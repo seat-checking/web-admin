@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
     node: true, // module is not defined 오류 해결
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'import'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -17,7 +17,6 @@ module.exports = {
     'plugin:import/recommended',
     'plugin:import/typescript',
     'prettier',
-    // 'prettier/@typescript-eslint',// prettier 8.00 부터 병합됨
     'plugin:prettier/recommended',
   ],
   overrides: [],
@@ -27,6 +26,15 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
     createDefaultProgram: true,
+  },
+  // import 에러 해결하기 위해 추가
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        moduleDirectory: ['node_modules', 'src/'],
+      },
+    },
   },
   rules: {
     // "off" or 0 - turn the rule off
