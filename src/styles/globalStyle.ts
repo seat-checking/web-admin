@@ -7,7 +7,6 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 62.5%; // 1rem = 10px 로 변경
   }
   body {
-    max-width: 57.6rem;
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI',
       'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
       'Helvetica Neue', sans-serif;
