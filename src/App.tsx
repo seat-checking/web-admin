@@ -1,5 +1,8 @@
+import { RouterProvider } from 'react-router-dom';
+import { router } from 'pages/Router';
+
 const App: React.FC = () => {
-  return <div>관리자 페이지</div>;
+  return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
 };
 
 export default App;
