@@ -4,6 +4,9 @@ interface ButtonProps extends React.HtmlHTMLAttributes<HTMLButtonElement> {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   isDisabled?: boolean;
   children?: React.ReactNode;
+  width?: string;
+  height?: string;
+  borderRadius?: string;
 }
 
 /**
@@ -11,6 +14,9 @@ interface ButtonProps extends React.HtmlHTMLAttributes<HTMLButtonElement> {
  */
 export const Button: React.FC<ButtonProps> = ({
   onClick,
+  width = '100%',
+  height = '5.6rem',
+  borderRadius = '0.8rem',
   isDisabled,
   children,
   ...rest
@@ -20,6 +26,9 @@ export const Button: React.FC<ButtonProps> = ({
       type='button'
       onClick={onClick}
       disabled={isDisabled}
+      width={width}
+      height={height}
+      borderRadius={borderRadius}
       {...rest}
     >
       {children}
