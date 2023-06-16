@@ -96,6 +96,7 @@ module.exports = {
         prefer: 'type-imports',
       },
     ],
+    // jsx 코드 하단에 스타일 선언하기 위함
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
     'import/order': [

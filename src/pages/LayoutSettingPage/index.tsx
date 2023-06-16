@@ -1,3 +1,4 @@
+import styled from 'styled-components';
 import type { TabItem } from 'components/Tabs.tsx';
 import { SideBar } from 'components/SideBar';
 import { Tabs } from 'components/Tabs.tsx';
@@ -14,9 +15,13 @@ const tabList: TabItem[] = [
 export const LayoutSettingPage: React.FC = () => {
   return (
     <div>
-      <SideBar style={{ paddingTop: '6rem' }}>
+      <StyledSideBar>
         <Tabs tabList={tabList} />
-      </SideBar>
+      </StyledSideBar>
     </div>
   );
 };
+
+const StyledSideBar = styled(SideBar)`
+  padding-top: 6rem;
+`;

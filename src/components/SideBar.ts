@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Wrap = styled.div`
+export const SideBar = styled.div`
   width: 46.1rem;
   height: 100%;
 
