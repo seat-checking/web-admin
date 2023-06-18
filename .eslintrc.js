@@ -96,6 +96,9 @@ module.exports = {
         prefer: 'type-imports',
       },
     ],
+    // jsx 코드 하단에 스타일 선언하기 위함
+    '@typescript-eslint/no-use-before-define': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
     'import/order': [
       'error',
       {
@@ -130,7 +133,7 @@ module.exports = {
       { namedComponents: 'arrow-function' },
     ],
     'react-hooks/exhaustive-deps': 'warn', // 디펜던시 빠진 것들 모두 추가하도록 함
-    '@typescript-eslint/explicit-function-return-type': 'warn',
+    // '@typescript-eslint/explicit-function-return-type': 'off',
     // default export 선호 끔
     'import/prefer-default-export': 'off',
     '@typescript-eslint/ban-types': [

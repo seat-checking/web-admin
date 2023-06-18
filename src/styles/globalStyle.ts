@@ -1,10 +1,15 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-
   html {
     font-size: 62.5%; // 1rem = 10px 로 변경
+
+    @media all and (max-width: 1700px) {
+        font-size: 50%;
+    }
+    @media all and (max-width: 1500px) {
+        font-size: 45%;
+    }
   }
   body {
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI',
