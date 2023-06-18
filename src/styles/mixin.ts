@@ -9,3 +9,12 @@ export const flexSet = (
   justify-content: ${justify};
   align-items: ${align};
 `;
+
+export const mediaBpDown = (
+  maxWidth: string,
+  children: FlattenSimpleInterpolation,
+) => css`
+  @media screen and (max-width: ${maxWidth}) {
+    ${children}
+  }
+`;
