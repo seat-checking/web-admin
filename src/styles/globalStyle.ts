@@ -10,6 +10,9 @@ export const GlobalStyle = createGlobalStyle`
     @media all and (max-width: 1500px) {
         font-size: 45%;
     }
+    /* @media all and (max-width: 1200px) {
+        font-size: 35%; // TODO 아이콘도 rem으로 변경 필요
+    } */
   }
   body {
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI',

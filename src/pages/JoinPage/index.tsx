@@ -1,4 +1,7 @@
+import { useState } from 'react';
+import type { JoinStatus } from 'pages/JoinPage/utils/types';
 import { AdminInfo } from 'pages/JoinPage/components/AdminInfo';
+import { StoreInfo } from 'pages/JoinPage/components/StoreInfo';
 import {
   LeftSide,
   ProgressBackground,
@@ -16,6 +19,12 @@ import {
  * 회원가입 페이지
  */
 export const JoinPage: React.FC = () => {
+  const [joinStatus, setJoinStatus] = useState<JoinStatus>('FIRST');
+
+  const handleSwitchPage = (status: JoinStatus) => {
+    setJoinStatus(status);
+  };
+
   return (
     <Wrap>
       <LeftSide>
@@ -30,11 +39,15 @@ export const JoinPage: React.FC = () => {
           <Title>관리자 회원가입</Title>
           <ProgressWrap>
             <ProgressBackground>
-              <ProgressBar />
+              <ProgressBar status={joinStatus} />
             </ProgressBackground>
-            <ProgressText>1/2</ProgressText>
+            <ProgressText>{joinStatus === 'FIRST' ? 1 : 2}/2</ProgressText>
           </ProgressWrap>
-          <AdminInfo />
+          {joinStatus === 'FIRST' ? (
+            <AdminInfo onClickNext={handleSwitchPage} />
+          ) : (
+            <StoreInfo onClickNext={handleSwitchPage} />
+          )}
         </RightContentWrap>
       </RightSide>
     </Wrap>

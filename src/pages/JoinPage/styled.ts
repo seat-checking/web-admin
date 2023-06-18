@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components/macro';
+import type { JoinStatus } from 'pages/JoinPage/utils/types';
 import { mediaBpDown } from 'styles/mixin';
 
 export const Wrap = styled.div`
@@ -71,8 +72,8 @@ export const ProgressBackground = styled.div`
   background-color: ${({ theme }) => theme.palette.grey[50]};
 `;
 
-export const ProgressBar = styled.div`
-  width: 50%;
+export const ProgressBar = styled.div<{ status: JoinStatus }>`
+  width: ${({ status }) => (status === 'FIRST' ? '50%' : '100%')};
   height: 100%;
   background-color: ${({ theme }) => theme.palette.primary.orange};
 `;
