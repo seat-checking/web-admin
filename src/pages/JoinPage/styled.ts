@@ -12,6 +12,7 @@ const LEFT_SIDE_WIDTH = '40%';
 export const LeftSide = styled.div`
   background-color: ${({ theme }) => theme.palette.primary.orange};
   width: ${LEFT_SIDE_WIDTH};
+  min-height: 100vh;
 
   ${mediaBpDown(
     '700px',
