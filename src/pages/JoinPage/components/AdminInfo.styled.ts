@@ -1,12 +1,18 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { Input } from 'components/Input';
+import { ErrorMessage } from 'components/ErrorMessage';
 import { flexSet } from 'styles/mixin';
 
-export const GappedInput = styled(Input)`
+export const Form = styled.form``;
+
+export const InputWrap = styled.div`
   & + & {
     margin-top: 6.8rem;
   }
+`;
+
+export const GappedErrorMessage = styled(ErrorMessage)`
+  margin-top: 0.8rem;
 `;
 
 export const LoginRow = styled.div`

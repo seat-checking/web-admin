@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import type { JoinStatus } from 'pages/JoinPage/utils/types';
 import { AdminInfo } from 'pages/JoinPage/components/AdminInfo';
 import { StoreInfo } from 'pages/JoinPage/components/StoreInfo';
@@ -19,6 +20,7 @@ import {
  * 회원가입 페이지
  */
 export const JoinPage: React.FC = () => {
+  const { register, handleSubmit } = useForm();
   const [joinStatus, setJoinStatus] = useState<JoinStatus>('FIRST');
 
   const handleSwitchPage = (status: JoinStatus) => {
@@ -44,9 +46,17 @@ export const JoinPage: React.FC = () => {
             <ProgressText>{joinStatus === 'FIRST' ? 1 : 2}/2</ProgressText>
           </ProgressWrap>
           {joinStatus === 'FIRST' ? (
-            <AdminInfo onClickNext={handleSwitchPage} />
+            <AdminInfo
+              onClickNext={handleSwitchPage}
+              register={register}
+              handleSubmit={handleSubmit}
+            />
           ) : (
-            <StoreInfo onClickNext={handleSwitchPage} />
+            <StoreInfo
+              register={register}
+              onClickNext={handleSwitchPage}
+              handleSubmit={handleSubmit}
+            />
           )}
         </RightContentWrap>
       </RightSide>
