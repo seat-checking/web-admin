@@ -3,7 +3,7 @@ import type { Ref } from 'react';
 import { StyledInput, Wrap } from 'components/Input.styled';
 import { Label } from 'components/Label';
 
-interface InputProps extends React.HtmlHTMLAttributes<HTMLInputElement> {
+interface InputProps extends React.ComponentPropsWithoutRef<'input'> {
   label: string;
   required?: boolean; // false면 * 표시 숨김
   placeholder?: string;
