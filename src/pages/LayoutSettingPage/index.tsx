@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import type { TabItem } from 'components/Tabs.tsx';
 import { SideBar } from 'components/SideBar';
 import { Tabs } from 'components/Tabs.tsx';
