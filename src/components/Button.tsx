@@ -7,6 +7,7 @@ interface ButtonProps extends React.HtmlHTMLAttributes<HTMLButtonElement> {
   width?: string;
   height?: string;
   borderRadius?: string;
+  type?: 'submit' | 'button' | 'reset' | undefined;
 }
 
 /**
@@ -18,12 +19,13 @@ export const Button: React.FC<ButtonProps> = ({
   height = '5.6rem',
   borderRadius = '0.8rem',
   isDisabled,
+  type = 'submit',
   children,
   ...rest
 }) => {
   return (
     <StyledButton
-      type='button'
+      type={type}
       onClick={onClick}
       disabled={isDisabled}
       width={width}
