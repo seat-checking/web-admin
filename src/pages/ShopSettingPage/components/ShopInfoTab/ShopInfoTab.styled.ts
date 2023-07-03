@@ -3,13 +3,13 @@ import styled from 'styled-components';
 export const Wrap = styled.div`
   padding-top: 4rem;
   width: 100%;
-  background-color: red;
+  /* background-color: red; */
 `;
 
 export const ContentWrap = styled.ul`
   width: 53.9rem;
   margin: auto;
-  background-color: yellow;
+  /* background-color: yellow; */
 `;
 
 export const ListItem = styled.li`

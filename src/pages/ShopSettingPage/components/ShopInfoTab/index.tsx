@@ -37,24 +37,6 @@ export const ShopInfoTab: React.FC = () => {
           <Input label='가게 위치' placeholder='가게 주소 찾기' />
         </ListItem>
         <ListItem>
-          <Input label='가게 위치' placeholder='가게 주소 찾기' />
-        </ListItem>
-        <ListItem>
-          <Input label='가게 위치' placeholder='가게 주소 찾기' />
-        </ListItem>
-        <ListItem>
-          <Label label='가게 유형' required={false} />
-        </ListItem>
-        <ListItem>
-          <Label label='가게 유형' required={false} />
-        </ListItem>
-        <ListItem>
-          <Label label='가게 유형' required={false} />
-        </ListItem>
-        <ListItem>
-          <Label label='가게 유형' required={false} />
-        </ListItem>
-        <ListItem>
           <Label label='가게 유형' required={false} />
         </ListItem>
         <RadioRow>
