@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import type React from 'react';
 import { TabNavItem } from 'components/Tabs.tsx/components/TabNavItem';
 
@@ -10,12 +10,13 @@ export interface TabItem {
 
 interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   tabList: TabItem[];
+  tabWidth?: string;
 }
 
 /**
  * 탭 메뉴 컴포넌트
  */
-export const Tabs: React.FC<TabsProps> = ({ tabList, ...rest }) => {
+export const Tabs: React.FC<TabsProps> = ({ tabList, tabWidth, ...rest }) => {
   const [activeTab, setActiveTab] = useState(0);
 
   const onClickItem = (index: number) => {
@@ -36,7 +37,7 @@ export const Tabs: React.FC<TabsProps> = ({ tabList, ...rest }) => {
 
   return (
     <Wrap {...rest}>
-      <TabContainer>{tabNavItemList}</TabContainer>
+      <TabContainer tabWidth={tabWidth}>{tabNavItemList}</TabContainer>
       {tabList[activeTab].content}
     </Wrap>
   );
@@ -44,9 +45,12 @@ export const Tabs: React.FC<TabsProps> = ({ tabList, ...rest }) => {
 
 const Wrap = styled.div`
   height: 6rem;
+
+  width: 100%;
 `;
 
-const TabContainer = styled.ul`
+const TabContainer = styled.ul<{ tabWidth?: string }>`
+  max-width: ${({ tabWidth }) => tabWidth && tabWidth};
   display: flex;
   height: 100%;
 

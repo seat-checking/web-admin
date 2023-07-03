@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { GlobalNavigationBar } from 'components/DashboardLayout/components/GlobalNavigationBar';
 
 /**
@@ -16,7 +16,6 @@ export const DashboardLayout: React.FC = () => {
 
 const Wrap = styled.div`
   display: flex;
-  height: 100%;
 
   /* background-color: yellow; */
 `;
