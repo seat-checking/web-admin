@@ -2,7 +2,7 @@ import type { TabItem } from 'components/Tabs.tsx';
 import { Button } from 'components/Button';
 import { Tabs } from 'components/Tabs.tsx';
 import { BusinessHourTab } from 'pages/ShopSettingPage/components/BusinessHourTab';
-import { EmployerTab } from 'pages/ShopSettingPage/components/EmployerTab';
+import { EmployerTab } from 'pages/ShopSettingPage/components/EmployerTab/EmployerTab';
 import { SettingSideBar } from 'pages/ShopSettingPage/components/SettingSideBar';
 import { ShopInfoTab } from 'pages/ShopSettingPage/components/ShopInfoTab';
 import { ContentWrap, HeaderWrap, Wrap } from 'pages/ShopSettingPage/styled';
