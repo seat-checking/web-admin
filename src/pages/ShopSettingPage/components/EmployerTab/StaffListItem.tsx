@@ -48,7 +48,7 @@ export const StaffListItem = () => {
                 checked={checkboxes[0]}
                 onChange={() => toggleCheckbox(0)}
               />
-              <CheckBoxLabel htmlFor='check1'>좌석설정</CheckBoxLabel>
+              <CheckBoxLabel htmlFor='check1'>가게현황</CheckBoxLabel>
             </InputCheckBoxWrapper>
             <InputCheckBoxWrapper>
               <InputCheckBox
@@ -56,7 +56,7 @@ export const StaffListItem = () => {
                 checked={checkboxes[1]}
                 onChange={() => toggleCheckbox(1)}
               />
-              <CheckBoxLabel htmlFor='check2'>가게통계</CheckBoxLabel>
+              <CheckBoxLabel htmlFor='check2'>좌석설정</CheckBoxLabel>
             </InputCheckBoxWrapper>
             <InputCheckBoxWrapper>
               <InputCheckBox
@@ -64,7 +64,7 @@ export const StaffListItem = () => {
                 checked={checkboxes[2]}
                 onChange={() => toggleCheckbox(2)}
               />
-              <CheckBoxLabel htmlFor='check3'>가게현황</CheckBoxLabel>
+              <CheckBoxLabel htmlFor='check3'>가게통계</CheckBoxLabel>
             </InputCheckBoxWrapper>
             <InputCheckBoxWrapper>
               <InputCheckBox

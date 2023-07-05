@@ -37,27 +37,27 @@ export const StaffRegistration: React.FC = () => {
         <FlexWrapper>
           <InputCheckBoxWrapper>
             <InputCheckBox
-              id='seatsettings'
+              id='situation'
               checked={checkboxes[0]}
               onChange={() => toggleCheckbox(0)}
+            />
+            <CheckBoxLabel htmlFor='situation'>가게현황</CheckBoxLabel>
+          </InputCheckBoxWrapper>
+          <InputCheckBoxWrapper>
+            <InputCheckBox
+              id='seatsettings'
+              checked={checkboxes[1]}
+              onChange={() => toggleCheckbox(1)}
             />
             <CheckBoxLabel htmlFor='seatsettings'>좌석설정</CheckBoxLabel>
           </InputCheckBoxWrapper>
           <InputCheckBoxWrapper>
             <InputCheckBox
               id='statistics'
-              checked={checkboxes[1]}
-              onChange={() => toggleCheckbox(1)}
-            />
-            <CheckBoxLabel htmlFor='statistics'>가게통계</CheckBoxLabel>
-          </InputCheckBoxWrapper>
-          <InputCheckBoxWrapper>
-            <InputCheckBox
-              id='situation'
               checked={checkboxes[2]}
               onChange={() => toggleCheckbox(2)}
             />
-            <CheckBoxLabel htmlFor='situation'>가게현황</CheckBoxLabel>
+            <CheckBoxLabel htmlFor='statistics'>가게통계</CheckBoxLabel>
           </InputCheckBoxWrapper>
           <InputCheckBoxWrapper>
             <InputCheckBox
