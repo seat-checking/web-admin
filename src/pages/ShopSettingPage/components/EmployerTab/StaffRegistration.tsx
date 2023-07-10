@@ -31,7 +31,6 @@ export const StaffRegistration: React.FC = () => {
           <StaffEmail>wooyoung6695@naver.com</StaffEmail>
           <StaffName>최우영님</StaffName>
         </StaffInfo>
-        <RegistrationButton>직원 등록하기</RegistrationButton>
       </RegistrationHeader>
       <FlexWrapperContainer>
         <FlexWrapper>
@@ -69,6 +68,7 @@ export const StaffRegistration: React.FC = () => {
           </InputCheckBoxWrapper>
         </FlexWrapper>
       </FlexWrapperContainer>
+      <RegistrationButton>직원 등록하기</RegistrationButton>
     </Registration>
   );
 };

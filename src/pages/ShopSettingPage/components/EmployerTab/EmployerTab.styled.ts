@@ -4,7 +4,6 @@ import Search from 'assets/icons/search.svg';
 
 export const EmployerTabWrapper = styled.div`
   width: 100%;
-  height: 31.7rem;
   background: ${({ theme }) => theme.palette.grey[50]};
   padding-top: 4rem;
   padding-bottom: 4rem;

@@ -1,12 +1,20 @@
 import { useState } from 'react';
 import InputCheckBox from 'components/InputCheckBox';
 
+import { Modal } from 'components/Modal';
 import {
   ButtonWrapper,
   CheckBoxLabel,
   FlexWrapper,
   InputCheckBoxLabel,
   InputCheckBoxWrapper,
+  ModaMainText,
+  ModaSubText,
+  ModalButton,
+  ModalButtonWrapper,
+  ModalCancel,
+  ModalContent,
+  ModalHeader,
   StaffEmail,
   StaffInfoFlex,
   StaffInfoWrapper,
@@ -19,6 +27,7 @@ import {
 export const StaffListItem = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [checkboxes, setCheckboxes] = useState([false, false, false, false]);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const toggleIsOpen = () => {
     setIsOpen(!isOpen);
@@ -29,6 +38,15 @@ export const StaffListItem = () => {
     newCheckboxes[index] = !newCheckboxes[index];
     setCheckboxes(newCheckboxes);
   };
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
     <StaffListItemWrapper>
       <StaffInfoWrapper>
@@ -76,13 +94,24 @@ export const StaffListItem = () => {
             </InputCheckBoxWrapper>
           </FlexWrapper>
           <ButtonWrapper>
-            <TextButton>직원 삭제</TextButton>
+            <TextButton onClick={openModal}>직원 삭제</TextButton>
             <TextButton style={{ backgroundColor: '#FF8D4E', color: 'white' }}>
               저장하기
             </TextButton>
           </ButtonWrapper>
         </>
       )}
+      <Modal isOpen={modalOpen}>
+        <ModalHeader>직원삭제</ModalHeader>
+        <ModalContent>
+          <ModaMainText>정말 직원을 삭제하시나요?</ModaMainText>
+          <ModaSubText>삭제한 직원은 복구할 수 없어요!</ModaSubText>
+        </ModalContent>
+        <ModalButtonWrapper>
+          <ModalCancel onClick={closeModal}>취소</ModalCancel>
+          <ModalButton>직원삭제</ModalButton>
+        </ModalButtonWrapper>
+      </Modal>
     </StaffListItemWrapper>
   );
 };
