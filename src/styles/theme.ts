@@ -4,6 +4,7 @@ export const theme: DefaultTheme = {
   palette: {
     primary: {
       orange: '#FF8D4E',
+      dark: '#303030',
     },
     error: {
       main: '#FF334B',
