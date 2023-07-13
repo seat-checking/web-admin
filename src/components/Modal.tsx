@@ -12,9 +12,13 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     return null;
   }
 
+  const handleWrapperClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+  };
+
   return (
     <ModalOverlay onClick={onClose}>
-      <ModalWrapper>{children}</ModalWrapper>
+      <ModalWrapper onClick={handleWrapperClick}>{children}</ModalWrapper>
     </ModalOverlay>
   );
 };
