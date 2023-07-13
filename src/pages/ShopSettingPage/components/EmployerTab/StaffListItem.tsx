@@ -50,11 +50,11 @@ export const StaffListItem = () => {
   return (
     <StaffListItemWrapper>
       <StaffInfoWrapper>
-        <StaffName>최우영</StaffName>
         <StaffInfoFlex>
+          <StaffName>최우영</StaffName>
           <StaffEmail>wooyoung6695@gmail.com</StaffEmail>
-          <ToggleIcon onClick={toggleIsOpen} isOpen={isOpen} />
         </StaffInfoFlex>
+        <ToggleIcon onClick={toggleIsOpen} isOpen={isOpen} />
       </StaffInfoWrapper>
       {isOpen && (
         <>
@@ -101,7 +101,7 @@ export const StaffListItem = () => {
           </ButtonWrapper>
         </>
       )}
-      <Modal isOpen={modalOpen}>
+      <Modal isOpen={modalOpen} onClose={closeModal}>
         <ModalHeader>직원삭제</ModalHeader>
         <ModalContent>
           <ModaMainText>정말 직원을 삭제하시나요?</ModaMainText>

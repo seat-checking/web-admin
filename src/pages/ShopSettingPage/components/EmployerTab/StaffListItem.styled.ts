@@ -11,13 +11,12 @@ export const StaffListItemWrapper = styled.div`
 export const StaffInfoWrapper = styled.div`
   width: 95%;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
-export const StaffInfoFlex = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
+export const StaffInfoFlex = styled.div``;
 
 export const StaffName = styled.div`
   color: ${({ theme }) => theme.palette.grey[500]};
