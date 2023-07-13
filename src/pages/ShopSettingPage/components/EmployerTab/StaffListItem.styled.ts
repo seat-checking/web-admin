@@ -86,7 +86,6 @@ export const ToggleIcon = styled.div<{ isOpen: boolean }>`
   background-image: url(${(props) => (props.isOpen ? ToggleUp : ToggleDown)});
   background-size: cover;
   cursor: pointer;
-  margin-bottom: 2.3rem;
 `;
 
 export const ModalHeader = styled.div`

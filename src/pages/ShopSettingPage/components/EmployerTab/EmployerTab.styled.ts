@@ -62,6 +62,7 @@ export const HelperCircle = styled.div`
   height: 1.6rem;
   background-image: url(${Circle});
   background-size: cover;
+  margin-right: 0.4rem;
 `;
 
 export const HelperText = styled.div`
