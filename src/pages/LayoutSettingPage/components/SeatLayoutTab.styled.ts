@@ -3,12 +3,12 @@ import { Button } from 'components/Button';
 import { flexSet, grayBorderBoxStyle } from 'styles/mixin';
 
 export const Wrap = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 2.3rem;
-
   display: flex;
   flex-direction: column;
+
+  width: 100%;
+  height: 100%; // 부모에 height: 100 줘야 자식에 flex-grow 적용 가능
+  padding: 2.3rem;
 `;
 export const SeatCountWrap = styled.div`
   margin-top: 2.4rem;
@@ -78,10 +78,10 @@ export const DoorText = styled.p`
 `;
 
 export const ButtonRow = styled.div`
-  /* background-color: yellow; */
-
   display: flex;
   gap: 2rem;
+
+  margin-top: auto;
 `;
 
 export const StyledButton = styled(Button)`

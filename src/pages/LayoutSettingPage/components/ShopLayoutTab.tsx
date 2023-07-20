@@ -1,13 +1,19 @@
+// import { ReactComponent as ChevronLeftCircle } from 'assets/icons/chevron-left-circle.svg';
+// import { ReactComponent as CheveronRightCircle } from 'assets/icons/chevron-right-circle.svg';
+import { DescriptionText, Wrap } from './LayoutTab.styled';
+import { CheckRadioButton } from 'pages/LayoutSettingPage/components/CheckRadioButton';
 import {
-  DescriptionText,
+  HeightInput,
+  IconWrap,
   Label,
   LayoutBox,
   Rectangle,
+  RectangleWrap,
+  SettingLabel,
   Square,
+  StyledButton,
   WidthSettingBox,
-  Wrap,
-} from './LayoutTab.styled';
-import { Button } from 'components/Button';
+} from 'pages/LayoutSettingPage/components/ShopLayoutTab.styled';
 
 /**
  * '좌석 설정' > '가게 형태' 탭 클릭했을 때 보여줄 컴포넌트
@@ -24,12 +30,19 @@ export const ShopLayoutTab: React.FC = () => {
           <input type='radio' id='square' name='layout' value='square' />
         </Label>
         <Label htmlFor='rectangle'>
-          <Rectangle />
-          <input type='radio' id='rectangle' name='layout' value='rectangle' />
+          <RectangleWrap>
+            <Rectangle />
+          </RectangleWrap>
+          <CheckRadioButton id='rectangle' name='layout' value='rectangle' />
         </Label>
       </LayoutBox>
-      <WidthSettingBox>가게 세로 길이</WidthSettingBox>
-      <Button>다음</Button>
+      <WidthSettingBox>
+        <SettingLabel>가게 세로 길이</SettingLabel>{' '}
+        <IconWrap>{/* <ChevronLeftCircle /> */}</IconWrap>
+        <HeightInput />
+        <IconWrap>{/* <CheveronRightCircle /> */}</IconWrap>
+      </WidthSettingBox>
+      <StyledButton>다음</StyledButton>
     </Wrap>
   );
 };
