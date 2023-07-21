@@ -1,6 +1,5 @@
 import { ReactComponent as ChevronLeftCircle } from 'assets/icons/chevron-left-circle.svg';
 import { ReactComponent as CheveronRightCircle } from 'assets/icons/chevron-right-circle.svg';
-import { CheckRadioButton } from 'pages/LayoutSettingPage/components/CheckRadioButton';
 import {
   DescriptionText,
   HeightInput,
@@ -14,7 +13,8 @@ import {
   StyledButton,
   WidthSettingBox,
   Wrap,
-} from 'pages/LayoutSettingPage/components/ShopLayoutTab.styled';
+} from 'pages/LayoutSettingPage/ShopLayoutTab/ShopLayoutTab.styled';
+import { CheckRadioButton } from 'pages/LayoutSettingPage/ShopLayoutTab/components/CheckRadioButton';
 
 /**
  * '좌석 설정' > '가게 형태' 탭 클릭했을 때 보여줄 컴포넌트

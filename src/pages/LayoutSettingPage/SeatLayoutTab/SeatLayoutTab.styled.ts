@@ -18,6 +18,15 @@ export const SeatCountWrap = styled.div`
   gap: 1.3rem;
 `;
 
+export const DescriptionText = styled.p`
+  color: ${({ theme }) => theme.palette.grey[300]};
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: normal;
+
+  text-align: center;
+`;
+
 export const SeatCountBox = styled.div`
   ${grayBorderBoxStyle}
   ${flexSet()}

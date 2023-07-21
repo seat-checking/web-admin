@@ -1,8 +1,5 @@
 import { useTheme } from 'styled-components';
 import { ShopApi } from 'api/lib/shop';
-import { Button } from 'components/Button';
-import { Chair } from 'pages/LayoutSettingPage/components/Chair';
-import { DescriptionText } from 'pages/LayoutSettingPage/components/LayoutTab.styled';
 import {
   Door,
   DoorChairBox,
@@ -16,8 +13,10 @@ import {
   DoorText,
   ButtonRow,
   StyledButton,
-} from 'pages/LayoutSettingPage/components/SeatLayoutTab.styled';
-import { Table } from 'pages/LayoutSettingPage/components/Table';
+  DescriptionText,
+} from 'pages/LayoutSettingPage/SeatLayoutTab/SeatLayoutTab.styled';
+import { Chair } from 'pages/LayoutSettingPage/SeatLayoutTab/components/Chair';
+import { Table } from 'pages/LayoutSettingPage/SeatLayoutTab/components/Table';
 
 /**
  * '좌석 설정' > '좌석 배치' 탭 클릭했을 때 보여줄 컴포넌트

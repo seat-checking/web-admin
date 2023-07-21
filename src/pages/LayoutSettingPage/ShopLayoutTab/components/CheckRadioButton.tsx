@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import styled from 'styled-components';
 import type { Ref } from 'react';
-// import { ReactComponent as CheckedIcon } from 'assets/icons/checked.svg';
+
 import checkIcon from 'assets/icons/check.svg';
 import checkedIcon from 'assets/icons/checked.svg';
 
