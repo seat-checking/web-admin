@@ -1,19 +1,30 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, css } from 'styled-components';
+
+const BREAKPOINTS = new Map([
+  [2000, 56],
+  [1700, 50],
+  [1500, 45],
+  // [1300, 40],
+]);
+
+/**
+    우영 모니터: 1713px
+    수민 모니터: 1328px (ipad)
+    */
+const responsiveStyles = Array.from(BREAKPOINTS).map(
+  ([maxWidth, fontSize]) => css`
+    @media all and (max-width: ${maxWidth}px) {
+      font-size: ${fontSize}%;
+    }
+  `,
+);
 
 export const GlobalStyle = createGlobalStyle`
   html {
     font-size: 62.5%; // 1rem = 10px 로 변경
+    
+    ${responsiveStyles}
 
-    @media all and (max-width: 1700px) {
-        font-size: 50%;
-    }
-    @media all and (max-width: 1500px) {
-        font-size: 45%;
-    }
-
-    @media all and (max-width: 1200px) {
-        font-size: 40%;
-    }
   }
   body {
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI',
