@@ -13,8 +13,8 @@ import {
   GridTable,
   StyledSideBar,
 } from 'pages/LayoutSettingPage/LayoutSettingPage.styled';
-import { SeatLayoutTab } from 'pages/LayoutSettingPage/SeatLayoutTab';
-import { ShopLayoutTab } from 'pages/LayoutSettingPage/ShopLayoutTab';
+import { SeatLayoutTab } from 'pages/LayoutSettingPage/components/SeatLayoutTab';
+import { ShopLayoutTab } from 'pages/LayoutSettingPage/components/ShopLayoutTab';
 import 'react-resizable/css/styles.css';
 import 'react-grid-layout/css/styles.css';
 

@@ -13,8 +13,8 @@ import {
   StyledButton,
   WidthSettingBox,
   Wrap,
-} from 'pages/LayoutSettingPage/ShopLayoutTab/ShopLayoutTab.styled';
-import { CheckRadioButton } from 'pages/LayoutSettingPage/ShopLayoutTab/components/CheckRadioButton';
+} from 'pages/LayoutSettingPage/components/ShopLayoutTab/ShopLayoutTab.styled';
+import { CheckRadioButton } from 'pages/LayoutSettingPage/components/ShopLayoutTab/components/CheckRadioButton';
 
 /**
  * '좌석 설정' > '가게 형태' 탭 클릭했을 때 보여줄 컴포넌트
