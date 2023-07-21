@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled, { useTheme } from 'styled-components/macro';
 import { ReactComponent as PlusCircleIcon } from 'assets/icons/plus-circle.svg';
 import { SideBar } from 'components/SideBar';
 import { ShopItem } from 'pages/ShopSettingPage/components/SettingSideBar/ShopItem';
@@ -7,12 +7,13 @@ import { ShopItem } from 'pages/ShopSettingPage/components/SettingSideBar/ShopIt
  * 컴포넌트
  */
 export const SettingSideBar: React.FC = () => {
+  const theme = useTheme();
   return (
     <StyledSideBar>
       <SideHeaderWrap>
         <Title>전체 가게 관리</Title>
         <button type='button'>
-          <PlusCircleIcon />
+          <PlusCircleIcon stroke={theme.palette.black.main} />
         </button>
       </SideHeaderWrap>
 

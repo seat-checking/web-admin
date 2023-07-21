@@ -45,7 +45,7 @@ export const SpaceRow: React.FC<SpaceRowProps> = ({
         />
       ))}
       <AddRow onClick={handleAddSpace}>
-        <PlusCircle />
+        <PlusCircle stroke='white' />
         <AddText>스페이스 추가</AddText>
       </AddRow>
     </Wrap>
