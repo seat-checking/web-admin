@@ -1,8 +1,8 @@
-// import { ReactComponent as ChevronLeftCircle } from 'assets/icons/chevron-left-circle.svg';
-// import { ReactComponent as CheveronRightCircle } from 'assets/icons/chevron-right-circle.svg';
-import { DescriptionText, Wrap } from './LayoutTab.styled';
+import { ReactComponent as ChevronLeftCircle } from 'assets/icons/chevron-left-circle.svg';
+import { ReactComponent as CheveronRightCircle } from 'assets/icons/chevron-right-circle.svg';
 import { CheckRadioButton } from 'pages/LayoutSettingPage/components/CheckRadioButton';
 import {
+  DescriptionText,
   HeightInput,
   IconWrap,
   Label,
@@ -13,6 +13,7 @@ import {
   Square,
   StyledButton,
   WidthSettingBox,
+  Wrap,
 } from 'pages/LayoutSettingPage/components/ShopLayoutTab.styled';
 
 /**
@@ -27,7 +28,7 @@ export const ShopLayoutTab: React.FC = () => {
       <LayoutBox>
         <Label htmlFor='square'>
           <Square />
-          <input type='radio' id='square' name='layout' value='square' />
+          <CheckRadioButton id='square' name='layout' value='square' />
         </Label>
         <Label htmlFor='rectangle'>
           <RectangleWrap>
@@ -37,10 +38,14 @@ export const ShopLayoutTab: React.FC = () => {
         </Label>
       </LayoutBox>
       <WidthSettingBox>
-        <SettingLabel>가게 세로 길이</SettingLabel>{' '}
-        <IconWrap>{/* <ChevronLeftCircle /> */}</IconWrap>
+        <SettingLabel>가게 세로 길이</SettingLabel>
+        <IconWrap>
+          <ChevronLeftCircle />
+        </IconWrap>
         <HeightInput />
-        <IconWrap>{/* <CheveronRightCircle /> */}</IconWrap>
+        <IconWrap>
+          <CheveronRightCircle />
+        </IconWrap>
       </WidthSettingBox>
       <StyledButton>다음</StyledButton>
     </Wrap>
