@@ -13,14 +13,14 @@ import {
   ButtonRow,
   StyledButton,
   DescriptionText,
-} from 'pages/LayoutSettingPage/components/SeatLayoutTab/SeatLayoutTab.styled';
-import { Chair } from 'pages/LayoutSettingPage/components/SeatLayoutTab/components/Chair';
-import { Table } from 'pages/LayoutSettingPage/components/SeatLayoutTab/components/Table';
+} from 'pages/LayoutSettingPage/components/SeatArrangementTab/SeatArrangementTab.styled';
+import { Chair } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Chair';
+import { Table } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Table';
 
 /**
  * '좌석 설정' > '좌석 배치' 탭 클릭했을 때 보여줄 컴포넌트
  */
-export const SeatLayoutTab: React.FC = () => {
+export const SeatArrangementTab: React.FC = () => {
   const theme = useTheme();
 
   const handleSave = () => {

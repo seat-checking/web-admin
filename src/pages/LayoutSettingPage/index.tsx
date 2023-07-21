@@ -13,8 +13,8 @@ import {
   GridTable,
   StyledSideBar,
 } from 'pages/LayoutSettingPage/LayoutSettingPage.styled';
-import { SeatLayoutTab } from 'pages/LayoutSettingPage/components/SeatLayoutTab';
-import { ShopLayoutTab } from 'pages/LayoutSettingPage/components/ShopLayoutTab';
+import { SeatArrangementTab } from 'pages/LayoutSettingPage/components/SeatArrangementTab';
+import { ShopFormTab } from 'pages/LayoutSettingPage/components/ShopFormTab';
 import 'react-resizable/css/styles.css';
 import 'react-grid-layout/css/styles.css';
 
@@ -25,8 +25,8 @@ import {
 } from 'pages/LayoutSettingPage/utils/constants';
 
 const tabList: TabItem[] = [
-  { label: '가게 형태', content: <ShopLayoutTab /> },
-  { label: '좌석 배치', content: <SeatLayoutTab /> },
+  { label: '가게 형태', content: <ShopFormTab /> },
+  { label: '좌석 배치', content: <SeatArrangementTab /> },
 ];
 
 interface MyLayout extends Layout {
@@ -65,12 +65,21 @@ export const LayoutSettingPage: React.FC = () => {
     return <GridTable key={item.i} />;
   });
 
+  const handleDropDragOver = (event: any) => {
+    console.log('handleDropDragOver');
+    // return false;
+    const width = event.dataTransfer.getData('width');
+    console.log('width:', width);
+    return { w: 2, h: 2 };
+  };
+
   const idx = useRef(0);
   const handleDropItem = (
     myLayout: MyLayout[],
     item: MyLayout,
     e: DragEvent,
   ): void => {
+    console.log('item :>> ', item);
     const sort = e.dataTransfer?.getData('sort');
     const width = Number(e.dataTransfer?.getData('width'));
     const height = Number(e.dataTransfer?.getData('height'));
@@ -123,6 +132,9 @@ export const LayoutSettingPage: React.FC = () => {
           preventCollision
           isDroppable
           onDrop={handleDropItem}
+          onDropDragOver={handleDropDragOver}
+          onDragStart={() => console.log('onDragStart')}
+          onDrag={() => console.log('hi')}
         >
           {itemsDom}
         </ShopGridBackground>

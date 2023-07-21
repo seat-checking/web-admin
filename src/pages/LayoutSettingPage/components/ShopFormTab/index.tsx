@@ -13,13 +13,13 @@ import {
   StyledButton,
   WidthSettingBox,
   Wrap,
-} from 'pages/LayoutSettingPage/components/ShopLayoutTab/ShopLayoutTab.styled';
-import { CheckRadioButton } from 'pages/LayoutSettingPage/components/ShopLayoutTab/components/CheckRadioButton';
+} from 'pages/LayoutSettingPage/components/ShopFormTab/ShopFormTab.styled';
+import { CheckRadioButton } from 'pages/LayoutSettingPage/components/ShopFormTab/components/CheckRadioButton';
 
 /**
  * '좌석 설정' > '가게 형태' 탭 클릭했을 때 보여줄 컴포넌트
  */
-export const ShopLayoutTab: React.FC = () => {
+export const ShopFormTab: React.FC = () => {
   return (
     <Wrap>
       <DescriptionText>
