@@ -8,7 +8,7 @@ export const Wrap = styled.div<{ folded: boolean }>`
   padding: 8rem 0;
 
   width: ${({ folded }): string => (folded ? '9.6rem' : '31.5rem')};
-  height: 100%;
+  min-height: 100vh; // 필요
   background-color: #303030;
 
   .shopLogo {

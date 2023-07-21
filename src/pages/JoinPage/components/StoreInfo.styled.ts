@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { Input } from 'components/Input';
+import styled from 'styled-components/macro';
+import { ErrorMessage } from 'components/ErrorMessage';
 
-export const GappedInput = styled(Input)`
+export const InputWrap = styled.div`
   & + & {
     margin-top: 6.8rem;
   }
@@ -10,4 +10,8 @@ export const GappedInput = styled(Input)`
 export const BottomWrap = styled.div`
   margin-top: 6.8rem;
   margin-bottom: 9.8rem;
+`;
+
+export const GappedErrorMessage = styled(ErrorMessage)`
+  margin-top: 0.8rem;
 `;

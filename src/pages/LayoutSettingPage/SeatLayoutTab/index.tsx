@@ -1,5 +1,4 @@
 import { useTheme } from 'styled-components';
-import { ShopApi } from 'api/lib/shop';
 import {
   Door,
   DoorChairBox,
@@ -25,7 +24,7 @@ export const SeatLayoutTab: React.FC = () => {
   const theme = useTheme();
 
   const handleSave = () => {
-    ShopApi.saveShopLayout(1);
+    // ShopApi.saveShopLayout(1);
   };
   return (
     <Wrap>

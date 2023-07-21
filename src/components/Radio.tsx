@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import type { Ref } from 'react';
 
 interface RadioProps extends React.HtmlHTMLAttributes<HTMLInputElement> {

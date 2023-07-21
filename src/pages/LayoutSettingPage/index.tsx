@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import type { ShopLayout } from 'api/lib/shop';
 import type { TabItem } from 'components/Tabs.tsx';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import type { Layout } from 'react-grid-layout';
@@ -37,7 +36,7 @@ interface MyLayout extends Layout {
  * 좌석 설정 페이지
  */
 export const LayoutSettingPage: React.FC = () => {
-  const [shopList, setShopList] = useState<ShopLayout[]>([]);
+  const [shopList, setShopList] = useState([]);
   const [mylayout, setmyLayout] = useState<MyLayout[]>([]);
   const [spaceList, setSpaceList] = useState<SpaceType[]>([]);
 

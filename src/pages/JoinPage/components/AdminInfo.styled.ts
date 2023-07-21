@@ -11,6 +11,14 @@ export const InputWrap = styled.div`
   }
 `;
 
+export const RadioRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+
+  padding-top: 0.8rem;
+`;
+
 export const GappedErrorMessage = styled(ErrorMessage)`
   margin-top: 0.8rem;
 `;
