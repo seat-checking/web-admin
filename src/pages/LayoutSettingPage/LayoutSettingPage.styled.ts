@@ -17,10 +17,6 @@ export const Wrap = styled.div`
     width: 1rem;
     height: 1rem;
   }
-
-  .clickable {
-    cursor: pointer;
-  }
 `;
 
 export const StyledSideBar = styled(SideBar)`
@@ -63,12 +59,12 @@ export const GridTable = styled.div`
   border-color: ${({ theme }) => theme.palette.black.main};
   border-width: 1px;
   border-style: solid;
+
+  cursor: pointer;
 `;
 
 // 의자 바깥에 투명한 테두리를 넣기 위함
-export const ChairBorder = styled.div`
-  ${flexSet()}/* background-color: red; */
-`;
+export const ChairBorder = styled.div``;
 
 // 검정 테두리를 준 의자 영역
 export const Chair = styled.div`
@@ -79,4 +75,6 @@ export const Chair = styled.div`
 
   border: ${CHAIR_BORDER_PX}px solid ${({ theme }) => theme.palette.black.main};
   border-radius: 50%;
+
+  cursor: pointer;
 `;

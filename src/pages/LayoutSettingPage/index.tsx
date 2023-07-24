@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import type { TabItem } from 'components/Tabs.tsx';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import type { Layout } from 'react-grid-layout';
@@ -19,6 +19,7 @@ import 'react-resizable/css/styles.css';
 import 'react-grid-layout/css/styles.css';
 
 import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
+import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
 import {
   COLUMN_CNT,
   TABLE_SIZE_PX,
@@ -40,6 +41,8 @@ export const LayoutSettingPage: React.FC = () => {
   const [mylayout, setmyLayout] = useState<MyLayout[]>([]);
   const [spaceList, setSpaceList] = useState<SpaceType[]>([]);
 
+  const { size } = useContext(DragContext);
+
   const addSpace = () => {
     const newSpace: SpaceType = {
       storeSpaceId: Date.now(),
@@ -57,7 +60,7 @@ export const LayoutSettingPage: React.FC = () => {
     const sort = item.i.split('-')[0];
     if (sort === 'chair') {
       return (
-        <ChairBorder key={item.i} className='chair clickable'>
+        <ChairBorder key={item.i} className='chair'>
           <Chair />
         </ChairBorder>
       );
@@ -65,12 +68,8 @@ export const LayoutSettingPage: React.FC = () => {
     return <GridTable key={item.i} />;
   });
 
-  const handleDropDragOver = (event: any) => {
-    console.log('handleDropDragOver');
-    // return false;
-    const width = event.dataTransfer.getData('width');
-    console.log('width:', width);
-    return { w: 2, h: 2 };
+  const handleDropDragOver = () => {
+    return { ...size.current };
   };
 
   const idx = useRef(0);
@@ -79,10 +78,12 @@ export const LayoutSettingPage: React.FC = () => {
     item: MyLayout,
     e: DragEvent,
   ): void => {
-    console.log('item :>> ', item);
     const sort = e.dataTransfer?.getData('sort');
-    const width = Number(e.dataTransfer?.getData('width'));
-    const height = Number(e.dataTransfer?.getData('height'));
+
+    const { w, h } = size.current;
+    item.w = w;
+    item.h = h;
+
     if (sort === 'chair') {
       item.isResizable = false;
       item.sort = 'chair';
@@ -91,8 +92,6 @@ export const LayoutSettingPage: React.FC = () => {
       item.sort = 'table';
       item.i = `table-${idx.current++}`;
     }
-    item.w = width;
-    item.h = height;
     setmyLayout(myLayout);
   };
 
@@ -116,7 +115,6 @@ export const LayoutSettingPage: React.FC = () => {
           deleteSpace={deleteSpace}
         />
         <ShopGridBackground
-          className='layout mine clickable'
           layout={mylayout}
           rowHeight={TABLE_SIZE_PX}
           // width/cols = rowHeight가 나와야 정사각형 나옴
@@ -133,8 +131,6 @@ export const LayoutSettingPage: React.FC = () => {
           isDroppable
           onDrop={handleDropItem}
           onDropDragOver={handleDropDragOver}
-          onDragStart={() => console.log('onDragStart')}
-          onDrag={() => console.log('hi')}
         >
           {itemsDom}
         </ShopGridBackground>
