@@ -19,6 +19,7 @@ import 'react-resizable/css/styles.css';
 import 'react-grid-layout/css/styles.css';
 
 import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
+import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
 import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
 import {
   COLUMN_CNT,
@@ -37,24 +38,12 @@ interface MyLayout extends Layout {
  * 좌석 설정 페이지
  */
 export const LayoutSettingPage: React.FC = () => {
+  const { setSpaces } = useSpace();
   const [shopList, setShopList] = useState([]);
   const [mylayout, setmyLayout] = useState<MyLayout[]>([]);
   const [spaceList, setSpaceList] = useState<SpaceType[]>([]);
 
   const { size } = useContext(DragContext);
-
-  const addSpace = () => {
-    const newSpace: SpaceType = {
-      storeSpaceId: Date.now(),
-      name: 'Space',
-    };
-    setSpaceList([...spaceList, newSpace]);
-  };
-
-  const deleteSpace = (id: number) => {
-    const deleted = spaceList.filter(({ storeSpaceId }) => storeSpaceId !== id);
-    setSpaceList(deleted);
-  };
 
   const itemsDom = mylayout.map((item) => {
     const sort = item.i.split('-')[0];
@@ -100,8 +89,8 @@ export const LayoutSettingPage: React.FC = () => {
       storeSpaceId,
       name,
     }));
-    setSpaceList(spaces);
-  }, [shopList]);
+    setSpaces(spaces);
+  }, [shopList, setSpaces]);
 
   return (
     <Wrap>
@@ -109,11 +98,7 @@ export const LayoutSettingPage: React.FC = () => {
         <Tabs tabList={tabList} />
       </StyledSideBar>
       <RightWrap>
-        <SpaceRow
-          spaceList={spaceList}
-          addSpace={addSpace}
-          deleteSpace={deleteSpace}
-        />
+        <SpaceRow />
         <ShopGridBackground
           layout={mylayout}
           rowHeight={TABLE_SIZE_PX}

@@ -84,11 +84,15 @@ export const DeleteWrap = styled.div`
   top: 0.4rem;
   right: 0.4rem;
 
-  :hover {
-    path {
-      // todo 순권님 (마우스 올렸을 때 디자인)
-      stroke-width: 4;
-      /* stroke: black; */
-    }
+  :hover::after {
+    display: inline-block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2.4rem;
+    height: 2.4rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 20%;
   }
 `;
