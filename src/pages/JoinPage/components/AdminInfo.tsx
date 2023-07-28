@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Form } from 'react-router-dom';
 import type { JoinFormInputs } from 'common/utils/types';
 import type { InnerPageProps } from 'pages/JoinPage/utils/types';
@@ -72,14 +71,12 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const passwordChecked = getValues('passwordChecked');
-    if (
-      passwordChecked.length === 0 ||
-      errors.passwordChecked?.type === 'pattern'
-    ) {
+    if (passwordChecked.length === 0) {
       return;
     }
+
     const password = event.target.value;
-    if (password === getValues('passwordChecked')) {
+    if (password === passwordChecked) {
       clearErrors('passwordChecked');
     } else {
       setError('passwordChecked', {
@@ -131,11 +128,7 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
           placeholder='비밀번호를 한번 더 입력해주세요'
           type='password'
           {...register('passwordChecked', {
-            required: '비밀번호는 필수 입력입니다.',
-            pattern: {
-              value: /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/,
-              message: '영문, 숫자, 특수기호를 포함하여 8~20자로 입력해주세요.',
-            },
+            required: '비밀번호 확인은 필수 입력입니다.',
             validate: {
               isSame: (value, formValues: JoinFormInputs) =>
                 value === formValues.password ||
