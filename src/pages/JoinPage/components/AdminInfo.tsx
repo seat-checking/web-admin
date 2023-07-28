@@ -3,7 +3,7 @@ import { Form } from 'react-router-dom';
 import type { JoinFormInputs } from 'common/utils/types';
 import type { InnerPageProps } from 'pages/JoinPage/utils/types';
 import type { SubmitHandler, ChangeHandler } from 'react-hook-form';
-import { validateEmail, validateNickname } from 'api/lib/auth';
+import { AuthApi } from 'api/lib/auth';
 import { PATH } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
@@ -43,7 +43,7 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
   const handleValidateNickname: ChangeHandler = async (e) => {
     if (errors.nickname) return;
     try {
-      const response = await validateNickname(e.target.value);
+      const response = await AuthApi.validateNickname(e.target.value);
 
       const isValidNickname = response.data.result.isValid;
       if (!isValidNickname) {
@@ -57,7 +57,7 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
   const handleValidateEmail: ChangeHandler = async (event) => {
     if (errors.email) return;
     try {
-      const response = await validateEmail(event.target.value);
+      const response = await AuthApi.validateEmail(event.target.value);
 
       const isValidEmail = response.data.result.isValid;
       if (!isValidEmail) {

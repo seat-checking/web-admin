@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import type { JoinFormInputs } from 'common/utils/types';
 import type { InnerPageProps } from 'pages/JoinPage/utils/types';
 import type { SubmitHandler } from 'react-hook-form';
-import { signUp } from 'api/lib/auth';
+import { AuthApi } from 'api/lib/auth';
 import { PATH } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
@@ -30,7 +30,7 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
 
   const onSubmit: SubmitHandler<JoinFormInputs> = async (data) => {
     try {
-      await signUp(data);
+      await AuthApi.signUp(data);
       onClickNext('FIRST'); // 초기화
       navigate(`/${PATH.login}`, { replace: true });
     } catch (error) {
