@@ -1,4 +1,5 @@
 import type { TabItem } from 'components/Tabs.tsx';
+import { useTab } from 'common/hooks/useTab';
 import { Button } from 'components/Button';
 import { Tabs } from 'components/Tabs.tsx';
 import { BusinessHourTab } from 'pages/ShopSettingPage/components/BusinessHourTab';
@@ -25,12 +26,19 @@ const tabList: TabItem[] = [
  * 가게 설정 페이지
  */
 export const ShopSettingPage: React.FC = () => {
+  const { activeTab, changeTab } = useTab();
+
   return (
     <Wrap>
       <SettingSideBar />
       <ContentWrap>
         <HeaderWrap>
-          <Tabs tabList={tabList} tabWidth='63rem' />
+          <Tabs
+            tabList={tabList}
+            tabWidth='63rem'
+            activeTab={activeTab}
+            onClickTab={changeTab}
+          />
           <Button
             width='7.6rem'
             height='3.6rem'

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components/macro';
 import type React from 'react';
 import { TabNavItem } from 'components/Tabs.tsx/components/TabNavItem';
@@ -11,18 +10,20 @@ export interface TabItem {
 interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   tabList: TabItem[];
   tabWidth?: string;
+  activeTab: number;
+  onClickTab?: (index: number) => void;
 }
 
 /**
  * 탭 메뉴 컴포넌트
  */
-export const Tabs: React.FC<TabsProps> = ({ tabList, tabWidth, ...rest }) => {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const onClickItem = (index: number) => {
-    setActiveTab(index);
-  };
-
+export const Tabs: React.FC<TabsProps> = ({
+  tabList,
+  tabWidth,
+  activeTab,
+  onClickTab,
+  ...rest
+}) => {
   const tabNavItemList = tabList.map(
     (item, index): React.ReactElement => (
       <TabNavItem
@@ -30,7 +31,8 @@ export const Tabs: React.FC<TabsProps> = ({ tabList, tabWidth, ...rest }) => {
         index={index}
         text={item.label}
         activeTab={activeTab}
-        onClick={() => onClickItem(index)}
+        isClickable={!!onClickTab}
+        {...(onClickTab && { onClick: () => onClickTab(index) })}
       />
     ),
   );
@@ -38,7 +40,11 @@ export const Tabs: React.FC<TabsProps> = ({ tabList, tabWidth, ...rest }) => {
   return (
     <Wrap {...rest}>
       <TabWrap>{tabNavItemList}</TabWrap>
-      <ContentWrap>{tabList[activeTab].content}</ContentWrap>
+      {tabList.map((item, index) => (
+        <ContentWrap hidden={activeTab !== index} key={item.label}>
+          {item.content}
+        </ContentWrap>
+      ))}
     </Wrap>
   );
 };

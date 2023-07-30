@@ -1,18 +1,19 @@
 import styled, { css } from 'styled-components';
 
-export const ListItem = styled.li`
+export const ListItem = styled.li<{
+  active?: boolean;
+  $isClickable: boolean;
+}>`
   flex: 1;
-`;
 
-export const Button = styled.button<{ active?: boolean }>`
-  width: 100%;
-  height: 100%;
-
-  /* background-color: aqua; */
-
-  &:active {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
+  ${({ $isClickable }) =>
+    $isClickable &&
+    css`
+      cursor: pointer;
+      &:active {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    `}
 `;
 
 export const Text = styled.p<{ active?: boolean }>`
