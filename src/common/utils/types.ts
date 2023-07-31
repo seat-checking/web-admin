@@ -3,9 +3,10 @@ export interface JoinFormInputs {
   password: string;
   passwordChecked: string;
   nickname: string;
+  name: string;
   age: number;
   sex: string;
-  employerIdNumber: string;
+  businessRegistrationNumber: string;
   openDate: string;
   adminName: string;
   // 추가

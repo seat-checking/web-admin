@@ -57,7 +57,7 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
         <Input
           label='사업자등록번호'
           placeholder='숫자 10자리를 입력해주세요.'
-          {...register('employerIdNumber', {
+          {...register('businessRegistrationNumber', {
             required: '사업자등록번호는 필수 입력입니다.',
             pattern: {
               value: /^\d{10}$/,
@@ -65,9 +65,9 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
             },
           })}
         />
-        {errors.employerIdNumber && (
+        {errors.businessRegistrationNumber && (
           <GappedErrorMessage>
-            {errors.employerIdNumber?.message}
+            {errors.businessRegistrationNumber?.message}
           </GappedErrorMessage>
         )}
       </InputWrap>
