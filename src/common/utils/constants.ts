@@ -6,3 +6,7 @@ export const PATH = {
   login: 'login',
   join: 'join',
 } as const;
+
+export const STORAGE = {
+  accessToken: 'accessToken',
+} as const;

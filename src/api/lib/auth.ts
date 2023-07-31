@@ -10,6 +10,20 @@ export interface ErrorResponse {
   success: boolean;
 }
 
+interface LoginResponse {
+  accessToken: string;
+  permissionByMenu: string;
+  position: string;
+}
+
+interface SuccessResponse<T> {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: T;
+  status: number;
+}
+
 export class AuthApi {
   static signUp({
     email,
@@ -41,12 +55,16 @@ export class AuthApi {
     });
   }
 
-  static signIn(email: string, password: string): Promise<AxiosResponse> {
-    return axiosClient.post('/admins/sign-in', {
+  static signIn = async (
+    email: string,
+    password: string,
+  ): Promise<LoginResponse> => {
+    const response = await axiosClient.post('/admins/sign-in', {
       email,
       password,
     });
-  }
+    return response.data.result;
+  };
 
   static validateNickname(nickname: string) {
     return axiosClient.post('/admins/validate/nickname', {

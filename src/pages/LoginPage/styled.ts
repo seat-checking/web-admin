@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { Input } from 'components/Input';
 
 import { flexSet } from 'styles/mixin';
 
@@ -15,10 +14,8 @@ export const ContentWrap = styled.div`
   width: 53.9rem;
 `;
 
-export const GappedInput = styled(Input)`
-  & + & {
-    margin-top: 3.2rem;
-  }
+export const InputWrap = styled.div`
+  margin-top: 3.2rem;
 `;
 
 export const Title = styled.h1`
