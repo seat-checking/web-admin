@@ -5,8 +5,8 @@ import type { Ref } from 'react';
 import checkIcon from 'assets/icons/check.svg';
 import checkedIcon from 'assets/icons/checked.svg';
 
-interface RadioProps extends React.HtmlHTMLAttributes<HTMLInputElement> {
-  id: string;
+interface RadioProps extends React.ComponentPropsWithRef<'input'> {
+  id?: string;
   name: string; // radio group 내에서 동일한 이름 사용해야함
   value: string;
 }
@@ -20,11 +20,11 @@ export const CheckRadioButton = forwardRef(
       <>
         <RadioInput
           type='radio'
-          id={id}
           name={name}
           value={value}
           ref={ref}
           {...rest}
+          {...{ id }}
         />
         <div className='radioBtnIcon'>라디오 버튼</div>
       </>
