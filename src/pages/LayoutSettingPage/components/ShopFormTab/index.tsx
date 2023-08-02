@@ -37,6 +37,7 @@ type CheckState = 'SQUARE' | 'RECTANGLE' | 'NONE';
 
 interface ShopFormTabProps {
   rowCnt: number;
+  minRowCnt: number;
   changeRowCnt: (value: number | ChangeRowCommand) => void;
   changeTab: (index: number) => void;
 }
@@ -45,6 +46,7 @@ interface ShopFormTabProps {
  */
 export const ShopFormTab: React.FC<ShopFormTabProps> = ({
   rowCnt,
+  minRowCnt,
   changeRowCnt,
   changeTab,
 }) => {
@@ -78,7 +80,17 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
   };
 
   const handleRoundInput = () => {
-    setHeightInput((prev) => nearestDivisible(prev));
+    // TODO: 리팩토링
+    const minHeight = minRowCnt * TABLE_SIZE_PX;
+    if (heightInput < minHeight) {
+      setHeightInput(minHeight);
+      changeRowCnt(minRowCnt);
+      return;
+    }
+
+    const nearestHeight = nearestDivisible(heightInput);
+    setHeightInput(nearestHeight);
+    changeRowCnt(nearestHeight / TABLE_SIZE_PX);
   };
 
   const handleChangeNextTab = () => {

@@ -39,7 +39,7 @@ export interface MyLayout extends Layout {
 export const LayoutSettingPage: React.FC = () => {
   const { activeTab, changeTab } = useTab();
   const { setSpaces } = useSpace();
-  const { rowCnt, maxHeight, changeRowCnt, changeMaxHeight, findMaxHeight } =
+  const { rowCnt, minRowCnt, changeRowCnt, changeMinRowCnt, findMinRowCnt } =
     useShopHeight(DEFAULT_ROW_CNT);
   const { size } = useContext(DragContext);
 
@@ -99,8 +99,8 @@ export const LayoutSettingPage: React.FC = () => {
   };
 
   useEffect(() => {
-    changeMaxHeight(findMaxHeight(layouts));
-  }, [layouts, changeMaxHeight, findMaxHeight]);
+    changeMinRowCnt(findMinRowCnt(layouts));
+  }, [layouts, changeMinRowCnt, findMinRowCnt]);
 
   useEffect(() => {
     const spaces = shopList.map(({ storeSpaceId, name }) => ({
@@ -148,6 +148,7 @@ export const LayoutSettingPage: React.FC = () => {
                 <ShopFormTab
                   changeRowCnt={changeRowCnt}
                   rowCnt={rowCnt}
+                  minRowCnt={minRowCnt}
                   changeTab={changeTab}
                 />
               ),
@@ -171,7 +172,7 @@ export const LayoutSettingPage: React.FC = () => {
             }}
             minConstraints={[
               TABLE_SIZE_PX,
-              maxHeight * TABLE_SIZE_PX || TABLE_SIZE_PX * 2,
+              minRowCnt * TABLE_SIZE_PX || TABLE_SIZE_PX * 2,
             ]}
             axis={undefined}
             onResize={handleResize}

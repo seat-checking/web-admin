@@ -5,33 +5,36 @@ export type ChangeRowCommand = 'UP' | 'DOWN';
 
 interface Return {
   rowCnt: number;
-  maxHeight: number;
+  minRowCnt: number;
   changeRowCnt: (value: number | ChangeRowCommand) => void;
-  changeMaxHeight: (height: number) => void;
-  findMaxHeight: (layouts: MyLayout[]) => number;
+  changeMinRowCnt: (height: number) => void;
+  findMinRowCnt: (layouts: MyLayout[]) => number;
 }
 
 export const useShopHeight = (defaultRowCnt: number): Return => {
   const [rowCnt, setRowCnt] = useState(defaultRowCnt);
-  const [maxHeight, setMaxHeight] = useState(0);
+  const [minRowCnt, setMinRowCnt] = useState(0);
+
+  const getValidRowCnt = (newRowCnt: number) =>
+    newRowCnt < minRowCnt ? minRowCnt : newRowCnt;
 
   const changeRowCnt = (value: number | ChangeRowCommand) => {
     if (value === 'UP') {
-      setRowCnt((prev) => prev + 1);
+      setRowCnt((prev) => getValidRowCnt(prev + 1));
       return;
     }
     if (value === 'DOWN') {
-      setRowCnt((prev) => prev - 1);
+      setRowCnt((prev) => getValidRowCnt(prev - 1));
       return;
     }
-    setRowCnt(value);
+    setRowCnt(getValidRowCnt(value));
   };
 
-  const changeMaxHeight = (height: number) => {
-    setMaxHeight(height);
+  const changeMinRowCnt = (height: number) => {
+    setMinRowCnt(height);
   };
 
-  const findMaxHeight = (layouts: MyLayout[]) => {
+  const findMinRowCnt = (layouts: MyLayout[]) => {
     let max = 0;
     layouts.forEach((layout) => {
       if (layout.y + layout.h <= max) {
@@ -42,5 +45,11 @@ export const useShopHeight = (defaultRowCnt: number): Return => {
     return max;
   };
 
-  return { rowCnt, maxHeight, changeRowCnt, changeMaxHeight, findMaxHeight };
+  return {
+    rowCnt,
+    minRowCnt,
+    changeRowCnt,
+    changeMinRowCnt,
+    findMinRowCnt,
+  };
 };
