@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import type { ChangeRowCommand } from 'pages/LayoutSettingPage/hooks/useShopHeight';
 import { ReactComponent as ChevronLeftCircle } from 'assets/icons/chevron-left-circle.svg';
 import { ReactComponent as CheveronRightCircle } from 'assets/icons/chevron-right-circle.svg';
 import {
@@ -15,39 +17,121 @@ import {
   Wrap,
 } from 'pages/LayoutSettingPage/components/ShopFormTab/ShopFormTab.styled';
 import { CheckRadioButton } from 'pages/LayoutSettingPage/components/ShopFormTab/components/CheckRadioButton';
+import {
+  COLUMN_CNT,
+  DEFAULT_ROW_CNT,
+  TABLE_SIZE_PX,
+} from 'pages/LayoutSettingPage/utils/constants';
 
+function nearestDivisible(n: number): number {
+  const divisor = TABLE_SIZE_PX;
+  const remainder = n % divisor;
+
+  if (remainder < divisor / 2) {
+    return n - remainder;
+  }
+  return n + (divisor - remainder);
+}
+
+type CheckState = 'SQUARE' | 'RECTANGLE' | 'NONE';
+
+interface ShopFormTabProps {
+  rowCnt: number;
+  changeRowCnt: (value: number | ChangeRowCommand) => void;
+  changeTab: (index: number) => void;
+}
 /**
  * '좌석 설정' > '가게 형태' 탭 클릭했을 때 보여줄 컴포넌트
  */
-export const ShopFormTab: React.FC = () => {
+export const ShopFormTab: React.FC<ShopFormTabProps> = ({
+  rowCnt,
+  changeRowCnt,
+  changeTab,
+}) => {
+  const [checkState, setCheckState] = useState<CheckState>('NONE');
+  const [heightInput, setHeightInput] = useState(rowCnt * TABLE_SIZE_PX);
+
+  const handleResizeUpDown = (command: ChangeRowCommand) => {
+    if (command === 'DOWN' && rowCnt <= 2) {
+      return;
+    }
+    setCheckState('NONE');
+    changeRowCnt(command);
+  };
+
+  const handleResizeByChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const size = e.currentTarget.value;
+    if (size === 'SQUARE') {
+      changeRowCnt(COLUMN_CNT);
+      setCheckState(size);
+      return;
+    }
+    if (size === 'RECTANGLE') {
+      changeRowCnt(DEFAULT_ROW_CNT);
+      setCheckState(size);
+    }
+  };
+
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHeightInput(Number(e.currentTarget.value));
+    setCheckState('NONE');
+  };
+
+  const handleRoundInput = () => {
+    setHeightInput((prev) => nearestDivisible(prev));
+  };
+
+  const handleChangeNextTab = () => {
+    changeTab(1);
+  };
+
+  useEffect(() => {
+    setHeightInput(rowCnt * TABLE_SIZE_PX);
+  }, [rowCnt]);
+
   return (
     <Wrap>
       <DescriptionText>
         우리 가게와 가장 비슷한 형태를 선택해주세요.
       </DescriptionText>
       <LayoutBox>
-        <Label htmlFor='square'>
-          <Square />
-          <CheckRadioButton id='square' name='layout' value='square' />
+        <Label>
+          <Square $isChecked={checkState === 'SQUARE'} />
+          <CheckRadioButton
+            name='layout'
+            value='SQUARE'
+            checked={checkState === 'SQUARE'}
+            onChange={handleResizeByChecked}
+          />
         </Label>
-        <Label htmlFor='rectangle'>
+        <Label>
           <RectangleWrap>
-            <Rectangle />
+            <Rectangle $isChecked={checkState === 'RECTANGLE'} />
           </RectangleWrap>
-          <CheckRadioButton id='rectangle' name='layout' value='rectangle' />
+          <CheckRadioButton
+            name='layout'
+            value='RECTANGLE'
+            checked={checkState === 'RECTANGLE'}
+            onChange={handleResizeByChecked}
+          />
         </Label>
       </LayoutBox>
       <WidthSettingBox>
         <SettingLabel>가게 세로 길이</SettingLabel>
-        <IconWrap>
+        <IconWrap onClick={() => handleResizeUpDown('DOWN')}>
           <ChevronLeftCircle />
         </IconWrap>
-        <HeightInput />
-        <IconWrap>
+        <HeightInput
+          value={heightInput}
+          onChange={handleChangeInput}
+          onBlur={handleRoundInput}
+        />
+
+        <IconWrap onClick={() => handleResizeUpDown('UP')}>
           <CheveronRightCircle />
         </IconWrap>
       </WidthSettingBox>
-      <StyledButton>다음</StyledButton>
+      <StyledButton onClick={handleChangeNextTab}>다음</StyledButton>
     </Wrap>
   );
 };

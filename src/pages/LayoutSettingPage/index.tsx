@@ -1,8 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import type { TabItem } from 'components/Tabs.tsx';
-import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
+import type { SyntheticEvent } from 'react';
 import type { Layout } from 'react-grid-layout';
+import type { ResizeCallbackData } from 'react-resizable';
 
+import { useTab } from 'common/hooks/useTab';
 import { Tabs } from 'components/Tabs.tsx';
 import {
   ChairBorder,
@@ -12,6 +13,7 @@ import {
   RightWrap,
   GridTable,
   StyledSideBar,
+  ResizableWrap,
 } from 'pages/LayoutSettingPage/LayoutSettingPage.styled';
 import { SeatArrangementTab } from 'pages/LayoutSettingPage/components/SeatArrangementTab';
 import { ShopFormTab } from 'pages/LayoutSettingPage/components/ShopFormTab';
@@ -19,33 +21,34 @@ import 'react-resizable/css/styles.css';
 import 'react-grid-layout/css/styles.css';
 
 import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
+import { useShopHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
 import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
 import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
 import {
   COLUMN_CNT,
+  DEFAULT_ROW_CNT,
   TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
 
-const tabList: TabItem[] = [
-  { label: '가게 형태', content: <ShopFormTab /> },
-  { label: '좌석 배치', content: <SeatArrangementTab /> },
-];
-
-interface MyLayout extends Layout {
+export interface MyLayout extends Layout {
   sort: 'chair' | 'table';
 }
 /**
  * 좌석 설정 페이지
  */
 export const LayoutSettingPage: React.FC = () => {
+  const { activeTab, changeTab } = useTab();
   const { setSpaces } = useSpace();
-  const [shopList, setShopList] = useState([]);
-  const [mylayout, setmyLayout] = useState<MyLayout[]>([]);
-  const [spaceList, setSpaceList] = useState<SpaceType[]>([]);
-
+  const { rowCnt, maxHeight, changeRowCnt, changeMaxHeight, findMaxHeight } =
+    useShopHeight(DEFAULT_ROW_CNT);
   const { size } = useContext(DragContext);
 
-  const itemsDom = mylayout.map((item) => {
+  const [shopList, setShopList] = useState([]);
+  const [layouts, setLayouts] = useState<MyLayout[]>([]);
+
+  const itemIndex = useRef(0);
+
+  const itemsDom = layouts.map((item) => {
     const sort = item.i.split('-')[0];
     if (sort === 'chair') {
       return (
@@ -57,32 +60,47 @@ export const LayoutSettingPage: React.FC = () => {
     return <GridTable key={item.i} />;
   });
 
+  const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
+    const { height } = data.size;
+    changeRowCnt(height / TABLE_SIZE_PX);
+  };
+
   const handleDropDragOver = () => {
     return { ...size.current };
   };
 
-  const idx = useRef(0);
   const handleDropItem = (
     myLayout: MyLayout[],
     item: MyLayout,
     e: DragEvent,
   ): void => {
     const sort = e.dataTransfer?.getData('sort');
-
     const { w, h } = size.current;
     item.w = w;
     item.h = h;
-
     if (sort === 'chair') {
       item.isResizable = false;
       item.sort = 'chair';
-      item.i = `chair-${idx.current++}`;
+      item.i = `chair-${itemIndex.current++}`;
     } else {
+      item.isResizable = true;
       item.sort = 'table';
-      item.i = `table-${idx.current++}`;
+      item.i = `table-${itemIndex.current++}`;
     }
-    setmyLayout(myLayout);
+    setLayouts(myLayout);
   };
+
+  const handleLayoutChange = (layout: MyLayout[]) => {
+    if (layout.at(-1)?.i === '__dropping-elem__') {
+      return;
+    }
+
+    setLayouts(layout);
+  };
+
+  useEffect(() => {
+    changeMaxHeight(findMaxHeight(layouts));
+  }, [layouts, changeMaxHeight, findMaxHeight]);
 
   useEffect(() => {
     const spaces = shopList.map(({ storeSpaceId, name }) => ({
@@ -92,33 +110,116 @@ export const LayoutSettingPage: React.FC = () => {
     setSpaces(spaces);
   }, [shopList, setSpaces]);
 
+  useEffect(() => {
+    if (activeTab === 0) {
+      setLayouts((prev) =>
+        prev.map((item) => {
+          const result = { ...item, isDraggable: false };
+          if (item.i.split('-')[0] === 'table') {
+            result.isResizable = false;
+          }
+          return result;
+        }),
+      );
+      return;
+    }
+    if (activeTab === 1) {
+      setLayouts((prev) =>
+        prev.map((item) => {
+          const result = { ...item, isDraggable: true };
+          if (item.i.split('-')[0] === 'table') {
+            result.isResizable = true;
+          }
+          return result;
+        }),
+      );
+    }
+  }, [activeTab]);
+
   return (
     <Wrap>
       <StyledSideBar>
-        <Tabs tabList={tabList} />
+        <Tabs
+          activeTab={activeTab}
+          tabList={[
+            {
+              label: '가게 형태',
+              content: (
+                <ShopFormTab
+                  changeRowCnt={changeRowCnt}
+                  rowCnt={rowCnt}
+                  changeTab={changeTab}
+                />
+              ),
+            },
+            {
+              label: '좌석 배치',
+              content: <SeatArrangementTab changeTab={changeTab} />,
+            },
+          ]}
+        />
       </StyledSideBar>
       <RightWrap>
         <SpaceRow />
-        <ShopGridBackground
-          layout={mylayout}
-          rowHeight={TABLE_SIZE_PX}
-          // width/cols = rowHeight가 나와야 정사각형 나옴
-          cols={COLUMN_CNT}
-          width={TABLE_SIZE_PX * COLUMN_CNT}
-          $height={15 * TABLE_SIZE_PX}
-          margin={[0, 0]}
-          // 이게 없어야 배경색 보임, 드래그앤드롭 자유배치 가능
-          autoSize={false}
-          compactType={null}
-          maxRows={15}
-          // 이게 있어야 아이템이 이동시킬 때 다른 아이템이 움직이지 않음
-          preventCollision
-          isDroppable
-          onDrop={handleDropItem}
-          onDropDragOver={handleDropDragOver}
-        >
-          {itemsDom}
-        </ShopGridBackground>
+        {activeTab === 0 ? (
+          <ResizableWrap
+            width={TABLE_SIZE_PX * COLUMN_CNT}
+            height={rowCnt * TABLE_SIZE_PX}
+            resizeHandles={['s']}
+            draggableOpts={{
+              grid: [TABLE_SIZE_PX, TABLE_SIZE_PX],
+            }}
+            minConstraints={[
+              TABLE_SIZE_PX,
+              maxHeight * TABLE_SIZE_PX || TABLE_SIZE_PX * 2,
+            ]}
+            axis={undefined}
+            onResize={handleResize}
+          >
+            <ShopGridBackground
+              layout={layouts}
+              rowHeight={TABLE_SIZE_PX}
+              // width/cols = rowHeight가 나와야 정사각형 나옴
+              cols={COLUMN_CNT}
+              width={TABLE_SIZE_PX * COLUMN_CNT}
+              $height={rowCnt * TABLE_SIZE_PX}
+              margin={[0, 0]}
+              // 이게 없어야 배경색 보임, 드래그앤드롭 자유배치 가능
+              autoSize={false}
+              compactType={null}
+              maxRows={rowCnt}
+              // 이게 있어야 아이템이 이동시킬 때 다른 아이템이 움직이지 않음
+              preventCollision
+              isDroppable
+              onDrop={handleDropItem}
+              onDropDragOver={handleDropDragOver}
+              onLayoutChange={handleLayoutChange}
+            >
+              {itemsDom}
+            </ShopGridBackground>
+          </ResizableWrap>
+        ) : (
+          <ResizableWrap as='div'>
+            <ShopGridBackground
+              layout={layouts}
+              rowHeight={TABLE_SIZE_PX}
+              cols={COLUMN_CNT}
+              width={TABLE_SIZE_PX * COLUMN_CNT}
+              $height={rowCnt * TABLE_SIZE_PX}
+              margin={[0, 0]}
+              autoSize={false}
+              compactType={null}
+              maxRows={rowCnt}
+              preventCollision
+              isDroppable
+              onDrop={handleDropItem}
+              onDropDragOver={handleDropDragOver}
+              onLayoutChange={handleLayoutChange}
+            >
+              {itemsDom}
+            </ShopGridBackground>
+          </ResizableWrap>
+        )}
       </RightWrap>
     </Wrap>
   );

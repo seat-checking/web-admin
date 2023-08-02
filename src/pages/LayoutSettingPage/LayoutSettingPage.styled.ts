@@ -1,5 +1,7 @@
 import GridLayout from 'react-grid-layout';
+import { ResizableBox } from 'react-resizable';
 import styled from 'styled-components/macro';
+import chevronDown from 'assets/icons/chevron-down.svg';
 import { SideBar } from 'components/SideBar';
 import {
   CHAIR_BORDER_PX,
@@ -12,10 +14,32 @@ export const Wrap = styled.div`
   display: flex;
   background-color: ${({ theme }) => theme.palette.grey[100]};
 
-  // resizable 영역 범위 바꾸는 부분
+  // 그리드 아이템의 resizable 영역 좁힘
   .react-grid-item > .react-resizable-handle {
     width: 1rem;
     height: 1rem;
+  }
+
+  // 가게 형태 resizable 마우스 커스텀
+  .react-resizable > .react-resizable-handle.react-resizable-handle-s {
+    transform: rotate(0);
+    bottom: -5px;
+    width: 100%;
+    left: 0;
+    margin-left: 0;
+    background-image: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      width: 3rem;
+      height: 3rem;
+      background-color: ${({ theme }) => theme.palette.grey[300]};
+      mask-image: url(${chevronDown});
+      mask-position: center;
+      mask-size: contain;
+    }
   }
 `;
 
@@ -31,22 +55,24 @@ export const RightWrap = styled.div`
   flex-direction: column;
 `;
 
-export const ShopGridBackground = styled(GridLayout)<{
-  width: number;
-  $height: number;
-}>`
-  width: ${({ width }) => {
-    return width + 'px';
-  }};
-
-  height: 500px;
-
+export const ResizableWrap = styled(ResizableBox)`
   background-color: white;
 
   border-bottom: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
   border-left: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
   border-right: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
   border-radius: 0 0 1.2rem 1.2rem;
+`;
+
+export const ShopGridBackground = styled(GridLayout)<{
+  width: number;
+  $height?: number;
+}>`
+  width: ${({ width }) => {
+    return width + 'px';
+  }};
+
+  height: ${({ $height }) => $height + 'px'};
 `;
 
 export const GridWrap = styled.div`
@@ -64,7 +90,9 @@ export const GridTable = styled.div`
 `;
 
 // 의자 바깥에 투명한 테두리를 넣기 위함
-export const ChairBorder = styled.div``;
+export const ChairBorder = styled.div`
+  ${flexSet()}
+`;
 
 // 검정 테두리를 준 의자 영역
 export const Chair = styled.div`

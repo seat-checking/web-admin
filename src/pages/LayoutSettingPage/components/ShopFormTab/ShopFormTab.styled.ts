@@ -35,16 +35,20 @@ export const Label = styled.label`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  cursor: pointer;
 `;
 
 const SQUARE_HEIGHT = 10;
 
-export const Square = styled.div`
+export const Square = styled.div<{ $isChecked: boolean }>`
   margin-bottom: 1rem;
   width: 10rem;
   height: ${SQUARE_HEIGHT}rem;
 
-  border: 0.2rem solid ${({ theme }) => theme.palette.grey[200]};
+  border: 0.2rem solid
+    ${({ $isChecked, theme }) =>
+      $isChecked ? theme.palette.primary.orange : theme.palette.grey[200]};
   border-radius: 0.4rem;
 
   background-color: ${({ theme }) => theme.palette.grey[50]};
@@ -97,9 +101,14 @@ export const HeightInput = styled.input`
   font-weight: 500;
   text-align: center;
   color: ${({ theme }) => theme.palette.grey[500]};
+
+  &:focus {
+    border: 1px solid ${({ theme }) => theme.palette.primary.orange};
+  }
 `;
 
 export const IconWrap = styled.div`
+  cursor: pointer;
   &:hover {
     svg {
       rect {
