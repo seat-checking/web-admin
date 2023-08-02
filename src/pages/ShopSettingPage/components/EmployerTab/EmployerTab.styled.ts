@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Circle from 'assets/icons/alertcircle.svg';
+import Circle from 'assets/icons/alert-circle.svg';
 import Search from 'assets/icons/search.svg';
 
 export const EmployerTabWrapper = styled.div`

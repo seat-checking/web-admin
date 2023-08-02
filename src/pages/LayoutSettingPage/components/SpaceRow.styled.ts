@@ -4,7 +4,24 @@ import {
   TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
 
-export const Wrap = styled.div`
+export const InfoWrap = styled.div`
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 0.8rem;
+
+  font-size: 1.6rem;
+  font-weight: 400;
+  background-color: ${({ theme }) => theme.palette.black};
+`;
+
+export const BoldText = styled.span`
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0.8rem 0 0.4rem;
+`;
+
+export const SpaceWrap = styled.div`
   display: flex;
 
   padding: 2rem;
