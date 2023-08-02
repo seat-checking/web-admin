@@ -43,10 +43,13 @@ export const LoginPage: React.FC = () => {
     password,
   }) => {
     try {
-      const res = await AuthApi.signIn(email, password);
-      const { accessToken, permissionByMenu, position } = res;
-      console.log('res :>> ', res);
+      const { accessToken, permissionByMenu, position } = await AuthApi.signIn(
+        email,
+        password,
+      );
+
       localStorage.setItem(STORAGE.accessToken, accessToken);
+
       navigate('/');
     } catch (error) {
       if (isAxiosError<ErrorResponse>(error)) {
