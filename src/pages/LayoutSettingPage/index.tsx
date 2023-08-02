@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import type { ShopFormState } from 'pages/LayoutSettingPage/utils/types';
 import type { SyntheticEvent } from 'react';
 import type { Layout } from 'react-grid-layout';
 import type { ResizeCallbackData } from 'react-resizable';
@@ -16,10 +17,10 @@ import {
   ResizableWrap,
 } from 'pages/LayoutSettingPage/LayoutSettingPage.styled';
 import { SeatArrangementTab } from 'pages/LayoutSettingPage/components/SeatArrangementTab';
-import { ShopFormTab } from 'pages/LayoutSettingPage/components/ShopFormTab';
 import 'react-resizable/css/styles.css';
 import 'react-grid-layout/css/styles.css';
 
+import { ShopFormTab } from 'pages/LayoutSettingPage/components/ShopFormTab';
 import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
 import { useShopHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
 import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
@@ -43,6 +44,8 @@ export const LayoutSettingPage: React.FC = () => {
     useShopHeight(DEFAULT_ROW_CNT);
   const { size } = useContext(DragContext);
 
+  const [shopFormState, setShopFormState] =
+    useState<ShopFormState>('RECTANGLE');
   const [shopList, setShopList] = useState([]);
   const [layouts, setLayouts] = useState<MyLayout[]>([]);
 
@@ -63,6 +66,7 @@ export const LayoutSettingPage: React.FC = () => {
   const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
     const { height } = data.size;
     changeRowCnt(height / TABLE_SIZE_PX);
+    setShopFormState('NONE');
   };
 
   const handleDropDragOver = () => {
@@ -150,6 +154,8 @@ export const LayoutSettingPage: React.FC = () => {
                   rowCnt={rowCnt}
                   minRowCnt={minRowCnt}
                   changeTab={changeTab}
+                  shopFormState={shopFormState}
+                  setShopFormState={setShopFormState}
                 />
               ),
             },

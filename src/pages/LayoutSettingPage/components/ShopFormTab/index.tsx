@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ChangeRowCommand } from 'pages/LayoutSettingPage/hooks/useShopHeight';
+import type { ShopFormState } from 'pages/LayoutSettingPage/utils/types';
 import { ReactComponent as ChevronLeftCircle } from 'assets/icons/chevron-left-circle.svg';
 import { ReactComponent as CheveronRightCircle } from 'assets/icons/chevron-right-circle.svg';
 import {
@@ -33,13 +34,13 @@ function nearestDivisible(n: number): number {
   return n + (divisor - remainder);
 }
 
-type CheckState = 'SQUARE' | 'RECTANGLE' | 'NONE';
-
 interface ShopFormTabProps {
   rowCnt: number;
   minRowCnt: number;
   changeRowCnt: (value: number | ChangeRowCommand) => void;
   changeTab: (index: number) => void;
+  shopFormState: ShopFormState;
+  setShopFormState: React.Dispatch<React.SetStateAction<ShopFormState>>;
 }
 /**
  * '좌석 설정' > '가게 형태' 탭 클릭했을 때 보여줄 컴포넌트
@@ -49,8 +50,9 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
   minRowCnt,
   changeRowCnt,
   changeTab,
+  shopFormState: checkState,
+  setShopFormState: setCheckState,
 }) => {
-  const [checkState, setCheckState] = useState<CheckState>('NONE');
   const [heightInput, setHeightInput] = useState(rowCnt * TABLE_SIZE_PX);
 
   const handleResizeUpDown = (command: ChangeRowCommand) => {
