@@ -17,14 +17,25 @@ import {
 import { Chair } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Chair';
 import { Table } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Table';
 
+interface SeatArrangementTabProps {
+  changeTab: (index: number) => void;
+}
+
 /**
  * '좌석 설정' > '좌석 배치' 탭 클릭했을 때 보여줄 컴포넌트
  */
-export const SeatArrangementTab: React.FC = () => {
+export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
+  changeTab,
+}) => {
   const theme = useTheme();
 
   const handleSave = () => {
+    // TODO api 호출
     // ShopApi.saveShopLayout(1);
+  };
+
+  const handleChangePreviousTab = () => {
+    changeTab(0);
   };
   return (
     <Wrap>
@@ -72,7 +83,7 @@ export const SeatArrangementTab: React.FC = () => {
 
       <ButtonRow>
         <StyledButton
-          onClick={handleSave}
+          onClick={handleChangePreviousTab}
           backgroundColor={theme.palette.grey[100]}
           color={theme.palette.grey[400]}
         >
