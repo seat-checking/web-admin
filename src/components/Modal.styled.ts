@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const ModalWrapper = styled.div`
   width: 35.4rem;
-  height: 21.7rem;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -22,4 +21,6 @@ export const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  z-index: 100;
 `;
