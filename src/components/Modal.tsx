@@ -1,13 +1,22 @@
-import type React from 'react';
-import { ModalOverlay, ModalWrapper } from 'components/Modal.styled';
+import React from 'react';
+import { useTheme } from 'styled-components';
+import { ReactComponent as XIcon } from 'assets/icons/x.svg';
+import {
+  HeaderWrap,
+  ModalOverlay,
+  ModalWrapper,
+} from 'components/Modal.styled';
 
 interface ModalProps {
   isOpen: boolean;
+  closeOnOusideClick?: boolean;
   onClose?: () => void;
   children: React.ReactNode;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+export const Modal: React.FC<ModalProps> & {
+  Header: React.FC<HeaderProps>;
+} = ({ isOpen, onClose, children, closeOnOusideClick = true }) => {
   if (!isOpen) {
     return null;
   }
@@ -17,8 +26,42 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   };
 
   return (
-    <ModalOverlay onClick={onClose}>
-      <ModalWrapper onClick={handleWrapperClick}>{children}</ModalWrapper>
+    <ModalOverlay {...(closeOnOusideClick && { onClick: onClose })}>
+      <ModalWrapper onClick={handleWrapperClick}>
+        {React.Children.map(children, (child) => {
+          if (
+            React.isValidElement<HeaderProps>(child) &&
+            child.type === Modal.Header
+          ) {
+            return React.cloneElement(child, { onClose });
+          }
+          return child;
+        })}
+      </ModalWrapper>
     </ModalOverlay>
   );
 };
+
+interface HeaderProps {
+  children: React.ReactNode;
+  onClose?: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ children, onClose }) => {
+  const theme = useTheme();
+
+  const handleClose = () => {
+    onClose?.();
+  };
+
+  return (
+    <HeaderWrap>
+      {children}
+      <button type='button' onClick={handleClose}>
+        <XIcon stroke={theme.palette.grey[300]} />
+      </button>
+    </HeaderWrap>
+  );
+};
+
+Modal.Header = Header;

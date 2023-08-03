@@ -5,6 +5,7 @@ declare module 'styled-components' {
     palette: {
       primary: {
         orange: string;
+        dark: string;
       };
       error: {
         main: string;
@@ -13,6 +14,7 @@ declare module 'styled-components' {
         main: string;
       };
       grey: {
+        30: string;
         50: string;
         100: string;
         200: string;

@@ -1,6 +1,5 @@
 import type { HTMLAttributes } from 'react';
 import {
-  Button,
   ListItem,
   Text,
 } from 'components/Tabs.tsx/components/TabNavItem.styled';
@@ -9,6 +8,7 @@ interface TabNavItemProps extends HTMLAttributes<HTMLLIElement> {
   text: string;
   index: number;
   activeTab: number;
+  isClickable: boolean;
 }
 
 /**
@@ -18,13 +18,12 @@ export const TabNavItem: React.FC<TabNavItemProps> = ({
   text,
   index,
   activeTab,
+  isClickable,
   ...rest
 }) => {
   return (
-    <ListItem {...rest}>
-      <Button type='button'>
-        <Text active={activeTab === index}>{text}</Text>
-      </Button>
+    <ListItem {...rest} $isClickable={isClickable}>
+      <Text active={activeTab === index}>{text}</Text>
     </ListItem>
   );
 };

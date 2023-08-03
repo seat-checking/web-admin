@@ -1,3 +1,4 @@
+import { useTheme } from 'styled-components';
 import { StyledButton } from 'components/Button.styled';
 
 interface ButtonProps extends React.HtmlHTMLAttributes<HTMLButtonElement> {
@@ -8,6 +9,9 @@ interface ButtonProps extends React.HtmlHTMLAttributes<HTMLButtonElement> {
   height?: string;
   borderRadius?: string;
   type?: 'submit' | 'button' | 'reset' | undefined;
+  backgroundColor?: string;
+  color?: string;
+  fontSize?: string;
 }
 
 /**
@@ -21,8 +25,13 @@ export const Button: React.FC<ButtonProps> = ({
   isDisabled,
   type = 'submit',
   children,
+  backgroundColor,
+  color = 'white',
+  fontSize = '2rem',
   ...rest
 }) => {
+  const theme = useTheme();
+  const bgColor = backgroundColor || theme.palette.primary.orange;
   return (
     <StyledButton
       type={type}
@@ -31,6 +40,9 @@ export const Button: React.FC<ButtonProps> = ({
       width={width}
       height={height}
       borderRadius={borderRadius}
+      bgColor={bgColor}
+      color={color}
+      fontSize={fontSize}
       {...rest}
     >
       {children}

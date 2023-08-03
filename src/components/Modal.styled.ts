@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const ModalWrapper = styled.div`
   width: 35.4rem;
-  height: 21.7rem;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -22,4 +21,19 @@ export const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  z-index: 100;
+`;
+
+export const HeaderWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  padding: 1.2rem 1.6rem;
+
+  color: ${({ theme }) => theme.palette.grey[500]};
+  font-size: 1.6rem;
+  font-weight: 700;
+
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey[50]};
 `;
