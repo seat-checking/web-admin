@@ -37,24 +37,26 @@ export const Tabs: React.FC<TabsProps> = ({ tabList, tabWidth, ...rest }) => {
 
   return (
     <Wrap {...rest}>
-      <TabContainer tabWidth={tabWidth}>{tabNavItemList}</TabContainer>
-      {tabList[activeTab].content}
+      <TabWrap>{tabNavItemList}</TabWrap>
+      <ContentWrap>{tabList[activeTab].content}</ContentWrap>
     </Wrap>
   );
 };
 
 const Wrap = styled.div`
-  height: 6rem;
-
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
-const TabContainer = styled.ul<{ tabWidth?: string }>`
-  max-width: ${({ tabWidth }) => tabWidth && tabWidth};
+const TabWrap = styled.ul`
   display: flex;
-  height: 100%;
+  height: 6rem;
 
   box-shadow: inset 0px -0.3rem 0px #e6e6e6;
+`;
 
-  /* background-color: yellow; */
+const ContentWrap = styled.div`
+  flex: 1;
 `;
