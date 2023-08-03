@@ -55,13 +55,15 @@ export const RightWrap = styled.div`
   flex-direction: column;
 `;
 
-export const ResizableWrap = styled(ResizableBox)`
+export const ResizableWrap = styled(ResizableBox)<{ $width?: number }>`
   background-color: white;
 
   border-bottom: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
   border-left: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
   border-right: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
   border-radius: 0 0 1.2rem 1.2rem;
+
+  width: ${({ $width }) => $width && $width + 'px'};
 `;
 
 export const ShopGridBackground = styled(GridLayout)<{

@@ -206,7 +206,7 @@ export const LayoutSettingPage: React.FC = () => {
             </ShopGridBackground>
           </ResizableWrap>
         ) : (
-          <ResizableWrap as='div'>
+          <ResizableWrap as='div' $width={TABLE_SIZE_PX * COLUMN_CNT}>
             <ShopGridBackground
               layout={layouts}
               rowHeight={TABLE_SIZE_PX}
