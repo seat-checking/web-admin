@@ -7,6 +7,7 @@ export const StyledButton = styled.button<{
   borderRadius: string;
   bgColor: string;
   color: string;
+  fontSize: string;
 }>`
   width: ${({ width }) => width};
   height: ${({ height }) => height};
@@ -16,8 +17,7 @@ export const StyledButton = styled.button<{
   border-radius: ${({ borderRadius }) => borderRadius};
 
   font-weight: 500;
-  font-size: 2rem;
-
+  font-size: ${({ fontSize }) => fontSize};
   &:hover {
     filter: brightness(95%);
   }
