@@ -11,6 +11,7 @@ interface ButtonProps extends React.HtmlHTMLAttributes<HTMLButtonElement> {
   type?: 'submit' | 'button' | 'reset' | undefined;
   backgroundColor?: string;
   color?: string;
+  fontSize?: string;
 }
 
 /**
@@ -26,6 +27,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   backgroundColor,
   color = 'white',
+  fontSize = '2rem',
   ...rest
 }) => {
   const theme = useTheme();
@@ -40,6 +42,7 @@ export const Button: React.FC<ButtonProps> = ({
       borderRadius={borderRadius}
       bgColor={bgColor}
       color={color}
+      fontSize={fontSize}
       {...rest}
     >
       {children}
