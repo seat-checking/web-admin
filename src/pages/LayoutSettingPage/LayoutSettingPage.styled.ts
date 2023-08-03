@@ -49,7 +49,7 @@ export const StyledSideBar = styled(SideBar)`
 `;
 
 export const RightWrap = styled.div`
-  /* background-color: aqua; */
+  padding: 3rem 1.5rem;
 
   margin: auto;
   flex-direction: column;

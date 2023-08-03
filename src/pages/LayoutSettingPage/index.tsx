@@ -180,6 +180,7 @@ export const LayoutSettingPage: React.FC = () => {
               TABLE_SIZE_PX,
               minRowCnt * TABLE_SIZE_PX || TABLE_SIZE_PX * 2,
             ]}
+            maxConstraints={[1000, TABLE_SIZE_PX * COLUMN_CNT]}
             axis={undefined}
             onResize={handleResize}
           >
