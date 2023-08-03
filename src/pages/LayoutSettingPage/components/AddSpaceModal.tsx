@@ -44,13 +44,8 @@ export const AddSpaceModal: React.FC = () => {
   };
 
   return (
-    <Modal isOpen={isOpen}>
-      <Header>
-        스페이스 생성
-        <button type='button' onClick={handleClose}>
-          <XIcon stroke={theme.palette.grey[300]} />
-        </button>
-      </Header>
+    <Modal isOpen={isOpen} onClose={handleClose} closeOnOusideClick={false}>
+      <Modal.Header>스페이스 생성</Modal.Header>
       <Content>
         <SpaceNameLabel>사용할 스페이스의 이름을 적어주세요</SpaceNameLabel>
         <SpaceNameInput
@@ -95,19 +90,6 @@ export const AddSpaceModal: React.FC = () => {
     </Modal>
   );
 };
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-
-  padding: 1.2rem 1.6rem;
-
-  color: ${({ theme }) => theme.palette.grey[500]};
-  font-size: 1.6rem;
-  font-weight: 700;
-
-  border-bottom: 1px solid ${({ theme }) => theme.palette.grey[50]};
-`;
 
 const Content = styled.div`
   padding: 1.6rem;

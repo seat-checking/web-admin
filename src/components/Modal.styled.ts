@@ -24,3 +24,16 @@ export const ModalOverlay = styled.div`
 
   z-index: 100;
 `;
+
+export const HeaderWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  padding: 1.2rem 1.6rem;
+
+  color: ${({ theme }) => theme.palette.grey[500]};
+  font-size: 1.6rem;
+  font-weight: 700;
+
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey[50]};
+`;
