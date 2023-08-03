@@ -98,9 +98,7 @@ module.exports = {
     ],
     // jsx 코드 하단에 스타일 선언하기 위함
     '@typescript-eslint/no-use-before-define': 'off',
-    // 사용하지 않는 변수에 error 대신 warn 사용, 코드 테스트할 때 불편하기 때문
     '@typescript-eslint/no-unused-vars': 'warn',
-    '@typescript-eslint/no-unused-expressions': 'warn',
     'import/order': [
       'error',
       {

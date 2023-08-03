@@ -5,14 +5,12 @@ export const StyledButton = styled.button<{
   width: string;
   height: string;
   borderRadius: string;
-  bgColor: string;
-  color: string;
 }>`
   width: ${({ width }) => width};
   height: ${({ height }) => height};
 
-  background-color: ${({ bgColor }) => bgColor};
-  color: ${({ color }) => color};
+  background-color: ${({ theme }) => theme.palette.primary.orange};
+  color: white;
   border-radius: ${({ borderRadius }) => borderRadius};
 
   font-weight: 500;
