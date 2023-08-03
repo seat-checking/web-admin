@@ -81,14 +81,14 @@ export const GridWrap = styled.div`
   background-color: skyblue;
 `;
 
-export const GridTable = styled.div`
+export const GridTable = styled.div<{ isClickable: boolean }>`
   background-color: ${(props): string => props.theme.palette.grey[100]};
 
   border-color: ${({ theme }) => theme.palette.black.main};
   border-width: 1px;
   border-style: solid;
 
-  cursor: pointer;
+  cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
 `;
 
 // 의자 바깥에 투명한 테두리를 넣기 위함
@@ -97,7 +97,7 @@ export const ChairBorder = styled.div`
 `;
 
 // 검정 테두리를 준 의자 영역
-export const Chair = styled.div`
+export const Chair = styled.div<{ isClickable: boolean }>`
   background-color: ${(props): string => props.theme.palette.grey[100]};
 
   width: ${CHAIR_SIZE_PX - CHAIR_BORDER_PX}px;
@@ -106,5 +106,5 @@ export const Chair = styled.div`
   border: ${CHAIR_BORDER_PX}px solid ${({ theme }) => theme.palette.black.main};
   border-radius: 50%;
 
-  cursor: pointer;
+  cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
 `;

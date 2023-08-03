@@ -56,11 +56,11 @@ export const LayoutSettingPage: React.FC = () => {
     if (sort === 'chair') {
       return (
         <ChairBorder key={item.i} className='chair'>
-          <Chair />
+          <Chair isClickable={activeTab === 1} />
         </ChairBorder>
       );
     }
-    return <GridTable key={item.i} />;
+    return <GridTable key={item.i} isClickable={activeTab === 1} />;
   });
 
   const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
