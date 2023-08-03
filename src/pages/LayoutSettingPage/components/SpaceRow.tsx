@@ -1,5 +1,8 @@
 import { ReactComponent as AlertCircleBorderIcon } from 'assets/icons/alert-circle-border.svg';
 import { ReactComponent as PlusCircle } from 'assets/icons/plus-circle.svg';
+import { AddSpaceModal } from 'pages/LayoutSettingPage/components/AddSpaceModal';
+import { DeleteSpaceModal } from 'pages/LayoutSettingPage/components/DeleteSpaceModal';
+import { ExitConfirmModal } from 'pages/LayoutSettingPage/components/ExitConfirmModal';
 
 import { Space } from 'pages/LayoutSettingPage/components/Space';
 import {
@@ -40,6 +43,9 @@ export const SpaceRow: React.FC = () => {
           <AddText>스페이스 추가</AddText>
         </AddRow>
       </SpaceWrap>
+      <AddSpaceModal />
+      <DeleteSpaceModal />
+      <ExitConfirmModal />
     </>
   );
 };
