@@ -63,13 +63,13 @@ export const ResizableWrap = styled(ResizableBox)<{
   width: ${({ $width }) => $width && $width + 'px'};
 
   box-sizing: content-box;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 4px;
+  padding-bottom: 4px;
 
-  border-bottom: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
-  border-left: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
-  border-right: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
-  border-radius: 0 0 1.2rem 1.2rem;
+  border-bottom: 2px solid ${({ theme }) => theme.palette.grey[200]};
+  border-left: 2px solid ${({ theme }) => theme.palette.grey[200]};
+  border-right: 2px solid ${({ theme }) => theme.palette.grey[200]};
+  border-radius: 0 0 12px 12px;
 `;
 
 export const ShopGridBackground = styled(GridLayout)<{

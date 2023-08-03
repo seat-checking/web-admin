@@ -25,7 +25,7 @@ export const SpaceWrap = styled.div`
   display: flex;
 
   /* padding: 2rem 0rem 0 2rem; */
-  width: ${TABLE_SIZE_PX * COLUMN_CNT + 'px'};
+  width: ${TABLE_SIZE_PX * COLUMN_CNT + 4 + 'px'};
   background-color: ${({ theme }) => theme.palette.primary.dark};
   border-radius: 1.2rem 1.2rem 0 0;
 
