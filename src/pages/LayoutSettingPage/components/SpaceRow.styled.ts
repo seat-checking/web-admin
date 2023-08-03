@@ -24,26 +24,46 @@ export const BoldText = styled.span`
 export const SpaceWrap = styled.div`
   display: flex;
 
-  padding: 2rem;
+  /* padding: 2rem 0rem 0 2rem; */
   width: ${TABLE_SIZE_PX * COLUMN_CNT + 'px'};
-  height: 13.1rem;
   background-color: ${({ theme }) => theme.palette.primary.dark};
   border-radius: 1.2rem 1.2rem 0 0;
 
-  border-top: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
-  border-left: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
-  border-right: 0.3rem solid ${({ theme }) => theme.palette.grey[200]};
+  // TODO 바깥 테두리 (순권)
+  /* outline-style: solid;
+  outline-color: ${({ theme }) => theme.palette.grey[200]};
+  outline-width: 0.3rem 0.3rem 0 0.3rem; */
 
-  overflow-x: auto;
+  // 내부 테두리
+  border-color: ${({ theme }) => theme.palette.primary.dark};
+  border-style: solid;
+  border-width: 2rem 0rem 0.6rem 2rem;
 
-  // 스크롤바 숨기기
-  /* ( 크롬, 사파리, 오페라, 엣지 ) 동작 */
-  &::-webkit-scrollbar {
-    display: none;
+  padding-bottom: 0.6rem;
+
+  overflow-x: scroll;
+
+  ::-webkit-scrollbar {
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    border: 0.5px solid var(--grey-300, #a9abb6);
+    background: rgba(255, 255, 255, 0.1);
   }
 
-  & {
-    scrollbar-width: none; /* 파이어폭스 */
+  &::after {
+    content: '';
+    position: sticky;
+    right: 0;
+    width: 4.4rem;
+    height: 9.1rem;
+    opacity: 0.5;
+    background: linear-gradient(270deg, #303030 0%, rgba(48, 48, 48, 0) 100%);
+    pointer-events: none; // 클릭 무시
   }
 `;
 
