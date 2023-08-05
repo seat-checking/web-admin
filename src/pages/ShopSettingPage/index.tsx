@@ -47,6 +47,8 @@ export const ShopSettingPage: React.FC = () => {
             style={{
               position: 'absolute',
               marginLeft: 'auto',
+              marginRight: '9.6rem',
+              top: 'calc((6rem - 3.6rem )/2)',
               right: 0,
             }}
           >
