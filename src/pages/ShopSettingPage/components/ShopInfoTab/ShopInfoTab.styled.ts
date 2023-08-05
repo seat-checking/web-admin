@@ -59,18 +59,6 @@ export const WifiLabelWrap = styled.div`
 `;
 export const WifiHelperWrap = styled.div`
   margin-left: 0.6rem;
-
-  display: flex;
-  align-items: center;
-`;
-
-export const OpenHelperWrap = styled.div`
-  display: flex;
-  align-items: center;
-`;
-export const HelperText = styled.span`
-  margin-left: 0.4rem;
-  color: ${({ theme }) => theme.palette.grey[400]};
 `;
 
 export const FileInput = styled.input``;

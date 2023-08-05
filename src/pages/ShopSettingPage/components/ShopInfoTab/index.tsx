@@ -2,6 +2,7 @@ import { ReactComponent as AlertCicleIcon } from 'assets/icons/alert-circle.svg'
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import { Radio } from 'components/Radio';
+import { HelperText } from 'pages/ShopSettingPage/components/HelperText';
 import { Toggle } from 'pages/ShopSettingPage/components/SettingSideBar/Toggle';
 import {
   ContentWrap,
@@ -10,8 +11,6 @@ import {
   LeftWrap,
   ListItem,
   ListItemFlex,
-  HelperText,
-  OpenHelperWrap,
   OpenText,
   RadioRow,
   RightWrap,
@@ -31,7 +30,6 @@ export const ShopInfoTab: React.FC = () => {
           <WifiLabelWrap>
             <Label label='Wi-Fi 등록' marginBottom='0' />
             <WifiHelperWrap>
-              <AlertCicleIcon />
               <HelperText>
                 현재 가게에서 사용중인 Wi-Fi를 통해 고객들의 입실과 퇴실 여부를
                 확인할 수 있어요.
@@ -44,13 +42,10 @@ export const ShopInfoTab: React.FC = () => {
       <ListItemFlex>
         <LeftWrap>
           <Label label='가게 운영 여부' />
-          <OpenHelperWrap>
-            <AlertCicleIcon />
-            <HelperText>
-              한동안 가게 운영이 어려울 때만 OFF로 바꿔주세요. (고객들에게 우리
-              가게가 이지 않아요!)
-            </HelperText>
-          </OpenHelperWrap>
+          <HelperText>
+            한동안 가게 운영이 어려울 때만 OFF로 바꿔주세요. (고객들에게 우리
+            가게가 이지 않아요!)
+          </HelperText>
         </LeftWrap>
         <RightWrap>
           <Toggle />
