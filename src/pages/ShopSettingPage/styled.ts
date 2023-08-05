@@ -6,16 +6,16 @@ export const Wrap = styled.div`
   overflow: auto; // 필요
   display: flex;
 `;
-export const HeaderWrap = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
 
 export const ContentWrap = styled.div`
   padding-top: 8.9rem;
-  padding-right: 9.6rem;
   flex: 1;
+`;
+
+export const HeaderWrap = styled.div`
+  position: relative; // 버튼 배치 위함
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;

@@ -1,21 +1,27 @@
 import styled from 'styled-components';
 
-export const Wrap = styled.div`
-  padding-top: 4rem;
-  width: 100%;
-  /* background-color: red; */
-`;
-
 export const ContentWrap = styled.ul`
-  width: 53.9rem;
-  margin: auto;
-  /* background-color: yellow; */
+  width: 100%;
 `;
 
+export const GrayBackground = styled.div`
+  width: 100%;
+  padding: 4rem 0;
+  margin-bottom: 4rem;
+  background-color: ${({ theme }) => theme.palette.grey[50]};
+`;
 export const ListItem = styled.li`
+  width: 65rem; // TODO (순권님)
+  /* width: 53.9rem; */
+  margin: auto;
   & + & {
     margin-top: 6.8rem;
   }
+`;
+
+export const ListItemFlex = styled(ListItem)`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const CurrentWifiBtn = styled.button`
@@ -33,6 +39,41 @@ export const CurrentWifiBtn = styled.button`
     filter: brightness(95%);
   }
 `;
+
+export const LeftWrap = styled.div``;
+
+export const RightWrap = styled.div``;
+
+export const OpenText = styled.div`
+  line-height: normal;
+  text-align: right;
+  color: ${({ theme }) => theme.palette.black};
+  font-size: 1.2rem;
+  font-weight: 600;
+`;
+
+export const WifiLabelWrap = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.8rem;
+`;
+export const WifiHelperWrap = styled.div`
+  margin-left: 0.6rem;
+
+  display: flex;
+  align-items: center;
+`;
+
+export const OpenHelperWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
+export const HelperText = styled.span`
+  margin-left: 0.4rem;
+  color: ${({ theme }) => theme.palette.grey[400]};
+`;
+
+export const FileInput = styled.input``;
 
 export const RadioRow = styled.li`
   display: flex;

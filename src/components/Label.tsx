@@ -4,6 +4,7 @@ interface LabelProps {
   label: string;
   required?: boolean; // false면 * 표시 숨김
   children?: React.ReactNode;
+  marginBottom?: string;
 }
 
 /**
@@ -13,10 +14,11 @@ export const Label: React.FC<LabelProps> = ({
   label,
   required = true,
   children,
+  marginBottom = '0.8rem',
 }) => {
   return (
     <StyledLabel>
-      <LabelText>
+      <LabelText $marginBottom={marginBottom}>
         {label}
         {required && <RequiredAsterisk>*</RequiredAsterisk>}
       </LabelText>
@@ -27,8 +29,8 @@ export const Label: React.FC<LabelProps> = ({
 
 const StyledLabel = styled.label``;
 
-const LabelText = styled.p`
-  margin-bottom: 0.8rem;
+const LabelText = styled.p<{ $marginBottom: string }>`
+  margin-bottom: ${({ $marginBottom }) => $marginBottom};
 
   font-weight: 600;
   font-size: 1.6rem;
