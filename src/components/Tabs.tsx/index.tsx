@@ -39,7 +39,7 @@ export const Tabs: React.FC<TabsProps> = ({
 
   return (
     <Wrap {...rest}>
-      <TabWrap>{tabNavItemList}</TabWrap>
+      <TabWrap $tabWidth={tabWidth}>{tabNavItemList}</TabWrap>
       {tabList.map((item, index) => (
         <ContentWrap hidden={activeTab !== index} key={item.label}>
           {item.content}
@@ -56,13 +56,24 @@ const Wrap = styled.div`
   flex-direction: column;
 `;
 
-const TabWrap = styled.ul`
+const TabWrap = styled.ul<{ $tabWidth?: string }>`
   display: flex;
-  height: 6rem;
 
-  box-shadow: inset 0px -0.3rem 0px #e6e6e6;
+  width: ${({ $tabWidth }) => $tabWidth && $tabWidth};
+  height: 6rem;
 `;
 
 const ContentWrap = styled.div`
+  position: relative;
+
+  ::before {
+    content: '';
+    position: absolute;
+    top: -0.3rem;
+    left: 0;
+    right: 0;
+    border-bottom: 0.35rem solid #e6e6e6;
+  }
+
   flex: 1;
 `;
