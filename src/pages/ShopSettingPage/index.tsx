@@ -6,7 +6,12 @@ import { BusinessHourTab } from 'pages/ShopSettingPage/components/BusinessHourTa
 import { EmployerTab } from 'pages/ShopSettingPage/components/EmployerTab/EmployerTab';
 import { SettingSideBar } from 'pages/ShopSettingPage/components/SettingSideBar';
 import { ShopInfoTab } from 'pages/ShopSettingPage/components/ShopInfoTab';
-import { ContentWrap, HeaderWrap, Wrap } from 'pages/ShopSettingPage/styled';
+import {
+  ContentWrap,
+  HeaderWrap,
+  SaveBtn,
+  Wrap,
+} from 'pages/ShopSettingPage/styled';
 
 const tabList: TabItem[] = [
   {
@@ -39,21 +44,14 @@ export const ShopSettingPage: React.FC = () => {
             activeTab={activeTab}
             onClickTab={changeTab}
           />
-          <Button
+          <SaveBtn
             width='7.6rem'
             height='3.6rem'
             borderRadius='0.6rem'
             type='button'
-            style={{
-              position: 'absolute',
-              marginLeft: 'auto',
-              marginRight: '9.6rem',
-              top: 'calc((6rem - 3.6rem )/2)',
-              right: 0,
-            }}
           >
             저장
-          </Button>
+          </SaveBtn>
         </HeaderWrap>
       </ContentWrap>
     </Wrap>

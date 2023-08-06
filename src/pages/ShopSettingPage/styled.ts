@@ -1,4 +1,5 @@
 import styled from 'styled-components/macro';
+import { Button } from 'components/Button';
 
 export const Wrap = styled.div`
   flex: 1; // side bar 제외 남은 영역 꽉 채우기
@@ -18,4 +19,10 @@ export const HeaderWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+export const SaveBtn = styled(Button)`
+  position: absolute;
+  top: calc((6rem - 3.6rem) / 2);
+  right: 6rem;
 `;

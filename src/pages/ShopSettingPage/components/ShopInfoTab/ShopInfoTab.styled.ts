@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 export const ContentWrap = styled.ul`
   width: 100%;
+
+  padding-bottom: 10rem;
 `;
 
 export const GrayBackground = styled.div`
@@ -11,7 +13,7 @@ export const GrayBackground = styled.div`
   background-color: ${({ theme }) => theme.palette.grey[50]};
 `;
 export const ListItem = styled.li`
-  width: 65rem; // TODO (순권님)
+  width: 60rem; // TODO (순권님)
   /* width: 53.9rem; */
   margin: auto;
   & + & {
