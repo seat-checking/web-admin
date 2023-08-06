@@ -1,13 +1,18 @@
 import styled, { css } from 'styled-components/macro';
 
+const WIDTH_FOLDED = '9.6rem';
+const WIDTH_UNFOLDED = '31.5rem';
+
 export const Wrap = styled.div<{ folded: boolean }>`
+  position: fixed;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 
   padding: 8rem 0;
 
-  width: ${({ folded }): string => (folded ? '9.6rem' : '31.5rem')};
+  width: ${({ folded }): string => (folded ? WIDTH_FOLDED : WIDTH_UNFOLDED)};
   min-height: 100vh; // 필요
   background-color: #303030;
 
@@ -66,4 +71,8 @@ export const Wrap = styled.div<{ folded: boolean }>`
 
 export const FoldBtn = styled.button`
   margin-top: auto;
+`;
+
+export const Blank = styled.div<{ folded: boolean }>`
+  width: ${({ folded }): string => (folded ? WIDTH_FOLDED : WIDTH_UNFOLDED)};
 `;

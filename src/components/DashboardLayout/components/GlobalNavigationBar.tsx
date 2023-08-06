@@ -11,6 +11,7 @@ import { ReactComponent as SettingStoreActive } from 'assets/icons/snb-setting-s
 import { ReactComponent as SettingStore } from 'assets/icons/snb-setting-store.svg';
 import { PATH } from 'common/utils/constants';
 import {
+  Blank,
   FoldBtn,
   Wrap,
 } from 'components/DashboardLayout/components/GlobalNavigationBar.styled';
@@ -27,46 +28,49 @@ export const GlobalNavigationBar: React.FC = () => {
   };
 
   return (
-    <Wrap folded={isFolded}>
-      <img src='' alt='가게 로고' className='shopLogo' />
-      <button type='button' className='shopNameWrap'>
-        <h1 className='shopName'>가게 이름</h1>
-        <ChevronDown className='hideFold' />
-      </button>
-      <p className='branchName hideFold'>지점명</p>
-      <ul className='naviationList'>
-        <NavigationItem
-          to='/'
-          label='가게 현황'
-          activeIcon={OverviewActive}
-          defaultIcon={Overview}
-          isFolded={isFolded}
-        />
-        <NavigationItem
-          to={`/${PATH.layout}`}
-          label='좌석 설정'
-          activeIcon={SettingSeatActive}
-          defaultIcon={SettingSeat}
-          isFolded={isFolded}
-        />
-        <NavigationItem
-          to={`/${PATH.statistics}`}
-          label='가게 통계'
-          activeIcon={AnalyticsActive}
-          defaultIcon={Analytics}
-          isFolded={isFolded}
-        />
-        <NavigationItem
-          to={`/${PATH.setting}`}
-          label='가게 설정'
-          activeIcon={SettingStoreActive}
-          defaultIcon={SettingStore}
-          isFolded={isFolded}
-        />
-      </ul>
-      <FoldBtn onClick={handleClickFoldBtn}>
-        <ChevronLeft {...(isFolded && { transform: 'rotate(180)' })} />
-      </FoldBtn>
-    </Wrap>
+    <>
+      <Wrap folded={isFolded}>
+        <img src='' alt='가게 로고' className='shopLogo' />
+        <button type='button' className='shopNameWrap'>
+          <h1 className='shopName'>가게 이름</h1>
+          <ChevronDown className='hideFold' />
+        </button>
+        <p className='branchName hideFold'>지점명</p>
+        <ul className='naviationList'>
+          <NavigationItem
+            to='/'
+            label='가게 현황'
+            activeIcon={OverviewActive}
+            defaultIcon={Overview}
+            isFolded={isFolded}
+          />
+          <NavigationItem
+            to={`/${PATH.layout}`}
+            label='좌석 설정'
+            activeIcon={SettingSeatActive}
+            defaultIcon={SettingSeat}
+            isFolded={isFolded}
+          />
+          <NavigationItem
+            to={`/${PATH.statistics}`}
+            label='가게 통계'
+            activeIcon={AnalyticsActive}
+            defaultIcon={Analytics}
+            isFolded={isFolded}
+          />
+          <NavigationItem
+            to={`/${PATH.setting}`}
+            label='가게 설정'
+            activeIcon={SettingStoreActive}
+            defaultIcon={SettingStore}
+            isFolded={isFolded}
+          />
+        </ul>
+        <FoldBtn onClick={handleClickFoldBtn}>
+          <ChevronLeft {...(isFolded && { transform: 'rotate(180)' })} />
+        </FoldBtn>
+      </Wrap>
+      <Blank folded={isFolded} />
+    </>
   );
 };
