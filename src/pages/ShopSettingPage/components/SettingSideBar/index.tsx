@@ -18,8 +18,8 @@ export const SettingSideBar: React.FC = () => {
       </SideHeaderWrap>
 
       <ul>
-        <ShopItem name='hspace?' />
-        <ShopItem name='hspace?' />
+        <ShopItem id={1} name='hsp 강남점' isOperating />
+        <ShopItem id={2} name='개빠른 pc 방' isOperating={false} />
       </ul>
     </StyledSideBar>
   );
