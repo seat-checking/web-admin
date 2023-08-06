@@ -1,4 +1,5 @@
-import { ReactComponent as AlertCicleIcon } from 'assets/icons/alert-circle.svg';
+import { useTheme } from 'styled-components';
+
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import { Radio } from 'components/Radio';
@@ -6,7 +7,6 @@ import { HelperText } from 'pages/ShopSettingPage/components/HelperText';
 import { Toggle } from 'pages/ShopSettingPage/components/SettingSideBar/Toggle';
 import {
   ContentWrap,
-  CurrentWifiBtn,
   GrayBackground,
   LeftWrap,
   ListItem,
@@ -17,12 +17,18 @@ import {
   WifiHelperWrap,
   WifiLabelWrap,
   FileInput,
+  AddFileBtn,
+  AddFileRow,
+  LocationBtn,
 } from 'pages/ShopSettingPage/components/ShopInfoTab/ShopInfoTab.styled';
+import { Carousel } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Carousel';
+import { Wifi } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Wifi';
 
 /**
  * 가게 정보 설정 탭
  */
 export const ShopInfoTab: React.FC = () => {
+  const theme = useTheme();
   return (
     <ContentWrap>
       <GrayBackground>
@@ -36,7 +42,7 @@ export const ShopInfoTab: React.FC = () => {
               </HelperText>
             </WifiHelperWrap>
           </WifiLabelWrap>
-          <CurrentWifiBtn>현재 연결된 Wi-Fi 등록하기</CurrentWifiBtn>
+          <Wifi />
         </ListItem>
       </GrayBackground>
       <ListItemFlex>
@@ -74,7 +80,14 @@ export const ShopInfoTab: React.FC = () => {
       </ListItem>
       <ListItem>
         <Label label='가게 대표 이미지' />
-        <FileInput type='file' />
+        <FileInput type='file' hidden />
+        <AddFileRow>
+          <AddFileBtn backgroundColor={theme.palette.grey[50]}>
+            첨부파일 업로드 *최대 10장
+            <br /> (권장 사이즈 750x480이상)
+          </AddFileBtn>
+          <Carousel />
+        </AddFileRow>
       </ListItem>
       <ListItem>
         <Input
@@ -83,7 +96,8 @@ export const ShopInfoTab: React.FC = () => {
         />
       </ListItem>
       <ListItem>
-        <Input label='가게 위치' placeholder='가게 주소 찾기' />
+        <Label label='가게 위치' />
+        <LocationBtn>가게 주소 찾기</LocationBtn>
       </ListItem>
     </ContentWrap>
   );

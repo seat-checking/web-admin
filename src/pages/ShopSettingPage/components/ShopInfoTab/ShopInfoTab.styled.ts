@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Button } from 'components/Button';
 
 export const ContentWrap = styled.ul`
   width: 100%;
@@ -26,22 +27,6 @@ export const ListItemFlex = styled(ListItem)`
   justify-content: space-between;
 `;
 
-export const CurrentWifiBtn = styled.button`
-  width: 100%;
-  height: 4.2rem;
-  border-radius: 0.8rem;
-
-  background-color: ${({ theme }) => theme.palette.grey[500]};
-
-  color: white;
-  font-size: 1.4rem;
-  font-weight: 500;
-
-  &:hover {
-    filter: brightness(95%);
-  }
-`;
-
 export const LeftWrap = styled.div``;
 
 export const RightWrap = styled.div``;
@@ -65,10 +50,35 @@ export const WifiHelperWrap = styled.div`
 
 export const FileInput = styled.input``;
 
+export const AddFileRow = styled.div`
+  height: 10.9rem;
+
+  display: flex;
+  gap: 1.2rem;
+`;
+export const AddFileBtn = styled(Button)`
+  flex: 1;
+  height: 100%;
+  background-color: ${({ theme }) => theme.palette.grey[50]};
+  color: ${({ theme }) => theme.palette.grey[400]};
+
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 2.4rem;
+`;
+
 export const RadioRow = styled.li`
   display: flex;
   align-items: center;
   gap: 4rem;
 
   padding-top: 0.8rem;
+`;
+
+export const LocationBtn = styled(Button)`
+  background-color: white;
+  border: 0.1rem solid ${({ theme }) => theme.palette.grey[300]};
+  color: ${({ theme }) => theme.palette.grey[400]};
+  font-size: 1.6rem;
+  font-weight: 600;
 `;
