@@ -19,7 +19,7 @@ const tabList: TabItem[] = [
     content: <ShopInfoTab />,
   },
   {
-    label: '운영 시간 설정',
+    label: '영업 시간 설정',
     content: <BusinessHourTab />,
   },
   {

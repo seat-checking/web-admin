@@ -23,6 +23,12 @@ const Wrap = styled.div`
 `;
 
 const Text = styled.span`
+  flex: 1;
+
   margin-left: 0.4rem;
   color: ${({ theme }) => theme.palette.grey[400]};
+
+  font-size: 1.2rem;
+  letter-spacing: -0.897px;
+  font-weight: 400;
 `;
