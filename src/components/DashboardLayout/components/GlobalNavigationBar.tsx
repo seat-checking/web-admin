@@ -33,7 +33,7 @@ export const GlobalNavigationBar: React.FC = () => {
         <img src='' alt='가게 로고' className='shopLogo' />
         <button type='button' className='shopNameWrap'>
           <h1 className='shopName'>가게 이름</h1>
-          <ChevronDown className='hideFold' />
+          <ChevronDown className='hideFold' stroke='white' />
         </button>
         <p className='branchName hideFold'>지점명</p>
         <ul className='naviationList'>
