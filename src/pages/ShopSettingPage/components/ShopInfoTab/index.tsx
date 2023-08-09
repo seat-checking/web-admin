@@ -50,6 +50,10 @@ export const ShopInfoTab: React.FC = () => {
         />
       </ListItem>
       <ListItem>
+        <Label label='가게 위치' />
+        <LocationBtn>가게 주소 찾기</LocationBtn>
+      </ListItem>
+      <ListItem>
         <Label label='가게 유형' required={false} />
         <RadioRow>
           <Radio
@@ -80,10 +84,6 @@ export const ShopInfoTab: React.FC = () => {
           label='한 줄 소개'
           placeholder='가게의 소개글을 작성해주세요. (최대 N자 이내)'
         />
-      </ListItem>
-      <ListItem>
-        <Label label='가게 위치' />
-        <LocationBtn>가게 주소 찾기</LocationBtn>
       </ListItem>
     </ContentWrap>
   );

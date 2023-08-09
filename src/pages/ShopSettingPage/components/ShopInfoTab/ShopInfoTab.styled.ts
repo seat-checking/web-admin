@@ -75,6 +75,8 @@ export const RadioRow = styled.li`
 `;
 
 export const LocationBtn = styled(Button)`
+  height: 4.8rem;
+
   background-color: white;
   border: 0.1rem solid ${({ theme }) => theme.palette.grey[300]};
   color: ${({ theme }) => theme.palette.grey[400]};
