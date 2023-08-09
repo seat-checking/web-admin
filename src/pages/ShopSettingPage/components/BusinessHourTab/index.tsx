@@ -5,21 +5,15 @@ import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import {
   DayItem,
-  DayList,
   DayText,
-  LeftWrap,
   ListItem,
   ListItemFlex,
   MaxTimeWrap,
-  OpenText,
-  RightWrap,
   SaveBtnWrap,
   Slash,
   Wrap,
 } from 'pages/ShopSettingPage/components/BusinessHourTab/BusinessHourTab.styled';
 import { TimeSelect } from 'pages/ShopSettingPage/components/BusinessHourTab/components/TimeSelect';
-import { HelperText } from 'pages/ShopSettingPage/components/HelperText';
-import { Toggle } from 'pages/ShopSettingPage/components/SettingSideBar/Toggle';
 
 const days = ['월', '화', '수', '목', '금', '토', '일'];
 /**
@@ -33,23 +27,8 @@ export const BusinessHourTab: React.FC = () => {
       }}
     >
       <Wrap>
-        <ListItemFlex>
-          <LeftWrap>
-            <Label label='임시 휴무' />
-            <HelperText>
-              임시적으로 가게 영업이 어려울 때 사용( 고객이 우리 가게를 볼 수
-              있고, 예약도 신청할 수 있어요!)
-            </HelperText>
-          </LeftWrap>
-          <RightWrap>
-            <Toggle />
-            <OpenText>
-              일시 정지 <span className='orange'>OFF</span>
-            </OpenText>
-          </RightWrap>
-        </ListItemFlex>
         <ListItem>
-          <DayList>
+          <ul>
             {days.map((day) => (
               <DayItem key={day}>
                 <DayText>{`${day}요일`}</DayText>
@@ -60,7 +39,7 @@ export const BusinessHourTab: React.FC = () => {
                 </ListItemFlex>
               </DayItem>
             ))}
-          </DayList>
+          </ul>
         </ListItem>
         <ListItem>
           <Input
