@@ -1,6 +1,5 @@
 import type { TabItem } from 'components/Tabs.tsx';
 import { useTab } from 'common/hooks/useTab';
-import { Button } from 'components/Button';
 import { Tabs } from 'components/Tabs.tsx';
 import { BusinessHourTab } from 'pages/ShopSettingPage/components/BusinessHourTab';
 import { EmployerTab } from 'pages/ShopSettingPage/components/EmployerTab/EmployerTab';

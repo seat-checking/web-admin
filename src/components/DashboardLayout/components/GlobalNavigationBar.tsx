@@ -59,7 +59,7 @@ export const GlobalNavigationBar: React.FC = () => {
             isFolded={isFolded}
           />
           <NavigationItem
-            to={`/${PATH.setting}`}
+            to={`/${PATH.setting}/1`}
             label='가게 설정'
             activeIcon={SettingStoreActive}
             defaultIcon={SettingStore}

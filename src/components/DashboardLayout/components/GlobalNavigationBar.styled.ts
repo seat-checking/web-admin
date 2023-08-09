@@ -5,6 +5,7 @@ const WIDTH_UNFOLDED = '31.5rem';
 
 export const Wrap = styled.div<{ folded: boolean }>`
   position: fixed;
+  z-index: 100;
 
   display: flex;
   flex-direction: column;

@@ -27,9 +27,6 @@ export const SettingSideBar: React.FC = () => {
 
 export const StyledSideBar = styled(SideBar)`
   padding: 8rem 4rem;
-  /* min-height: 100vh; */
-  /* overflow: auto; */
-  /* background-color: aqua; */
 `;
 
 export const SideHeaderWrap = styled.div`
