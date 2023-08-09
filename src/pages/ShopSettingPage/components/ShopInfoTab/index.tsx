@@ -8,12 +8,8 @@ import { Toggle } from 'pages/ShopSettingPage/components/SettingSideBar/Toggle';
 import {
   ContentWrap,
   GrayBackground,
-  LeftWrap,
   ListItem,
-  ListItemFlex,
-  OpenText,
   RadioRow,
-  RightWrap,
   WifiHelperWrap,
   WifiLabelWrap,
   FileInput,
@@ -47,19 +43,6 @@ export const ShopInfoTab: React.FC = () => {
           <Wifi />
         </ListItem>
       </GrayBackground>
-      <ListItemFlex>
-        <LeftWrap>
-          <Label label='가게 운영 여부' />
-          <HelperText>
-            한동안 가게 운영이 어려울 때만 OFF로 바꿔주세요. (고객들에게 우리
-            가게가 이지 않아요!)
-          </HelperText>
-        </LeftWrap>
-        <RightWrap>
-          <Toggle />
-          <OpenText>운영중</OpenText>
-        </RightWrap>
-      </ListItemFlex>
       <ListItem>
         <Input
           label='가게 이름'

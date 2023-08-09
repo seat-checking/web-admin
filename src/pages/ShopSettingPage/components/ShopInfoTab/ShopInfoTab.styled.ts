@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import upload from 'assets/icons/upload.svg';
 import { Button } from 'components/Button';
 
 export const ContentWrap = styled.ul`
@@ -22,23 +23,6 @@ export const ListItem = styled.li`
   }
 `;
 
-export const ListItemFlex = styled(ListItem)`
-  display: flex;
-  justify-content: space-between;
-`;
-
-export const LeftWrap = styled.div``;
-
-export const RightWrap = styled.div``;
-
-export const OpenText = styled.div`
-  line-height: normal;
-  text-align: right;
-  color: ${({ theme }) => theme.palette.black};
-  font-size: 1.2rem;
-  font-weight: 600;
-`;
-
 export const WifiLabelWrap = styled.div`
   display: flex;
   align-items: center;
@@ -57,14 +41,29 @@ export const AddFileRow = styled.div`
   gap: 1.2rem;
 `;
 export const AddFileBtn = styled(Button)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   flex: 1;
   height: 100%;
   background-color: ${({ theme }) => theme.palette.grey[50]};
-  color: ${({ theme }) => theme.palette.grey[400]};
+  color: ${({ theme }) => theme.palette.grey[300]};
 
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 600;
-  line-height: 2.4rem;
+  line-height: normal;
+`;
+
+export const UploadIconBox = styled.div`
+  margin-bottom: 0.8rem;
+
+  width: 2.4rem;
+  height: 2.4rem;
+  background-image: url(${upload});
+  background-size: contain;
+  background-repeat: no-repeat;
 `;
 
 export const RadioRow = styled.li`
