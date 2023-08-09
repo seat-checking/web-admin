@@ -20,7 +20,9 @@ import {
   AddFileBtn,
   AddFileRow,
   LocationBtn,
+  UploadIconBox,
 } from 'pages/ShopSettingPage/components/ShopInfoTab/ShopInfoTab.styled';
+
 import { Carousel } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Carousel';
 import { Wifi } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Wifi';
 
@@ -83,6 +85,7 @@ export const ShopInfoTab: React.FC = () => {
         <FileInput type='file' hidden />
         <AddFileRow>
           <AddFileBtn backgroundColor={theme.palette.grey[50]}>
+            <UploadIconBox />
             첨부파일 업로드 *최대 10장
             <br /> (권장 사이즈 750x480이상)
           </AddFileBtn>
