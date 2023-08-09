@@ -17,15 +17,7 @@ interface CarouselProps {
 /**
  * 캐러셀 컴포넌트
  */
-export const Carousel: React.FC<CarouselProps> = ({
-  // imgs,
-  imgs = [
-    {
-      id: 0,
-      url: 'https://s3-alpha-sig.figma.com/img/b3df/7e09/8a307db8c10180c72b6ea455fdfe8191?Expires=1692576000&Signature=Q8zuYX8Mug~ADqCuCltBt1K8Ve1eXrbMNnvvtgWnC9KpVTfwv0GMhiWqeEzMKzTJCyHUcOBUW9CtZG1wBNdXTaR7dSAx20GQ0nIANwB3dxU82vdmg3ZBO6oG6E-Vv6lZXz7p2dKoK8hLnONen1Vq5~Lnj4YYRXce-T6e9LE1GFXTu5hpiggJJWABajmSexBGtbF40sMlGj61eQIiYYPDNjkKIZCRQp3iSUnVesf6EmiTHuiGUaDQg2ob2CXUihqIZ29BF7ooS8ASM13s2SasGfa7ANbPr76H-DEsjl2CbUsd2FoCGIKhu1SugevXH1VvnYZxBiDmG7JkALwmMu-kpA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-    },
-  ],
-}) => {
+export const Carousel: React.FC<CarouselProps> = ({ imgs }) => {
   const theme = useTheme();
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
@@ -61,7 +53,7 @@ export const Carousel: React.FC<CarouselProps> = ({
 const Wrap = styled.div<{ $img?: string }>`
   width: 20.2rem;
 
-  border: 1px solid ${({ theme }) => theme.palette.grey[300]};
+  border: 0.1rem solid ${({ theme }) => theme.palette.grey[300]};
   border-radius: 0.8rem;
   overflow: hidden;
 `;

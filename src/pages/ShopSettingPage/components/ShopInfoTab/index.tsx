@@ -1,5 +1,6 @@
 import { useTheme } from 'styled-components';
 
+import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import { Radio } from 'components/Radio';
@@ -84,6 +85,9 @@ export const ShopInfoTab: React.FC = () => {
           label='한 줄 소개'
           placeholder='가게의 소개글을 작성해주세요. (최대 N자 이내)'
         />
+      </ListItem>
+      <ListItem>
+        <Button>저장하기</Button>
       </ListItem>
     </ContentWrap>
   );

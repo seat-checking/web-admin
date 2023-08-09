@@ -15,8 +15,7 @@ export const GrayBackground = styled.div`
   background-color: ${({ theme }) => theme.palette.grey[50]};
 `;
 export const ListItem = styled.li`
-  width: 60rem; // TODO (순권님)
-  /* width: 53.9rem; */
+  width: 53.9rem;
   margin: auto;
   & + & {
     margin-top: 6.8rem;

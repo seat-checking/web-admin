@@ -44,14 +44,6 @@ export const ShopSettingPage: React.FC = () => {
             activeTab={activeTab}
             onClickTab={changeTab}
           />
-          <SaveBtn
-            width='7.6rem'
-            height='3.6rem'
-            borderRadius='0.6rem'
-            type='button'
-          >
-            저장
-          </SaveBtn>
         </HeaderWrap>
       </ContentWrap>
     </Wrap>
