@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
     node: true, // module is not defined 오류 해결
   },
-  plugins: ['react', '@typescript-eslint', 'import'],
+  plugins: ['react', '@typescript-eslint', 'import', '@tanstack/query'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -18,6 +18,7 @@ module.exports = {
     'plugin:import/typescript',
     'prettier',
     'plugin:prettier/recommended',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
   ],
   overrides: [],
   parser: '@typescript-eslint/parser',
