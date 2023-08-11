@@ -5,7 +5,6 @@ import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import { Radio } from 'components/Radio';
 import { HelperText } from 'pages/ShopSettingPage/components/HelperText';
-import { Toggle } from 'pages/ShopSettingPage/components/SettingSideBar/Toggle';
 import {
   ContentWrap,
   GrayBackground,

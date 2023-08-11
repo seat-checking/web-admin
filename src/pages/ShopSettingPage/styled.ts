@@ -12,12 +12,8 @@ export const ContentWrap = styled.div`
   flex: 1;
 `;
 
-export const HeaderWrap = styled.div`
+export const TabsWrap = styled.div`
   position: relative; // 버튼 배치 위함
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 export const SaveBtn = styled(Button)`

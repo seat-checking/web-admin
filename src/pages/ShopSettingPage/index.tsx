@@ -3,14 +3,8 @@ import { useTab } from 'common/hooks/useTab';
 import { Tabs } from 'components/Tabs.tsx';
 import { BusinessHourTab } from 'pages/ShopSettingPage/components/BusinessHourTab';
 import { EmployerTab } from 'pages/ShopSettingPage/components/EmployerTab/EmployerTab';
-import { SettingSideBar } from 'pages/ShopSettingPage/components/SettingSideBar';
 import { ShopInfoTab } from 'pages/ShopSettingPage/components/ShopInfoTab';
-import {
-  ContentWrap,
-  HeaderWrap,
-  SaveBtn,
-  Wrap,
-} from 'pages/ShopSettingPage/styled';
+import { ContentWrap, TabsWrap, Wrap } from 'pages/ShopSettingPage/styled';
 
 const tabList: TabItem[] = [
   {
@@ -34,16 +28,15 @@ export const ShopSettingPage: React.FC = () => {
 
   return (
     <Wrap>
-      <SettingSideBar />
       <ContentWrap>
-        <HeaderWrap>
+        <TabsWrap>
           <Tabs
             tabList={tabList}
             tabWidth='63rem'
             activeTab={activeTab}
             onClickTab={changeTab}
           />
-        </HeaderWrap>
+        </TabsWrap>
       </ContentWrap>
     </Wrap>
   );
