@@ -64,7 +64,7 @@ export const ShopInfoTab: React.FC = () => {
             name='shopSort'
           />
           <Radio id='cafe' label='카페' value='카페' name='shopSort' />
-          <Radio id='cafe' label='모임' value='모임' name='shopSort' />
+          <Radio id='gathering' label='모임' value='모임' name='shopSort' />
         </RadioRow>
       </ListItem>
       <ListItem>
