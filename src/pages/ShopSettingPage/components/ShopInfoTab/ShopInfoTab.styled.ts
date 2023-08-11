@@ -68,12 +68,14 @@ export const UploadIconBox = styled.div`
 export const RadioRow = styled.li`
   display: flex;
   align-items: center;
-  gap: 4rem;
+  gap: 8.7rem;
 
   padding-top: 0.8rem;
 `;
 
 export const LocationBtn = styled(Button)`
+  margin-bottom: 0.8rem;
+
   height: 4.8rem;
 
   background-color: white;

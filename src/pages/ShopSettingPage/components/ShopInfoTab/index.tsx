@@ -52,6 +52,7 @@ export const ShopInfoTab: React.FC = () => {
       <ListItem>
         <Label label='가게 위치' />
         <LocationBtn>가게 주소 찾기</LocationBtn>
+        <Input placeholder='상세 주소' />
       </ListItem>
       <ListItem>
         <Label label='가게 유형' required={false} />
@@ -64,7 +65,6 @@ export const ShopInfoTab: React.FC = () => {
           />
           <Radio id='cafe' label='카페' value='카페' name='shopSort' />
           <Radio id='cafe' label='모임' value='모임' name='shopSort' />
-          <Radio id='etc' label='기타' value='기타' name='shopSort' />
         </RadioRow>
       </ListItem>
       <ListItem>
