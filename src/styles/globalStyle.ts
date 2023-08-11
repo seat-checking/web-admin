@@ -32,6 +32,8 @@ export const GlobalStyle = createGlobalStyle`
       'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    // 스크롤바 유무에 의해 레이아웃이 흐트러지는 걸 막기 위함
+    overflow-y: scroll;
   }
 
   // reset css

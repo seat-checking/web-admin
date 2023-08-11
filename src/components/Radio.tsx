@@ -27,7 +27,7 @@ export const Radio = forwardRef(
           ref={ref}
           {...rest}
         />
-        <LabelText>{label}</LabelText>
+        <LabelText className='label'>{label}</LabelText>
       </Label>
     );
   },
@@ -36,14 +36,13 @@ export const Radio = forwardRef(
 const Label = styled.label`
   display: inline-flex;
   align-items: center;
-  /* background-color: aqua; */
 `;
 
 const LabelText = styled.span`
-  font-weight: 400;
+  font-weight: 600;
   font-size: 1.6rem;
   line-height: 1.8rem;
-  color: ${({ theme }) => theme.palette.grey[400]};
+  color: ${({ theme }) => theme.palette.grey[300]};
   margin-left: 1.6rem;
 `;
 
@@ -67,6 +66,10 @@ const RadioInput = styled.input`
     border: 0.3rem solid white;
     background-color: ${({ theme }) => theme.palette.primary.orange};
     margin: 0.3rem;
+
+    & + .label {
+      color: black;
+    }
   }
 
   &[type='radio']:hover {

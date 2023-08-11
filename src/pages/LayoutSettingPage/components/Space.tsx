@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import styled, { css, useTheme } from 'styled-components/macro';
 import type { ChangeEvent } from 'react';
-import { ReactComponent as XIcon } from 'assets/icons/x.svg';
+
+import { XButton } from 'components/XButton';
 import { flexSet } from 'styles/mixin';
 
 interface SpaceProps {
@@ -22,7 +23,6 @@ export const Space: React.FC<SpaceProps> = ({
   isSelected,
   deleteSpace,
 }) => {
-  const theme = useTheme();
   const [spaceName, setSpaceName] = useState(name);
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
@@ -36,9 +36,14 @@ export const Space: React.FC<SpaceProps> = ({
   return (
     <SpaceBox onClick={() => onClick(id)} isSelected={isSelected}>
       <Input type='text' onChange={handleChangeName} value={spaceName} />
-      <DeleteWrap onClick={handleDeleteSpace}>
-        <XIcon stroke={theme.palette.grey[500]} />
-      </DeleteWrap>
+      <XButton
+        onClick={handleDeleteSpace}
+        style={{
+          position: 'absolute',
+          top: '0.4rem',
+          right: '0.4rem',
+        }}
+      />
     </SpaceBox>
   );
 };
