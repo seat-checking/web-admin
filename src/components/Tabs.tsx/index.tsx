@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import type React from 'react';
 import { TabNavItem } from 'components/Tabs.tsx/components/TabNavItem';
 
@@ -59,8 +59,15 @@ const Wrap = styled.div`
 const TabWrap = styled.ul<{ $tabWidth?: string }>`
   display: flex;
 
-  width: ${({ $tabWidth }) => $tabWidth && $tabWidth};
   height: 6rem;
+
+  ${({ $tabWidth }) =>
+    $tabWidth &&
+    css`
+      max-width: ${$tabWidth};
+      width: 100%;
+      margin: auto;
+    `}
 `;
 
 const ContentWrap = styled.div`
