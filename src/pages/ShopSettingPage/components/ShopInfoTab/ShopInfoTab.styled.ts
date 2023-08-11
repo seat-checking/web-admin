@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import upload from 'assets/icons/upload.svg';
 import { Button } from 'components/Button';
 
@@ -65,7 +65,7 @@ export const UploadIconBox = styled.div`
   background-repeat: no-repeat;
 `;
 
-export const RadioRow = styled.li`
+export const RadioRow = styled.div`
   display: flex;
   align-items: center;
   gap: 8.7rem;

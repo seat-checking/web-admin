@@ -1,13 +1,12 @@
 import { ConfigProvider } from 'antd';
-import { useTheme } from 'styled-components';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import {
   DayItem,
   DayText,
-  ListItem,
-  ListItemFlex,
+  ItemWrap,
+  ItemWrapFlex,
   MaxTimeWrap,
   SaveBtnWrap,
   Slash,
@@ -27,33 +26,33 @@ export const BusinessHourTab: React.FC = () => {
       }}
     >
       <Wrap>
-        <ListItem>
+        <ItemWrap>
           <ul>
             {days.map((day) => (
               <DayItem key={day}>
                 <DayText>{`${day}요일`}</DayText>
-                <ListItemFlex>
+                <ItemWrapFlex>
                   <TimeSelect defaultValue='09:00' />
                   <Slash>~</Slash>
                   <TimeSelect />
-                </ListItemFlex>
+                </ItemWrapFlex>
               </DayItem>
             ))}
           </ul>
-        </ListItem>
-        <ListItem>
+        </ItemWrap>
+        <ItemWrap>
           <Input
             label='이용 제한 시간'
             placeholder='ex) 11:00~12:00'
             required={false}
           />
-        </ListItem>
-        <ListItem>
+        </ItemWrap>
+        <ItemWrap>
           <Label label='좌석별 최대 이용 시간' />
           <MaxTimeWrap>
             <TimeSelect />
           </MaxTimeWrap>
-        </ListItem>
+        </ItemWrap>
         <SaveBtnWrap>
           <Button>저장하기</Button>
         </SaveBtnWrap>

@@ -6,13 +6,13 @@ export const Wrap = styled.div`
   margin: auto;
 `;
 
-export const ListItem = styled.li`
+export const ItemWrap = styled.div`
   & + & {
     margin-top: 2.4rem;
   }
 `;
 
-export const ListItemFlex = styled(ListItem)`
+export const ItemWrapFlex = styled(ItemWrap)`
   display: flex;
 `;
 
