@@ -47,7 +47,6 @@ const AddWifiBtn = styled.button`
   border-radius: 0.8rem;
 
   background-color: ${({ theme }) => theme.palette.grey[500]};
-
   color: white;
   font-size: 1.4rem;
   font-weight: 500;

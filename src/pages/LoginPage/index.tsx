@@ -43,12 +43,13 @@ export const LoginPage: React.FC = () => {
     password,
   }) => {
     try {
-      const { accessToken, permissionByMenu, position } = await AuthApi.signIn(
+      const { accessToken, permissionByMenu, storeId } = await AuthApi.signIn(
         email,
         password,
       );
 
       localStorage.setItem(STORAGE.accessToken, accessToken);
+      localStorage.setItem(STORAGE.storeId, String(storeId));
 
       navigate('/');
     } catch (error) {

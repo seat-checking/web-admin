@@ -12,8 +12,9 @@ export interface ErrorResponse {
 
 interface LoginResponse {
   accessToken: string;
+  storeId: number;
+  storeName: string;
   permissionByMenu: string;
-  position: string;
 }
 
 interface SuccessResponse<T> {

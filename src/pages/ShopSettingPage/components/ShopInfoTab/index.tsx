@@ -1,5 +1,6 @@
 import { useTheme } from 'styled-components';
 
+import { useAddress } from 'common/hooks/useAddress';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
@@ -17,6 +18,8 @@ import {
   AddFileRow,
   LocationBtn,
   UploadIconBox,
+  AddressWrap,
+  AddressInput,
 } from 'pages/ShopSettingPage/components/ShopInfoTab/ShopInfoTab.styled';
 
 import { Carousel } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Carousel';
@@ -27,6 +30,11 @@ import { Wifi } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Wi
  */
 export const ShopInfoTab: React.FC = () => {
   const theme = useTheme();
+  const { open, address, handleComplete, handleChangeDetail } = useAddress();
+
+  const handleOpenAddress = () => {
+    open({ onComplete: handleComplete });
+  };
   return (
     <ContentWrap>
       <GrayBackground>
@@ -51,8 +59,15 @@ export const ShopInfoTab: React.FC = () => {
       </ListItem>
       <ListItem>
         <Label label='가게 위치' />
-        <LocationBtn>가게 주소 찾기</LocationBtn>
-        <Input placeholder='상세 주소' />
+        <AddressWrap>
+          <AddressInput placeholder='주소' value={address.full} />
+          <LocationBtn onClick={handleOpenAddress}>가게 주소 찾기</LocationBtn>
+        </AddressWrap>
+        <Input
+          placeholder='상세 주소'
+          value={address.detailed}
+          onChange={handleChangeDetail}
+        />
       </ListItem>
       <ListItem>
         <Label label='가게 유형' required={false} />
