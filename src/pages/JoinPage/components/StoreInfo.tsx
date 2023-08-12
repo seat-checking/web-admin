@@ -1,19 +1,28 @@
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
+import { Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import type { JoinFormInputs } from 'common/utils/types';
 import type { InnerPageProps } from 'pages/JoinPage/utils/types';
+import type { Address } from 'react-daum-postcode';
 import type { SubmitHandler } from 'react-hook-form';
 import { AuthApi } from 'api/lib/auth';
+import { useAddress } from 'common/hooks/useAddress';
 import { PATH } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
+import { Label } from 'components/Label';
 import {
   BottomWrap,
   DateInput,
   GappedErrorMessage,
   InputWrap,
 } from 'pages/JoinPage/components/StoreInfo.styled';
+import {
+  AddressInput,
+  AddressWrap,
+  LocationBtn,
+} from 'pages/ShopSettingPage/components/ShopInfoTab/ShopInfoTab.styled';
 
 /**
  * 관리자 회원가입 > 두 번째 화면에서 보여줄 컴포넌트 (가게 정보 입력 페이지)
@@ -28,7 +37,10 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
     register,
     handleSubmit,
     formState: { errors, isValid },
+    control,
   } = useJoinForm;
+
+  const { open, handleComplete } = useAddress();
 
   const onSubmit: SubmitHandler<JoinFormInputs> = async (data) => {
     try {
@@ -67,7 +79,46 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
           <GappedErrorMessage>{errors.storeName?.message}</GappedErrorMessage>
         )}
       </InputWrap>
-      {/* // TODO 가게 위치 추가 */}
+      <InputWrap>
+        <Label label='가게 위치' />
+        <Controller
+          control={control}
+          name='address'
+          rules={{ required: '주소를 선택해주세요' }}
+          render={({ field: { onChange, value } }) => (
+            <AddressWrap>
+              <AddressInput value={value} placeholder='주소' disabled />
+              <LocationBtn
+                onClick={(e) => {
+                  e.preventDefault();
+                  open({
+                    onComplete: (data: Address) => {
+                      const fullAddress = handleComplete(data);
+                      onChange(fullAddress);
+                    },
+                  });
+                }}
+              >
+                가게 주소 찾기
+              </LocationBtn>
+            </AddressWrap>
+          )}
+        />
+        <Input
+          placeholder='상세 주소'
+          {...register('detailAddress', {
+            required: '상세 주소를 입력해주세요.',
+          })}
+        />
+        {errors.detailAddress && (
+          <GappedErrorMessage>
+            {errors.detailAddress?.message}
+          </GappedErrorMessage>
+        )}
+        {errors.address && (
+          <GappedErrorMessage>{errors.address?.message}</GappedErrorMessage>
+        )}
+      </InputWrap>
       <InputWrap>
         <Input
           label='사업자등록번호'

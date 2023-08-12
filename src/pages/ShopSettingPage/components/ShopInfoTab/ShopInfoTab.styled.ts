@@ -1,6 +1,7 @@
 import styled from 'styled-components/macro';
 import upload from 'assets/icons/upload.svg';
 import { Button } from 'components/Button';
+import { Input } from 'components/Input';
 
 export const ContentWrap = styled.ul`
   width: 100%;
@@ -73,14 +74,24 @@ export const RadioRow = styled.div`
   padding-top: 0.8rem;
 `;
 
-export const LocationBtn = styled(Button)`
+export const AddressWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
   margin-bottom: 0.8rem;
+`;
 
+export const AddressInput = styled(Input)`
+  width: 40rem;
+`;
+
+export const LocationBtn = styled(Button)`
+  width: 13rem;
   height: 4.8rem;
 
   background-color: white;
-  border: 0.1rem solid ${({ theme }) => theme.palette.grey[300]};
-  color: ${({ theme }) => theme.palette.grey[400]};
+  background-color: ${({ theme }) => theme.palette.grey[500]};
+  color: white;
   font-size: 1.6rem;
   font-weight: 600;
 `;
