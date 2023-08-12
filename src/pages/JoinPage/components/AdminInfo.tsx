@@ -16,6 +16,7 @@ import {
   GappedErrorMessage,
   InputWrap,
   RadioRow,
+  DateInput,
 } from 'pages/JoinPage/components/AdminInfo.styled';
 
 /**
@@ -161,15 +162,17 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
         )}
       </InputWrap>
       <InputWrap>
-        <Input
-          className='gap'
-          label='나이'
-          placeholder='나이를 입력해주세요'
+        <DateInput
+          label='생년월일'
+          type='date'
+          min='2023-08-10'
+          // max={dayjs(Date.now()).format('YYYY-MM-DD')}
           {...register('age', {
-            required: '나이는 필수 입력입니다.',
+            required: '생년월일은 필수 입력입니다.',
             pattern: {
-              value: /^(?:[1-9]|[1-9][0-9])$/,
-              message: '유효한 나이를 입력해주세요.',
+              value:
+                /^(?:(?:19|20)\d\d)-(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-9]|3[01])$/,
+              message: '유효한 생년월일를 입력해주세요',
             },
           })}
         />

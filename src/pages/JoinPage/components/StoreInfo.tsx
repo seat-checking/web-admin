@@ -9,6 +9,7 @@ import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import {
   BottomWrap,
+  DateInput,
   GappedErrorMessage,
   InputWrap,
 } from 'pages/JoinPage/components/StoreInfo.styled';
@@ -72,9 +73,10 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
         )}
       </InputWrap>
       <InputWrap>
-        <Input
+        <DateInput
           label='개업일자'
           type='date'
+          min='2023-08-10'
           {...register('openDate', {
             required: '개업일자는 필수 입력입니다.',
             pattern: {
@@ -83,7 +85,6 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
               message: '유효한 날짜를 입력해주세요',
             },
           })}
-          style={{ width: 'fit-content' }}
         />
         {errors.openDate && (
           <GappedErrorMessage>{errors.openDate?.message}</GappedErrorMessage>
