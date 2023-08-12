@@ -184,7 +184,7 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
           type='date'
           min='1900-01-01'
           max={dayjs(Date.now()).format('YYYY-MM-DD')}
-          {...register('age', {
+          {...register('birthDate', {
             required: '생년월일은 필수 입력입니다.',
             pattern: {
               value:
@@ -193,8 +193,8 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
             },
           })}
         />
-        {errors.age && (
-          <GappedErrorMessage>{errors.age?.message}</GappedErrorMessage>
+        {errors.birthDate && (
+          <GappedErrorMessage>{errors.birthDate?.message}</GappedErrorMessage>
         )}
       </InputWrap>
       <InputWrap>
