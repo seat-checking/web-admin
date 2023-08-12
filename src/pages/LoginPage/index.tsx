@@ -15,8 +15,6 @@ import {
   InputWrap,
   JoinLink,
   JoinRow,
-  Label,
-  LoginRow,
   OrangeText,
   Title,
 } from 'pages/LoginPage/styled';
@@ -74,17 +72,12 @@ export const LoginPage: React.FC = () => {
           <InputWrap>
             <Input
               label='비밀번호'
+              type='password'
               placeholder='비밀번호를 입력해 주세요.'
               {...register('password')}
             />
           </InputWrap>
-          <LoginRow>
-            <Label htmlFor='stayLogined'>
-              <input type='checkbox' id='stayLogined' />
-              로그인 상태 유지
-            </Label>
-            <Link to='/'>비밀번호를 잊으셨나요?</Link>
-          </LoginRow>
+
           {errors.root && <ErrorMessage>{errors.root?.message}</ErrorMessage>}
           <JoinRow>
             <OrangeText>계정이 없으신가요?</OrangeText>

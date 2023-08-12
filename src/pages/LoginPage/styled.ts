@@ -28,23 +28,6 @@ export const Title = styled.h1`
   margin-bottom: 3.2rem;
 `;
 
-export const LoginRow = styled.div`
-  /* background-color: aqua; */
-  padding: 3.2rem 0;
-  display: flex;
-  justify-content: space-evenly;
-
-  font-weight: 500;
-  font-size: 1.4rem;
-  line-height: 2rem;
-  color: ${({ theme }) => theme.palette.grey[400]};
-`;
-
-export const Label = styled.label`
-  display: flex;
-  gap: 0.8rem;
-`;
-
 export const Checkbox = styled.input`
   display: inline-block;
   width: 1.6rem;
