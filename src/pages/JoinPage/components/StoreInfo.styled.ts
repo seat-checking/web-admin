@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { ErrorMessage } from 'components/ErrorMessage';
 import { Input } from 'components/Input';
 

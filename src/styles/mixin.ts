@@ -18,3 +18,9 @@ export const mediaBpDown = (
     ${children}
   }
 `;
+
+export const grayBorderBoxStyle = css`
+  border: 0.1rem solid ${({ theme }) => theme.palette.grey[100]};
+  background-color: white;
+  border-radius: 0.7rem;
+`;

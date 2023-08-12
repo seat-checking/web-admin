@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components/macro';
 import type React from 'react';
 import { TabNavItem } from 'components/Tabs.tsx/components/TabNavItem';
 
@@ -10,18 +9,21 @@ export interface TabItem {
 
 interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   tabList: TabItem[];
+  tabWidth?: string;
+  activeTab: number;
+  onClickTab?: (index: number) => void;
 }
 
 /**
  * 탭 메뉴 컴포넌트
  */
-export const Tabs: React.FC<TabsProps> = ({ tabList, ...rest }) => {
-  const [activeTab, setActiveTab] = useState(0);
-
-  const onClickItem = (index: number) => {
-    setActiveTab(index);
-  };
-
+export const Tabs: React.FC<TabsProps> = ({
+  tabList,
+  tabWidth,
+  activeTab,
+  onClickTab,
+  ...rest
+}) => {
   const tabNavItemList = tabList.map(
     (item, index): React.ReactElement => (
       <TabNavItem
@@ -29,28 +31,56 @@ export const Tabs: React.FC<TabsProps> = ({ tabList, ...rest }) => {
         index={index}
         text={item.label}
         activeTab={activeTab}
-        onClick={() => onClickItem(index)}
+        isClickable={!!onClickTab}
+        {...(onClickTab && { onClick: () => onClickTab(index) })}
       />
     ),
   );
 
   return (
     <Wrap {...rest}>
-      <TabContainer>{tabNavItemList}</TabContainer>
-      {tabList[activeTab].content}
+      <TabWrap $tabWidth={tabWidth}>{tabNavItemList}</TabWrap>
+      {tabList.map((item, index) => (
+        <ContentWrap hidden={activeTab !== index} key={item.label}>
+          {item.content}
+        </ContentWrap>
+      ))}
     </Wrap>
   );
 };
 
 const Wrap = styled.div`
-  height: 6rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
-const TabContainer = styled.ul`
+const TabWrap = styled.ul<{ $tabWidth?: string }>`
   display: flex;
-  height: 100%;
 
-  box-shadow: inset 0px -0.3rem 0px #e6e6e6;
+  height: 6rem;
 
-  /* background-color: yellow; */
+  ${({ $tabWidth }) =>
+    $tabWidth &&
+    css`
+      max-width: ${$tabWidth};
+      width: 100%;
+      margin: auto;
+    `}
+`;
+
+const ContentWrap = styled.div`
+  position: relative;
+
+  ::before {
+    content: '';
+    position: absolute;
+    top: -0.3rem;
+    left: 0;
+    right: 0;
+    border-bottom: 0.35rem solid #e6e6e6;
+  }
+
+  flex: 1;
 `;

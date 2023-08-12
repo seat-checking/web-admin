@@ -1,18 +1,30 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, css } from 'styled-components';
+
+const BREAKPOINTS = new Map([
+  [2000, 56],
+  [1700, 50],
+  [1500, 45],
+  // [1300, 40],
+]);
+
+/**
+    우영 모니터: 1713px
+    수민 모니터: 1328px (ipad)
+    */
+const responsiveStyles = Array.from(BREAKPOINTS).map(
+  ([maxWidth, fontSize]) => css`
+    @media all and (max-width: ${maxWidth}px) {
+      font-size: ${fontSize}%;
+    }
+  `,
+);
 
 export const GlobalStyle = createGlobalStyle`
   html {
     font-size: 62.5%; // 1rem = 10px 로 변경
+    
+    ${responsiveStyles}
 
-    @media all and (max-width: 1700px) {
-        font-size: 50%;
-    }
-    @media all and (max-width: 1500px) {
-        font-size: 45%;
-    }
-    /* @media all and (max-width: 1200px) {
-        font-size: 35%; // TODO 아이콘도 rem으로 변경 필요
-    } */
   }
   body {
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -20,6 +32,8 @@ export const GlobalStyle = createGlobalStyle`
       'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    // 스크롤바 유무에 의해 레이아웃이 흐트러지는 걸 막기 위함
+    overflow-y: scroll;
   }
 
   // reset css

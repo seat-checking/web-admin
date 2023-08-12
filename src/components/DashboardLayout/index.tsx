@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { GlobalNavigationBar } from 'components/DashboardLayout/components/GlobalNavigationBar';
 
 /**
@@ -16,7 +16,8 @@ export const DashboardLayout: React.FC = () => {
 
 const Wrap = styled.div`
   display: flex;
-  height: 100%;
 
   /* background-color: yellow; */
 `;
+
+// Outlet에는 어떤 css도 적용되지 않음. flex:1을 먹이고 싶으면 Outlet이 아닌 Outlet에 들어갈 컴포넌트에 flex:1 을 주어야함

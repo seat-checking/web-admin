@@ -4,6 +4,7 @@ export const theme: DefaultTheme = {
   palette: {
     primary: {
       orange: '#FF8D4E',
+      dark: '#303030',
     },
     error: {
       main: '#FF334B',
@@ -12,7 +13,8 @@ export const theme: DefaultTheme = {
       main: '#58B99D',
     },
     grey: {
-      50: '#F3F3F3',
+      30: '#F7F8FA',
+      50: '#F2F4F8',
       100: '#EFF0F5',
       200: '#D8D9E1',
       300: '#A9ABB6',

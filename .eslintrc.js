@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
     node: true, // module is not defined 오류 해결
   },
-  plugins: ['react', '@typescript-eslint', 'import'],
+  plugins: ['react', '@typescript-eslint', 'import', '@tanstack/query'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -18,6 +18,7 @@ module.exports = {
     'plugin:import/typescript',
     'prettier',
     'plugin:prettier/recommended',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
   ],
   overrides: [],
   parser: '@typescript-eslint/parser',
@@ -98,7 +99,9 @@ module.exports = {
     ],
     // jsx 코드 하단에 스타일 선언하기 위함
     '@typescript-eslint/no-use-before-define': 'off',
+    // 사용하지 않는 변수에 error 대신 warn 사용, 코드 테스트할 때 불편하기 때문
     '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-expressions': 'warn',
     'import/order': [
       'error',
       {

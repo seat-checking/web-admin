@@ -4,7 +4,7 @@ import { StyledInput, Wrap } from 'components/Input.styled';
 import { Label } from 'components/Label';
 
 interface InputProps extends React.ComponentPropsWithoutRef<'input'> {
-  label: string;
+  label?: string;
   required?: boolean; // false면 * 표시 숨김
   placeholder?: string;
   type?: React.HTMLInputTypeAttribute;
@@ -27,14 +27,23 @@ export const Input = forwardRef(
     return (
       // TODO rest 처리
       <Wrap>
-        <Label label={label} required={required}>
+        {label ? (
+          <Label label={label} required={required}>
+            <StyledInput
+              type={type}
+              placeholder={placeholder}
+              ref={ref}
+              {...rest}
+            />
+          </Label>
+        ) : (
           <StyledInput
             type={type}
             placeholder={placeholder}
             ref={ref}
             {...rest}
           />
-        </Label>
+        )}
       </Wrap>
     );
   },
