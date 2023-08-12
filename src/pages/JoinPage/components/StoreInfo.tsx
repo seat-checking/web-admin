@@ -9,6 +9,7 @@ import type { SubmitHandler } from 'react-hook-form';
 import { AuthApi } from 'api/lib/auth';
 import { useAddress } from 'common/hooks/useAddress';
 import { PATH } from 'common/utils/constants';
+import { AddressBox } from 'components/AddressBox';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
@@ -18,11 +19,6 @@ import {
   GappedErrorMessage,
   InputWrap,
 } from 'pages/JoinPage/components/StoreInfo.styled';
-import {
-  AddressInput,
-  AddressWrap,
-  LocationBtn,
-} from 'pages/ShopSettingPage/components/ShopInfoTab/ShopInfoTab.styled';
 
 /**
  * 관리자 회원가입 > 두 번째 화면에서 보여줄 컴포넌트 (가게 정보 입력 페이지)
@@ -86,22 +82,18 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
           name='address'
           rules={{ required: '주소를 선택해주세요' }}
           render={({ field: { onChange, value } }) => (
-            <AddressWrap>
-              <AddressInput value={value} placeholder='주소' disabled />
-              <LocationBtn
-                onClick={(e) => {
-                  e.preventDefault();
-                  open({
-                    onComplete: (data: Address) => {
-                      const fullAddress = handleComplete(data);
-                      onChange(fullAddress);
-                    },
-                  });
-                }}
-              >
-                가게 주소 찾기
-              </LocationBtn>
-            </AddressWrap>
+            <AddressBox
+              value={value}
+              onClick={(e) => {
+                e.preventDefault();
+                open({
+                  onComplete: (data: Address) => {
+                    const fullAddress = handleComplete(data);
+                    onChange(fullAddress);
+                  },
+                });
+              }}
+            />
           )}
         />
         <Input
