@@ -162,6 +162,22 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
         )}
       </InputWrap>
       <InputWrap>
+        <Input
+          label='이름'
+          placeholder='이름을 입력해주세요'
+          {...register('name', {
+            required: '이름은 필수 입력입니다.',
+            pattern: {
+              value: /^[가-힣]+$/,
+              message: '공백없이 한글만 입력가능합니다.',
+            },
+          })}
+        />
+        {errors.name && (
+          <GappedErrorMessage>{errors.name?.message}</GappedErrorMessage>
+        )}
+      </InputWrap>
+      <InputWrap>
         <DateInput
           label='생년월일'
           type='date'

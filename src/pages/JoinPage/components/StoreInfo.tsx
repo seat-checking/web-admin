@@ -56,6 +56,19 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <InputWrap>
         <Input
+          label='가게 이름'
+          placeholder='가게 이름을 입력해주세요'
+          {...register('storeName', {
+            required: '가게 이름은 필수 입력입니다.',
+          })}
+        />
+        {errors.storeName && (
+          <GappedErrorMessage>{errors.storeName?.message}</GappedErrorMessage>
+        )}
+      </InputWrap>
+      {/* // TODO 가게 위치 추가 */}
+      <InputWrap>
+        <Input
           label='사업자등록번호'
           placeholder='숫자 10자리를 입력해주세요.'
           {...register('businessRegistrationNumber', {
