@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { Form } from 'react-router-dom';
 import type { JoinFormInputs } from 'common/utils/types';
 import type { InnerPageProps } from 'pages/JoinPage/utils/types';
@@ -181,8 +182,8 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
         <DateInput
           label='생년월일'
           type='date'
-          min='2023-08-10'
-          // max={dayjs(Date.now()).format('YYYY-MM-DD')}
+          min='1900-01-01'
+          max={dayjs(Date.now()).format('YYYY-MM-DD')}
           {...register('age', {
             required: '생년월일은 필수 입력입니다.',
             pattern: {

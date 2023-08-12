@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { JoinFormInputs } from 'common/utils/types';
@@ -89,7 +90,8 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
         <DateInput
           label='개업일자'
           type='date'
-          min='2023-08-10'
+          min='1900-01-01'
+          max={dayjs(Date.now()).format('YYYY-MM-DD')}
           {...register('openDate', {
             required: '개업일자는 필수 입력입니다.',
             pattern: {
