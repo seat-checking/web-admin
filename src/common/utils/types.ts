@@ -1,4 +1,4 @@
-export interface JoinFormInputs {
+export interface JoinForm {
   email: string;
   password: string;
   passwordChecked: string;
@@ -14,4 +14,9 @@ export interface JoinFormInputs {
   storeName: string; // 가게 이름
   address: string;
   detailAddress: string;
+}
+
+export interface LoginForm {
+  email: string;
+  password: string;
 }

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
+import { ErrorMessage } from 'components/ErrorMessage';
 
 import { flexSet } from 'styles/mixin';
 
@@ -36,7 +37,7 @@ export const Checkbox = styled.input`
 `;
 
 export const JoinRow = styled.div`
-  padding-top: 3.3rem;
+  padding-top: 4rem;
   padding-bottom: 5.6rem;
 
   ${flexSet()}
@@ -47,6 +48,10 @@ export const OrangeText = styled.span`
   font-size: 1.6rem;
   line-height: 1.9rem;
   color: ${({ theme }) => theme.palette.primary.orange};
+`;
+
+export const ErrorMessageGap = styled(ErrorMessage)`
+  margin-top: 1.2rem;
 `;
 
 export const JoinLink = styled(Link)`

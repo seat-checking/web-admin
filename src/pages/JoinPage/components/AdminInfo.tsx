@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { Form } from 'react-router-dom';
-import type { JoinFormInputs } from 'common/utils/types';
+import type { JoinForm } from 'common/utils/types';
 import type { InnerPageProps } from 'pages/JoinPage/utils/types';
 import type { SubmitHandler, ChangeHandler } from 'react-hook-form';
 import { AuthApi } from 'api/lib/auth';
@@ -36,7 +36,7 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
     handleSubmit,
   } = useJoinForm;
 
-  const onSubmit: SubmitHandler<JoinFormInputs> = () => {
+  const onSubmit: SubmitHandler<JoinForm> = () => {
     onClickNext('SECOND');
     window.history.pushState({ page: 1 }, '');
   };
@@ -132,7 +132,7 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
           {...register('passwordChecked', {
             required: '비밀번호 확인은 필수 입력입니다.',
             validate: {
-              isSame: (value, formValues: JoinFormInputs) =>
+              isSame: (value, formValues: JoinForm) =>
                 value === formValues.password ||
                 '비밀번호가 일치하지 않습니다.',
             },

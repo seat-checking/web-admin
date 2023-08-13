@@ -1,17 +1,19 @@
 import { isAxiosError } from 'axios';
+
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import type { ErrorResponse } from 'api/lib/auth';
+
 import type { SubmitHandler } from 'react-hook-form';
-import { AuthApi } from 'api/lib/auth';
-import { PATH, STORAGE } from 'common/utils/constants';
+import { useLogin } from 'common/hooks/mutations/useLogin';
+import { PATH } from 'common/utils/constants';
 import { Button } from 'components/Button';
-import { ErrorMessage } from 'components/ErrorMessage';
 
 import { Input } from 'components/Input';
 import {
   Background,
   ContentWrap,
+  ErrorMessageGap,
   InputWrap,
   JoinLink,
   JoinRow,
@@ -34,30 +36,24 @@ export const LoginPage: React.FC = () => {
     setError,
     formState: { errors },
   } = useForm<LoginFormInputs>();
-  const navigate = useNavigate();
+  const { mutate: loginMutate } = useLogin();
 
-  const handleLogin: SubmitHandler<LoginFormInputs> = async ({
-    email,
-    password,
-  }) => {
-    try {
-      const { accessToken, permissionByMenu, position } = await AuthApi.signIn(
-        email,
-        password,
-      );
-
-      localStorage.setItem(STORAGE.accessToken, accessToken);
-
-      navigate('/');
-    } catch (error) {
-      if (isAxiosError<ErrorResponse>(error)) {
-        console.log(error.response?.data.message);
-      }
-      setError('root', {
-        message: '아이디 또는 비밀번호를 다시 입력해주세요.',
-      });
-    }
+  const handleLogin: SubmitHandler<LoginFormInputs> = ({ email, password }) => {
+    loginMutate(
+      { email, password },
+      {
+        onError(error) {
+          if (isAxiosError<ErrorResponse>(error)) {
+            console.log(error.response?.data.message);
+            setError('root', {
+              message: '아이디 또는 비밀번호를 다시 입력해주세요.',
+            });
+          }
+        },
+      },
+    );
   };
+
   console.log('errors :>> ', errors);
   return (
     <Background>
@@ -78,7 +74,9 @@ export const LoginPage: React.FC = () => {
             />
           </InputWrap>
 
-          {errors.root && <ErrorMessage>{errors.root?.message}</ErrorMessage>}
+          {errors.root && (
+            <ErrorMessageGap>{errors.root?.message}</ErrorMessageGap>
+          )}
           <JoinRow>
             <OrangeText>계정이 없으신가요?</OrangeText>
             <JoinLink to={`/${PATH.join}`}>회원가입</JoinLink>

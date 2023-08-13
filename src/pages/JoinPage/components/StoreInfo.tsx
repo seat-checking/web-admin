@@ -2,11 +2,11 @@ import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import type { JoinFormInputs } from 'common/utils/types';
+import type { JoinForm } from 'common/utils/types';
 import type { InnerPageProps } from 'pages/JoinPage/utils/types';
 import type { Address } from 'react-daum-postcode';
 import type { SubmitHandler } from 'react-hook-form';
-import { AuthApi } from 'api/lib/auth';
+import { useJoin } from 'common/hooks/mutations/useJoin';
 import { useAddress } from 'common/hooks/useAddress';
 import { PATH } from 'common/utils/constants';
 import { AddressBox } from 'components/AddressBox';
@@ -28,6 +28,7 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
   useJoinForm,
 }) => {
   const navigate = useNavigate();
+  const { mutate: joinMutate } = useJoin();
 
   const {
     register,
@@ -38,14 +39,16 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
 
   const { open, handleComplete } = useAddress();
 
-  const onSubmit: SubmitHandler<JoinFormInputs> = async (data) => {
-    try {
-      await AuthApi.signUp(data);
-      onClickNext('FIRST'); // 초기화
-      navigate(`/${PATH.login}`, { replace: true });
-    } catch (error) {
-      console.log(error);
-    }
+  const onSubmit: SubmitHandler<JoinForm> = (data) => {
+    joinMutate(data, {
+      onSuccess: () => {
+        onClickNext('FIRST'); // 초기화
+        navigate(`/${PATH.login}`, { replace: true });
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
   };
 
   // 뒤로가기 발생 시 회원가입 첫번째 페이지로 전환
