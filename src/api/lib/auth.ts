@@ -1,5 +1,4 @@
-import type { AxiosResponse } from 'axios';
-import type { JoinFormInputs } from 'common/utils/types';
+import type { JoinForm, LoginForm } from 'common/utils/types';
 import { axiosClient } from 'api/apiClient';
 
 export interface ErrorResponse {
@@ -10,10 +9,15 @@ export interface ErrorResponse {
   success: boolean;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
   accessToken: string;
+  storeId: number;
+  storeName: string;
   permissionByMenu: string;
-  position: string;
+}
+
+export interface GetShopResponse {
+  storeIds: number[];
 }
 
 interface SuccessResponse<T> {
@@ -25,44 +29,17 @@ interface SuccessResponse<T> {
 }
 
 export class AuthApi {
-  static signUp({
-    email,
-    password,
-    passwordChecked,
-    nickname,
-    name,
-    age,
-    sex,
-    consentToMarketing,
-    consentToTermsOfUser,
-    businessRegistrationNumber,
-    openDate,
-    adminName,
-  }: JoinFormInputs) {
+  static signUp(joinForm: JoinForm) {
     return axiosClient.post('/admins/sign-up', {
-      email,
-      password,
-      passwordChecked,
-      nickname,
-      name: adminName, // TODO 디자인 시안에 이름 입력창 추가 반영 후 작업
-      age,
-      sex,
+      ...joinForm,
       consentToMarketing: true,
       consentToTermsOfUser: true,
-      businessRegistrationNumber,
-      openDate,
-      adminName,
     });
   }
 
-  static signIn = async (
-    email: string,
-    password: string,
-  ): Promise<LoginResponse> => {
-    const response = await axiosClient.post('/admins/sign-in', {
-      email,
-      password,
-    });
+  static signIn = async (loginForm: LoginForm): Promise<LoginResponse> => {
+    const response = await axiosClient.post('/admins/sign-in', loginForm);
+    console.log('response.data.result :>> ', response.data.result);
     return response.data.result;
   };
 
@@ -77,4 +54,13 @@ export class AuthApi {
       email,
     });
   }
+
+  static getShops = async (): Promise<GetShopResponse> => {
+    const response = await axiosClient.get('/stores/admins/owned');
+    return response.data.result;
+  };
 }
+// return useMutation({
+//   queryKey: [this.SIGN_IN_QUERY_KEY, email, password],
+//   queryFn: () => this.signIn(email, password),
+// });
