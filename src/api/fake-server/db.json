@@ -1,0 +1,185 @@
+{
+  "reservationResponseListPending": [
+    {
+      "id": 1,
+      "name": "김길동",
+      "reservationStatus": "대기",
+      "storeSpaceName": "1층 레드룸",
+      "reservationUnit": "좌석",
+      "manageId": 152,
+      "reservationStartDateAndTime": "2023-08-10T06:21:14.480Z",
+      "reservationEndDateAndTime": "2023-08-10T06:21:14.480Z",
+      "createdAt": "2023-08-10T06:21:14.480Z"
+    },
+    {
+      "id": 2,
+      "name": "박순이",
+      "reservationStatus": "대기",
+      "storeSpaceName": "블루룸",
+      "reservationUnit": "좌석",
+      "manageId": 153,
+      "reservationStartDateAndTime": "2023-08-10T06:21:14.480Z",
+      "reservationEndDateAndTime": "2023-08-10T06:21:14.480Z",
+      "createdAt": "2023-08-10T06:21:14.480Z"
+    }
+  ],
+  "spacesList": [
+    {
+      "storeSpaceId": 10,
+      "storeSpaceName": "레드룸"
+    },
+    {
+      "storeSpaceId": 20,
+      "storeSpaceName": "블루룸"
+    }
+  ],
+  "layout": {
+    "storeSpaceId": 10,
+    "storeSpaceName": "레드룸",
+    "width": 2,
+    "height": 10,
+    "tableList": [
+      {
+        "storeTableId": "150923",
+        "manageId": 1,
+        "width": 2,
+        "height": 5,
+        "tableX": 2,
+        "tableY": 5
+      }
+    ],
+    "chairList": [
+      {
+        "storeChairId": "150924",
+        "manageId": 1,
+        "chairX": 4,
+        "chairY": 2
+      },
+      {
+        "storeChairId": "150925",
+        "manageId": 2,
+        "chairX": 5,
+        "chairY": 8
+      }
+    ]
+  },
+  "allLayoutSumin": [
+    {
+      "storeSpaceId": 10,
+      "storeSpaceName": "레드룸",
+      "width": 2,
+      "height": 10,
+      "tableList": [
+        {
+          "storeTableId": "150923",
+          "manageId": 1,
+          "width": 2,
+          "height": 5,
+          "tableX": 2,
+          "tableY": 5
+        }
+      ],
+      "chairList": [
+        {
+          "storeChairId": "150924",
+          "manageId": 1,
+          "chairX": 4,
+          "chairY": 2
+        },
+        {
+          "storeChairId": "150925",
+          "manageId": 2,
+          "chairX": 5,
+          "chairY": 8
+        }
+      ]
+    },
+    {
+      "storeSpaceId": 20,
+      "storeSpaceName": "블루룸",
+      "width": 2,
+      "height": 20,
+      "tableList": [
+        {
+          "storeTableId": "150923",
+          "manageId": 1,
+          "width": 10,
+          "height": 5,
+          "tableX": 2,
+          "tableY": 5
+        }
+      ],
+      "chairList": [
+        {
+          "storeChairId": "150924",
+          "manageId": 1,
+          "chairX": 4,
+          "chairY": 2
+        },
+        {
+          "storeChairId": "150925",
+          "manageId": 2,
+          "chairX": 5,
+          "chairY": 8
+        }
+      ]
+    }
+  ],
+  "allLayouts": {
+    "storeId": 1,
+    "adminStoreSpaceResponseList": [
+      {
+        "storeSpaceId": 1,
+        "storeSpaceName": "1층 레드룸",
+        "width": 2,
+        "height": 10,
+        "entranceX": 20,
+        "entraceY": 20,
+        "tableList": [
+          {
+            "storeTableId": "1",
+            "manageId": 1,
+            "tableX": 1,
+            "tableY": 1,
+            "width": 4,
+            "height": 2
+          }
+        ],
+        "chairList": [
+          {
+            "storeChairId": "2",
+            "manageId": 1,
+            "chairX": 1,
+            "chairY": 1
+          }
+        ]
+      },
+      {
+        "storeSpaceId": 2,
+        "storeSpaceName": "블루룸",
+        "width": 2,
+        "height": 20,
+        "entranceX": 20,
+        "entraceY": 20,
+        "tableList": [
+          {
+            "storeTableId": "1",
+            "manageId": 1,
+            "tableX": 1,
+            "tableY": 1,
+            "width": 4,
+            "height": 2
+          }
+        ],
+        "chairList": [
+          {
+            "storeChairId": "2",
+            "manageId": 1,
+            "chairX": 1,
+            "chairY": 1
+          }
+        ]
+      }
+    ]
+  }
+}

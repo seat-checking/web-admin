@@ -5,7 +5,8 @@ import { getAccessToken, setAccessToken } from 'common/utils/auth';
 const ENDPOINT = process.env.REACT_APP_API_URL;
 
 export const axiosClient = axios.create({
-  baseURL: ENDPOINT,
+  // baseURL: ENDPOINT,
+  baseURL: 'http://localhost:3001',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

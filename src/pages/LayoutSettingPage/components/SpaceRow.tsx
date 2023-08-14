@@ -56,7 +56,7 @@ export const SpaceRow: React.FC = () => {
             name={space.storeSpaceName}
             // onClick={setSelectedSpace}
             // isSelected={space.storeSpaceId === selected}
-            deleteSpace={deleteSpace}
+            // deleteSpace={deleteSpace}
           />
         ))}
         <AddRow onClick={addSpace}>

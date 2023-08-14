@@ -9,21 +9,12 @@ import { flexSet } from 'styles/mixin';
 interface SpaceProps {
   id: number;
   name: string;
-  // onClick: (id: number) => void;
-  // isSelected: boolean;
-  deleteSpace: (id: number) => void;
 }
 
 /**
  * Space 컴포넌트 (흰색 네모)
  */
-export const Space: React.FC<SpaceProps> = ({
-  id,
-  name,
-  // onClick,
-  // isSelected,
-  deleteSpace,
-}) => {
+export const Space: React.FC<SpaceProps> = ({ id, name }) => {
   const [spaceName, setSpaceName] = useState(name);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -36,7 +27,7 @@ export const Space: React.FC<SpaceProps> = ({
   };
 
   const handleDeleteSpace = () => {
-    deleteSpace(id);
+    // TODO 삭제 api 나오면 연결
   };
 
   return (
