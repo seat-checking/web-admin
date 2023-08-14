@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 
-interface Return {
+export interface UseSpaceReturn {
   spaceList: SpaceType[];
   setSpaces: (space: SpaceType[]) => void;
   addSpace: () => void;
@@ -10,9 +10,9 @@ interface Return {
   selected: number;
 }
 
-export const useSpace = (): Return => {
+export const useSpace = (): UseSpaceReturn => {
   const [spaceList, setSpaceList] = useState<SpaceType[]>([]);
-  const [selected, setSelected] = useState(spaceList?.[0]?.storeSpaceId);
+  const [selected, setSelected] = useState(spaceList?.[0]?.id);
 
   const setSelectedSpace = (id: number) => {
     setSelected(id);
@@ -24,7 +24,7 @@ export const useSpace = (): Return => {
 
   const addSpace = useCallback(() => {
     const newSpace: SpaceType = {
-      storeSpaceId: Date.now(),
+      id: Date.now(),
       name: 'Space',
     };
     setSpaceList([...spaceList, newSpace]);
@@ -32,9 +32,7 @@ export const useSpace = (): Return => {
 
   const deleteSpace = useCallback(
     (id: number) => {
-      const deleted = spaceList.filter(
-        ({ storeSpaceId }) => storeSpaceId !== id,
-      );
+      const deleted = spaceList.filter((space) => space.id !== id);
       setSpaceList(deleted);
     },
     [spaceList],

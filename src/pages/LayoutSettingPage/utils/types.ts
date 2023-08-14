@@ -1,5 +1,5 @@
 export interface SpaceType {
-  storeSpaceId: number;
+  id: number;
   name: string;
 }
 
