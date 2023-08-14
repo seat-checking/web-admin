@@ -18,5 +18,7 @@ export const mutationKeys = {
 };
 
 export const queryKeys = {
-  GET_SHOP: 'getShop',
+  GET_SHOP: 'shop',
+  GET_SPACES: 'spaces',
+  GET_SPACE_LAYOUT: 'spaceLayout',
 };
