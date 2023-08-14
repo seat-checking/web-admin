@@ -37,8 +37,9 @@ axiosClient.interceptors.response.use(
     }
     return response;
   },
-  (error: AxiosError) => {
-    console.log('error (응답 인터셉터) :>> ', error);
+  (error) => {
+    // TODO 리프레시 만료 시 cors 뜸
+    console.log('error (응답 인터셉터) :>> ', error, error.response);
     if (error.code === AxiosError.ERR_NETWORK) {
       // window.alert('네트워크 오류');
     }

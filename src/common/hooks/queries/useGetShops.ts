@@ -5,6 +5,6 @@ import { queryKeys } from 'common/utils/constants';
 export const useGetShops = () => {
   return useQuery({
     queryKey: [queryKeys.GET_SHOP],
-    queryFn: AuthApi.getShops,
+    queryFn: AuthApi.getShopsTest,
   });
 };

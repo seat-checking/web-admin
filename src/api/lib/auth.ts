@@ -55,9 +55,16 @@ export class AuthApi {
     });
   }
 
-  static getShops = async (): Promise<GetShopResponse> => {
+  static getShopsTest = async (): Promise<GetShopResponse> => {
     const response = await axiosClient.get('/stores/admins/owned');
     return response.data.result;
+  };
+
+  static searchTest = async () => {
+    const response = await axiosClient.get(
+      `/users/search?email=usermember@naver.com`,
+    );
+    return response.data;
   };
 }
 // return useMutation({
