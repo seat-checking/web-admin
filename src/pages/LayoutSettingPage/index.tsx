@@ -1,9 +1,13 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import type { ShopLayout } from 'api/lib/shop';
 import type { ShopFormState } from 'pages/LayoutSettingPage/utils/types';
 import type { SyntheticEvent } from 'react';
 import type { Layout } from 'react-grid-layout';
 import type { ResizeCallbackData } from 'react-resizable';
 
+import { useGetSpaceLayout } from 'common/hooks/queries/useGetSpaceLayout';
+import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
 import { useTab } from 'common/hooks/useTab';
 import { Tabs } from 'components/Tabs.tsx';
 import {
@@ -23,7 +27,6 @@ import 'react-grid-layout/css/styles.css';
 import { ShopFormTab } from 'pages/LayoutSettingPage/components/ShopFormTab';
 import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
 import { useShopHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
-import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
 import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
 import {
   COLUMN_CNT,
@@ -31,29 +34,45 @@ import {
   TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
 
+type ItemType = 'chair' | 'table';
 export interface MyLayout extends Layout {
-  sort: 'chair' | 'table';
+  sort: ItemType;
+  manageId?: number;
 }
-/**
- * 좌석 설정 페이지
- */
-export const LayoutSettingPage: React.FC = () => {
-  const { activeTab, changeTab } = useTab();
-  const { setSpaces } = useSpace();
-  const { rowCnt, minRowCnt, changeRowCnt, changeMinRowCnt, findMinRowCnt } =
-    useShopHeight(DEFAULT_ROW_CNT);
-  const { size } = useContext(DragContext);
 
-  const [shopFormState, setShopFormState] =
-    useState<ShopFormState>('RECTANGLE');
-  const [shopList, setShopList] = useState([]);
-  const [layouts, setLayouts] = useState<MyLayout[]>([]);
+const initialLayouts = (shop: ShopLayout) => {
+  const tables = shop?.tableList.map((table) => {
+    return {
+      i: table.storeTableId,
+      x: table.tableX,
+      y: table.tableY,
+      w: table.width,
+      h: table.height,
+      sort: 'table' as ItemType,
+      isResizable: true,
+    };
+  });
+  const chairs = shop?.chairList.map((chair) => {
+    return {
+      i: chair.storeChairId,
+      x: chair.chairX,
+      y: chair.chairY,
+      w: 1,
+      h: 1,
+      sort: 'chair' as ItemType,
+      manageId: chair.manageId,
+      isResizable: false,
+      isDraggable: false,
+    };
+  });
+  return [...tables, ...chairs];
+};
 
-  const itemIndex = useRef(0);
-
-  const itemsDom = layouts.map((item) => {
-    const sort = item.i.split('-')[0];
-    if (sort === 'chair') {
+const itemsDom = (layouts2: MyLayout[], activeTab: number) => {
+  console.log('layouts2 :>> ', layouts2);
+  return layouts2.map((item) => {
+    // if (item.i.split('-')[0] === 'chair') {
+    if (item.sort === 'chair') {
       return (
         <ChairBorder key={item.i} className='chair'>
           <Chair isClickable={activeTab === 1} />
@@ -62,6 +81,23 @@ export const LayoutSettingPage: React.FC = () => {
     }
     return <GridTable key={item.i} isClickable={activeTab === 1} />;
   });
+};
+/**
+ * 좌석 설정 페이지
+ */
+export const LayoutSettingPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const spaceParams = Number(searchParams.get('space'));
+  const { data: spaceLayout } = useGetSpaceLayout(spaceParams ?? -100);
+
+  const { activeTab, changeTab } = useTab();
+  const { rowCnt, minRowCnt, changeRowCnt, changeMinRowCnt, findMinRowCnt } =
+    useShopHeight(DEFAULT_ROW_CNT);
+  const { size } = useContext(DragContext);
+
+  const [shopFormState, setShopFormState] =
+    useState<ShopFormState>('RECTANGLE');
+  const [myLayout, setMyLayout] = useState<MyLayout[]>([]);
 
   const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
     const { height } = data.size;
@@ -73,11 +109,7 @@ export const LayoutSettingPage: React.FC = () => {
     return { ...size.current };
   };
 
-  const handleDropItem = (
-    myLayout: MyLayout[],
-    item: MyLayout,
-    e: DragEvent,
-  ): void => {
+  const handleDropItem = (layout: Layout[], item: MyLayout, e: DragEvent) => {
     const sort = e.dataTransfer?.getData('sort');
     const { w, h } = size.current;
     item.w = w;
@@ -85,38 +117,33 @@ export const LayoutSettingPage: React.FC = () => {
     if (sort === 'chair') {
       item.isResizable = false;
       item.sort = 'chair';
-      item.i = `chair-${itemIndex.current++}`;
+      item.i = String(Date.now());
     } else {
       item.isResizable = true;
       item.sort = 'table';
-      item.i = `table-${itemIndex.current++}`;
+      item.i = String(Date.now());
     }
-    setLayouts(myLayout);
+    // setLayouts2(myLayout);
+    setMyLayout((prev) => [...prev, item]);
   };
 
-  const handleLayoutChange = (layout: MyLayout[]) => {
+  const handleLayoutChange = (layout: Layout[]) => {
     if (layout.at(-1)?.i === '__dropping-elem__') {
       return;
     }
-
-    setLayouts(layout);
+    // 라이브러리에 의해 지정해둔 타입이 날라가서 추가함
+    setMyLayout((prev) => {
+      return prev.map((prevLayout, idx) => ({ ...prevLayout, ...layout[idx] }));
+    });
   };
 
   useEffect(() => {
-    changeMinRowCnt(findMinRowCnt(layouts));
-  }, [layouts, changeMinRowCnt, findMinRowCnt]);
-
-  useEffect(() => {
-    const spaces = shopList.map(({ storeSpaceId, name }) => ({
-      storeSpaceId,
-      name,
-    }));
-    setSpaces(spaces);
-  }, [shopList, setSpaces]);
+    changeMinRowCnt(findMinRowCnt(myLayout));
+  }, [myLayout, changeMinRowCnt, findMinRowCnt]);
 
   useEffect(() => {
     if (activeTab === 0) {
-      setLayouts((prev) =>
+      setMyLayout((prev) =>
         prev.map((item) => {
           const result = { ...item, isDraggable: false };
           if (item.i.split('-')[0] === 'table') {
@@ -128,7 +155,7 @@ export const LayoutSettingPage: React.FC = () => {
       return;
     }
     if (activeTab === 1) {
-      setLayouts((prev) =>
+      setMyLayout((prev) =>
         prev.map((item) => {
           const result = { ...item, isDraggable: true };
           if (item.i.split('-')[0] === 'table') {
@@ -139,6 +166,14 @@ export const LayoutSettingPage: React.FC = () => {
       );
     }
   }, [activeTab]);
+
+  useEffect(() => {
+    if (spaceLayout) {
+      console.log('spaceLayout :>> ', spaceLayout);
+      setMyLayout(initialLayouts(spaceLayout)); // this line casues infinite rerender. but why?
+      changeRowCnt(spaceLayout.height);
+    }
+  }, [spaceLayout, changeRowCnt]);
 
   return (
     <Wrap>
@@ -185,7 +220,7 @@ export const LayoutSettingPage: React.FC = () => {
             onResize={handleResize}
           >
             <ShopGridBackground
-              layout={layouts}
+              layout={myLayout}
               rowHeight={TABLE_SIZE_PX}
               // width/cols = rowHeight가 나와야 정사각형 나옴
               cols={COLUMN_CNT}
@@ -203,13 +238,13 @@ export const LayoutSettingPage: React.FC = () => {
               onDropDragOver={handleDropDragOver}
               onLayoutChange={handleLayoutChange}
             >
-              {itemsDom}
+              {itemsDom(myLayout, activeTab)}
             </ShopGridBackground>
           </ResizableWrap>
         ) : (
           <ResizableWrap as='div' $width={TABLE_SIZE_PX * COLUMN_CNT}>
             <ShopGridBackground
-              layout={layouts}
+              layout={myLayout}
               rowHeight={TABLE_SIZE_PX}
               cols={COLUMN_CNT}
               width={TABLE_SIZE_PX * COLUMN_CNT}
@@ -224,7 +259,7 @@ export const LayoutSettingPage: React.FC = () => {
               onDropDragOver={handleDropDragOver}
               onLayoutChange={handleLayoutChange}
             >
-              {itemsDom}
+              {itemsDom(myLayout, activeTab)}
             </ShopGridBackground>
           </ResizableWrap>
         )}
