@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import type { MyLayout } from 'pages/LayoutSettingPage';
 
 export type ChangeRowCommand = 'UP' | 'DOWN';
@@ -15,26 +15,33 @@ export const useShopHeight = (defaultRowCnt: number): Return => {
   const [rowCnt, setRowCnt] = useState(defaultRowCnt);
   const [minRowCnt, setMinRowCnt] = useState(0);
 
-  const getValidRowCnt = (newRowCnt: number) =>
-    newRowCnt < minRowCnt ? minRowCnt : newRowCnt;
+  const getValidRowCnt = useCallback(
+    (newRowCnt: number) => {
+      return newRowCnt < minRowCnt ? minRowCnt : newRowCnt;
+    },
+    [minRowCnt],
+  );
 
-  const changeRowCnt = (value: number | ChangeRowCommand) => {
-    if (value === 'UP') {
-      setRowCnt((prev) => getValidRowCnt(prev + 1));
-      return;
-    }
-    if (value === 'DOWN') {
-      setRowCnt((prev) => getValidRowCnt(prev - 1));
-      return;
-    }
-    setRowCnt(getValidRowCnt(value));
-  };
+  const changeRowCnt = useCallback(
+    (value: number | ChangeRowCommand) => {
+      if (value === 'UP') {
+        setRowCnt((prev) => getValidRowCnt(prev + 1));
+        return;
+      }
+      if (value === 'DOWN') {
+        setRowCnt((prev) => getValidRowCnt(prev - 1));
+        return;
+      }
+      setRowCnt(getValidRowCnt(value));
+    },
+    [getValidRowCnt],
+  );
 
-  const changeMinRowCnt = (height: number) => {
+  const changeMinRowCnt = useCallback((height: number) => {
     setMinRowCnt(height);
-  };
+  }, []);
 
-  const findMinRowCnt = (layouts: MyLayout[]) => {
+  const findMinRowCnt = useCallback((layouts: MyLayout[]) => {
     let max = 0;
     layouts.forEach((layout) => {
       if (layout.y + layout.h <= max) {
@@ -43,7 +50,7 @@ export const useShopHeight = (defaultRowCnt: number): Return => {
       max = layout.y + layout.h;
     });
     return max;
-  };
+  }, []);
 
   return {
     rowCnt,

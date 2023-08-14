@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { ShopLayout } from 'api/lib/shop';
 import type { ShopFormState } from 'pages/LayoutSettingPage/utils/types';
@@ -7,7 +7,6 @@ import type { Layout } from 'react-grid-layout';
 import type { ResizeCallbackData } from 'react-resizable';
 
 import { useGetSpaceLayout } from 'common/hooks/queries/useGetSpaceLayout';
-import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
 import { useTab } from 'common/hooks/useTab';
 import { Tabs } from 'components/Tabs.tsx';
 import {
@@ -169,7 +168,6 @@ export const LayoutSettingPage: React.FC = () => {
 
   useEffect(() => {
     if (spaceLayout) {
-      console.log('spaceLayout :>> ', spaceLayout);
       setMyLayout(initialLayouts(spaceLayout)); // this line casues infinite rerender. but why?
       changeRowCnt(spaceLayout.height);
     }
