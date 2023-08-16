@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import type { AxiosResponse } from 'axios';
 import { axiosClient } from 'api/apiClient';
+import { STORAGE } from 'common/utils/constants';
 
 interface Chair {
   storeChairId: string; // string으로, 프론트에서 넘겨주는 고유값
@@ -32,76 +33,61 @@ interface LayoutResponse {
   adminStoreSpaceResponseList: ShopLayout[];
 }
 
+interface Space {
+  storeSpaceId: number;
+  name: string;
+}
+
 export class ShopApi {
-  // 관리자 가게 형태 조회 (제거 예정)
-  static getAllLayout = async (shopId = 1): Promise<ShopLayout[]> => {
-    const response: AxiosResponse<LayoutResponse> = await axiosClient.get(
-      `/allLayouts`,
-    );
-    return response.data.adminStoreSpaceResponseList;
-    // const response = await axiosClient.get(`/admin/store/form/${shopId}`);
-    // return response.data?.result.adminStoreSpaceResponseList;
-  };
+  static readonly apiPrefix = '/stores/admins';
 
   // 스페이스별 가게 형태 조회
-  static getLayout = async (shopId = 1, spaceId = 1) => {
-    const response = await axiosClient.get(`/allLayoutSumin`, {
-      params: { storeSpaceId: spaceId },
-    });
-    console.log('response.data :>> ', response.data[0]);
-    return response.data[0];
+  static getLayout = async (spaceId: number) => {
+    const response = await axiosClient.get(
+      `${this.apiPrefix}/spaces/seats/${spaceId}`,
+    );
+    return response.data.result;
   };
 
-  // 관리자 가게 형태 등록
-  static saveShopLayout = async (shopId: number): Promise<any> => {
-    const req = [
-      {
-        name: '우하하',
-        width: 1,
-        height: 1,
-        entranceX: 1,
-        entranceY: 1,
-        tableList: [
-          {
-            tableX: 1,
-            tableY: 1,
-            chairList: [
-              {
-                chairX: 1,
-                chairY: 1,
-              },
-            ],
-          },
-        ],
-      },
+  // 스페이스 생성
+  static saveShopLayout = async (): Promise<any> => {
+    const storeId = localStorage.getItem(STORAGE.storeId);
+    const req = {
+      name: '우하하',
+      height: 20,
+      reservationUnit: '좌석',
+      tableList: [
+        {
+          storeTableId: '15445',
+          tableX: 10,
+          tableY: 10,
+          tableWidth: 2,
+          tableHeight: 4,
+        },
+      ],
+      chairList: [
+        {
+          storeChairId: '15446',
+          manageId: 2,
+          chairX: 1,
+          chairY: 1,
+        },
+      ],
+    };
 
-      {
-        name: '우하j하',
-        width: 1,
-        height: 1,
-        entranceX: 1,
-        entranceY: 1,
-        tableList: [
-          {
-            tableX: 1,
-            tableY: 1,
-            chairList: [
-              {
-                chairX: 1,
-                chairY: 1,
-              },
-            ],
-          },
-        ],
-      },
-    ];
-    const response = await axiosClient.post(`/admin/store/form/${shopId}`, req);
+    const response = await axiosClient.post(
+      `${this.apiPrefix}/spaces/${storeId}`,
+      req,
+    );
     return response;
   };
 
-  // 관리자 가게 스페이스 목록 조회
-  static getSpaceList = async (): Promise<any> => {
-    const response = await axiosClient.get(`/spacesList`);
-    return response.data;
+  // 가게의 모든 스페이스 기본 정보 조회
+  static getSpaceList = async (): Promise<Space[]> => {
+    const storeId = localStorage.getItem(STORAGE.storeId);
+    const response = await axiosClient.get(
+      `${this.apiPrefix}/spaces/${storeId}`,
+    );
+    return response.data.result;
   };
 }
