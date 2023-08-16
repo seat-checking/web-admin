@@ -1,5 +1,6 @@
 import { useTheme } from 'styled-components';
 
+import { AddressBox } from 'components/AddressBox';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
@@ -15,7 +16,6 @@ import {
   FileInput,
   AddFileBtn,
   AddFileRow,
-  LocationBtn,
   UploadIconBox,
 } from 'pages/ShopSettingPage/components/ShopInfoTab/ShopInfoTab.styled';
 
@@ -27,6 +27,7 @@ import { Wifi } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Wi
  */
 export const ShopInfoTab: React.FC = () => {
   const theme = useTheme();
+
   return (
     <ContentWrap>
       <GrayBackground>
@@ -51,8 +52,14 @@ export const ShopInfoTab: React.FC = () => {
       </ListItem>
       <ListItem>
         <Label label='가게 위치' />
-        <LocationBtn>가게 주소 찾기</LocationBtn>
-        <Input placeholder='상세 주소' />
+        {/* // TODO 기능 구현 미완 */}
+        <AddressBox
+          value=''
+          onClick={() => {
+            console.log(3);
+          }}
+        />
+        <Input placeholder='상세 주소' value='' />
       </ListItem>
       <ListItem>
         <Label label='가게 유형' required={false} />

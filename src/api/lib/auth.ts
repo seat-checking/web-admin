@@ -1,47 +1,73 @@
-import type { JoinFormInputs } from 'common/utils/types';
+import type { JoinForm, LoginForm } from 'common/utils/types';
 import { axiosClient } from 'api/apiClient';
 
-export function signUp({
-  email,
-  password,
-  passwordChecked,
-  nickname,
-  age,
-  sex,
-  consentToMarketing,
-  consentToTermsOfUser,
-  employerIdNumber,
-  openDate,
-  adminName,
-}: JoinFormInputs) {
-  return axiosClient.post('/admins/sign-up', {
-    email,
-    password,
-    passwordChecked,
-    nickname,
-    age,
-    sex,
-    consentToMarketing: true,
-    consentToTermsOfUser: true,
-    employerIdNumber,
-    openDate,
-    adminName,
-  });
+export interface ErrorResponse {
+  code: string;
+  errors: [];
+  message: string;
+  status: number;
+  success: boolean;
 }
 
-// 로그인 미완
-export function signIn(email: string, password: string) {
-  return axiosClient.post('/admins/sign-in', {});
+export interface LoginResponse {
+  accessToken: string;
+  storeId: number;
+  storeName: string;
+  permissionByMenu: string;
 }
 
-export function validateNickname(nickname: string) {
-  return axiosClient.post('/admins/validate/nickname', {
-    nickname,
-  });
+export interface GetShopResponse {
+  storeIds: number[];
 }
 
-export function validateEmail(email: string) {
-  return axiosClient.post('/admins/validate/email', {
-    email,
-  });
+interface SuccessResponse<T> {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: T;
+  status: number;
 }
+
+export class AuthApi {
+  static signUp(joinForm: JoinForm) {
+    return axiosClient.post('/admins/sign-up', {
+      ...joinForm,
+      consentToMarketing: true,
+      consentToTermsOfUser: true,
+    });
+  }
+
+  static signIn = async (loginForm: LoginForm): Promise<LoginResponse> => {
+    const response = await axiosClient.post('/admins/sign-in', loginForm);
+    console.log('response.data.result :>> ', response.data.result);
+    return response.data.result;
+  };
+
+  static validateNickname(nickname: string) {
+    return axiosClient.post('/admins/validate/nickname', {
+      nickname,
+    });
+  }
+
+  static validateEmail(email: string) {
+    return axiosClient.post('/admins/validate/email', {
+      email,
+    });
+  }
+
+  static getShopsTest = async (): Promise<GetShopResponse> => {
+    const response = await axiosClient.get('/stores/admins/owned');
+    return response.data.result;
+  };
+
+  static searchTest = async () => {
+    const response = await axiosClient.get(
+      `/users/search?email=usermember@naver.com`,
+    );
+    return response.data;
+  };
+}
+// return useMutation({
+//   queryKey: [this.SIGN_IN_QUERY_KEY, email, password],
+//   queryFn: () => this.signIn(email, password),
+// });

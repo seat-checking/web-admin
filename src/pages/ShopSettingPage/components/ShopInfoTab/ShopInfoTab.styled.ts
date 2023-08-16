@@ -72,15 +72,3 @@ export const RadioRow = styled.div`
 
   padding-top: 0.8rem;
 `;
-
-export const LocationBtn = styled(Button)`
-  margin-bottom: 0.8rem;
-
-  height: 4.8rem;
-
-  background-color: white;
-  border: 0.1rem solid ${({ theme }) => theme.palette.grey[300]};
-  color: ${({ theme }) => theme.palette.grey[400]};
-  font-size: 1.6rem;
-  font-weight: 600;
-`;

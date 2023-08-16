@@ -9,6 +9,8 @@ import { ReactComponent as SettingSeatActive } from 'assets/icons/snb-setting-se
 import { ReactComponent as SettingSeat } from 'assets/icons/snb-setting-seat.svg';
 import { ReactComponent as SettingStoreActive } from 'assets/icons/snb-setting-store-active.svg';
 import { ReactComponent as SettingStore } from 'assets/icons/snb-setting-store.svg';
+
+import { getPermission } from 'common/utils/auth';
 import { PATH } from 'common/utils/constants';
 import {
   Blank,
@@ -33,38 +35,46 @@ export const GlobalNavigationBar: React.FC = () => {
         <img src='' alt='가게 로고' className='shopLogo' />
         <button type='button' className='shopNameWrap'>
           <h1 className='shopName'>가게 이름</h1>
-          <ChevronDown className='hideFold' stroke='white' />
+          <ChevronDown className='hideFold' />
         </button>
         <p className='branchName hideFold'>지점명</p>
         <ul className='naviationList'>
-          <NavigationItem
-            to='/'
-            label='가게 현황'
-            activeIcon={OverviewActive}
-            defaultIcon={Overview}
-            isFolded={isFolded}
-          />
-          <NavigationItem
-            to={`/${PATH.layout}`}
-            label='좌석 설정'
-            activeIcon={SettingSeatActive}
-            defaultIcon={SettingSeat}
-            isFolded={isFolded}
-          />
-          <NavigationItem
-            to={`/${PATH.statistics}`}
-            label='가게 통계'
-            activeIcon={AnalyticsActive}
-            defaultIcon={Analytics}
-            isFolded={isFolded}
-          />
-          <NavigationItem
-            to={`/${PATH.setting}/1`}
-            label='가게 설정'
-            activeIcon={SettingStoreActive}
-            defaultIcon={SettingStore}
-            isFolded={isFolded}
-          />
+          {getPermission('storeStatus') && (
+            <NavigationItem
+              to='/'
+              label='가게 현황'
+              activeIcon={OverviewActive}
+              defaultIcon={Overview}
+              isFolded={isFolded}
+            />
+          )}
+          {getPermission('seatSetting') && (
+            <NavigationItem
+              to={`/${PATH.layout}`}
+              label='좌석 설정'
+              activeIcon={SettingSeatActive}
+              defaultIcon={SettingSeat}
+              isFolded={isFolded}
+            />
+          )}
+          {getPermission('storeStatistics') && (
+            <NavigationItem
+              to={`/${PATH.statistics}`}
+              label='가게 통계'
+              activeIcon={AnalyticsActive}
+              defaultIcon={Analytics}
+              isFolded={isFolded}
+            />
+          )}
+          {getPermission('storeSetting') && (
+            <NavigationItem
+              to={`/${PATH.setting}/1`}
+              label='가게 설정'
+              activeIcon={SettingStoreActive}
+              defaultIcon={SettingStore}
+              isFolded={isFolded}
+            />
+          )}
         </ul>
         <FoldBtn onClick={handleClickFoldBtn}>
           <ChevronLeft {...(isFolded && { transform: 'rotate(180)' })} />
