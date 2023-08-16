@@ -41,6 +41,15 @@ interface Space {
 export class ShopApi {
   static readonly apiPrefix = '/stores/admins';
 
+  // 가게의 모든 스페이스 기본 정보 조회
+  static getSpaceList = async (): Promise<Space[]> => {
+    const storeId = localStorage.getItem(STORAGE.storeId);
+    const response = await axiosClient.get(
+      `${this.apiPrefix}/spaces/${storeId}`,
+    );
+    return response.data.result;
+  };
+
   // 스페이스별 가게 형태 조회
   static getLayout = async (spaceId: number) => {
     const response = await axiosClient.get(
@@ -53,8 +62,8 @@ export class ShopApi {
   static saveShopLayout = async (): Promise<any> => {
     const storeId = localStorage.getItem(STORAGE.storeId);
     const req = {
-      name: '우하하',
-      height: 20,
+      name: '블루룸',
+      height: 10,
       reservationUnit: '좌석',
       tableList: [
         {
@@ -72,6 +81,12 @@ export class ShopApi {
           chairX: 1,
           chairY: 1,
         },
+        {
+          storeChairId: '15446',
+          manageId: 2,
+          chairX: 3,
+          chairY: 3,
+        },
       ],
     };
 
@@ -82,12 +97,8 @@ export class ShopApi {
     return response;
   };
 
-  // 가게의 모든 스페이스 기본 정보 조회
-  static getSpaceList = async (): Promise<Space[]> => {
-    const storeId = localStorage.getItem(STORAGE.storeId);
-    const response = await axiosClient.get(
-      `${this.apiPrefix}/spaces/${storeId}`,
-    );
-    return response.data.result;
+  // 스페이스 삭제
+  static deleteSpace = async (spaceId: number) => {
+    await axiosClient.delete(`${this.apiPrefix}/spaces/${spaceId}`);
   };
 }
