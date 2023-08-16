@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
-import { queryKeys } from 'common/utils/constants';
+import { TEMPORARY_SPACE_ID, queryKeys } from 'common/utils/constants';
 
 export interface UseSpaceReturn {
   spaceList: SpaceType[];
@@ -28,7 +28,8 @@ export const useSpace = (): UseSpaceReturn => {
   }, []);
 
   const addSpace = useCallback(() => {
-    const newId = Date.now();
+    // const newId = Date.now();
+    const newId = TEMPORARY_SPACE_ID;
     const newSpace: SpaceType = {
       storeSpaceId: newId,
       storeSpaceName: 'Space',

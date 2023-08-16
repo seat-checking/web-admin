@@ -82,7 +82,7 @@ export class ShopApi {
           chairY: 1,
         },
         {
-          storeChairId: '15446',
+          storeChairId: '15447',
           manageId: 2,
           chairX: 3,
           chairY: 3,

@@ -36,11 +36,7 @@ export const SpaceRow: React.FC = () => {
       spacesList?.[0]?.storeSpaceId,
     );
     setSearchParams({ space: String(spacesList?.[0]?.storeSpaceId) });
-  }, []);
-
-  if (isLoading) {
-    return <div>로딩중...</div>;
-  }
+  }, [spacesList]);
 
   return (
     <>
@@ -49,16 +45,18 @@ export const SpaceRow: React.FC = () => {
         <BoldText>스페이스란?</BoldText> 가게의 방이나 분리된 공간을 의미해요.
       </InfoWrap>
       <SpaceWrap>
-        {spacesList?.map((space) => (
-          <Space
-            key={space.storeSpaceId}
-            id={space.storeSpaceId}
-            name={space.name}
-            // onClick={setSelectedSpace}
-            // isSelected={space.storeSpaceId === selected}
-            // deleteSpace={deleteSpace}
-          />
-        ))}
+        {isLoading
+          ? 'loading...'
+          : spacesList?.map((space) => (
+              <Space
+                key={space.storeSpaceId}
+                id={space.storeSpaceId}
+                name={space.name}
+                // onClick={setSelectedSpace}
+                // isSelected={space.storeSpaceId === selected}
+                // deleteSpace={deleteSpace}
+              />
+            ))}
         <AddRow onClick={addSpace}>
           <PlusCircle stroke='white' />
           <AddText>스페이스 추가</AddText>
