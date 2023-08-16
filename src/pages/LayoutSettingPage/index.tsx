@@ -87,7 +87,7 @@ const itemsDom = (layouts2: MyLayout[], activeTab: number) => {
 export const LayoutSettingPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const spaceParams = Number(searchParams.get('space'));
-  const { data: spaceLayout } = useGetSpaceLayout(spaceParams ?? -100);
+  const { data: spaceLayout } = useGetSpaceLayout(spaceParams);
 
   const { activeTab, changeTab } = useTab();
   const { rowCnt, minRowCnt, changeRowCnt, changeMinRowCnt, findMinRowCnt } =
@@ -168,7 +168,7 @@ export const LayoutSettingPage: React.FC = () => {
 
   useEffect(() => {
     if (spaceLayout) {
-      setMyLayout(initialLayouts(spaceLayout)); // this line casues infinite rerender. but why?
+      setMyLayout(initialLayouts(spaceLayout));
       changeRowCnt(spaceLayout.height);
     }
   }, [spaceLayout, changeRowCnt]);

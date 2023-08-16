@@ -22,3 +22,5 @@ export const queryKeys = {
   GET_SPACES: 'spaces',
   GET_SPACE_LAYOUT: 'spaceLayout',
 };
+
+export const TEMPORARY_SPACE_ID = -1;
