@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import InputCheckBox from 'components/InputCheckBox';
 
 import { Modal } from 'components/Modal';
@@ -24,11 +24,35 @@ import {
   ToggleIcon,
 } from 'pages/ShopSettingPage/components/EmployerTab/StaffListItem.styled';
 
-export const StaffListItem = () => {
+interface StaffListItemProps {
+  name: string;
+  email: string;
+  staffDeleteClick: () => void;
+  modifyPermissionClick: (newPermissions: boolean[]) => void;
+  permissions: {
+    storeStatus: boolean;
+    seatSetting: boolean;
+    storeStatistics: boolean;
+    storeSetting: boolean;
+  };
+}
+
+export const StaffListItem: React.FC<StaffListItemProps> = ({
+  name,
+  email,
+  staffDeleteClick,
+  modifyPermissionClick,
+  permissions,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [checkboxes, setCheckboxes] = useState([false, false, false, false]);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [checkboxes, setCheckboxes] = useState([
+    permissions.storeStatus,
+    permissions.seatSetting,
+    permissions.storeStatistics,
+    permissions.storeSetting,
+  ]);
   const toggleIsOpen = () => {
     setIsOpen(!isOpen);
   };
@@ -51,8 +75,8 @@ export const StaffListItem = () => {
     <StaffListItemWrapper>
       <StaffInfoWrapper>
         <StaffInfoFlex>
-          <StaffName>최우영</StaffName>
-          <StaffEmail>wooyoung6695@gmail.com</StaffEmail>
+          <StaffName>{name}</StaffName>
+          <StaffEmail>{email}</StaffEmail>
         </StaffInfoFlex>
         <ToggleIcon onClick={toggleIsOpen} isOpen={isOpen} />
       </StaffInfoWrapper>
@@ -62,40 +86,43 @@ export const StaffListItem = () => {
           <FlexWrapper>
             <InputCheckBoxWrapper>
               <InputCheckBox
-                id='check1'
+                id='storeStatus'
                 checked={checkboxes[0]}
                 onChange={() => toggleCheckbox(0)}
               />
-              <CheckBoxLabel htmlFor='check1'>가게현황</CheckBoxLabel>
+              <CheckBoxLabel htmlFor='storeStatus'>가게현황</CheckBoxLabel>
             </InputCheckBoxWrapper>
             <InputCheckBoxWrapper>
               <InputCheckBox
-                id='check2'
+                id='seatSetting'
                 checked={checkboxes[1]}
                 onChange={() => toggleCheckbox(1)}
               />
-              <CheckBoxLabel htmlFor='check2'>좌석설정</CheckBoxLabel>
+              <CheckBoxLabel htmlFor='seatSetting'>좌석설정</CheckBoxLabel>
             </InputCheckBoxWrapper>
             <InputCheckBoxWrapper>
               <InputCheckBox
-                id='check3'
+                id='storeStatistics'
                 checked={checkboxes[2]}
                 onChange={() => toggleCheckbox(2)}
               />
-              <CheckBoxLabel htmlFor='check3'>가게통계</CheckBoxLabel>
+              <CheckBoxLabel htmlFor='storeStatistics'>가게통계</CheckBoxLabel>
             </InputCheckBoxWrapper>
             <InputCheckBoxWrapper>
               <InputCheckBox
-                id='check4'
+                id='storeSetting'
                 checked={checkboxes[3]}
                 onChange={() => toggleCheckbox(3)}
               />
-              <CheckBoxLabel htmlFor='check4'>가게설정</CheckBoxLabel>
+              <CheckBoxLabel htmlFor='storeSetting'>가게설정</CheckBoxLabel>
             </InputCheckBoxWrapper>
           </FlexWrapper>
           <ButtonWrapper>
             <TextButton onClick={openModal}>직원 삭제</TextButton>
-            <TextButton style={{ backgroundColor: '#FF8D4E', color: 'white' }}>
+            <TextButton
+              style={{ backgroundColor: '#FF8D4E', color: 'white' }}
+              onClick={() => modifyPermissionClick(checkboxes)}
+            >
               저장하기
             </TextButton>
           </ButtonWrapper>
@@ -109,7 +136,7 @@ export const StaffListItem = () => {
         </ModalContent>
         <ModalButtonWrapper>
           <ModalCancel onClick={closeModal}>취소</ModalCancel>
-          <ModalButton>직원삭제</ModalButton>
+          <ModalButton onClick={staffDeleteClick}>직원삭제</ModalButton>
         </ModalButtonWrapper>
       </Modal>
     </StaffListItemWrapper>
