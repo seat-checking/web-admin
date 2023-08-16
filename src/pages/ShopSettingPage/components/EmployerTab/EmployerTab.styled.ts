@@ -20,6 +20,8 @@ export const InputWrapper = styled.div`
   width: 53.9rem;
   margin: 0 auto;
   position: relative;
+  display: flex; // Flexbox로 변경
+  align-items: center;
 `;
 
 export const SearchIcon = styled.div`
@@ -34,7 +36,8 @@ export const SearchIcon = styled.div`
 `;
 
 export const StyledInput = styled.input`
-  border-radius: 0.8rem;
+  flex: 1;
+  border-radius: 0.8rem 0 0 0.8rem;
   border: 0.1rem solid ${({ theme }) => theme.palette.grey[300]};
   width: 53.9rem;
   height: 4.8rem;
@@ -75,4 +78,32 @@ export const StaffListWrapper = styled.div`
   width: 53.9rem;
   margin: 0 auto;
   margin-top: 4rem;
+`;
+
+export const SearchButton = styled.button`
+  background-color: ${({ theme }) => theme.palette.primary.orange};
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  border-radius: 0rem 0.6rem 0.6rem 0rem;
+  width: 8.2rem;
+  height: 4.8rem;
+  color: white;
+`;
+
+export const NoResults = styled.div`
+  width: 53.9rem;
+  height: 3.2rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  border-radius: 0.8rem;
+  background: ${({ theme }) => theme.palette.grey[200]};
+  color: ${({ theme }) => theme.palette.grey[500]};
+  font-size: 1.4rem;
+  font-weight: 400;
+  padding-left: 0.8rem;
+  margin-top: 1.1rem;
 `;
