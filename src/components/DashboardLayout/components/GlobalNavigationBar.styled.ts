@@ -49,10 +49,13 @@ export const Wrap = styled.div<{ folded: boolean }>`
   .branchName {
     margin-top: 0.8rem;
 
+    width: 100%;
+
     color: ${({ theme }): string => theme.palette.grey[300]};
     font-weight: 400;
     font-size: 1.6rem;
     line-height: 2.4rem;
+    text-align: center;
   }
 
   .hideFold {

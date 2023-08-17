@@ -18,12 +18,18 @@ import {
   Wrap,
 } from 'components/DashboardLayout/components/GlobalNavigationBar.styled';
 import { NavigationItem } from 'components/DashboardLayout/components/NavigationItem';
+import { ShopDropdown } from 'components/DashboardLayout/components/ShopDropdown';
 
 /**
  * 글로벌 사이드 네비게이션 바 컴포넌트
  */
 export const GlobalNavigationBar: React.FC = () => {
   const [isFolded, setIsFolded] = useState<boolean>(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+
+  const handleCloseDropdown = () => {
+    setIsDropdownOpen(false);
+  };
 
   const handleClickFoldBtn = () => {
     setIsFolded((prevState) => !prevState);
@@ -35,9 +41,12 @@ export const GlobalNavigationBar: React.FC = () => {
         <img src='' alt='가게 로고' className='shopLogo' />
         <button type='button' className='shopNameWrap'>
           <h1 className='shopName'>가게 이름</h1>
-          <ChevronDown className='hideFold' />
+          <ChevronDown className='hideFold' stroke='white' />
         </button>
-        <p className='branchName hideFold'>지점명</p>
+        <p className='branchName hideFold'>
+          <ShopDropdown onClose={handleCloseDropdown} />
+          지점명
+        </p>
         <ul className='naviationList'>
           {getPermission('storeStatus') && (
             <NavigationItem
