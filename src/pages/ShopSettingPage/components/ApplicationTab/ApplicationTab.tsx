@@ -6,6 +6,7 @@ import { Label } from 'components/Label';
 import { Radio } from 'components/Radio';
 import {
   ApplicationTabWrapper,
+  Border,
   DeleteButton,
   EditIcon,
   FlexWrapper,
@@ -22,6 +23,9 @@ import { SelectInput } from 'pages/ShopSettingPage/components/ApplicationTab/com
 interface InputFieldProps {
   id: number;
   option: string;
+  title: string;
+  type: string;
+  contentGuide: string;
 }
 
 export const ApplicationTab = () => {
@@ -36,29 +40,59 @@ export const ApplicationTab = () => {
     value: string,
     selectedType: string,
   ) => {
-    setType(selectedType);
     setInputFields(
       inputFields.map((field) =>
-        field.id === fieldId ? { ...field, option: value } : field,
+        field.id === fieldId
+          ? { ...field, option: value, type: selectedType }
+          : field,
       ),
     );
   };
-
   const addInputField = () => {
-    setInputFields([...inputFields, { id: Date.now(), option: 'option1' }]);
+    setInputFields([
+      ...inputFields,
+      {
+        id: Date.now(),
+        option: 'option1',
+        title: '',
+        type: '단답형',
+        contentGuide: '',
+      },
+    ]);
+  };
+  const handleItemsChange = (fieldId: number, items: { value: string }[]) => {
+    setInputFields(
+      inputFields.map((field) =>
+        field.id === fieldId
+          ? { ...field, contentGuide: JSON.stringify(items) } // 아이템을 JSON 문자열로 저장
+          : field,
+      ),
+    );
   };
 
   const removeInputField = (id: number) => {
     setInputFields(inputFields.filter((field) => field.id !== id));
   };
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
+  const handleTitleChange =
+    (fieldId: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInputFields(
+        inputFields.map((field) =>
+          field.id === fieldId ? { ...field, title: e.target.value } : field,
+        ),
+      );
+    };
 
-  const handleContentGuideChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setContentGuide(e.target.value); // 수정: string으로 상태를 변경하십시오.
-  };
+  const handleContentGuideChange =
+    (fieldId: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInputFields(
+        inputFields.map((field) =>
+          field.id === fieldId
+            ? { ...field, contentGuide: e.target.value }
+            : field,
+        ),
+      );
+    };
 
   return (
     <ApplicationTabWrapper>
@@ -72,8 +106,8 @@ export const ApplicationTab = () => {
                 onFocus={() => setIsEditing(true)}
                 onBlur={() => setIsEditing(false)}
                 focused={isEditing}
-                value={title}
-                onChange={handleTitleChange}
+                value={field.title}
+                onChange={handleTitleChange(field.id)}
               />
               {!isEditing && <EditIcon />}
             </IconWrapper>
@@ -82,7 +116,8 @@ export const ApplicationTab = () => {
                 label='자유 입력'
                 id='option1'
                 name={field.id.toString()}
-                value={type}
+                value={field.type}
+                size='small'
                 onChange={() => handleRadioChange(field.id, 'option1', type)}
                 defaultChecked
               />
@@ -90,7 +125,8 @@ export const ApplicationTab = () => {
                 label='선택지 제공'
                 id='option2'
                 name={field.id.toString()}
-                value={type}
+                value={field.type}
+                size='small'
                 onChange={() => handleRadioChange(field.id, 'option2', type)}
               />
               <DeleteButton onClick={() => removeInputField(field.id)}>
@@ -101,20 +137,20 @@ export const ApplicationTab = () => {
           {field.option === 'option1' && (
             <Input
               placeholder='고객에게 가이드를 작성해주세요.(ex: 사용 목적을 입력해주세요)'
-              value={contentGuide}
-              onChange={handleContentGuideChange}
+              value={field.contentGuide}
+              onChange={handleContentGuideChange(field.id)}
             />
           )}
           {field.option === 'option2' && (
             <SelectInput
               placeholder='고객에게 가이드를 작성해주세요.(ex: 사용 목적을 입력해주세요)'
               type='text'
-              value={contentGuide}
-              onChange={handleContentGuideChange}
+              onItemsChange={(items) => handleItemsChange(field.id, items)}
             />
           )}
         </InputWrapper>
       ))}
+      <Border />
       <PlusWrapper onClick={addInputField}>
         <PlusCirclIcon />
         <PlusText>추가하기</PlusText>
