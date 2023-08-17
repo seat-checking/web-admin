@@ -54,7 +54,7 @@ export const EditIcon = styled.div`
   cursor: pointer;
 `;
 
-export const DeleteButton = styled.div`
+export const DeleteButton = styled.button`
   width: 2.5rem;
   height: 2.4rem;
   color: ${({ theme }) => theme.palette.grey[500]};
