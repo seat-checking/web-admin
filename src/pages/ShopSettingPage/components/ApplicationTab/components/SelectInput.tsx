@@ -12,24 +12,34 @@ import {
 interface SelectInputProps {
   placeholder: string;
   type: React.HTMLInputTypeAttribute;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onItemsChange: (items: { value: string }[]) => void; // 상위 컴포넌트에 전달할 함수
 }
 
 export const SelectInput = ({
   placeholder,
   type,
-  value,
-  onChange,
+  onItemsChange,
 }: SelectInputProps) => {
-  const [items, setItems] = useState([{}]);
+  const [items, setItems] = useState([{ value: '' }]);
 
   const handleAdd = () => {
-    setItems([...items, {}]);
+    setItems([...items, { value: '' }]);
   };
 
   const handleRemove = (index: number) => {
-    setItems(items.filter((_, i) => i !== index));
+    const newItems = items.filter((_, i) => i !== index);
+    setItems(newItems);
+    onItemsChange(newItems); // 상위 컴포넌트에 전달
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const newItems = [...items];
+    newItems[index].value = e.target.value;
+    setItems(newItems);
+    onItemsChange(newItems); // 상위 컴포넌트에 전달
   };
 
   return (
@@ -41,9 +51,9 @@ export const SelectInput = ({
           <Input
             style={{ width: '47.5rem' }}
             placeholder={placeholder}
-            value={value}
+            value={item.value} // 배열의 항목별 상태값을 사용
             type={type}
-            onChange={onChange}
+            onChange={(e) => handleChange(e, index)}
           />
           <XIcon onClick={() => handleRemove(index)} />
         </SelectInputWrapper>
