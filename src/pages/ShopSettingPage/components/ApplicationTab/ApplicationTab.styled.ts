@@ -20,18 +20,20 @@ export const InputWrapper = styled.div`
 
 export const Border = styled.div`
   width: 100%;
+  height: 4rem;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey[100]};
 `;
 
 export const TitleInput = styled.input<TitleInputProps>`
   width: 14.8rem;
   height: 2.4rem;
-  color: ${({ theme }) => theme.palette.grey[300]};
+  color: ${({ theme }) => theme.palette.black.main};
   font-size: 1.6rem;
   font-weight: 600;
   border: ${({ focused }) => (focused ? '0.05rem solid black' : 'none')};
   border-radius: 0.4rem;
   transition: border 0.3s ease;
+  margin-right: ${({ focused }) => (focused ? '1.6rem;' : 'none')};
 
   ::placeholder {
     color: ${({ theme }) => theme.palette.grey[300]};
@@ -64,7 +66,7 @@ export const DeleteButton = styled.div`
 export const RadioWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 3.2rem;
+  gap: 4rem;
 `;
 export const FlexWrapper = styled.div`
   display: flex;
