@@ -148,9 +148,10 @@ export const ApplicationTab = () => {
               onItemsChange={(items) => handleItemsChange(field.id, items)}
             />
           )}
+          <Border />
         </InputWrapper>
       ))}
-      <Border />
+
       <PlusWrapper onClick={addInputField}>
         <PlusCirclIcon />
         <PlusText>추가하기</PlusText>
