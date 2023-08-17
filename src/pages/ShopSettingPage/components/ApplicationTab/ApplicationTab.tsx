@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type React from 'react';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
@@ -26,8 +27,16 @@ interface InputFieldProps {
 export const ApplicationTab = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [inputFields, setInputFields] = useState<InputFieldProps[]>([]);
+  const [title, setTitle] = useState<string>('');
+  const [type, setType] = useState<string>('단답형');
+  const [contentGuide, setContentGuide] = useState<string>('');
 
-  const handleRadioChange = (fieldId: number, value: string) => {
+  const handleRadioChange = (
+    fieldId: number,
+    value: string,
+    selectedType: string,
+  ) => {
+    setType(selectedType);
     setInputFields(
       inputFields.map((field) =>
         field.id === fieldId ? { ...field, option: value } : field,
@@ -43,6 +52,14 @@ export const ApplicationTab = () => {
     setInputFields(inputFields.filter((field) => field.id !== id));
   };
 
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleContentGuideChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setContentGuide(e.target.value); // 수정: string으로 상태를 변경하십시오.
+  };
+
   return (
     <ApplicationTabWrapper>
       <Label label='고객에게 받을 정보' />
@@ -55,24 +72,26 @@ export const ApplicationTab = () => {
                 onFocus={() => setIsEditing(true)}
                 onBlur={() => setIsEditing(false)}
                 focused={isEditing}
+                value={title}
+                onChange={handleTitleChange}
               />
               {!isEditing && <EditIcon />}
             </IconWrapper>
             <RadioWrapper>
               <Radio
-                label='단답형'
+                label='자유 입력'
                 id='option1'
-                name={field.id.toString()} // 각 라디오 그룹에 고유한 이름을 설정
-                value='option1'
-                onChange={() => handleRadioChange(field.id, 'option1')}
+                name={field.id.toString()}
+                value={type}
+                onChange={() => handleRadioChange(field.id, 'option1', type)}
                 defaultChecked
               />
               <Radio
                 label='선택지 제공'
                 id='option2'
-                name={field.id.toString()} // 각 라디오 그룹에 고유한 이름을 설정
-                value='option2'
-                onChange={() => handleRadioChange(field.id, 'option2')}
+                name={field.id.toString()}
+                value={type}
+                onChange={() => handleRadioChange(field.id, 'option2', type)}
               />
               <DeleteButton onClick={() => removeInputField(field.id)}>
                 삭제
@@ -80,9 +99,20 @@ export const ApplicationTab = () => {
             </RadioWrapper>
           </FlexWrapper>
           {field.option === 'option1' && (
-            <Input placeholder='고객에게 가이드를 작성해주세요.(ex: 사용 목적을 입력해주세요)' />
+            <Input
+              placeholder='고객에게 가이드를 작성해주세요.(ex: 사용 목적을 입력해주세요)'
+              value={contentGuide}
+              onChange={handleContentGuideChange}
+            />
           )}
-          {field.option === 'option2' && <SelectInput />}
+          {field.option === 'option2' && (
+            <SelectInput
+              placeholder='고객에게 가이드를 작성해주세요.(ex: 사용 목적을 입력해주세요)'
+              type='text'
+              value={contentGuide}
+              onChange={handleContentGuideChange}
+            />
+          )}
         </InputWrapper>
       ))}
       <PlusWrapper onClick={addInputField}>

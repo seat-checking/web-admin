@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { forwardRef, useState } from 'react';
+import type { Ref } from 'react';
+import type React from 'react';
 import { Input } from 'components/Input';
 import {
   CornerDownIcon,
@@ -7,7 +9,19 @@ import {
   XIcon,
 } from 'pages/ShopSettingPage/components/ApplicationTab/components/SelectInput.styled';
 
-export const SelectInput = () => {
+interface SelectInputProps {
+  placeholder: string;
+  type: React.HTMLInputTypeAttribute;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export const SelectInput = ({
+  placeholder,
+  type,
+  value,
+  onChange,
+}: SelectInputProps) => {
   const [items, setItems] = useState([{}]);
 
   const handleAdd = () => {
@@ -26,7 +40,10 @@ export const SelectInput = () => {
           <CornerDownIcon />
           <Input
             style={{ width: '47.5rem' }}
-            placeholder='ex: 프로젝트 및 스터디'
+            placeholder={placeholder}
+            value={value}
+            type={type}
+            onChange={onChange}
           />
           <XIcon onClick={() => handleRemove(index)} />
         </SelectInputWrapper>
