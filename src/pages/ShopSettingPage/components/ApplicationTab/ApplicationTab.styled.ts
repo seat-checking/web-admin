@@ -9,9 +9,19 @@ interface TitleInputProps {
 export const ApplicationTabWrapper = styled.div`
   width: 53.9rem;
   margin: 0 auto;
+  margin-top: 4rem;
 `;
 
-export const InputWrapper = styled.div``;
+export const InputWrapper = styled.div`
+  width: 53.9rem;
+  height: auto;
+  margin-bottom: 4rem;
+`;
+
+export const Border = styled.div`
+  width: 100%;
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey[100]};
+`;
 
 export const TitleInput = styled.input<TitleInputProps>`
   width: 14.8rem;
@@ -59,7 +69,7 @@ export const RadioWrapper = styled.div`
 export const FlexWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 8rem;
+  gap: 6rem;
   margin-bottom: 1.2rem;
   margin-top: 4.4rem;
   width: 53.9rem;
