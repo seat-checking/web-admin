@@ -1,6 +1,7 @@
 import styled from 'styled-components/macro';
 import upload from 'assets/icons/upload.svg';
 import { Button } from 'components/Button';
+import { Input } from 'components/Input';
 
 export const ContentWrap = styled.ul`
   width: 100%;
