@@ -101,4 +101,40 @@ export class ShopApi {
   static deleteSpace = async (spaceId: number) => {
     await axiosClient.delete(`${this.apiPrefix}/spaces/${spaceId}`);
   };
+
+  static editShopLayout = async (spaceId: number) => {
+    const req = {
+      name: '루루',
+      height: 10,
+      reservationUnit: '좌석',
+      tableList: [
+        {
+          storeTableId: '15445',
+          tableX: 9,
+          tableY: 10,
+          tableWidth: 2,
+          tableHeight: 4,
+        },
+      ],
+      chairList: [
+        {
+          storeChairId: '15446',
+          manageId: 2,
+          chairX: 1,
+          chairY: 1,
+        },
+        {
+          storeChairId: '15447',
+          manageId: 2,
+          chairX: 10,
+          chairY: 10,
+        },
+      ],
+    };
+    const response = await axiosClient.patch(
+      `${this.apiPrefix}/spaces/${spaceId}`,
+      req,
+    );
+    return response;
+  };
 }

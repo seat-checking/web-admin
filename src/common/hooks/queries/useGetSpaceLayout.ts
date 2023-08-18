@@ -10,5 +10,6 @@ export const useGetSpaceLayout = (spaceId: number) => {
       typeof spaceId === 'number' &&
       !Number.isNaN(spaceId) &&
       spaceId !== TEMPORARY_SPACE_ID,
+    refetchOnWindowFocus: false,
   });
 };
