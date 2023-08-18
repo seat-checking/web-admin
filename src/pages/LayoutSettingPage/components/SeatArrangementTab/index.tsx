@@ -1,5 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import { useTheme } from 'styled-components';
-import { ShopApi } from 'api/lib/shop';
+import { useEditLayout } from 'common/hooks/mutations/useEditLayout';
 import {
   Door,
   DoorChairBox,
@@ -29,9 +31,14 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
   changeTab,
 }) => {
   const theme = useTheme();
+  const { mutate: editLayoutMutate } = useEditLayout();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const spaceId = Number(searchParams.get('space'));
+  const queryClient = useQueryClient();
 
-  const handleSave = async () => {
-    await ShopApi.saveShopLayout();
+  const handleSave = () => {
+    editLayoutMutate(spaceId);
+    // await ShopApi.saveShopLayout();
   };
 
   const handleChangePreviousTab = () => {

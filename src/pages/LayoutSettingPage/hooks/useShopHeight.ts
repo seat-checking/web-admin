@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import type { MyLayout } from 'pages/LayoutSettingPage';
+import type { CustomLayout } from 'pages/LayoutSettingPage/utils/types';
 
 export type ChangeRowCommand = 'UP' | 'DOWN';
 
@@ -8,7 +8,7 @@ interface Return {
   minRowCnt: number;
   changeRowCnt: (value: number | ChangeRowCommand) => void;
   changeMinRowCnt: (height: number) => void;
-  findMinRowCnt: (layouts: MyLayout[]) => number;
+  findMinRowCnt: (layouts: CustomLayout[]) => number;
 }
 
 export const useShopHeight = (defaultRowCnt: number): Return => {
@@ -41,7 +41,7 @@ export const useShopHeight = (defaultRowCnt: number): Return => {
     setMinRowCnt(height);
   }, []);
 
-  const findMinRowCnt = useCallback((layouts: MyLayout[]) => {
+  const findMinRowCnt = useCallback((layouts: CustomLayout[]) => {
     let max = 0;
     layouts.forEach((layout) => {
       if (layout.y + layout.h <= max) {

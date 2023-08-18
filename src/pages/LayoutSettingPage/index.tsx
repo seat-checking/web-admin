@@ -1,7 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { ShopLayout } from 'api/lib/shop';
-import type { ShopFormState } from 'pages/LayoutSettingPage/utils/types';
+import type {
+  CustomLayout,
+  ItemType,
+  ShopFormState,
+} from 'pages/LayoutSettingPage/utils/types';
 import type { SyntheticEvent } from 'react';
 import type { Layout } from 'react-grid-layout';
 import type { ResizeCallbackData } from 'react-resizable';
@@ -26,18 +30,16 @@ import 'react-grid-layout/css/styles.css';
 import { ShopFormTab } from 'pages/LayoutSettingPage/components/ShopFormTab';
 import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
 import { useShopHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
+import {
+  useLayout,
+  useLayoutActions,
+} from 'pages/LayoutSettingPage/stores/layoutStore';
 import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
 import {
   COLUMN_CNT,
   DEFAULT_ROW_CNT,
   TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
-
-type ItemType = 'chair' | 'table';
-export interface MyLayout extends Layout {
-  sort: ItemType;
-  manageId?: number;
-}
 
 const initialLayouts = (shop: ShopLayout) => {
   const tables = shop?.tableList.map((table) => {
@@ -67,7 +69,7 @@ const initialLayouts = (shop: ShopLayout) => {
   return [...tables, ...chairs];
 };
 
-const itemsDom = (layouts2: MyLayout[], activeTab: number) => {
+const itemsDom = (layouts2: CustomLayout[], activeTab: number) => {
   console.log('layouts2 :>> ', layouts2);
   return layouts2.map((item) => {
     // if (item.i.split('-')[0] === 'chair') {
@@ -96,7 +98,9 @@ export const LayoutSettingPage: React.FC = () => {
 
   const [shopFormState, setShopFormState] =
     useState<ShopFormState>('RECTANGLE');
-  const [myLayout, setMyLayout] = useState<MyLayout[]>([]);
+  const myLayout = useLayout();
+  const { saveLayout, saveLayoutChange, disableMove, enableMove, addItem } =
+    useLayoutActions();
 
   const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
     const { height } = data.size;
@@ -108,7 +112,11 @@ export const LayoutSettingPage: React.FC = () => {
     return { ...size.current };
   };
 
-  const handleDropItem = (layout: Layout[], item: MyLayout, e: DragEvent) => {
+  const handleDropItem = (
+    layout: Layout[],
+    item: CustomLayout,
+    e: DragEvent,
+  ) => {
     const sort = e.dataTransfer?.getData('sort');
     const { w, h } = size.current;
     item.w = w;
@@ -122,18 +130,15 @@ export const LayoutSettingPage: React.FC = () => {
       item.sort = 'table';
       item.i = String(Date.now());
     }
-    // setLayouts2(myLayout);
-    setMyLayout((prev) => [...prev, item]);
+    addItem(item);
   };
 
   const handleLayoutChange = (layout: Layout[]) => {
     if (layout.at(-1)?.i === '__dropping-elem__') {
       return;
     }
-    // 라이브러리에 의해 지정해둔 타입이 날라가서 추가함
-    setMyLayout((prev) => {
-      return prev.map((prevLayout, idx) => ({ ...prevLayout, ...layout[idx] }));
-    });
+
+    saveLayoutChange(layout);
   };
 
   useEffect(() => {
@@ -142,36 +147,19 @@ export const LayoutSettingPage: React.FC = () => {
 
   useEffect(() => {
     if (activeTab === 0) {
-      setMyLayout((prev) =>
-        prev.map((item) => {
-          const result = { ...item, isDraggable: false };
-          if (item.i.split('-')[0] === 'table') {
-            result.isResizable = false;
-          }
-          return result;
-        }),
-      );
-      return;
+      disableMove();
     }
     if (activeTab === 1) {
-      setMyLayout((prev) =>
-        prev.map((item) => {
-          const result = { ...item, isDraggable: true };
-          if (item.i.split('-')[0] === 'table') {
-            result.isResizable = true;
-          }
-          return result;
-        }),
-      );
+      enableMove();
     }
   }, [activeTab]);
 
   useEffect(() => {
     if (spaceLayout) {
-      setMyLayout(initialLayouts(spaceLayout));
+      saveLayout(initialLayouts(spaceLayout));
       changeRowCnt(spaceLayout.height);
     }
-  }, [spaceLayout, changeRowCnt]);
+  }, [spaceLayout, saveLayout, changeRowCnt]);
 
   return (
     <Wrap>
