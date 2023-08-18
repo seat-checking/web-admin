@@ -30,6 +30,7 @@ import 'react-grid-layout/css/styles.css';
 import { ShopFormTab } from 'pages/LayoutSettingPage/components/ShopFormTab';
 import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
 import { useShopHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
+
 import {
   useLayout,
   useLayoutActions,
@@ -220,6 +221,8 @@ export const LayoutSettingPage: React.FC = () => {
               // 이게 있어야 아이템이 이동시킬 때 다른 아이템이 움직이지 않음
               preventCollision
               isDroppable
+              isDraggable={false}
+              isResizable={false}
               onDrop={handleDropItem}
               onDropDragOver={handleDropDragOver}
               onLayoutChange={handleLayoutChange}
