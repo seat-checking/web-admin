@@ -19,6 +19,7 @@ import {
 } from 'pages/LayoutSettingPage/components/SeatArrangementTab/SeatArrangementTab.styled';
 import { Chair } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Chair';
 import { Table } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Table';
+import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 
 interface SeatArrangementTabProps {
   changeTab: (index: number) => void;
@@ -35,7 +36,9 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const spaceId = Number(searchParams.get('space'));
   const queryClient = useQueryClient();
+  const { isChanged } = useChange();
 
+  // console.log('isChanged :>> ', isChanged);
   const handleSave = () => {
     editLayoutMutate(spaceId);
     // await ShopApi.saveShopLayout();
@@ -96,7 +99,9 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
         >
           이전으로
         </StyledButton>
-        <StyledButton onClick={handleSave}>저장하기</StyledButton>
+        <StyledButton onClick={handleSave} $isChanged={isChanged}>
+          저장하기
+        </StyledButton>
       </ButtonRow>
     </Wrap>
   );

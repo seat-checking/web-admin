@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { Button } from 'components/Button';
 import { flexSet, grayBorderBoxStyle } from 'styles/mixin';
 
@@ -93,6 +93,15 @@ export const ButtonRow = styled.div`
   margin-top: auto;
 `;
 
-export const StyledButton = styled(Button)`
+export const StyledButton = styled(Button)<{ $isChanged?: boolean }>`
   flex: 1;
+
+  ${({ $isChanged }) => {
+    return (
+      $isChanged &&
+      css`
+        background-color: red;
+      `
+    );
+  }}
 `;

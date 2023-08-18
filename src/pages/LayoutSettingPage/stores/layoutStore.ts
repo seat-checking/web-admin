@@ -2,11 +2,12 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import type { CustomLayout } from 'pages/LayoutSettingPage/utils/types';
 import type { Layout } from 'react-grid-layout';
+import { useChangeStore } from 'pages/LayoutSettingPage/stores/changeStore';
 
 interface LayoutStoreState {
   layout: CustomLayout[];
   actions: {
-    saveLayout: (layout: CustomLayout[]) => void;
+    saveInitialLayout: (layout: CustomLayout[]) => void;
     saveLayoutChange: (changedLayout: Layout[]) => void;
     disableMove: () => void;
     enableMove: () => void;
@@ -20,8 +21,8 @@ const useLayoutStore = create<LayoutStoreState>()(
     actions: {
       addItem: (item: CustomLayout) =>
         set((state) => ({ layout: [...state.layout, item] }), false, 'addItem'),
-      saveLayout: (layout: CustomLayout[]) =>
-        set(() => ({ layout }), false, 'saveLayout'),
+      saveInitialLayout: (layout: CustomLayout[]) =>
+        set(() => ({ layout }), false, 'saveInitialLayout'),
       saveLayoutChange: (changedLayout: Layout[]) =>
         set(
           (state) => {
@@ -30,6 +31,7 @@ const useLayoutStore = create<LayoutStoreState>()(
               state.layout,
               changedLayout,
             );
+            useChangeStore.getState().setChangeTrue();
             return {
               layout: state.layout.map((prevItem, idx) => ({
                 ...prevItem,

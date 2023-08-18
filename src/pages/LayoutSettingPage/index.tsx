@@ -74,7 +74,6 @@ const initialLayouts = (shop: ShopLayout) => {
 const itemsDom = (layouts2: CustomLayout[], activeTab: number) => {
   console.log('layouts2 :>> ', layouts2);
   return layouts2.map((item) => {
-    // if (item.i.split('-')[0] === 'chair') {
     if (item.sort === 'chair') {
       return (
         <ChairBorder key={item.i} className='chair'>
@@ -101,8 +100,13 @@ export const LayoutSettingPage: React.FC = () => {
   const [shopFormState, setShopFormState] =
     useState<ShopFormState>('RECTANGLE');
   const myLayout = useLayout();
-  const { saveLayout, saveLayoutChange, disableMove, enableMove, addItem } =
-    useLayoutActions();
+  const {
+    saveInitialLayout: saveLayout,
+    saveLayoutChange,
+    disableMove,
+    enableMove,
+    addItem,
+  } = useLayoutActions();
 
   const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
     const { height } = data.size;
