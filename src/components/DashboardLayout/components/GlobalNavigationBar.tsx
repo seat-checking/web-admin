@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as ChevronLeft } from 'assets/icons/chevron-left-bg-grey.svg';
 import { ReactComponent as AnalyticsActive } from 'assets/icons/snb-analytics-active.svg';
 import { ReactComponent as Analytics } from 'assets/icons/snb-analytics.svg';
@@ -25,11 +24,6 @@ import { ShopDropdown } from 'components/DashboardLayout/components/ShopDropdown
  */
 export const GlobalNavigationBar: React.FC = () => {
   const [isFolded, setIsFolded] = useState<boolean>(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-
-  const handleCloseDropdown = () => {
-    setIsDropdownOpen(false);
-  };
 
   const handleClickFoldBtn = () => {
     setIsFolded((prevState) => !prevState);
@@ -39,14 +33,8 @@ export const GlobalNavigationBar: React.FC = () => {
     <>
       <Wrap folded={isFolded}>
         <img src='' alt='가게 로고' className='shopLogo' />
-        <button type='button' className='shopNameWrap'>
-          <h1 className='shopName'>가게 이름</h1>
-          <ChevronDown className='hideFold' stroke='white' />
-        </button>
-        <p className='branchName hideFold'>
-          <ShopDropdown onClose={handleCloseDropdown} />
-          지점명
-        </p>
+        {!isFolded && <ShopDropdown isFolded={isFolded} />}
+        <p className='branchName hideFold'>지점명</p>
         <ul className='naviationList'>
           {getPermission('storeStatus') && (
             <NavigationItem

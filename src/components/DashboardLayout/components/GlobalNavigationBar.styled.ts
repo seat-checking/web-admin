@@ -26,26 +26,6 @@ export const Wrap = styled.div<{ folded: boolean }>`
     border-radius: ${({ folded }): string => (folded ? '0.8rem' : '1.4rem')};
   }
 
-  .shopNameWrap {
-    margin-top: ${({ folded }): string => (folded ? '1.2rem' : '1.4rem')};
-    display: flex;
-    align-items: center;
-  }
-
-  .shopName {
-    margin-right: 0.8rem;
-
-    font-weight: 600;
-    font-size: ${({ folded }): string => (folded ? '1.4rem' : '2.4rem')};
-    color: white;
-    // 말줄임 표시
-    max-width: ${({ folded }): string => (folded ? '7.6rem' : '18rem')};
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
   .branchName {
     margin-top: 0.8rem;
 
