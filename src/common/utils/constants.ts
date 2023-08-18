@@ -5,6 +5,7 @@ export const PATH = {
   login: 'login',
   join: 'join',
   statistics: 'statistics', // 안쓰임
+  addShop: 'addshop',
 } as const;
 
 export const STORAGE = {

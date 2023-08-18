@@ -5,6 +5,7 @@ import { AuthGuard } from 'components/AuthGuard';
 import { DashboardLayout } from 'components/DashboardLayout';
 import { GuestGuard } from 'components/GuestGuard';
 import { TabGuard } from 'components/TabGuard';
+import { AddShopPage } from 'pages/AddShopPage';
 import { JoinPage } from 'pages/JoinPage';
 import { DragContextProvider } from 'pages/LayoutSettingPage/utils/DragContext';
 import { LoginPage } from 'pages/LoginPage';
@@ -33,6 +34,14 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: `/${PATH.addShop}`,
+    element: (
+      <AuthGuard>
+        <AddShopPage />
+      </AuthGuard>
+    ),
+  },
+  {
     path: '/',
     element: (
       <AuthGuard>
@@ -48,6 +57,16 @@ export const router = createBrowserRouter([
           const { ShopStatusPage } = await import('./ShopStatusPage');
           return { Component: ShopStatusPage };
         },
+      },
+      {
+        path: PATH.addShop,
+        element: (
+          <Suspense fallback={<div>로딩...</div>}>
+            <DragContextProvider>
+              <LayoutSettingPage />
+            </DragContextProvider>
+          </Suspense>
+        ),
       },
       {
         path: PATH.layout,
