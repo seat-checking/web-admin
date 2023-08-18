@@ -6,6 +6,7 @@ export const StaffListItemWrapper = styled.div`
   width: 54rem;
   border-radius: 0.8rem;
   border: 0.1rem solid ${({ theme }) => theme.palette.grey[200]};
+  margin-bottom: 1.6rem;
 `;
 
 export const StaffInfoWrapper = styled.div`

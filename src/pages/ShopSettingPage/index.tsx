@@ -1,6 +1,7 @@
 import type { TabItem } from 'components/Tabs.tsx';
 import { useTab } from 'common/hooks/useTab';
 import { Tabs } from 'components/Tabs.tsx';
+import { ApplicationTab } from 'pages/ShopSettingPage/components/ApplicationTab/ApplicationTab';
 import { BusinessHourTab } from 'pages/ShopSettingPage/components/BusinessHourTab';
 import { EmployerTab } from 'pages/ShopSettingPage/components/EmployerTab/EmployerTab';
 import { ShopInfoTab } from 'pages/ShopSettingPage/components/ShopInfoTab';
@@ -18,6 +19,10 @@ const tabList: TabItem[] = [
   {
     label: '직원 권한 설정',
     content: <EmployerTab />,
+  },
+  {
+    label: '이용 신청 설정',
+    content: <ApplicationTab />,
   },
 ];
 /**
