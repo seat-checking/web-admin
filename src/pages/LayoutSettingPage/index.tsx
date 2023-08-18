@@ -51,7 +51,8 @@ const initialLayouts = (shop: ShopLayout) => {
       w: table.width,
       h: table.height,
       sort: 'table' as ItemType,
-      isResizable: true,
+      isResizable: false,
+      isDraggable: false,
     };
   });
   const chairs = shop?.chairList.map((chair) => {
