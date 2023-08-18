@@ -161,7 +161,7 @@ export const LayoutSettingPage: React.FC = () => {
       saveLayout(initialLayouts(spaceLayout));
       changeRowCnt(spaceLayout.height);
     }
-  }, [spaceLayout, saveLayout, changeRowCnt]);
+  }, [spaceLayout, saveLayout]); // FIXME changeRowCnt 추가
 
   return (
     <Wrap>
