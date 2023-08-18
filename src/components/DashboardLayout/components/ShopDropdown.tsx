@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components/macro';
 import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as PlusSquareIcon } from 'assets/icons/plus-square.svg';
+import { useGetOwnedShops } from 'common/hooks/queries/useGetOwnedShops';
 import { PATH, STORAGE } from 'common/utils/constants';
 import { DropdownItem } from 'components/DashboardLayout/components/DropdownItem';
 
@@ -41,6 +42,8 @@ const storeResponseList = [
  * 가게 드롭다운 컴포넌트
  */
 export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
+  const { data } = useGetOwnedShops();
+  console.log('data :>> ', data);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement | null>(null);

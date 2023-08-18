@@ -8,3 +8,8 @@ export const addShop = async (shopInfoForm: ShopInfoForm) => {
   );
   return response.data.result;
 };
+
+export const getOwnedShops = async () => {
+  const response = await axiosClient.get('/stores/admins/owned');
+  return response.data.result;
+};
