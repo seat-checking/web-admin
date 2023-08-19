@@ -7,8 +7,8 @@ import { ReactComponent as PlusCircle } from 'assets/icons/plus-circle.svg';
 
 import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
 import { queryKeys } from 'common/utils/constants';
-import { AddSpaceModal } from 'pages/LayoutSettingPage/components/AddSpaceModal';
 import { Space } from 'pages/LayoutSettingPage/components/Space';
+import { SpaceInfoModal } from 'pages/LayoutSettingPage/components/SpaceInfoModal';
 import {
   AddRow,
   AddText,
@@ -63,7 +63,11 @@ export const SpaceRow: React.FC = () => {
           <PlusCircle stroke='white' />
           <AddText>스페이스 추가</AddText>
         </AddRow>
-        <AddSpaceModal isOpen={isAddModalOn} onClose={handleAddModalClose} />
+        <SpaceInfoModal
+          isOpen={isAddModalOn}
+          onClose={handleAddModalClose}
+          type='CREATE'
+        />
       </SpaceWrap>
     </>
   );

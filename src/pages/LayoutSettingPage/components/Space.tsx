@@ -6,6 +6,7 @@ import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 
 import { IconButton } from 'components/XButton';
 import { DeleteSpaceModal } from 'pages/LayoutSettingPage/components/DeleteSpaceModal';
+import { SpaceInfoModal } from 'pages/LayoutSettingPage/components/SpaceInfoModal';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { flexSet } from 'styles/mixin';
 
@@ -19,36 +20,34 @@ interface SpaceProps {
  */
 export const Space: React.FC<SpaceProps> = ({ id, name }) => {
   const theme = useTheme();
-
   const { spaceId, setSpaceId } = useSpaceId();
+
   const [isDeleteModalOn, setIsDeleteModalOn] = useState(false);
+  const [isEditModalOn, setIsEditModalOn] = useState(false);
 
   const handleChangeSpaceParmas = () => {
     setSpaceId(id);
-  };
-
-  const handleOpenDeleteModal = () => {
-    setIsDeleteModalOn(true);
-  };
-
-  const handleCloseDeleteModal = () => {
-    setIsDeleteModalOn(false);
   };
 
   return (
     <SpaceBox onClick={handleChangeSpaceParmas} isSelected={spaceId === id}>
       <Name>{name}</Name>
       <BtnsRow>
-        <IconButton onClick={handleOpenDeleteModal}>
+        <IconButton onClick={() => setIsEditModalOn(true)}>
           <EditIcon stroke={theme.palette.grey[300]} />
         </IconButton>
-        <IconButton onClick={handleOpenDeleteModal}>
+        <IconButton onClick={() => setIsDeleteModalOn(true)}>
           <XIcon stroke={theme.palette.grey[300]} />
         </IconButton>
       </BtnsRow>
       <DeleteSpaceModal
         isOpen={isDeleteModalOn}
-        onClose={handleCloseDeleteModal}
+        onClose={() => setIsDeleteModalOn(false)}
+      />
+      <SpaceInfoModal
+        isOpen={isEditModalOn}
+        onClose={() => setIsEditModalOn(false)}
+        type='EDIT'
       />
     </SpaceBox>
   );

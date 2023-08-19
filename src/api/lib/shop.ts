@@ -5,17 +5,17 @@ import { axiosClient } from 'api/apiClient';
 import { STORAGE } from 'common/utils/constants';
 
 interface Chair {
-  storeChairId: string; // string으로, 프론트에서 넘겨주는 고유값
+  storeChairId: string;
   manageId: number;
   chairX: number;
   chairY: number;
 }
 
 interface Table {
-  storeTableId: string; // string으로, 프론트에서 넘겨주는 고유값
+  storeTableId: string;
   manageId: number; // 필요없음 (의자만 좌석 번호 필요함)
   width: number;
-  height: number; // 추가
+  height: number;
   tableX: number;
   tableY: number;
 }
@@ -23,14 +23,15 @@ interface Table {
 interface TableForEdit {
   storeTableId: string;
   tableWidth: number;
-  tableHeight: number; // 추가
+  tableHeight: number;
   tableX: number;
   tableY: number;
 }
 
 export interface ShopLayout {
   storeSpaceId: number;
-  storeSpaceName: string; // 추가
+  storeSpaceName: string;
+  reservationUnit: string; // 추가
   width: number; // 필요없음 (가로 길이 고정돼있음)
   height: number;
   tableList: Table[];
@@ -68,7 +69,7 @@ export class ShopApi {
   };
 
   // 스페이스별 가게 형태 조회
-  static getLayout = async (spaceId: number) => {
+  static getLayout = async (spaceId: number): Promise<ShopLayout> => {
     const response = await axiosClient.get(
       `${this.apiPrefix}/spaces/seats/${spaceId}`,
     );
@@ -76,7 +77,7 @@ export class ShopApi {
   };
 
   // 스페이스 생성
-  static createShopLayout = async (layout: EditShopLayout): Promise<any> => {
+  static createShopLayout = async (layout: EditShopLayout) => {
     const storeId = localStorage.getItem(STORAGE.storeId);
 
     const response = await axiosClient.post(

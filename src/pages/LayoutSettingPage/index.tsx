@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import type { ShopLayout } from 'api/lib/shop';
 import type {
   CustomItemLayout,
   ItemType,
+  ReservationUnit,
   ShopFormState,
 } from 'pages/LayoutSettingPage/utils/types';
 import type { SyntheticEvent } from 'react';
@@ -36,6 +36,7 @@ import {
   useLayout,
   useLayoutActions,
 } from 'pages/LayoutSettingPage/stores/layoutStore';
+import { useSpaceInfoActions } from 'pages/LayoutSettingPage/stores/spaceInfoStore';
 import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
 import {
   COLUMN_CNT,
@@ -85,6 +86,17 @@ const itemsDom = (layout: CustomItemLayout[], activeTab: number) => {
   });
 };
 
+const parseReservationUnitString = (unit: string) => {
+  const reservationUnit: ReservationUnit = { seat: true, space: true };
+  if (unit === '좌석') {
+    reservationUnit.space = false;
+  }
+  if (unit === '스페이스') {
+    reservationUnit.seat = false;
+  }
+  return reservationUnit;
+};
+
 /**
  * 좌석 설정 페이지
  */
@@ -97,6 +109,7 @@ export const LayoutSettingPage: React.FC = () => {
   const { rowCnt, minRowCnt, changeRowCnt, changeMinRowCnt, findMinRowCnt } =
     useShopHeight(DEFAULT_ROW_CNT);
   const { size } = useContext(DragContext);
+  const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
 
   const [shopFormState, setShopFormState] =
     useState<ShopFormState>('RECTANGLE');
@@ -162,7 +175,12 @@ export const LayoutSettingPage: React.FC = () => {
 
   useEffect(() => {
     if (spaceLayout) {
+      console.log('spaceLayout :>> ', spaceLayout);
       saveLayout(initialLayouts(spaceLayout));
+      setSpaceName(spaceLayout.storeSpaceName);
+      setReservationUnit(
+        parseReservationUnitString(spaceLayout.reservationUnit),
+      );
       changeRowCnt(spaceLayout.height);
     }
   }, [spaceLayout, saveLayout]); // FIXME changeRowCnt 추가

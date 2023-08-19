@@ -12,29 +12,38 @@ import {
   useSpaceName,
 } from 'pages/LayoutSettingPage/stores/spaceInfoStore';
 
-interface AddModalProps {
+type ModalType = 'CREATE' | 'EDIT';
+
+interface SpaceInfoModalProps {
   isOpen: boolean;
   onClose: () => void;
+  type: ModalType;
 }
 /**
- * 스페이스 추가 모달
+ * 스페이스 정보 모달
  */
-export const AddSpaceModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
-  const { addSpace, deleteSpace, selected, setSelectedSpace, setSpaces } =
-    useSpace();
+export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
+  isOpen,
+  onClose,
+  type,
+}) => {
+  const { addSpace } = useSpace();
+  const ref = useRef<HTMLInputElement | null>(null);
+  const theme = useTheme();
 
   const spaceName = useSpaceName();
   const reservationUnit = useReservationUnit();
-  const ref = useRef<HTMLInputElement | null>(null);
+
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
   const { clear: clearLayout } = useLayoutActions();
 
-  const theme = useTheme();
-  const [input, setInput] = useState('');
-  const [reservationUnits, setReservationUnits] = useState<ReservationUnit>({
-    seat: true,
-    space: false,
-  });
+  const defaultName = type === 'CREATE' ? '' : spaceName;
+  const defaultUnit =
+    type === 'CREATE' ? { seat: true, space: false } : reservationUnit;
+
+  const [input, setInput] = useState(defaultName);
+  const [reservationUnits, setReservationUnits] =
+    useState<ReservationUnit>(defaultUnit);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.currentTarget.value);
@@ -58,9 +67,13 @@ export const AddSpaceModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
     return '예약 단위를 선택하셔야 돼요';
   };
 
-  const handleAddSpace = () => {
+  const handleEditSpace = () => {
     setSpaceName(input);
     setReservationUnit(reservationUnits);
+    onClose();
+  };
+
+  const handleAddSpace = () => {
     addSpace(input);
     clearLayout();
     onClose();
@@ -68,7 +81,9 @@ export const AddSpaceModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
   /* eslint-disable-next-line */
   return (
     <Modal isOpen={isOpen} onClose={onClose} closeOnOusideClick={false}>
-      <Modal.Header>스페이스 생성</Modal.Header>
+      <Modal.Header>
+        {type === 'CREATE' ? '스페이스 생성' : ' 스페이스 수정'}
+      </Modal.Header>
       <Content>
         <SpaceNameLabel>사용할 스페이스의 이름을 적어주세요</SpaceNameLabel>
         <SpaceNameInput
@@ -107,9 +122,9 @@ export const AddSpaceModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
             input.length === 0 ||
             (!reservationUnits.seat && !reservationUnits.space)
           }
-          onClick={handleAddSpace}
+          onClick={type === 'CREATE' ? handleAddSpace : handleEditSpace}
         >
-          스페이스 생성
+          {type === 'CREATE' ? '스페이스 생성' : ' 스페이스 수정'}
         </Button>
       </Content>
     </Modal>
