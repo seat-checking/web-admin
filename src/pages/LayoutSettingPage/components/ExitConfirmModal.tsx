@@ -19,7 +19,7 @@ export const ExitConfirmModal: React.FC = () => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose}>
+    <Modal onClose={handleClose}>
       <Modal.Header>좌석 설정</Modal.Header>
       <Content>
         <ConfirmText>

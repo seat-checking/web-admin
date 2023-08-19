@@ -44,15 +44,12 @@ export const Space: React.FC<SpaceProps> = ({ id, name }) => {
           </IconButton>
         </BtnsRow>
       )}
-      <DeleteSpaceModal
-        isOpen={isDeleteModalOn}
-        onClose={() => setIsDeleteModalOn(false)}
-      />
-      <SpaceInfoModal
-        isOpen={isEditModalOn}
-        onClose={() => setIsEditModalOn(false)}
-        type='EDIT'
-      />
+      {isDeleteModalOn && (
+        <DeleteSpaceModal onClose={() => setIsDeleteModalOn(false)} />
+      )}
+      {isEditModalOn && (
+        <SpaceInfoModal onClose={() => setIsEditModalOn(false)} type='EDIT' />
+      )}
     </SpaceBox>
   );
 };

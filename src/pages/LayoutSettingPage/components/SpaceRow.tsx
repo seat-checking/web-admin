@@ -63,11 +63,9 @@ export const SpaceRow: React.FC = () => {
           <PlusCircle stroke='white' />
           <AddText>스페이스 추가</AddText>
         </AddRow>
-        <SpaceInfoModal
-          isOpen={isAddModalOn}
-          onClose={handleAddModalClose}
-          type='CREATE'
-        />
+        {isAddModalOn && (
+          <SpaceInfoModal onClose={handleAddModalClose} type='CREATE' />
+        )}
       </SpaceWrap>
     </>
   );

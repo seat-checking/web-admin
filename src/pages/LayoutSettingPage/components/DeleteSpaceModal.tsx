@@ -5,14 +5,12 @@ import { Modal } from 'components/Modal';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 
 interface DeleteSpaceModalProps {
-  isOpen: boolean;
   onClose: () => void;
 }
 /**
  * 스페이스 삭제 모달
  */
 export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
-  isOpen,
   onClose,
 }) => {
   const theme = useTheme();
@@ -25,12 +23,11 @@ export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
   };
 
   const handleDelete = () => {
-    console.log('spaceId :>> ', spaceId);
     deleteMutate(spaceId, { onSuccess: () => onClose() });
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal onClose={onClose}>
       <Modal.Header>좌석 설정</Modal.Header>
       <Content>
         <ConfirmText>정말 스페이스를 삭제할까요? 😥</ConfirmText>

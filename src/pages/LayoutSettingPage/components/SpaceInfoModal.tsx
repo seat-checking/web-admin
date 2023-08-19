@@ -15,7 +15,6 @@ import {
 type ModalType = 'CREATE' | 'EDIT';
 
 interface SpaceInfoModalProps {
-  isOpen: boolean;
   onClose: () => void;
   type: ModalType;
 }
@@ -23,7 +22,6 @@ interface SpaceInfoModalProps {
  * 스페이스 정보 모달
  */
 export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
-  isOpen,
   onClose,
   type,
 }) => {
@@ -41,6 +39,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
   const defaultUnit =
     type === 'CREATE' ? { seat: true, space: false } : reservationUnit;
 
+  console.log('defaultName, spaceName :>> ', type, defaultName, spaceName);
   const [input, setInput] = useState(defaultName);
   const [reservationUnits, setReservationUnits] =
     useState<ReservationUnit>(defaultUnit);
@@ -80,7 +79,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
   };
   /* eslint-disable-next-line */
   return (
-    <Modal isOpen={isOpen} onClose={onClose} closeOnOusideClick={false}>
+    <Modal onClose={onClose} closeOnOusideClick={false}>
       <Modal.Header>
         {type === 'CREATE' ? '스페이스 생성' : ' 스페이스 수정'}
       </Modal.Header>
