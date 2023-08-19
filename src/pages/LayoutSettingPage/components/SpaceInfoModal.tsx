@@ -47,7 +47,6 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
   const defaultUnit =
     type === 'CREATE' ? { seat: true, space: false } : reservationUnit;
 
-  console.log('defaultName, spaceName :>> ', type, defaultName, spaceName);
   const [input, setInput] = useState(defaultName);
   const [reservationUnits, setReservationUnits] =
     useState<ReservationUnit>(defaultUnit);
@@ -90,6 +89,8 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
   };
 
   const handleAddSpace = () => {
+    setSpaceName(input);
+    setReservationUnit(reservationUnits);
     addSpace(input);
     clearLayout();
     onClose();

@@ -3,9 +3,11 @@ import type { EditShopLayout } from 'api/lib/shop';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { ShopApi } from 'api/lib/shop';
 import { queryKeys } from 'common/utils/constants';
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 
 export const useCreateSpace = () => {
   const queryClient = useQueryClient();
+  const { setFirstSpaceId } = useSpaceId();
 
   return useMutation({
     mutationFn: (layout: EditShopLayout) => {
@@ -28,6 +30,7 @@ export const useCreateSpace = () => {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.GET_SPACES],
       });
+      setFirstSpaceId();
     },
   });
 };

@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
-import { queryKeys } from 'common/utils/constants';
+import { TEMPORARY_SPACE_ID, queryKeys } from 'common/utils/constants';
 
 export const useSpaceId = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,6 +19,9 @@ export const useSpaceId = () => {
     const spacesList: SpaceType[] | undefined = queryClient.getQueryData([
       queryKeys.GET_SPACES,
     ]);
+    if (spacesList?.length === 0) {
+      setSpaceId(TEMPORARY_SPACE_ID);
+    }
     if (spacesList && spacesList.length > 0) {
       setSpaceId(spacesList[0].storeSpaceId);
     }

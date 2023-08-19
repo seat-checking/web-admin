@@ -6,7 +6,7 @@ import { ReactComponent as AlertCircleBorderIcon } from 'assets/icons/alert-circ
 import { ReactComponent as PlusCircle } from 'assets/icons/plus-circle.svg';
 
 import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
-import { queryKeys } from 'common/utils/constants';
+import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import { Space } from 'pages/LayoutSettingPage/components/Space';
 import { SpaceInfoModal } from 'pages/LayoutSettingPage/components/SpaceInfoModal';
 import {
@@ -34,7 +34,11 @@ export const SpaceRow: React.FC = () => {
   };
 
   useEffect(() => {
-    if (spacesList && spacesList.length > 0 && !firstLoadedRef.current) {
+    if (!spacesList || spacesList?.length === 0) {
+      setSpaceId(TEMPORARY_SPACE_ID);
+      return;
+    }
+    if (!firstLoadedRef.current) {
       setSpaceId(spacesList[0].storeSpaceId);
       firstLoadedRef.current = true;
     }
