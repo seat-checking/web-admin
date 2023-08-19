@@ -2,7 +2,7 @@ import type { Layout } from 'react-grid-layout';
 
 export interface SpaceType {
   storeSpaceId: number;
-  storeSpaceName: string;
+  name: string;
 }
 
 export type ShopFormState = 'SQUARE' | 'RECTANGLE' | 'NONE';

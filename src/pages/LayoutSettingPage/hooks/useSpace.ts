@@ -32,15 +32,16 @@ export const useSpace = (): UseSpaceReturn => {
     const newId = TEMPORARY_SPACE_ID;
     const newSpace: SpaceType = {
       storeSpaceId: newId,
-      storeSpaceName: 'Space',
+      name: 'Space',
     };
     setSearchParmas({ space: String(newId) });
-    setSpaceList([...spaceList, newSpace]);
-    queryClient.setQueryData([queryKeys.GET_SPACES], (data: any) => {
-      console.log('data :>> ', data);
-      return [...data, newSpace];
-    });
-  }, [spaceList]);
+    queryClient.setQueryData(
+      [queryKeys.GET_SPACES],
+      (data: SpaceType[] | undefined) => {
+        return data ? [...data, newSpace] : [newSpace];
+      },
+    );
+  }, [queryClient, spaceList, setSearchParmas]);
 
   const deleteSpace = useCallback(
     (id: number) => {

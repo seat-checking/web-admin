@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import type { AxiosResponse } from 'axios';
+import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { axiosClient } from 'api/apiClient';
 import { STORAGE } from 'common/utils/constants';
 
@@ -33,16 +34,11 @@ interface LayoutResponse {
   adminStoreSpaceResponseList: ShopLayout[];
 }
 
-interface Space {
-  storeSpaceId: number;
-  name: string;
-}
-
 export class ShopApi {
   static readonly apiPrefix = '/stores/admins';
 
   // 가게의 모든 스페이스 기본 정보 조회
-  static getSpaceList = async (): Promise<Space[]> => {
+  static getSpaceList = async (): Promise<SpaceType[]> => {
     const storeId = localStorage.getItem(STORAGE.storeId);
     const response = await axiosClient.get(
       `${this.apiPrefix}/spaces/${storeId}`,

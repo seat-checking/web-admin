@@ -84,6 +84,7 @@ const itemsDom = (layouts2: CustomLayout[], activeTab: number) => {
     return <GridTable key={item.i} isClickable={activeTab === 1} />;
   });
 };
+
 /**
  * 좌석 설정 페이지
  */
