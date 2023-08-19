@@ -29,6 +29,7 @@ export const SpaceRow: React.FC = () => {
   const spacesList: SpaceType[] | undefined = queryClient.getQueryData([
     queryKeys.GET_SPACES,
   ]);
+  console.log('spacesList :>> ', spacesList);
 
   const [isAddModalOn, setIsAddModalOn] = useState(false);
 

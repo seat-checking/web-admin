@@ -1,25 +1,38 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
+import { useDeleteSpace } from 'common/hooks/mutations/useDeleteSpace';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
 
+interface DeleteSpaceModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 /**
  * 스페이스 삭제 모달
  */
-export const DeleteSpaceModal: React.FC = () => {
+export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
   const theme = useTheme();
-  const [isOpen, setIsOpen] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const spaceId = Number(searchParams.get('space'));
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const { mutate: deleteMutate } = useDeleteSpace();
 
   const handleCancel = () => {
-    setIsOpen(false);
+    onClose();
+  };
+
+  const handleDelete = () => {
+    console.log('spaceId :>> ', spaceId);
+    deleteMutate(spaceId, { onSuccess: () => onClose() });
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <Modal.Header>좌석 설정</Modal.Header>
       <Content>
         <ConfirmText>정말 스페이스를 삭제할까요? 😥</ConfirmText>
@@ -43,6 +56,7 @@ export const DeleteSpaceModal: React.FC = () => {
           borderRadius='0.4rem'
           fontSize='1.4rem'
           height='4.5rem'
+          onClick={handleDelete}
         >
           스페이스 삭제
         </Button>
