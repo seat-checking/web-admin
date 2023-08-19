@@ -1,10 +1,16 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components/macro';
-import type { ReservationUnit } from 'pages/LayoutSettingPage/utils/types';
+import type {
+  ReservationUnit,
+  SpaceType,
+} from 'pages/LayoutSettingPage/utils/types';
+import { queryKeys } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import InputCheckBox from 'components/InputCheckBox';
 import { Modal } from 'components/Modal';
 import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 import {
   useReservationUnit,
@@ -30,7 +36,9 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
   const theme = useTheme();
 
   const spaceName = useSpaceName();
+  const { spaceId } = useSpaceId();
   const reservationUnit = useReservationUnit();
+  const queryClient = useQueryClient();
 
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
   const { clear: clearLayout } = useLayoutActions();
@@ -69,6 +77,15 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
   const handleEditSpace = () => {
     setSpaceName(input);
     setReservationUnit(reservationUnits);
+
+    queryClient.setQueryData(
+      [queryKeys.GET_SPACES],
+      (data: SpaceType[] | undefined) =>
+        data?.map((space: SpaceType) =>
+          space.storeSpaceId === spaceId ? { ...space, name: input } : space,
+        ),
+    );
+
     onClose();
   };
 
