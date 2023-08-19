@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLoaderData, useSearchParams } from 'react-router-dom';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { ReactComponent as AlertCircleBorderIcon } from 'assets/icons/alert-circle-border.svg';
@@ -22,26 +22,22 @@ import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
  * space 목록 컴포넌트 (검은색 영역)
  */
 export const SpaceRow: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const queryClient = useQueryClient();
-  const loaded = useLoaderData() as SpaceType[];
-
-  const spacesList: SpaceType[] | undefined = queryClient.getQueryData([
-    queryKeys.GET_SPACES,
-  ]);
-  console.log('spacesList :>> ', spacesList);
-
   const [isAddModalOn, setIsAddModalOn] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { data: spacesList, isLoading } = useGetSpaces();
+  const firstLoadedRef = useRef(false);
 
   const handleAddModalClose = () => {
     setIsAddModalOn(false);
   };
 
   useEffect(() => {
-    queryClient.setQueryData([queryKeys.GET_SPACES], loaded);
-
-    setSearchParams({ space: String(loaded?.[0]?.storeSpaceId) });
-  }, []);
+    if (spacesList && spacesList.length > 0 && !firstLoadedRef.current) {
+      setSearchParams({ space: String(spacesList[0].storeSpaceId) });
+      firstLoadedRef.current = true;
+    }
+  }, [spacesList]);
 
   return (
     <>
@@ -50,16 +46,18 @@ export const SpaceRow: React.FC = () => {
         <BoldText>스페이스란?</BoldText> 가게의 방이나 분리된 공간을 의미해요.
       </InfoWrap>
       <SpaceWrap>
-        {spacesList?.map((space) => (
-          <Space
-            key={space.storeSpaceId}
-            id={space.storeSpaceId}
-            name={space.name}
-            // onClick={setSelectedSpace}
-            // isSelected={space.storeSpaceId === selected}
-            // deleteSpace={deleteSpace}
-          />
-        ))}
+        {isLoading
+          ? 'loading..'
+          : spacesList?.map((space) => (
+              <Space
+                key={space.storeSpaceId}
+                id={space.storeSpaceId}
+                name={space.name}
+                // onClick={setSelectedSpace}
+                // isSelected={space.storeSpaceId === selected}
+                // deleteSpace={deleteSpace}
+              />
+            ))}
         <AddRow onClick={() => setIsAddModalOn(true)}>
           <PlusCircle stroke='white' />
           <AddText>스페이스 추가</AddText>

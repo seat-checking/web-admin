@@ -59,9 +59,6 @@ export const router = createBrowserRouter([
             </DragContextProvider>
           </Suspense>
         ),
-        loader: () => {
-          return ShopApi.getSpaceList();
-        },
       },
       {
         path: PATH.statistics,
