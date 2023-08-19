@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled, { css, useTheme } from 'styled-components/macro';
 import type { ChangeEvent } from 'react';
+import { ReactComponent as EditIcon } from 'assets/icons/edit-md.svg';
+import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 
-import { XButton } from 'components/XButton';
+import { IconButton } from 'components/XButton';
 import { DeleteSpaceModal } from 'pages/LayoutSettingPage/components/DeleteSpaceModal';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { flexSet } from 'styles/mixin';
@@ -16,16 +18,13 @@ interface SpaceProps {
  * Space 컴포넌트 (흰색 네모)
  */
 export const Space: React.FC<SpaceProps> = ({ id, name }) => {
-  const [spaceName, setSpaceName] = useState(name);
+  const theme = useTheme();
+
   const { spaceId, setSpaceId } = useSpaceId();
   const [isDeleteModalOn, setIsDeleteModalOn] = useState(false);
 
   const handleChangeSpaceParmas = () => {
     setSpaceId(id);
-  };
-
-  const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
-    setSpaceName(event.currentTarget.value);
   };
 
   const handleOpenDeleteModal = () => {
@@ -38,15 +37,15 @@ export const Space: React.FC<SpaceProps> = ({ id, name }) => {
 
   return (
     <SpaceBox onClick={handleChangeSpaceParmas} isSelected={spaceId === id}>
-      <Input type='text' onChange={handleChangeName} value={spaceName} />
-      <XButton
-        onClick={handleOpenDeleteModal}
-        style={{
-          position: 'absolute',
-          top: '0.4rem',
-          right: '0.4rem',
-        }}
-      />
+      <Name>{name}</Name>
+      <BtnsRow>
+        <IconButton onClick={handleOpenDeleteModal}>
+          <EditIcon stroke={theme.palette.grey[300]} />
+        </IconButton>
+        <IconButton onClick={handleOpenDeleteModal}>
+          <XIcon stroke={theme.palette.grey[300]} />
+        </IconButton>
+      </BtnsRow>
       <DeleteSpaceModal
         isOpen={isDeleteModalOn}
         onClose={handleCloseDeleteModal}
@@ -82,7 +81,7 @@ export const SpaceBox = styled.div<{ isSelected: boolean }>`
     `}
 `;
 
-export const Input = styled.input`
+export const Name = styled.div`
   max-width: 16rem;
 
   text-align: center;
@@ -92,20 +91,13 @@ export const Input = styled.input`
   /* background-color: aqua; */
 `;
 
-export const DeleteWrap = styled.div`
+export const BtnsRow = styled.div`
   position: absolute;
   top: 0.4rem;
   right: 0.4rem;
 
-  :hover::after {
-    display: inline-block;
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 2.4rem;
-    height: 2.4rem;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 20%;
-  }
+  display: flex;
+  gap: 1rem;
+
+  /* background-color: yellow; */
 `;

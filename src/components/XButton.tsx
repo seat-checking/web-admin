@@ -1,20 +1,22 @@
 import styled, { useTheme } from 'styled-components';
 import type { ComponentPropsWithoutRef } from 'react';
-import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 
-interface XButtonProps extends ComponentPropsWithoutRef<'button'> {
+interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
   onClick?: () => void;
+  children: React.ReactNode;
 }
 
 /**
- * X 표 버튼
+ * 마우스 오버시 어두운 배경 생기는 버튼
  */
-export const XButton: React.FC<XButtonProps> = ({ onClick, ...rest }) => {
-  const theme = useTheme();
-
+export const IconButton: React.FC<IconButtonProps> = ({
+  onClick,
+  children,
+  ...rest
+}) => {
   return (
     <Button type='button' onClick={onClick} {...rest}>
-      <XIcon stroke={theme.palette.grey[500]} />
+      {children}
     </Button>
   );
 };
