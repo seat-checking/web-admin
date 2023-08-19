@@ -189,7 +189,9 @@ export const LayoutSettingPage: React.FC = () => {
             },
             {
               label: '좌석 배치',
-              content: <SeatArrangementTab changeTab={changeTab} />,
+              content: (
+                <SeatArrangementTab changeTab={changeTab} rowCnt={rowCnt} />
+              ),
             },
           ]}
         />

@@ -20,6 +20,14 @@ interface Table {
   tableY: number;
 }
 
+interface TableForEdit {
+  storeTableId: string;
+  tableWidth: number;
+  tableHeight: number; // 추가
+  tableX: number;
+  tableY: number;
+}
+
 export interface ShopLayout {
   storeSpaceId: number;
   storeSpaceName: string; // 추가
@@ -27,6 +35,19 @@ export interface ShopLayout {
   height: number;
   tableList: Table[];
   chairList: Chair[];
+}
+
+export interface EditShopLayout {
+  name: string;
+  height: number;
+  reservationUnit: string;
+  tableList: TableForEdit[];
+  chairList: Chair[];
+}
+
+export interface EditShopRequest {
+  spaceId: number;
+  layout: EditShopLayout;
 }
 
 interface LayoutResponse {
@@ -98,7 +119,7 @@ export class ShopApi {
     await axiosClient.delete(`${this.apiPrefix}/spaces/${spaceId}`);
   };
 
-  static editShopLayout = async (spaceId: number) => {
+  static editShopLayout = async ({ spaceId, layout }: EditShopRequest) => {
     const req = {
       name: '루루',
       height: 10,
@@ -129,7 +150,7 @@ export class ShopApi {
     };
     const response = await axiosClient.patch(
       `${this.apiPrefix}/spaces/${spaceId}`,
-      req,
+      layout,
     );
     return response;
   };
