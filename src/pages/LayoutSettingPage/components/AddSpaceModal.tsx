@@ -1,18 +1,38 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components/macro';
+import type { ReservationUnit } from 'pages/LayoutSettingPage/utils/types';
 import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 import { Button } from 'components/Button';
 import InputCheckBox from 'components/InputCheckBox';
 import { Modal } from 'components/Modal';
+import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
+import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
+import {
+  useReservationUnit,
+  useSpaceInfoActions,
+  useSpaceName,
+} from 'pages/LayoutSettingPage/stores/spaceInfoStore';
 
+interface AddModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 /**
  * 스페이스 추가 모달
  */
-export const AddSpaceModal: React.FC = () => {
+export const AddSpaceModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
+  const { addSpace, deleteSpace, selected, setSelectedSpace, setSpaces } =
+    useSpace();
+
+  const spaceName = useSpaceName();
+  const reservationUnit = useReservationUnit();
+  const ref = useRef<HTMLInputElement | null>(null);
+  const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
+  const { clear: clearLayout } = useLayoutActions();
+
   const theme = useTheme();
-  const [isOpen, setIsOpen] = useState(true);
   const [input, setInput] = useState('');
-  const [reservationUnits, setReservationUnits] = useState({
+  const [reservationUnits, setReservationUnits] = useState<ReservationUnit>({
     seat: true,
     space: false,
   });
@@ -39,12 +59,16 @@ export const AddSpaceModal: React.FC = () => {
     return '예약 단위를 선택하셔야 돼요';
   };
 
-  const handleClose = () => {
-    setIsOpen(false);
+  const handleAddSpace = () => {
+    setSpaceName(input);
+    setReservationUnit(reservationUnits);
+    addSpace(input);
+    clearLayout();
+    onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} closeOnOusideClick={false}>
+    <Modal isOpen={isOpen} onClose={onClose} closeOnOusideClick={false}>
       <Modal.Header>스페이스 생성</Modal.Header>
       <Content>
         <SpaceNameLabel>사용할 스페이스의 이름을 적어주세요</SpaceNameLabel>
@@ -53,6 +77,7 @@ export const AddSpaceModal: React.FC = () => {
           value={input}
           onChange={handleInput}
           placeholder='ex) 1층 Blue 룸'
+          ref={ref}
         />
         <UnitLabel>예약 단위 설정</UnitLabel>
         <UnitInputsWrap>
@@ -83,6 +108,7 @@ export const AddSpaceModal: React.FC = () => {
             input.length === 0 ||
             (!reservationUnits.seat && !reservationUnits.space)
           }
+          onClick={handleAddSpace}
         >
           스페이스 생성
         </Button>

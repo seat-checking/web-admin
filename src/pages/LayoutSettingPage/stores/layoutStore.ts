@@ -1,27 +1,32 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { CustomLayout } from 'pages/LayoutSettingPage/utils/types';
+import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
 import type { Layout } from 'react-grid-layout';
 import { useChangeStore } from 'pages/LayoutSettingPage/stores/changeStore';
 
 interface LayoutStoreState {
-  layout: CustomLayout[];
+  layout: CustomItemLayout[];
   actions: {
-    saveInitialLayout: (layout: CustomLayout[]) => void;
+    clear: () => void;
+    saveInitialLayout: (layout: CustomItemLayout[]) => void;
     saveLayoutChange: (changedLayout: Layout[]) => void;
     disableMove: () => void;
     enableMove: () => void;
-    addItem: (item: CustomLayout) => void;
+    addItem: (item: CustomItemLayout) => void;
   };
 }
 
+/**
+ * 좌석 배치 정보 관리
+ */
 const useLayoutStore = create<LayoutStoreState>()(
   devtools((set) => ({
     layout: [],
     actions: {
-      addItem: (item: CustomLayout) =>
+      clear: () => set(() => ({ layout: [] })),
+      addItem: (item: CustomItemLayout) =>
         set((state) => ({ layout: [...state.layout, item] }), false, 'addItem'),
-      saveInitialLayout: (layout: CustomLayout[]) =>
+      saveInitialLayout: (layout: CustomItemLayout[]) =>
         set(() => ({ layout }), false, 'saveInitialLayout'),
       saveLayoutChange: (changedLayout: Layout[]) =>
         set(

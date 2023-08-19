@@ -9,7 +9,12 @@ export type ShopFormState = 'SQUARE' | 'RECTANGLE' | 'NONE';
 
 export type ItemType = 'chair' | 'table';
 
-export interface CustomLayout extends Layout {
+export interface CustomItemLayout extends Layout {
   sort: ItemType;
   manageId?: number;
+}
+
+export interface ReservationUnit {
+  seat: boolean;
+  space: boolean;
 }

@@ -7,7 +7,7 @@ import { TEMPORARY_SPACE_ID, queryKeys } from 'common/utils/constants';
 export interface UseSpaceReturn {
   spaceList: SpaceType[];
   setSpaces: (space: SpaceType[]) => void;
-  addSpace: () => void;
+  addSpace: (name: string) => void;
   deleteSpace: (id: number) => void;
   setSelectedSpace: (id: number) => void;
   selected: number;
@@ -27,21 +27,24 @@ export const useSpace = (): UseSpaceReturn => {
     setSpaceList(space);
   }, []);
 
-  const addSpace = useCallback(() => {
-    // const newId = Date.now();
-    const newId = TEMPORARY_SPACE_ID;
-    const newSpace: SpaceType = {
-      storeSpaceId: newId,
-      name: 'Space',
-    };
-    setSearchParmas({ space: String(newId) });
-    queryClient.setQueryData(
-      [queryKeys.GET_SPACES],
-      (data: SpaceType[] | undefined) => {
-        return data ? [...data, newSpace] : [newSpace];
-      },
-    );
-  }, [queryClient, spaceList, setSearchParmas]);
+  const addSpace = useCallback(
+    (name: string) => {
+      // const newId = Date.now();
+      const newId = TEMPORARY_SPACE_ID;
+      const newSpace: SpaceType = {
+        storeSpaceId: newId,
+        name,
+      };
+      setSearchParmas({ space: String(newId) });
+      queryClient.setQueryData(
+        [queryKeys.GET_SPACES],
+        (data: SpaceType[] | undefined) => {
+          return data ? [...data, newSpace] : [newSpace];
+        },
+      );
+    },
+    [queryClient, spaceList, setSearchParmas],
+  );
 
   const deleteSpace = useCallback(
     (id: number) => {

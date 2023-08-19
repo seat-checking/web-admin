@@ -1,8 +1,13 @@
 import { useSearchParams } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 import type { EditShopLayout } from 'api/lib/shop';
-import type { CustomLayout } from 'pages/LayoutSettingPage/utils/types';
+import type {
+  CustomItemLayout,
+  ReservationUnit,
+} from 'pages/LayoutSettingPage/utils/types';
+import { useCreateSpace } from 'common/hooks/mutations/useCreateSpace';
 import { useEditLayout } from 'common/hooks/mutations/useEditLayout';
+import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import {
   Door,
   DoorChairBox,
@@ -22,17 +27,32 @@ import { Chair } from 'pages/LayoutSettingPage/components/SeatArrangementTab/com
 import { Table } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Table';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useLayout } from 'pages/LayoutSettingPage/stores/layoutStore';
+import {
+  useReservationUnit,
+  useSpaceName,
+} from 'pages/LayoutSettingPage/stores/spaceInfoStore';
 
 interface SeatArrangementTabProps {
   changeTab: (index: number) => void;
   rowCnt: number;
 }
 
-const mappingData = (layout: CustomLayout[], rowCnt: number) => {
+const getReservationUnitString = (reservationUnit: ReservationUnit) => {
+  if (reservationUnit.seat && !reservationUnit.space) return '좌석';
+  if (!reservationUnit.seat && reservationUnit.space) return '스페이스';
+  return '스페이스/좌석';
+};
+
+const mappingData = (
+  layout: CustomItemLayout[],
+  rowCnt: number,
+  spaceName: string,
+  reservationUnit: ReservationUnit,
+) => {
   const request: EditShopLayout = {
-    name: '루루',
+    name: spaceName,
     height: rowCnt,
-    reservationUnit: '좌석',
+    reservationUnit: getReservationUnitString(reservationUnit),
     tableList: [],
     chairList: [],
   };
@@ -67,13 +87,26 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
 }) => {
   const theme = useTheme();
   const { mutate: editLayoutMutate } = useEditLayout();
+  const { mutate: createSpaceMutate } = useCreateSpace();
   const [searchParams, setSearchParams] = useSearchParams();
   const spaceId = Number(searchParams.get('space'));
   const layout = useLayout();
   const { isChanged } = useChange();
 
+  const spaceName = useSpaceName();
+  const reservationUnit = useReservationUnit();
+
   const handleSave = () => {
-    editLayoutMutate({ spaceId, layout: mappingData(layout, rowCnt) });
+    if (spaceId === TEMPORARY_SPACE_ID) {
+      createSpaceMutate(
+        mappingData(layout, rowCnt, spaceName, reservationUnit),
+      );
+      return;
+    }
+    editLayoutMutate({
+      spaceId,
+      layout: mappingData(layout, rowCnt, spaceName, reservationUnit),
+    });
   };
 
   const handleChangePreviousTab = () => {
@@ -132,7 +165,7 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
           이전으로
         </StyledButton>
         <StyledButton onClick={handleSave} $isChanged={isChanged}>
-          저장하기
+          {spaceId === TEMPORARY_SPACE_ID ? '생성하기' : '저장하기'}
         </StyledButton>
       </ButtonRow>
     </Wrap>

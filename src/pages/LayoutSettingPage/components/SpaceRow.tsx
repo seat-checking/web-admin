@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLoaderData, useSearchParams } from 'react-router-dom';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { ReactComponent as AlertCircleBorderIcon } from 'assets/icons/alert-circle-border.svg';
@@ -7,6 +7,7 @@ import { ReactComponent as PlusCircle } from 'assets/icons/plus-circle.svg';
 
 import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
 import { queryKeys } from 'common/utils/constants';
+import { AddSpaceModal } from 'pages/LayoutSettingPage/components/AddSpaceModal';
 import { Space } from 'pages/LayoutSettingPage/components/Space';
 import {
   AddRow,
@@ -21,8 +22,6 @@ import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
  * space 목록 컴포넌트 (검은색 영역)
  */
 export const SpaceRow: React.FC = () => {
-  const { addSpace, deleteSpace, selected, setSelectedSpace, setSpaces } =
-    useSpace();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const loaded = useLoaderData() as SpaceType[];
@@ -30,6 +29,12 @@ export const SpaceRow: React.FC = () => {
   const spacesList: SpaceType[] | undefined = queryClient.getQueryData([
     queryKeys.GET_SPACES,
   ]);
+
+  const [isAddModalOn, setIsAddModalOn] = useState(false);
+
+  const handleAddModalClose = () => {
+    setIsAddModalOn(false);
+  };
 
   useEffect(() => {
     queryClient.setQueryData([queryKeys.GET_SPACES], loaded);
@@ -54,10 +59,11 @@ export const SpaceRow: React.FC = () => {
             // deleteSpace={deleteSpace}
           />
         ))}
-        <AddRow onClick={addSpace}>
+        <AddRow onClick={() => setIsAddModalOn(true)}>
           <PlusCircle stroke='white' />
           <AddText>스페이스 추가</AddText>
         </AddRow>
+        <AddSpaceModal isOpen={isAddModalOn} onClose={handleAddModalClose} />
       </SpaceWrap>
     </>
   );

@@ -76,40 +76,12 @@ export class ShopApi {
   };
 
   // 스페이스 생성
-  static saveShopLayout = async (): Promise<any> => {
+  static createShopLayout = async (layout: EditShopLayout): Promise<any> => {
     const storeId = localStorage.getItem(STORAGE.storeId);
-    const req = {
-      name: '블루룸',
-      height: 10,
-      reservationUnit: '좌석',
-      tableList: [
-        {
-          storeTableId: '15445',
-          tableX: 10,
-          tableY: 10,
-          tableWidth: 2,
-          tableHeight: 4,
-        },
-      ],
-      chairList: [
-        {
-          storeChairId: '15446',
-          manageId: 2,
-          chairX: 1,
-          chairY: 1,
-        },
-        {
-          storeChairId: '15447',
-          manageId: 2,
-          chairX: 3,
-          chairY: 3,
-        },
-      ],
-    };
 
     const response = await axiosClient.post(
       `${this.apiPrefix}/spaces/${storeId}`,
-      req,
+      layout,
     );
     return response;
   };
@@ -120,34 +92,6 @@ export class ShopApi {
   };
 
   static editShopLayout = async ({ spaceId, layout }: EditShopRequest) => {
-    const req = {
-      name: '루루',
-      height: 10,
-      reservationUnit: '좌석',
-      tableList: [
-        {
-          storeTableId: '15445',
-          tableX: 9,
-          tableY: 10,
-          tableWidth: 2,
-          tableHeight: 4,
-        },
-      ],
-      chairList: [
-        {
-          storeChairId: '15446',
-          manageId: 2,
-          chairX: 1,
-          chairY: 1,
-        },
-        {
-          storeChairId: '15447',
-          manageId: 2,
-          chairX: 10,
-          chairY: 10,
-        },
-      ],
-    };
     const response = await axiosClient.patch(
       `${this.apiPrefix}/spaces/${spaceId}`,
       layout,

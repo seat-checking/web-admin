@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { ShopLayout } from 'api/lib/shop';
 import type {
-  CustomLayout,
+  CustomItemLayout,
   ItemType,
   ShopFormState,
 } from 'pages/LayoutSettingPage/utils/types';
@@ -71,9 +71,8 @@ const initialLayouts = (shop: ShopLayout) => {
   return [...tables, ...chairs];
 };
 
-const itemsDom = (layouts2: CustomLayout[], activeTab: number) => {
-  console.log('layouts2 :>> ', layouts2);
-  return layouts2.map((item) => {
+const itemsDom = (layout: CustomItemLayout[], activeTab: number) => {
+  return layout.map((item) => {
     if (item.sort === 'chair') {
       return (
         <ChairBorder key={item.i} className='chair'>
@@ -92,6 +91,7 @@ export const LayoutSettingPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const spaceParams = Number(searchParams.get('space'));
   const { data: spaceLayout } = useGetSpaceLayout(spaceParams);
+  console.log('spaceLayout :>> ', spaceLayout);
 
   const { activeTab, changeTab } = useTab();
   const { rowCnt, minRowCnt, changeRowCnt, changeMinRowCnt, findMinRowCnt } =
@@ -121,7 +121,7 @@ export const LayoutSettingPage: React.FC = () => {
 
   const handleDropItem = (
     layout: Layout[],
-    item: CustomLayout,
+    item: CustomItemLayout,
     e: DragEvent,
   ) => {
     const sort = e.dataTransfer?.getData('sort');
@@ -144,7 +144,6 @@ export const LayoutSettingPage: React.FC = () => {
     if (layout.at(-1)?.i === '__dropping-elem__') {
       return;
     }
-
     saveLayoutChange(layout);
   };
 
