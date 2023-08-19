@@ -25,21 +25,25 @@ export const Space: React.FC<SpaceProps> = ({ id, name }) => {
   const [isDeleteModalOn, setIsDeleteModalOn] = useState(false);
   const [isEditModalOn, setIsEditModalOn] = useState(false);
 
+  const isSelected = spaceId === id;
+
   const handleChangeSpaceParmas = () => {
     setSpaceId(id);
   };
 
   return (
-    <SpaceBox onClick={handleChangeSpaceParmas} isSelected={spaceId === id}>
+    <SpaceBox onClick={handleChangeSpaceParmas} isSelected={isSelected}>
       <Name>{name}</Name>
-      <BtnsRow>
-        <IconButton onClick={() => setIsEditModalOn(true)}>
-          <EditIcon stroke={theme.palette.grey[300]} />
-        </IconButton>
-        <IconButton onClick={() => setIsDeleteModalOn(true)}>
-          <XIcon stroke={theme.palette.grey[300]} />
-        </IconButton>
-      </BtnsRow>
+      {isSelected && (
+        <BtnsRow>
+          <IconButton onClick={() => setIsEditModalOn(true)}>
+            <EditIcon stroke={theme.palette.grey[300]} />
+          </IconButton>
+          <IconButton onClick={() => setIsDeleteModalOn(true)}>
+            <XIcon stroke={theme.palette.grey[300]} />
+          </IconButton>
+        </BtnsRow>
+      )}
       <DeleteSpaceModal
         isOpen={isDeleteModalOn}
         onClose={() => setIsDeleteModalOn(false)}
