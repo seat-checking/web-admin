@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 import { useDeleteSpace } from 'common/hooks/mutations/useDeleteSpace';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 
 interface DeleteSpaceModalProps {
   isOpen: boolean;
@@ -17,8 +16,7 @@ export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
   onClose,
 }) => {
   const theme = useTheme();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const spaceId = Number(searchParams.get('space'));
+  const { spaceId } = useSpaceId();
 
   const { mutate: deleteMutate } = useDeleteSpace();
 

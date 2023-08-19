@@ -1,4 +1,3 @@
-import { useSearchParams } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 import type { EditShopLayout } from 'api/lib/shop';
 import type {
@@ -25,6 +24,7 @@ import {
 } from 'pages/LayoutSettingPage/components/SeatArrangementTab/SeatArrangementTab.styled';
 import { Chair } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Chair';
 import { Table } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Table';
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useLayout } from 'pages/LayoutSettingPage/stores/layoutStore';
 import {
@@ -88,8 +88,8 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
   const theme = useTheme();
   const { mutate: editLayoutMutate } = useEditLayout();
   const { mutate: createSpaceMutate } = useCreateSpace();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const spaceId = Number(searchParams.get('space'));
+  const { spaceId } = useSpaceId();
+
   const layout = useLayout();
   const { isChanged } = useChange();
 

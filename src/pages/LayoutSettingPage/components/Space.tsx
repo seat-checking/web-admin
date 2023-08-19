@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import styled, { css } from 'styled-components/macro';
 import type { ChangeEvent } from 'react';
 
-import { useDeleteSpace } from 'common/hooks/mutations/useDeleteSpace';
 import { XButton } from 'components/XButton';
 import { DeleteSpaceModal } from 'pages/LayoutSettingPage/components/DeleteSpaceModal';
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { flexSet } from 'styles/mixin';
 
 interface SpaceProps {
@@ -18,11 +17,11 @@ interface SpaceProps {
  */
 export const Space: React.FC<SpaceProps> = ({ id, name }) => {
   const [spaceName, setSpaceName] = useState(name);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { spaceId, setSpaceId } = useSpaceId();
   const [isDeleteModalOn, setIsDeleteModalOn] = useState(false);
 
   const handleChangeSpaceParmas = () => {
-    setSearchParams({ ...searchParams, space: String(id) });
+    setSpaceId(id);
   };
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
@@ -38,10 +37,7 @@ export const Space: React.FC<SpaceProps> = ({ id, name }) => {
   };
 
   return (
-    <SpaceBox
-      onClick={handleChangeSpaceParmas}
-      isSelected={searchParams.get('space') === String(id)}
-    >
+    <SpaceBox onClick={handleChangeSpaceParmas} isSelected={spaceId === id}>
       <Input type='text' onChange={handleChangeName} value={spaceName} />
       <XButton
         onClick={handleOpenDeleteModal}

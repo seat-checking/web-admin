@@ -31,6 +31,7 @@ import { ShopFormTab } from 'pages/LayoutSettingPage/components/ShopFormTab';
 import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
 import { useShopHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
 
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import {
   useLayout,
   useLayoutActions,
@@ -88,10 +89,9 @@ const itemsDom = (layout: CustomItemLayout[], activeTab: number) => {
  * 좌석 설정 페이지
  */
 export const LayoutSettingPage: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const spaceParams = Number(searchParams.get('space'));
-  const { data: spaceLayout } = useGetSpaceLayout(spaceParams);
-  console.log('spaceLayout :>> ', spaceLayout);
+  const { spaceId } = useSpaceId();
+
+  const { data: spaceLayout } = useGetSpaceLayout(spaceId);
 
   const { activeTab, changeTab } = useTab();
   const { rowCnt, minRowCnt, changeRowCnt, changeMinRowCnt, findMinRowCnt } =
