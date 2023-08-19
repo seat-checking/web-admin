@@ -16,14 +16,15 @@ import {
   InfoWrap,
   SpaceWrap,
 } from 'pages/LayoutSettingPage/components/SpaceRow.styled';
-import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
+
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 
 /**
  * space 목록 컴포넌트 (검은색 영역)
  */
 export const SpaceRow: React.FC = () => {
   const [isAddModalOn, setIsAddModalOn] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { setSpaceId } = useSpaceId();
 
   const { data: spacesList, isLoading } = useGetSpaces();
   const firstLoadedRef = useRef(false);
@@ -34,7 +35,7 @@ export const SpaceRow: React.FC = () => {
 
   useEffect(() => {
     if (spacesList && spacesList.length > 0 && !firstLoadedRef.current) {
-      setSearchParams({ space: String(spacesList[0].storeSpaceId) });
+      setSpaceId(spacesList[0].storeSpaceId);
       firstLoadedRef.current = true;
     }
   }, [spacesList]);

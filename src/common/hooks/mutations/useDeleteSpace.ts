@@ -1,10 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { ShopApi } from 'api/lib/shop';
 import { queryKeys } from 'common/utils/constants';
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 
 export const useDeleteSpace = () => {
   const queryClient = useQueryClient();
+  const { setFirstSpaceId } = useSpaceId();
 
   return useMutation({
     mutationFn: (spaceId: number) => {
@@ -17,10 +20,10 @@ export const useDeleteSpace = () => {
           const filtered = data?.filter(
             (item) => item.storeSpaceId !== spaceId,
           );
-          console.log('filtered :>> ', filtered);
           return filtered;
         },
       );
+      setFirstSpaceId();
     },
   });
 };

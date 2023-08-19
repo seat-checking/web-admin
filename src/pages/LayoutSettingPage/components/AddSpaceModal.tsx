@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components/macro';
 import type { ReservationUnit } from 'pages/LayoutSettingPage/utils/types';
-import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 import { Button } from 'components/Button';
 import InputCheckBox from 'components/InputCheckBox';
 import { Modal } from 'components/Modal';
@@ -66,7 +65,7 @@ export const AddSpaceModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
     clearLayout();
     onClose();
   };
-
+  /* eslint-disable-next-line */
   return (
     <Modal isOpen={isOpen} onClose={onClose} closeOnOusideClick={false}>
       <Modal.Header>스페이스 생성</Modal.Header>
