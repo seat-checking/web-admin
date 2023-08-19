@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ShopLayout } from 'api/lib/shop';
 import type {
-  CustomItemLayout,
   ItemType,
   ReservationUnit,
   ShopFormState,
@@ -14,15 +13,12 @@ import { useGetSpaceLayout } from 'common/hooks/queries/useGetSpaceLayout';
 import { useTab } from 'common/hooks/useTab';
 import { Tabs } from 'components/Tabs.tsx';
 import {
-  ChairBorder,
-  Chair,
   Wrap,
-  ShopGridBackground,
   RightWrap,
-  GridTable,
   StyledSideBar,
   ResizableWrap,
 } from 'pages/LayoutSettingPage/LayoutSettingPage.styled';
+import { GridBackground } from 'pages/LayoutSettingPage/components/GridBackground';
 import { SeatArrangementTab } from 'pages/LayoutSettingPage/components/SeatArrangementTab';
 import 'react-resizable/css/styles.css';
 import 'react-grid-layout/css/styles.css';
@@ -37,7 +33,6 @@ import {
   useLayoutActions,
 } from 'pages/LayoutSettingPage/stores/layoutStore';
 import { useSpaceInfoActions } from 'pages/LayoutSettingPage/stores/spaceInfoStore';
-import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
 import {
   COLUMN_CNT,
   DEFAULT_ROW_CNT,
@@ -73,19 +68,6 @@ const initialLayouts = (shop: ShopLayout) => {
   return [...tables, ...chairs];
 };
 
-const itemsDom = (layout: CustomItemLayout[], activeTab: number) => {
-  return layout.map((item) => {
-    if (item.sort === 'chair') {
-      return (
-        <ChairBorder key={item.i} className='chair'>
-          <Chair isClickable={activeTab === 1} />
-        </ChairBorder>
-      );
-    }
-    return <GridTable key={item.i} isClickable={activeTab === 1} />;
-  });
-};
-
 const parseReservationUnitString = (unit: string) => {
   const reservationUnit: ReservationUnit = { seat: true, space: true };
   if (unit === '좌석') {
@@ -108,7 +90,6 @@ export const LayoutSettingPage: React.FC = () => {
   const { activeTab, changeTab } = useTab();
   const { rowCnt, minRowCnt, changeRowCnt, changeMinRowCnt, findMinRowCnt } =
     useShopHeight(DEFAULT_ROW_CNT);
-  const { size } = useContext(DragContext);
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
 
   const [shopFormState, setShopFormState] =
@@ -116,10 +97,8 @@ export const LayoutSettingPage: React.FC = () => {
   const myLayout = useLayout();
   const {
     saveInitialLayout: saveLayout,
-    saveLayoutChange,
     disableMove,
     enableMove,
-    addItem,
   } = useLayoutActions();
 
   const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
@@ -128,41 +107,13 @@ export const LayoutSettingPage: React.FC = () => {
     setShopFormState('NONE');
   };
 
-  const handleDropDragOver = () => {
-    return { ...size.current };
-  };
-
-  const handleDropItem = (
-    layout: Layout[],
-    item: CustomItemLayout,
-    e: DragEvent,
-  ) => {
-    const sort = e.dataTransfer?.getData('sort');
-    const { w, h } = size.current;
-    item.w = w;
-    item.h = h;
-    if (sort === 'chair') {
-      item.isResizable = false;
-      item.sort = 'chair';
-      item.i = String(Date.now());
-    } else {
-      item.isResizable = true;
-      item.sort = 'table';
-      item.i = String(Date.now());
-    }
-    addItem(item);
-  };
-
-  const handleLayoutChange = (layout: Layout[]) => {
-    if (layout.at(-1)?.i === '__dropping-elem__') {
-      return;
-    }
-    saveLayoutChange(layout);
-  };
-
   useEffect(() => {
     changeMinRowCnt(findMinRowCnt(myLayout));
   }, [myLayout, changeMinRowCnt, findMinRowCnt]);
+
+  useEffect(() => {
+    changeTab(0);
+  }, [spaceId, changeTab]);
 
   useEffect(() => {
     if (activeTab === 0) {
@@ -171,11 +122,10 @@ export const LayoutSettingPage: React.FC = () => {
     if (activeTab === 1) {
       enableMove();
     }
-  }, [activeTab]);
+  }, [activeTab, disableMove, enableMove]);
 
   useEffect(() => {
     if (spaceLayout) {
-      console.log('spaceLayout :>> ', spaceLayout);
       saveLayout(initialLayouts(spaceLayout));
       setSpaceName(spaceLayout.storeSpaceName);
       setReservationUnit(
@@ -231,50 +181,11 @@ export const LayoutSettingPage: React.FC = () => {
             axis={undefined}
             onResize={handleResize}
           >
-            <ShopGridBackground
-              layout={myLayout}
-              rowHeight={TABLE_SIZE_PX}
-              // width/cols = rowHeight가 나와야 정사각형 나옴
-              cols={COLUMN_CNT}
-              width={TABLE_SIZE_PX * COLUMN_CNT}
-              $height={rowCnt * TABLE_SIZE_PX}
-              margin={[0, 0]}
-              // 이게 없어야 배경색 보임, 드래그앤드롭 자유배치 가능
-              autoSize={false}
-              compactType={null}
-              maxRows={rowCnt}
-              // 이게 있어야 아이템이 이동시킬 때 다른 아이템이 움직이지 않음
-              preventCollision
-              isDroppable
-              isDraggable={false}
-              isResizable={false}
-              onDrop={handleDropItem}
-              onDropDragOver={handleDropDragOver}
-              onLayoutChange={handleLayoutChange}
-            >
-              {itemsDom(myLayout, activeTab)}
-            </ShopGridBackground>
+            <GridBackground rowCnt={rowCnt} activeTab={activeTab} />
           </ResizableWrap>
         ) : (
           <ResizableWrap as='div' $width={TABLE_SIZE_PX * COLUMN_CNT}>
-            <ShopGridBackground
-              layout={myLayout}
-              rowHeight={TABLE_SIZE_PX}
-              cols={COLUMN_CNT}
-              width={TABLE_SIZE_PX * COLUMN_CNT}
-              $height={rowCnt * TABLE_SIZE_PX}
-              margin={[0, 0]}
-              autoSize={false}
-              compactType={null}
-              maxRows={rowCnt}
-              preventCollision
-              isDroppable
-              onDrop={handleDropItem}
-              onDropDragOver={handleDropDragOver}
-              onLayoutChange={handleLayoutChange}
-            >
-              {itemsDom(myLayout, activeTab)}
-            </ShopGridBackground>
+            <GridBackground rowCnt={rowCnt} activeTab={activeTab} />
           </ResizableWrap>
         )}
       </RightWrap>

@@ -3,11 +3,6 @@ import { ResizableBox } from 'react-resizable';
 import styled from 'styled-components/macro';
 import chevronDown from 'assets/icons/chevron-down.svg';
 import { SideBar } from 'components/SideBar';
-import {
-  CHAIR_BORDER_PX,
-  CHAIR_SIZE_PX,
-} from 'pages/LayoutSettingPage/utils/constants';
-import { flexSet } from 'styles/mixin';
 
 export const Wrap = styled.div`
   flex: 1; // GNB 제외한 영역 꽉 채우기
@@ -72,45 +67,6 @@ export const ResizableWrap = styled(ResizableBox)<{
   border-radius: 0 0 12px 12px;
 `;
 
-export const ShopGridBackground = styled(GridLayout)<{
-  width: number;
-  $height?: number;
-}>`
-  width: ${({ width }) => {
-    return width + 'px';
-  }};
-
-  height: ${({ $height }) => $height + 'px'};
-`;
-
 export const GridWrap = styled.div`
   background-color: skyblue;
-`;
-
-export const GridTable = styled.div<{ isClickable: boolean }>`
-  background-color: ${(props): string => props.theme.palette.grey[100]};
-
-  border-color: ${({ theme }) => theme.palette.black.main};
-  border-width: 1px;
-  border-style: solid;
-
-  cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
-`;
-
-// 의자 바깥에 투명한 테두리를 넣기 위함
-export const ChairBorder = styled.div`
-  ${flexSet()}
-`;
-
-// 검정 테두리를 준 의자 영역
-export const Chair = styled.div<{ isClickable: boolean }>`
-  background-color: ${(props): string => props.theme.palette.grey[100]};
-
-  width: ${CHAIR_SIZE_PX - CHAIR_BORDER_PX}px;
-  height: ${CHAIR_SIZE_PX - CHAIR_BORDER_PX}px;
-
-  border: ${CHAIR_BORDER_PX}px solid ${({ theme }) => theme.palette.black.main};
-  border-radius: 50%;
-
-  cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
 `;
