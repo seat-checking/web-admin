@@ -4,29 +4,35 @@ import { Modal } from 'components/Modal';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
 
+interface ExitConfirmModalProps {
+  onComplete?: () => void;
+  onClose?: () => void;
+}
 /**
  * 저장하지 않았을 때 뜨는 확인 모달
  */
-export const ExitConfirmModal: React.FC = () => {
+export const ExitConfirmModal: React.FC<ExitConfirmModalProps> = ({
+  onComplete,
+  onClose,
+}) => {
   const theme = useTheme();
   const { setChange } = useChange();
-  const { setIsConfirmOn, setIsAddOn } = useModal();
 
   const handleClose = () => {
-    setIsConfirmOn(false);
+    onClose?.();
   };
 
   const handleCancel = () => {
     setChange(false);
+    onComplete?.();
     handleClose();
-    setIsAddOn(true);
   };
 
   const handleSave = () => {
     setChange(false);
+    onComplete?.();
     // TODO 저장 처리
     handleClose();
-    setIsAddOn(true);
   };
 
   return (

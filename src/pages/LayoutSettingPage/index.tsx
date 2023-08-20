@@ -33,7 +33,6 @@ import {
   useLayout,
   useLayoutActions,
 } from 'pages/LayoutSettingPage/stores/layoutStore';
-import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
 import { useSpaceInfoActions } from 'pages/LayoutSettingPage/stores/spaceInfoStore';
 import {
   COLUMN_CNT,
@@ -86,7 +85,7 @@ const parseReservationUnitString = (unit: string) => {
  */
 export const LayoutSettingPage: React.FC = () => {
   const { spaceId } = useSpaceId();
-  const { isConfirmOn } = useModal();
+  const [isConfirmOn, setIsConfirmOn] = useState(false);
   const { setChange } = useChange();
 
   const { data: spaceLayout } = useGetSpaceLayout(spaceId);
@@ -197,7 +196,7 @@ export const LayoutSettingPage: React.FC = () => {
           )}
         </RightWrap>
       </Wrap>
-      {isConfirmOn && <ExitConfirmModal />}
+      {/* {isConfirmOn && <ExitConfirmModal />} */}
     </>
   );
 };
