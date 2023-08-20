@@ -7,6 +7,7 @@ import { ReactComponent as PlusCircle } from 'assets/icons/plus-circle.svg';
 
 import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
 import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
+import { ExitConfirmModal } from 'pages/LayoutSettingPage/components/ExitConfirmModal';
 import { Space } from 'pages/LayoutSettingPage/components/Space';
 import { SpaceInfoModal } from 'pages/LayoutSettingPage/components/SpaceInfoModal';
 import {
@@ -25,9 +26,12 @@ import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
  * space 목록 컴포넌트 (검은색 영역)
  */
 export const SpaceRow: React.FC = () => {
-  const { setSpaceId } = useSpaceId();
+  const { setSpaceId, spaceId } = useSpaceId();
   const { isChanged } = useChange();
-  const { setIsConfirmOn, setIsAddOn, isAddOn } = useModal();
+  const { setIsAddOn, isAddOn } = useModal();
+  const [isAddConfirmModalOn, setIsAddConfirmModalOn] = useState(false);
+  const [isChangeConfirmModalOn, setIsChangeConfirmModalOn] = useState(false);
+  const [clickedSpaceId, setClickedSpaceId] = useState(-1);
 
   const { data: spacesList, isLoading } = useGetSpaces();
   const firstLoadedRef = useRef(false);
@@ -38,10 +42,26 @@ export const SpaceRow: React.FC = () => {
 
   const handleAddSpace = () => {
     if (isChanged) {
-      setIsConfirmOn(true);
+      setIsAddConfirmModalOn(true);
       return;
     }
     setIsAddOn(true);
+  };
+
+  const handleChangeSpaceId = (id: number) => {
+    setSpaceId(id);
+  };
+
+  const handleClickSpace = (id: number) => {
+    setClickedSpaceId(id);
+    if (id === spaceId) {
+      return;
+    }
+    if (isChanged) {
+      setIsChangeConfirmModalOn(true);
+      return;
+    }
+    handleChangeSpaceId(id);
   };
 
   useEffect(() => {
@@ -69,14 +89,26 @@ export const SpaceRow: React.FC = () => {
                 key={space.storeSpaceId}
                 id={space.storeSpaceId}
                 name={space.name}
-                // onClick={setSelectedSpace}
+                onClick={() => handleClickSpace(space.storeSpaceId)}
                 // isSelected={space.storeSpaceId === selected}
                 // deleteSpace={deleteSpace}
               />
             ))}
+        {isChangeConfirmModalOn && (
+          <ExitConfirmModal
+            onClose={() => setIsChangeConfirmModalOn(false)}
+            onComplete={() => handleChangeSpaceId(clickedSpaceId)}
+          />
+        )}
         <AddRow onClick={handleAddSpace}>
           <PlusCircle stroke='white' />
           <AddText>스페이스 추가</AddText>
+          {isAddConfirmModalOn && (
+            <ExitConfirmModal
+              onComplete={() => setIsAddOn(true)}
+              onClose={() => setIsAddConfirmModalOn(false)}
+            />
+          )}
         </AddRow>
         {isAddOn && (
           <SpaceInfoModal onClose={handleAddModalClose} type='CREATE' />
