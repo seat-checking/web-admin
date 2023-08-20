@@ -1,8 +1,8 @@
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components/macro';
 import type { ComponentPropsWithoutRef } from 'react';
 
 interface IconButtonProps extends ComponentPropsWithoutRef<'button'> {
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
 }
 
