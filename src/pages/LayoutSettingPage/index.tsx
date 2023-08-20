@@ -6,7 +6,6 @@ import type {
   ShopFormState,
 } from 'pages/LayoutSettingPage/utils/types';
 import type { SyntheticEvent } from 'react';
-import type { Layout } from 'react-grid-layout';
 import type { ResizeCallbackData } from 'react-resizable';
 
 import { useGetSpaceLayout } from 'common/hooks/queries/useGetSpaceLayout';
@@ -18,6 +17,7 @@ import {
   StyledSideBar,
   ResizableWrap,
 } from 'pages/LayoutSettingPage/LayoutSettingPage.styled';
+import { ExitConfirmModal } from 'pages/LayoutSettingPage/components/ExitConfirmModal';
 import { GridBackground } from 'pages/LayoutSettingPage/components/GridBackground';
 import { SeatArrangementTab } from 'pages/LayoutSettingPage/components/SeatArrangementTab';
 import 'react-resizable/css/styles.css';
@@ -33,6 +33,7 @@ import {
   useLayout,
   useLayoutActions,
 } from 'pages/LayoutSettingPage/stores/layoutStore';
+import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
 import { useSpaceInfoActions } from 'pages/LayoutSettingPage/stores/spaceInfoStore';
 import {
   COLUMN_CNT,
@@ -85,6 +86,7 @@ const parseReservationUnitString = (unit: string) => {
  */
 export const LayoutSettingPage: React.FC = () => {
   const { spaceId } = useSpaceId();
+  const { isConfirmOn } = useModal();
   const { setChange } = useChange();
 
   const { data: spaceLayout } = useGetSpaceLayout(spaceId);
@@ -107,6 +109,7 @@ export const LayoutSettingPage: React.FC = () => {
     const { height } = data.size;
     changeRowCnt(height / TABLE_SIZE_PX);
     setChange(true);
+
     setShopFormState('NONE');
   };
 
@@ -139,59 +142,62 @@ export const LayoutSettingPage: React.FC = () => {
   }, [spaceLayout, saveLayout]); // FIXME changeRowCnt 추가
 
   return (
-    <Wrap>
-      <StyledSideBar>
-        <Tabs
-          activeTab={activeTab}
-          tabList={[
-            {
-              label: '가게 형태',
-              content: (
-                <ShopFormTab
-                  changeRowCnt={changeRowCnt}
-                  rowCnt={rowCnt}
-                  minRowCnt={minRowCnt}
-                  changeTab={changeTab}
-                  shopFormState={shopFormState}
-                  setShopFormState={setShopFormState}
-                />
-              ),
-            },
-            {
-              label: '좌석 배치',
-              content: (
-                <SeatArrangementTab changeTab={changeTab} rowCnt={rowCnt} />
-              ),
-            },
-          ]}
-        />
-      </StyledSideBar>
-      <RightWrap>
-        <SpaceRow />
-        {activeTab === 0 ? (
-          <ResizableWrap
-            width={TABLE_SIZE_PX * COLUMN_CNT}
-            height={rowCnt * TABLE_SIZE_PX}
-            resizeHandles={['s']}
-            draggableOpts={{
-              grid: [TABLE_SIZE_PX, TABLE_SIZE_PX],
-            }}
-            minConstraints={[
-              TABLE_SIZE_PX,
-              minRowCnt * TABLE_SIZE_PX || TABLE_SIZE_PX * 2,
+    <>
+      <Wrap>
+        <StyledSideBar>
+          <Tabs
+            activeTab={activeTab}
+            tabList={[
+              {
+                label: '가게 형태',
+                content: (
+                  <ShopFormTab
+                    changeRowCnt={changeRowCnt}
+                    rowCnt={rowCnt}
+                    minRowCnt={minRowCnt}
+                    changeTab={changeTab}
+                    shopFormState={shopFormState}
+                    setShopFormState={setShopFormState}
+                  />
+                ),
+              },
+              {
+                label: '좌석 배치',
+                content: (
+                  <SeatArrangementTab changeTab={changeTab} rowCnt={rowCnt} />
+                ),
+              },
             ]}
-            maxConstraints={[1000, TABLE_SIZE_PX * COLUMN_CNT]}
-            axis={undefined}
-            onResize={handleResize}
-          >
-            <GridBackground rowCnt={rowCnt} activeTab={activeTab} />
-          </ResizableWrap>
-        ) : (
-          <ResizableWrap as='div' $width={TABLE_SIZE_PX * COLUMN_CNT}>
-            <GridBackground rowCnt={rowCnt} activeTab={activeTab} />
-          </ResizableWrap>
-        )}
-      </RightWrap>
-    </Wrap>
+          />
+        </StyledSideBar>
+        <RightWrap>
+          <SpaceRow />
+          {activeTab === 0 ? (
+            <ResizableWrap
+              width={TABLE_SIZE_PX * COLUMN_CNT}
+              height={rowCnt * TABLE_SIZE_PX}
+              resizeHandles={['s']}
+              draggableOpts={{
+                grid: [TABLE_SIZE_PX, TABLE_SIZE_PX],
+              }}
+              minConstraints={[
+                TABLE_SIZE_PX,
+                minRowCnt * TABLE_SIZE_PX || TABLE_SIZE_PX * 2,
+              ]}
+              maxConstraints={[1000, TABLE_SIZE_PX * COLUMN_CNT]}
+              axis={undefined}
+              onResize={handleResize}
+            >
+              <GridBackground rowCnt={rowCnt} activeTab={activeTab} />
+            </ResizableWrap>
+          ) : (
+            <ResizableWrap as='div' $width={TABLE_SIZE_PX * COLUMN_CNT}>
+              <GridBackground rowCnt={rowCnt} activeTab={activeTab} />
+            </ResizableWrap>
+          )}
+        </RightWrap>
+      </Wrap>
+      {isConfirmOn && <ExitConfirmModal />}
+    </>
   );
 };

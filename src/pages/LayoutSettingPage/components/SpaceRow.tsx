@@ -18,19 +18,30 @@ import {
 } from 'pages/LayoutSettingPage/components/SpaceRow.styled';
 
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
+import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
+import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
 
 /**
  * space 목록 컴포넌트 (검은색 영역)
  */
 export const SpaceRow: React.FC = () => {
-  const [isAddModalOn, setIsAddModalOn] = useState(false);
   const { setSpaceId } = useSpaceId();
+  const { isChanged } = useChange();
+  const { setIsConfirmOn, setIsAddOn, isAddOn } = useModal();
 
   const { data: spacesList, isLoading } = useGetSpaces();
   const firstLoadedRef = useRef(false);
 
   const handleAddModalClose = () => {
-    setIsAddModalOn(false);
+    setIsAddOn(false);
+  };
+
+  const handleAddSpace = () => {
+    if (isChanged) {
+      setIsConfirmOn(true);
+      return;
+    }
+    setIsAddOn(true);
   };
 
   useEffect(() => {
@@ -63,11 +74,11 @@ export const SpaceRow: React.FC = () => {
                 // deleteSpace={deleteSpace}
               />
             ))}
-        <AddRow onClick={() => setIsAddModalOn(true)}>
+        <AddRow onClick={handleAddSpace}>
           <PlusCircle stroke='white' />
           <AddText>스페이스 추가</AddText>
         </AddRow>
-        {isAddModalOn && (
+        {isAddOn && (
           <SpaceInfoModal onClose={handleAddModalClose} type='CREATE' />
         )}
       </SpaceWrap>

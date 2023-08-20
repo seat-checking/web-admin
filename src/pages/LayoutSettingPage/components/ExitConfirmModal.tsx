@@ -1,21 +1,32 @@
-import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
+import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
+import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
 
 /**
  * 저장하지 않았을 때 뜨는 확인 모달
  */
 export const ExitConfirmModal: React.FC = () => {
   const theme = useTheme();
-  const [isOpen, setIsOpen] = useState(true);
+  const { setChange } = useChange();
+  const { setIsConfirmOn, setIsAddOn } = useModal();
 
   const handleClose = () => {
-    setIsOpen(false);
+    setIsConfirmOn(false);
   };
 
   const handleCancel = () => {
-    setIsOpen(false);
+    setChange(false);
+    handleClose();
+    setIsAddOn(true);
+  };
+
+  const handleSave = () => {
+    setChange(false);
+    // TODO 저장 처리
+    handleClose();
+    setIsAddOn(true);
   };
 
   return (
@@ -46,6 +57,7 @@ export const ExitConfirmModal: React.FC = () => {
           borderRadius='0.4rem'
           fontSize='1.4rem'
           height='4.5rem'
+          onClick={handleSave}
         >
           저장하기
         </Button>

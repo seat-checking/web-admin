@@ -51,7 +51,7 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
   };
 
   const handleDropItem = (
-    layout: Layout[],
+    _: Layout[],
     item: CustomItemLayout,
     e: DragEvent,
   ) => {
@@ -59,14 +59,13 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
     const { w, h } = size.current;
     item.w = w;
     item.h = h;
+    item.i = String(Date.now());
     if (sort === 'chair') {
       item.isResizable = false;
       item.sort = 'chair';
-      item.i = String(Date.now());
     } else {
       item.isResizable = true;
       item.sort = 'table';
-      item.i = String(Date.now());
     }
     addItem(item);
   };
