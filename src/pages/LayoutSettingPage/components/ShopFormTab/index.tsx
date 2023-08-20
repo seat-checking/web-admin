@@ -19,6 +19,10 @@ import {
 } from 'pages/LayoutSettingPage/components/ShopFormTab/ShopFormTab.styled';
 import { CheckRadioButton } from 'pages/LayoutSettingPage/components/ShopFormTab/components/CheckRadioButton';
 import {
+  useChange,
+  useChangeStore,
+} from 'pages/LayoutSettingPage/stores/changeStore';
+import {
   COLUMN_CNT,
   DEFAULT_ROW_CNT,
   TABLE_SIZE_PX,
@@ -54,6 +58,7 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
   setShopFormState: setCheckState,
 }) => {
   const [heightInput, setHeightInput] = useState(rowCnt * TABLE_SIZE_PX);
+  const { setChange } = useChange();
 
   const handleResizeUpDown = (command: ChangeRowCommand) => {
     if (command === 'DOWN' && rowCnt <= 2) {
@@ -61,9 +66,12 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
     }
     setCheckState('NONE');
     changeRowCnt(command);
+    setChange(true);
   };
 
   const handleResizeByChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChange(true);
+
     const size = e.currentTarget.value;
     if (size === 'SQUARE') {
       changeRowCnt(COLUMN_CNT);

@@ -11,6 +11,7 @@ import InputCheckBox from 'components/InputCheckBox';
 import { Modal } from 'components/Modal';
 import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
+import { useChangeStore } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 import {
   useReservationUnit,
@@ -39,6 +40,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
   const { spaceId } = useSpaceId();
   const reservationUnit = useReservationUnit();
   const queryClient = useQueryClient();
+  const { setChange } = useChangeStore();
 
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
   const { clear: clearLayout } = useLayoutActions();
@@ -84,6 +86,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
           space.storeSpaceId === spaceId ? { ...space, name: input } : space,
         ),
     );
+    setChange(true);
 
     onClose();
   };
@@ -93,6 +96,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
     setReservationUnit(reservationUnits);
     addSpace(input);
     clearLayout();
+    setChange(true);
     onClose();
   };
   /* eslint-disable-next-line */

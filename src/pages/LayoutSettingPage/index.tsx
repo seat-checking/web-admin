@@ -28,6 +28,7 @@ import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
 import { useShopHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
 
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
+import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import {
   useLayout,
   useLayoutActions,
@@ -84,6 +85,7 @@ const parseReservationUnitString = (unit: string) => {
  */
 export const LayoutSettingPage: React.FC = () => {
   const { spaceId } = useSpaceId();
+  const { setChange } = useChange();
 
   const { data: spaceLayout } = useGetSpaceLayout(spaceId);
 
@@ -104,6 +106,7 @@ export const LayoutSettingPage: React.FC = () => {
   const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
     const { height } = data.size;
     changeRowCnt(height / TABLE_SIZE_PX);
+    setChange(true);
     setShopFormState('NONE');
   };
 

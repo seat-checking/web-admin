@@ -24,8 +24,10 @@ const useLayoutStore = create<LayoutStoreState>()(
     layout: [],
     actions: {
       clear: () => set(() => ({ layout: [] })),
-      addItem: (item: CustomItemLayout) =>
-        set((state) => ({ layout: [...state.layout, item] }), false, 'addItem'),
+      addItem: (item: CustomItemLayout) => {
+        useChangeStore.getState().setChange(true);
+        set((state) => ({ layout: [...state.layout, item] }), false, 'addItem');
+      },
       saveInitialLayout: (layout: CustomItemLayout[]) =>
         set(() => ({ layout }), false, 'saveInitialLayout'),
       saveLayoutChange: (changedLayout: Layout[]) =>
@@ -36,15 +38,29 @@ const useLayoutStore = create<LayoutStoreState>()(
               state.layout,
               changedLayout,
             );
-            useChangeStore.getState().setChangeTrue();
-            return {
-              layout: state.layout.map((prevItem, idx) => ({
+            if (!useChangeStore.getState().isChanged) {
+              const isChanged = state.layout.find(
+                (prevItem, idx) =>
+                  changedLayout[idx].w !== prevItem.w ||
+                  changedLayout[idx].h !== prevItem.h ||
+                  changedLayout[idx].x !== prevItem.x ||
+                  changedLayout[idx].y !== prevItem.y,
+              );
+              if (isChanged) {
+                useChangeStore.getState().setChange(true);
+              }
+            }
+            const newLayout = state.layout.map((prevItem, idx) => {
+              return {
                 ...prevItem,
                 w: changedLayout[idx].w,
                 h: changedLayout[idx].h,
                 x: changedLayout[idx].x,
                 y: changedLayout[idx].y,
-              })),
+              };
+            });
+            return {
+              layout: newLayout,
             };
           },
           false,

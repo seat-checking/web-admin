@@ -25,7 +25,10 @@ import {
 import { Chair } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Chair';
 import { Table } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Table';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
-import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
+import {
+  useChange,
+  useChangeStore,
+} from 'pages/LayoutSettingPage/stores/changeStore';
 import { useLayout } from 'pages/LayoutSettingPage/stores/layoutStore';
 import {
   useReservationUnit,
@@ -91,7 +94,7 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
   const { spaceId } = useSpaceId();
 
   const layout = useLayout();
-  const { isChanged } = useChange();
+  const { isChanged, setChange } = useChange();
 
   const spaceName = useSpaceName();
   const reservationUnit = useReservationUnit();
@@ -107,6 +110,7 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
       spaceId,
       layout: mappingData(layout, rowCnt, spaceName, reservationUnit),
     });
+    setChange(false);
   };
 
   const handleChangePreviousTab = () => {
