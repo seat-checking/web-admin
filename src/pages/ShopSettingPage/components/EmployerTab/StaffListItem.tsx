@@ -73,12 +73,12 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
 
   return (
     <StaffListItemWrapper>
-      <StaffInfoWrapper>
+      <StaffInfoWrapper onClick={toggleIsOpen}>
         <StaffInfoFlex>
           <StaffName>{name}</StaffName>
           <StaffEmail>{email}</StaffEmail>
         </StaffInfoFlex>
-        <ToggleIcon onClick={toggleIsOpen} isOpen={isOpen} />
+        <ToggleIcon isOpen={isOpen} />
       </StaffInfoWrapper>
       {isOpen && (
         <>
