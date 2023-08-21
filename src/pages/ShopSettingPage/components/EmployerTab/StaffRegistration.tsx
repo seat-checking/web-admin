@@ -21,12 +21,14 @@ interface StaffRegistrationProps {
   email: string;
   name: string;
   storeId: string;
+  onEmployeeAdded: () => void;
 }
 
 export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
   email,
   name,
   storeId,
+  onEmployeeAdded,
 }) => {
   const [checkboxes, setCheckboxes] = useState([false, false, false, false]);
 
@@ -53,6 +55,7 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
       const resData = await EmployeeRegistration(registrationData);
 
       console.log('Registration Successful:', resData);
+      onEmployeeAdded();
     } catch (error) {
       console.error(error);
     }
