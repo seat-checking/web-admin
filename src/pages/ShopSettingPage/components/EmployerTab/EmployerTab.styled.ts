@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import CheckCircle from 'assets/icons/CheckCircle.svg';
 import Circle from 'assets/icons/alert-circle.svg';
 import Search from 'assets/icons/search.svg';
 
@@ -106,4 +107,11 @@ export const NoResults = styled.div`
   font-weight: 400;
   padding-left: 0.8rem;
   margin-top: 1.1rem;
+`;
+export const CheckCircleIcon = styled.div`
+  width: 2rem;
+  height: 2rem;
+  background-image: url(${CheckCircle});
+  background-size: cover;
+  margin-top: 0.4rem;
 `;
