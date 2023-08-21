@@ -14,7 +14,7 @@ export const CustomToastContainer = ({
       <ToastContainer
         closeButton={false}
         position='top-right'
-        autoClose={false}
+        autoClose={2000}
         hideProgressBar={hideProggressBar}
         theme='dark'
         transition={Slide}

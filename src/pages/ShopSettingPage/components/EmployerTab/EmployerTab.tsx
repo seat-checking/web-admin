@@ -1,6 +1,7 @@
 import { notification } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import type { EmployeeResponse, SearchListResponse } from 'api/store/store';
 import type { ChangeEvent } from 'react';
 import type React from 'react';
@@ -11,6 +12,7 @@ import {
   modifyPermission,
 } from 'api/store/store';
 import { PATH } from 'common/utils/constants';
+import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Label } from 'components/Label';
 import {
   CheckCircleIcon,
@@ -119,22 +121,7 @@ export const EmployerTab: React.FC = () => {
         permissionByMenu,
       };
       await modifyPermission(params);
-
-      notification.success({
-        message: (
-          <span style={{ color: '#FFF', fontSize: '1.8rem;' }}>
-            변경사항이 성공적으로 저장되었습니다.
-          </span>
-        ),
-        style: {
-          width: '37.8rem',
-          height: '7rem',
-          background: '#303030',
-          color: 'white',
-        },
-        icon: <CheckCircleIcon />,
-        closeIcon: null,
-      });
+      toast.success('변경사항이 성공적으로 저장되었습니다.');
     } catch (error) {
       console.error(error);
     }
@@ -190,6 +177,7 @@ export const EmployerTab: React.FC = () => {
             />
           ) : null,
         )}
+        <CustomToastContainer />
       </StaffListWrapper>
     </>
   );
