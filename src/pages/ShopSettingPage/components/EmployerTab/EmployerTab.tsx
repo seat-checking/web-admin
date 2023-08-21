@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { EmployeeResponse, SearchListResponse } from 'api/store/store';
@@ -9,10 +10,10 @@ import {
   getSeachList,
   modifyPermission,
 } from 'api/store/store';
-
 import { PATH } from 'common/utils/constants';
 import { Label } from 'components/Label';
 import {
+  CheckCircleIcon,
   EmployerTabWrapper,
   HelperCircle,
   HelperText,
@@ -57,25 +58,25 @@ export const EmployerTab: React.FC = () => {
     setEmail(e.target.value);
   };
 
-  useEffect(() => {
-    const fetchEmployeeList = async () => {
-      if (storeId) {
-        try {
-          const response = await getEmployeeList({ storeId });
-          if (response.isSuccess) {
-            const parsedEmployeeList =
-              response.result.storeMemberResponseList.map((employee) => ({
-                ...employee,
-                permissions: JSON.parse(employee.permissionByMenu), // JSON 파싱
-              }));
-            setEmployeeList(parsedEmployeeList);
-          }
-        } catch (error) {
-          console.error(error);
+  const fetchEmployeeList = async () => {
+    if (storeId) {
+      try {
+        const response = await getEmployeeList({ storeId });
+        if (response.isSuccess) {
+          const parsedEmployeeList =
+            response.result.storeMemberResponseList.map((employee) => ({
+              ...employee,
+              permissions: JSON.parse(employee.permissionByMenu), // JSON 파싱
+            }));
+          setEmployeeList(parsedEmployeeList);
         }
+      } catch (error) {
+        console.error(error);
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     fetchEmployeeList();
   }, [storeId]);
 
@@ -119,7 +120,21 @@ export const EmployerTab: React.FC = () => {
       };
       await modifyPermission(params);
 
-      alert('저장이 완료되었습니다.');
+      notification.success({
+        message: (
+          <span style={{ color: '#FFF', fontSize: '1.8rem;' }}>
+            변경사항이 성공적으로 저장되었습니다.
+          </span>
+        ),
+        style: {
+          width: '37.8rem',
+          height: '7rem',
+          background: '#303030',
+          color: 'white',
+        },
+        icon: <CheckCircleIcon />,
+        closeIcon: null,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -151,6 +166,7 @@ export const EmployerTab: React.FC = () => {
             email={searchResult.email}
             name={searchResult.name}
             storeId={storeId}
+            onEmployeeAdded={fetchEmployeeList}
           />
         ) : searched ? (
           <NoResults>등록되지 않은 사용자입니다.</NoResults>
