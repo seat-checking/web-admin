@@ -13,8 +13,6 @@ import {
   ChairComponent,
   TableComponent,
 } from 'pages/LayoutSettingPage/components/Chair';
-import { Popover } from 'pages/LayoutSettingPage/components/Popover';
-import { PopoverGpt } from 'pages/LayoutSettingPage/components/PopoverGpt';
 import {
   useLayout,
   useLayoutActions,

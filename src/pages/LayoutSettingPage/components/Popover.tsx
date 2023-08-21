@@ -1,72 +1,55 @@
-import { useState, useRef, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import type React from 'react';
+import { ChairBody } from 'pages/LayoutSettingPage/components/Popover/ChairBody';
+import { Header } from 'pages/LayoutSettingPage/components/Popover/Header';
+import { TableBody } from 'pages/LayoutSettingPage/components/Popover/TableBody';
+import { TABLE_SIZE_PX } from 'pages/LayoutSettingPage/utils/constants';
 
-interface PopoverProps {
-  content?: React.ReactNode;
-  children?: React.ReactNode;
-  onClose?: () => void;
-}
+type PopoverProps = {
+  content?: string;
+};
 
-export const Popover: React.FC<PopoverProps> = ({
-  content,
-  children,
-  onClose,
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      containerRef.current &&
-      !containerRef.current.contains(event.target as Node)
-    ) {
-      onClose?.();
-    }
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
+export const ChairPopover: React.FC<PopoverProps> = ({ content }) => {
   return (
-    <PopoverContainer ref={containerRef}>
-      <PopoverContent>히히</PopoverContent>
-    </PopoverContainer>
+    <Container>
+      <Balloon>
+        {content}
+        <Header number={152} />
+        {/* <ChairBody defaultNumber={152} /> */}
+        <TableBody />
+      </Balloon>
+      <Tail />
+    </Container>
   );
 };
 
-// Styled components below
+const Container = styled.div`
+  position: absolute;
 
-const PopoverContainer = styled.div`
-  position: relative;
-  /* display: inline-block; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: ${TABLE_SIZE_PX}px;
 `;
 
-const PopoverContent = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  z-index: 1;
+const Balloon = styled.div`
+  position: relative;
+  padding: 0.8rem;
+  background-color: ${({ theme }) => theme.palette.grey[500]};
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+`;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: -10px; // Tail size
-    left: 10px; // Tail position from left
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent transparent #fff transparent;
-  }
+const Tail = styled.div`
+  position: relative;
+  top: -0.1rem;
+  width: 0;
+  height: 0;
+  border-left: 0.6rem solid transparent;
+  border-right: 0.6rem solid transparent;
+  border-top: 0.9rem solid ${({ theme }) => theme.palette.grey[500]};
+
+  z-index: 100;
 `;

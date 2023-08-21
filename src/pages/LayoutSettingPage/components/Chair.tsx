@@ -1,10 +1,10 @@
 import { forwardRef, useState } from 'react';
 import styled from 'styled-components';
 import type { ComponentPropsWithRef, Ref } from 'react';
+import { ChairPopover } from 'pages/LayoutSettingPage/components/Popover';
 import {
   CHAIR_BORDER_PX,
   CHAIR_SIZE_PX,
-  TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
 import { flexSet } from 'styles/mixin';
 
@@ -22,7 +22,7 @@ export const ChairComponent = forwardRef(
     return (
       <ChairBorder {...rest} ref={ref} onClick={handleTogglePopover}>
         <Chair isClickable={isClickable} />
-        {isPopoverOpen && <ChairPopover />}
+        <ChairPopover />
       </ChairBorder>
     );
   },
@@ -48,15 +48,15 @@ export const GridTable = styled.div<{ isClickable: boolean }>`
   cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
 `;
 
-export const ChairPopover = styled.div`
-  width: 100px;
-  height: 100px;
-  background-color: yellow;
+// export const ChairPopover = styled.div`
+//   width: 100px;
+//   height: 100px;
+//   background-color: yellow;
 
-  position: absolute;
-  bottom: ${TABLE_SIZE_PX}px;
-  left: 0;
-`;
+//   position: absolute;
+//   bottom: ${TABLE_SIZE_PX}px;
+//   left: 0;
+// `;
 
 // 의자 바깥에 투명한 테두리를 넣기 위함
 export const ChairBorder = styled.div`
