@@ -5,6 +5,7 @@ import InputCheckBox from 'components/InputCheckBox';
 import {
   CheckBoxLabel,
   FlexWrapper,
+  InputCheckBoxLabel,
   InputCheckBoxWrapper,
 } from 'pages/ShopSettingPage/components/EmployerTab/StaffListItem.styled';
 import {
@@ -30,7 +31,7 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
   storeId,
   onEmployeeAdded,
 }) => {
-  const [checkboxes, setCheckboxes] = useState([false, false, false, false]);
+  const [checkboxes, setCheckboxes] = useState([true, false, false, false]);
 
   const toggleCheckbox = (index: number) => {
     const newCheckboxes = [...checkboxes];
@@ -61,6 +62,8 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
     }
   };
 
+  const isButtonDisabled = checkboxes.every((checkbox) => !checkbox);
+
   return (
     <Registration>
       <RegistrationHeader>
@@ -70,44 +73,58 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
         </StaffInfo>
       </RegistrationHeader>
       <FlexWrapperContainer>
+        <InputCheckBoxLabel>권한 설정</InputCheckBoxLabel>
         <FlexWrapper>
           <InputCheckBoxWrapper>
-            <InputCheckBox
-              id='storeStatus'
-              checked={checkboxes[0]}
-              onChange={() => toggleCheckbox(0)}
-            />
-            <CheckBoxLabel htmlFor='storeStatus'>가게현황</CheckBoxLabel>
+            <CheckBoxLabel>
+              <InputCheckBox
+                checked={checkboxes[0]}
+                onChange={() => toggleCheckbox(0)}
+              />
+              가게현황
+            </CheckBoxLabel>
           </InputCheckBoxWrapper>
           <InputCheckBoxWrapper>
-            <InputCheckBox
-              id='seatSetting'
-              checked={checkboxes[1]}
-              onChange={() => toggleCheckbox(1)}
-            />
-            <CheckBoxLabel htmlFor='seatSetting'>좌석설정</CheckBoxLabel>
+            <CheckBoxLabel>
+              <InputCheckBox
+                checked={checkboxes[1]}
+                onChange={() => toggleCheckbox(1)}
+              />
+              좌석설정
+            </CheckBoxLabel>
           </InputCheckBoxWrapper>
           <InputCheckBoxWrapper>
-            <InputCheckBox
-              id='storeStatistics'
-              checked={checkboxes[2]}
-              onChange={() => toggleCheckbox(2)}
-            />
-            <CheckBoxLabel htmlFor='storeStatistics'>가게통계</CheckBoxLabel>
+            <CheckBoxLabel>
+              <InputCheckBox
+                checked={checkboxes[2]}
+                onChange={() => toggleCheckbox(2)}
+              />
+              가게통계
+            </CheckBoxLabel>
           </InputCheckBoxWrapper>
           <InputCheckBoxWrapper>
-            <InputCheckBox
-              id='storeSetting'
-              checked={checkboxes[3]}
-              onChange={() => toggleCheckbox(3)}
-            />
-            <CheckBoxLabel htmlFor='storeSetting'>가게설정</CheckBoxLabel>
+            <CheckBoxLabel>
+              <InputCheckBox
+                checked={checkboxes[3]}
+                onChange={() => toggleCheckbox(3)}
+              />
+              가게설정
+            </CheckBoxLabel>
           </InputCheckBoxWrapper>
         </FlexWrapper>
       </FlexWrapperContainer>
-      <RegistrationButton onClick={handleStaffRegistration}>
-        직원 등록하기
-      </RegistrationButton>
+      {isButtonDisabled ? (
+        <RegistrationButton
+          style={{ background: '#EFF0F5', color: '#727582' }}
+          disabled
+        >
+          직원 등록하기
+        </RegistrationButton>
+      ) : (
+        <RegistrationButton onClick={handleStaffRegistration}>
+          직원 등록하기
+        </RegistrationButton>
+      )}
     </Registration>
   );
 };
