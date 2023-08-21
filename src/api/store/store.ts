@@ -84,8 +84,9 @@ export const getSeachList = async (
 export const EmployeeRegistration = async (
   params: MemberRegistrationParams,
 ): Promise<SuccessOkWithoutResultResponse> => {
-  const url = getApiUrl(`/stores/admins/member-registration/${params.storeId}`);
-  const response = await axiosClient.post(url, { params });
+  const { storeId, ...restParams } = params;
+  const url = getApiUrl(`/stores/admins/member-registration/${storeId}`);
+  const response = await axiosClient.post(url, restParams);
   return response.data;
 };
 
@@ -112,7 +113,8 @@ export const deleteMember = async (
 export const modifyPermission = async (
   params: ModifyPermissionpParams,
 ): Promise<SuccessOkResponse<any>> => {
-  const url = getApiUrl(`/stores/admins/member-registration/${params.storeId}`);
-  const response = await axiosClient.patch(url, params);
+  const { storeId, ...restParams } = params;
+  const url = getApiUrl(`/stores/admins/member-registration/${storeId}`);
+  const response = await axiosClient.patch(url, restParams);
   return response.data;
 };
