@@ -15,6 +15,7 @@ export const StaffInfoWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
 `;
 
 export const StaffInfoFlex = styled.div``;
@@ -57,6 +58,9 @@ export const CheckBoxLabel = styled.label`
   font-size: 1.4rem;
   font-weight: 600;
   padding-top: 0.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 `;
 
 export const ButtonWrapper = styled.div`

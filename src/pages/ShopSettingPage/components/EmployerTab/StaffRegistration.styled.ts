@@ -33,10 +33,9 @@ export const StaffName = styled.div`
   font-weight: 400;
 `;
 
-export const RegistrationButton = styled.div`
+export const RegistrationButton = styled.button`
   width: 50.8rem;
   height: 4.4rem;
-  cursor: pointer;
   border-radius: 6px;
   background: ${({ theme }) => theme.palette.primary.orange};
   margin: 0 auto;
