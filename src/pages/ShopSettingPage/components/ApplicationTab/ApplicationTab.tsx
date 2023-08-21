@@ -30,7 +30,15 @@ interface InputFieldProps {
 
 export const ApplicationTab = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [inputFields, setInputFields] = useState<InputFieldProps[]>([]);
+  const [inputFields, setInputFields] = useState<InputFieldProps[]>([
+    {
+      id: Date.now(),
+      option: 'option1',
+      title: '',
+      type: '단답형',
+      contentGuide: '',
+    },
+  ]);
   const [title, setTitle] = useState<string>('');
   const [type, setType] = useState<string>('단답형');
   const [contentGuide, setContentGuide] = useState<string>('');
