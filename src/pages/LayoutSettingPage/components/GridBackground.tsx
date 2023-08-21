@@ -1,10 +1,16 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, forwardRef } from 'react';
 import GridLayout from 'react-grid-layout';
 import styled from 'styled-components/macro';
 import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
+import type {
+  ComponentPropsWithoutRef,
+  ComponentPropsWithRef,
+  Ref,
+} from 'react';
 import type { Layout } from 'react-grid-layout';
 
 import { Popover } from 'pages/LayoutSettingPage/components/Popover';
+import { PopoverGpt } from 'pages/LayoutSettingPage/components/PopoverGpt';
 import {
   useLayout,
   useLayoutActions,
@@ -94,22 +100,30 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
     >
       {myLayout?.map((item) => {
         if (item.sort === 'chair') {
-          return (
-            <div key={item.i}>
-              <ChairBorder onClick={handleTogglePopover}>
-                <Chair isClickable={activeTab === 1} />
-              </ChairBorder>
-              {isPopoverOpen && (
-                <Popover onClose={() => setIsPopoverOpen(false)} />
-              )}
-            </div>
-          );
+          return <ChairComponent key={item.i} isClickable={activeTab === 1} />;
         }
-        return <GridTable key={item.i} isClickable={activeTab === 1} />;
+        return <TableComponent key={item.i} isClickable={activeTab === 1} />;
       })}
     </ShopGridBackground>
   );
 };
+
+interface ChairComponentProps extends ComponentPropsWithRef<'div'> {
+  isClickable: boolean;
+}
+// Chair Component
+export const ChairComponent = forwardRef(
+  ({ isClickable, ...rest }: ChairComponentProps, ref: Ref<HTMLDivElement>) => (
+    <ChairBorder {...rest} ref={ref}>
+      <Chair isClickable={isClickable} />
+    </ChairBorder>
+  ),
+);
+
+// Table Component
+export const TableComponent: React.FC<{ isClickable: boolean }> = ({
+  isClickable,
+}) => <GridTable isClickable={isClickable} />;
 
 const ShopGridBackground = styled(GridLayout)<{
   width: number;
