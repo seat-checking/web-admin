@@ -121,9 +121,13 @@ export const ChairComponent = forwardRef(
 );
 
 // Table Component
-export const TableComponent: React.FC<{ isClickable: boolean }> = ({
-  isClickable,
-}) => <GridTable isClickable={isClickable} />;
+export const TableComponent = forwardRef(
+  ({ isClickable, ...rest }: ChairComponentProps, ref: Ref<HTMLDivElement>) => (
+    <div>
+      <GridTable isClickable={isClickable} {...rest} ref={ref} />
+    </div>
+  ),
+);
 
 const ShopGridBackground = styled(GridLayout)<{
   width: number;
