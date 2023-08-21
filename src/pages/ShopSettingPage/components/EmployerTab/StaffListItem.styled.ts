@@ -125,6 +125,7 @@ export const ModalButtonWrapper = styled.div`
   justify-content: center;
   gap: 2rem;
   padding-top: 1.6rem;
+  padding-bottom: 1.6rem;
 `;
 
 export const ModalCancel = styled.div`
