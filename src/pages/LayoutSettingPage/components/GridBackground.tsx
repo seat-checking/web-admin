@@ -1,9 +1,10 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import styled from 'styled-components/macro';
 import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
 import type { Layout } from 'react-grid-layout';
 
+import { Popover } from 'pages/LayoutSettingPage/components/Popover';
 import {
   useLayout,
   useLayoutActions,
@@ -21,19 +22,6 @@ interface GridBackgroundProps {
   activeTab: number;
   rowCnt: number;
 }
-
-const layoutToDom = (layout: CustomItemLayout[], activeTab: number) => {
-  return layout.map((item) => {
-    if (item.sort === 'chair') {
-      return (
-        <ChairBorder key={item.i} className='chair'>
-          <Chair isClickable={activeTab === 1} />
-        </ChairBorder>
-      );
-    }
-    return <GridTable key={item.i} isClickable={activeTab === 1} />;
-  });
-};
 
 /**
  * 좌석 배치 영역
@@ -77,6 +65,11 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
     saveLayoutChange(layout);
   };
 
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const handleTogglePopover = () => {
+    setIsPopoverOpen(!isPopoverOpen);
+  };
+
   return (
     <ShopGridBackground
       layout={myLayout}
@@ -99,7 +92,21 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
       onDropDragOver={handleDropDragOver}
       onLayoutChange={handleLayoutChange}
     >
-      {layoutToDom(myLayout, activeTab)}
+      {myLayout?.map((item) => {
+        if (item.sort === 'chair') {
+          return (
+            <div key={item.i}>
+              <ChairBorder onClick={handleTogglePopover}>
+                <Chair isClickable={activeTab === 1} />
+              </ChairBorder>
+              {isPopoverOpen && (
+                <Popover onClose={() => setIsPopoverOpen(false)} />
+              )}
+            </div>
+          );
+        }
+        return <GridTable key={item.i} isClickable={activeTab === 1} />;
+      })}
     </ShopGridBackground>
   );
 };
@@ -116,6 +123,7 @@ const ShopGridBackground = styled(GridLayout)<{
 `;
 
 export const GridTable = styled.div<{ isClickable: boolean }>`
+  position: relative;
   background-color: ${(props): string => props.theme.palette.grey[100]};
 
   border-color: ${({ theme }) => theme.palette.black.main};
