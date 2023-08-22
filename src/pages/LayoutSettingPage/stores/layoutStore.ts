@@ -8,11 +8,13 @@ interface LayoutStoreState {
   layout: CustomItemLayout[];
   actions: {
     clear: () => void;
+    getItem: (id: string) => CustomItemLayout | undefined;
     saveInitialLayout: (layout: CustomItemLayout[]) => void;
     saveLayoutChange: (changedLayout: Layout[]) => void;
     disableMove: () => void;
     enableMove: () => void;
     addItem: (item: CustomItemLayout) => void;
+    deleteItem: (id: string) => void;
   };
 }
 
@@ -20,13 +22,22 @@ interface LayoutStoreState {
  * 좌석 배치 정보 관리
  */
 const useLayoutStore = create<LayoutStoreState>()(
-  devtools((set) => ({
+  devtools((set, get) => ({
     layout: [],
     actions: {
       clear: () => set(() => ({ layout: [] })),
+      getItem: (id: string) => get().layout.find((item) => item.i === id),
       addItem: (item: CustomItemLayout) => {
         useChangeStore.getState().setChange(true);
         set((state) => ({ layout: [...state.layout, item] }), false, 'addItem');
+      },
+      deleteItem: (id: string) => {
+        useChangeStore.getState().setChange(true);
+        set(
+          (state) => ({ layout: state.layout.filter(({ i }) => i !== id) }),
+          false,
+          'deleteItem',
+        );
       },
       saveInitialLayout: (layout: CustomItemLayout[]) =>
         set(() => ({ layout }), false, 'saveInitialLayout'),
