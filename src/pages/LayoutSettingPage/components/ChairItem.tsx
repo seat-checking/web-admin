@@ -1,8 +1,9 @@
 import { forwardRef, useState } from 'react';
 import styled from 'styled-components';
-import type { ComponentPropsWithRef, Ref } from 'react';
+import type { ComponentPropsWithRef } from 'react';
 import { Popover } from 'pages/LayoutSettingPage/components/Popover';
 import { ChairBody } from 'pages/LayoutSettingPage/components/Popover/ChairBody';
+import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 import {
   CHAIR_BORDER_PX,
   CHAIR_SIZE_PX,
@@ -11,24 +12,38 @@ import { flexSet } from 'styles/mixin';
 
 interface ChairItemProps extends ComponentPropsWithRef<'div'> {
   isClickable: boolean;
+  id: string;
 }
 // Chair Component
-export const ChairItem = forwardRef(
-  ({ isClickable, ...rest }: ChairItemProps, ref: Ref<HTMLDivElement>) => {
+export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
+  ({ isClickable, id, ...rest }, ref) => {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [popoverPosition, setPopoverPosition] = useState('');
+    const { selectedItem, setSelectedItem } = useSelectItem();
+
     const handleTogglePopover = () => {
-      setIsPopoverOpen(!isPopoverOpen);
+      setIsPopoverOpen((prev) => !prev);
+      if (ref && typeof ref !== 'function' && ref.current) {
+        const { transform } = ref.current.style;
+        setPopoverPosition(transform);
+      }
+      setSelectedItem(id);
     };
 
     return (
-      <ChairBorder {...rest} ref={ref} onClick={handleTogglePopover}>
-        <Chair isClickable={isClickable} />
+      <>
+        <ChairBorder {...rest} ref={ref} onClick={handleTogglePopover}>
+          <Chair isClickable={isClickable} />
+        </ChairBorder>
         {isPopoverOpen && (
-          <Popover>
+          <Popover
+            transform={popoverPosition}
+            onClose={() => setIsPopoverOpen(false)}
+          >
             <ChairBody />
           </Popover>
         )}
-      </ChairBorder>
+      </>
     );
   },
 );

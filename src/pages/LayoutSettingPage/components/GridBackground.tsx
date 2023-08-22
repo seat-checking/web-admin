@@ -31,6 +31,7 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
 }) => {
   const myLayout = useLayout();
   const { saveLayoutChange, addItem } = useLayoutActions();
+
   const { size } = useContext(DragContext);
 
   const handleDropDragOver = () => {
@@ -88,9 +89,13 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
     >
       {myLayout?.map((item) => {
         if (item.sort === 'chair') {
-          return <ChairItem key={item.i} isClickable={activeTab === 1} />;
+          return (
+            <ChairItem key={item.i} id={item.i} isClickable={activeTab === 1} />
+          );
         }
-        return <TableItem key={item.i} isClickable={activeTab === 1} />;
+        return (
+          <TableItem key={item.i} id={item.i} isClickable={activeTab === 1} />
+        );
       })}
     </ShopGridBackground>
   );

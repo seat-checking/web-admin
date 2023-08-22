@@ -1,4 +1,3 @@
-import GridLayout from 'react-grid-layout';
 import { ResizableBox } from 'react-resizable';
 import styled from 'styled-components/macro';
 import chevronDown from 'assets/icons/chevron-down.svg';

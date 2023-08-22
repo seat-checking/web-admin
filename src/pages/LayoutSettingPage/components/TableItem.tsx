@@ -3,23 +3,26 @@ import styled from 'styled-components';
 import type { ComponentPropsWithRef } from 'react';
 import { Popover } from 'pages/LayoutSettingPage/components/Popover';
 import { TableBody } from 'pages/LayoutSettingPage/components/Popover/TableBody';
+import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 
 interface TableItemProps extends ComponentPropsWithRef<'div'> {
   isClickable: boolean;
+  id: string;
 }
 
 export const TableItem = forwardRef<HTMLDivElement, TableItemProps>(
-  ({ isClickable, ...rest }, ref) => {
+  ({ isClickable, id, ...rest }, ref) => {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [popoverPosition, setPopoverPosition] = useState('');
+    const { setSelectedItem } = useSelectItem();
 
-    const handleTogglePopover = (event: React.MouseEvent) => {
-      console.log(event.currentTarget.clientHeight);
+    const handleTogglePopover = () => {
+      setIsPopoverOpen(!isPopoverOpen);
       if (ref && typeof ref !== 'function' && ref.current) {
         const { transform } = ref.current.style;
         setPopoverPosition(transform);
       }
-      setIsPopoverOpen(!isPopoverOpen);
+      setSelectedItem(id);
     };
 
     return (
@@ -31,7 +34,10 @@ export const TableItem = forwardRef<HTMLDivElement, TableItemProps>(
           onClick={handleTogglePopover}
         />
         {isPopoverOpen && (
-          <Popover transform={popoverPosition}>
+          <Popover
+            transform={popoverPosition}
+            onClose={() => setIsPopoverOpen(false)}
+          >
             <TableBody />
           </Popover>
         )}
