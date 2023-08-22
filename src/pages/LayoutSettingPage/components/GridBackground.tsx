@@ -2,38 +2,25 @@ import { useContext } from 'react';
 import GridLayout from 'react-grid-layout';
 import styled from 'styled-components/macro';
 import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
-import type { Layout } from 'react-grid-layout';
 
+import type { Layout } from 'react-grid-layout';
+import { ChairItem } from 'pages/LayoutSettingPage/components/ChairItem';
+
+import { TableItem } from 'pages/LayoutSettingPage/components/TableItem';
 import {
   useLayout,
   useLayoutActions,
 } from 'pages/LayoutSettingPage/stores/layoutStore';
 import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
 import {
-  CHAIR_BORDER_PX,
-  CHAIR_SIZE_PX,
   COLUMN_CNT,
   TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
-import { flexSet } from 'styles/mixin';
 
 interface GridBackgroundProps {
   activeTab: number;
   rowCnt: number;
 }
-
-const layoutToDom = (layout: CustomItemLayout[], activeTab: number) => {
-  return layout.map((item) => {
-    if (item.sort === 'chair') {
-      return (
-        <ChairBorder key={item.i} className='chair'>
-          <Chair isClickable={activeTab === 1} />
-        </ChairBorder>
-      );
-    }
-    return <GridTable key={item.i} isClickable={activeTab === 1} />;
-  });
-};
 
 /**
  * 좌석 배치 영역
@@ -99,7 +86,12 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
       onDropDragOver={handleDropDragOver}
       onLayoutChange={handleLayoutChange}
     >
-      {layoutToDom(myLayout, activeTab)}
+      {myLayout?.map((item) => {
+        if (item.sort === 'chair') {
+          return <ChairItem key={item.i} isClickable={activeTab === 1} />;
+        }
+        return <TableItem key={item.i} isClickable={activeTab === 1} />;
+      })}
     </ShopGridBackground>
   );
 };
@@ -113,32 +105,4 @@ const ShopGridBackground = styled(GridLayout)<{
   }};
 
   height: ${({ $height }) => $height + 'px'};
-`;
-
-export const GridTable = styled.div<{ isClickable: boolean }>`
-  background-color: ${(props): string => props.theme.palette.grey[100]};
-
-  border-color: ${({ theme }) => theme.palette.black.main};
-  border-width: 1px;
-  border-style: solid;
-
-  cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
-`;
-
-// 의자 바깥에 투명한 테두리를 넣기 위함
-export const ChairBorder = styled.div`
-  ${flexSet()}
-`;
-
-// 검정 테두리를 준 의자 영역
-export const Chair = styled.div<{ isClickable: boolean }>`
-  background-color: ${(props): string => props.theme.palette.grey[100]};
-
-  width: ${CHAIR_SIZE_PX - CHAIR_BORDER_PX}px;
-  height: ${CHAIR_SIZE_PX - CHAIR_BORDER_PX}px;
-
-  border: ${CHAIR_BORDER_PX}px solid ${({ theme }) => theme.palette.black.main};
-  border-radius: 50%;
-
-  cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
 `;
