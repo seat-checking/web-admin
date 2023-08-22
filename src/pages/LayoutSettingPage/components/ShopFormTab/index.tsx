@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import type { ChangeRowCommand } from 'pages/LayoutSettingPage/hooks/useShopHeight';
 import type { ShopFormState } from 'pages/LayoutSettingPage/utils/types';
-import { ReactComponent as ChevronLeftCircle } from 'assets/icons/chevron-left-circle.svg';
-import { ReactComponent as CheveronRightCircle } from 'assets/icons/chevron-right-circle.svg';
+
+import { CircledArrowButton } from 'components/CircledArrowButton';
 import {
   DescriptionText,
   HeightInput,
-  IconWrap,
   Label,
   LayoutBox,
   Rectangle,
@@ -18,10 +17,7 @@ import {
   Wrap,
 } from 'pages/LayoutSettingPage/components/ShopFormTab/ShopFormTab.styled';
 import { CheckRadioButton } from 'pages/LayoutSettingPage/components/ShopFormTab/components/CheckRadioButton';
-import {
-  useChange,
-  useChangeStore,
-} from 'pages/LayoutSettingPage/stores/changeStore';
+import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import {
   COLUMN_CNT,
   DEFAULT_ROW_CNT,
@@ -140,18 +136,19 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
       </LayoutBox>
       <WidthSettingBox>
         <SettingLabel>가게 세로 길이</SettingLabel>
-        <IconWrap onClick={() => handleResizeUpDown('DOWN')}>
-          <ChevronLeftCircle />
-        </IconWrap>
+        <CircledArrowButton
+          direction='LEFT'
+          onClick={() => handleResizeUpDown('DOWN')}
+        />
         <HeightInput
           value={heightInput}
           onChange={handleChangeInput}
           onBlur={handleRoundInput}
         />
-
-        <IconWrap onClick={() => handleResizeUpDown('UP')}>
-          <CheveronRightCircle />
-        </IconWrap>
+        <CircledArrowButton
+          direction='RIGHT'
+          onClick={() => handleResizeUpDown('UP')}
+        />
       </WidthSettingBox>
       <StyledButton onClick={handleChangeNextTab}>다음</StyledButton>
     </Wrap>
