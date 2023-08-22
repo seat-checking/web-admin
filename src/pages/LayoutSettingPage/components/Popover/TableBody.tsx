@@ -1,5 +1,6 @@
 import styled from 'styled-components/macro';
 import { CircledArrowButton } from 'components/CircledArrowButton';
+import { TABLE_POPOVER_BODY_WIDTH_REM } from 'pages/LayoutSettingPage/utils/constants';
 
 interface TableBodyProps {
   width?: number;
@@ -29,7 +30,7 @@ export const TableBody: React.FC<TableBodyProps> = ({ width, height }) => {
 };
 
 const Wrap = styled.div`
-  width: 18rem;
+  width: ${TABLE_POPOVER_BODY_WIDTH_REM}rem;
 `;
 const Row = styled.div`
   display: flex;

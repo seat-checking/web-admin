@@ -33,11 +33,6 @@ const useLayoutStore = create<LayoutStoreState>()(
       saveLayoutChange: (changedLayout: Layout[]) =>
         set(
           (state) => {
-            console.log(
-              'state.layout, changedLayout :>> ',
-              state.layout,
-              changedLayout,
-            );
             if (!useChangeStore.getState().isChanged) {
               const isChanged = state.layout.find(
                 (prevItem, idx) =>
