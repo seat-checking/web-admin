@@ -1,4 +1,7 @@
+import { useEffect } from 'react';
 import styled from 'styled-components/macro';
+import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
+import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 
 interface HeaderProps {
   number?: number;
@@ -8,10 +11,22 @@ interface HeaderProps {
  * 팝오버 헤더 영역 (숫자 + 삭제 버튼)
  */
 export const Header: React.FC<HeaderProps> = ({ number }) => {
+  const { deleteItem } = useLayoutActions();
+  const { selectedItem } = useSelectItem();
+
+  // const selectedItemId = selectedItem && getItem(selectedItem)?.i; // TODO manageId 로 변경
+
+  const handleDeleteItem = () => {
+    if (!selectedItem) return;
+    deleteItem(selectedItem);
+  };
+
   return (
     <Wrap>
-      <ManageId>{number}번</ManageId>
-      <DeleteBtn type='button'>삭제</DeleteBtn>
+      <ManageId>{selectedItem}번</ManageId>
+      <DeleteBtn type='button' onClick={handleDeleteItem}>
+        삭제
+      </DeleteBtn>
     </Wrap>
   );
 };

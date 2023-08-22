@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import type React from 'react';
 import { ChairBody } from 'pages/LayoutSettingPage/components/Popover/ChairBody';
@@ -12,11 +13,35 @@ import {
 type PopoverProps = {
   children?: React.ReactNode;
   transform?: string;
+  onClose?: () => void;
 };
 
-export const Popover: React.FC<PopoverProps> = ({ children, transform }) => {
+export const Popover: React.FC<PopoverProps> = ({
+  children,
+  transform,
+  onClose,
+}) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      containerRef.current &&
+      !containerRef.current.contains(event.target as Node)
+    ) {
+      onClose?.();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <Container transform={transform}>
+    <Container transform={transform} ref={containerRef}>
       <Balloon>
         <Header number={152} />
         {children}
@@ -33,10 +58,12 @@ const Container = styled.div<{ transform?: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* bottom: ${TABLE_SIZE_PX}px; */
+  bottom: ${TABLE_SIZE_PX}px;
   left: -${TABLE_POPOVER_WIDTH_REM / 2}rem; // TODO - 팝업 너비만큼 + 테이블 너비 반
   top: -100px; // TODO - (팝업 높이 만큼 + 여백조금)
   transform: ${({ transform }) => transform};
+
+  z-index: 1000;
 `;
 
 const Balloon = styled.div`
