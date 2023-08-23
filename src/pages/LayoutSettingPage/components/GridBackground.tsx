@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import styled from 'styled-components/macro';
 import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
@@ -11,6 +11,7 @@ import {
   useLayout,
   useLayoutActions,
 } from 'pages/LayoutSettingPage/stores/layoutStore';
+import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
 import {
   COLUMN_CNT,
@@ -31,6 +32,13 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
 }) => {
   const myLayout = useLayout();
   const { saveLayoutChange, addItem } = useLayoutActions();
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const { selectedItem, setSelectedItem } = useSelectItem();
+
+  const handleTogglePopover = (id: string) => {
+    setIsPopoverOpen(!isPopoverOpen);
+    setSelectedItem(id);
+  };
 
   const { size } = useContext(DragContext);
 
@@ -49,6 +57,7 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
     item.h = h;
     item.i = String(Date.now());
     if (sort === 'chair') {
+      handleTogglePopover(item.i);
       item.isResizable = false;
       item.sort = 'chair';
     } else {
@@ -90,7 +99,13 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
       {myLayout?.map((item) => {
         if (item.sort === 'chair') {
           return (
-            <ChairItem key={item.i} id={item.i} isClickable={activeTab === 1} />
+            <ChairItem
+              key={item.i}
+              id={item.i}
+              isClickable={activeTab === 1}
+              isPopoverOpen={isPopoverOpen && selectedItem === item.i}
+              onClick={() => handleTogglePopover(item.i)}
+            />
           );
         }
         return (

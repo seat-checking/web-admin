@@ -13,8 +13,9 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ number }) => {
   const { deleteItem } = useLayoutActions();
   const { selectedItem } = useSelectItem();
+  const { getItem } = useLayoutActions();
 
-  // const selectedItemId = selectedItem && getItem(selectedItem)?.i; // TODO manageId 로 변경
+  const selectedManageId = selectedItem && getItem(selectedItem).manageId;
 
   const handleDeleteItem = () => {
     if (!selectedItem) return;
@@ -23,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ number }) => {
 
   return (
     <Wrap>
-      <ManageId>{selectedItem}번</ManageId>
+      <ManageId>{selectedManageId}번</ManageId>
       <DeleteBtn type='button' onClick={handleDeleteItem}>
         삭제
       </DeleteBtn>

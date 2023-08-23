@@ -8,13 +8,14 @@ interface LayoutStoreState {
   layout: CustomItemLayout[];
   actions: {
     clear: () => void;
-    getItem: (id: string) => CustomItemLayout | undefined;
+    getItem: (id: string) => CustomItemLayout;
     saveInitialLayout: (layout: CustomItemLayout[]) => void;
     saveLayoutChange: (changedLayout: Layout[]) => void;
     disableMove: () => void;
     enableMove: () => void;
     addItem: (item: CustomItemLayout) => void;
     deleteItem: (id: string) => void;
+    setManageId: (itemId: string, value: number) => void;
   };
 }
 
@@ -26,7 +27,11 @@ const useLayoutStore = create<LayoutStoreState>()(
     layout: [],
     actions: {
       clear: () => set(() => ({ layout: [] })),
-      getItem: (id: string) => get().layout.find((item) => item.i === id),
+      getItem: (id: string) => {
+        const finded = get().layout.find((item) => item.i === id);
+        if (!finded) throw new Error('존재하지 않는 아이템입니다.');
+        return finded;
+      },
       addItem: (item: CustomItemLayout) => {
         useChangeStore.getState().setChange(true);
         set((state) => ({ layout: [...state.layout, item] }), false, 'addItem');
@@ -72,6 +77,22 @@ const useLayoutStore = create<LayoutStoreState>()(
           false,
           'saveLayoutChange',
         ),
+      setManageId: (itemId: string, value: number) => {
+        set(
+          (state) => {
+            const copy = [...state.layout];
+            for (let i = state.layout.length - 1; i >= 0; i--) {
+              if (state.layout[i].i === itemId) {
+                copy[i].manageId = value;
+                break;
+              }
+            }
+            return { layout: copy };
+          },
+          false,
+          'setManageId',
+        );
+      },
       disableMove: () =>
         set(
           (state) => {

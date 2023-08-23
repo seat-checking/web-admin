@@ -1,9 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import type React from 'react';
 import { ChairBody } from 'pages/LayoutSettingPage/components/Popover/ChairBody';
 import { Header } from 'pages/LayoutSettingPage/components/Popover/Header';
 import { TableBody } from 'pages/LayoutSettingPage/components/Popover/TableBody';
+import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
+import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 import {
   POPOVER_PADDING_REM,
   TABLE_POPOVER_WIDTH_REM,
@@ -23,14 +25,30 @@ export const Popover: React.FC<PopoverProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      containerRef.current &&
-      !containerRef.current.contains(event.target as Node)
-    ) {
-      onClose?.();
-    }
-  };
+  const { selectedItem } = useSelectItem();
+  const { getItem } = useLayoutActions();
+  const selectedManageId = selectedItem && getItem(selectedItem).manageId;
+
+  const [input, setInput] = useState(
+    selectedManageId ? String(selectedManageId) : '',
+  );
+  const { setManageId } = useLayoutActions();
+
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        if (input === '' || !selectedItem) {
+          return;
+        }
+        setManageId(selectedItem, Number(input));
+        onClose?.();
+      }
+    },
+    [input, onClose, selectedItem, setManageId],
+  );
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -38,14 +56,14 @@ export const Popover: React.FC<PopoverProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [handleClickOutside]);
 
   return (
     <Container transform={transform} ref={containerRef}>
       <Balloon>
         <Header number={152} />
-        {children}
-        {/* <ChairBody defaultNumber={152} /> */}
+        {/* {children} */}
+        <ChairBody manageId={input} setManageId={setInput} />
       </Balloon>
       <Tail />
     </Container>
@@ -54,6 +72,7 @@ export const Popover: React.FC<PopoverProps> = ({
 
 const Container = styled.div<{ transform?: string }>`
   position: absolute;
+  height: fit-content;
 
   display: flex;
   flex-direction: column;

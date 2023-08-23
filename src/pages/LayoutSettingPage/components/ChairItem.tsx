@@ -1,9 +1,8 @@
 import { forwardRef, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import type { ComponentPropsWithRef } from 'react';
 import { Popover } from 'pages/LayoutSettingPage/components/Popover';
-import { ChairBody } from 'pages/LayoutSettingPage/components/Popover/ChairBody';
-import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
+import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 import {
   CHAIR_BORDER_PX,
   CHAIR_SIZE_PX,
@@ -13,34 +12,30 @@ import { flexSet } from 'styles/mixin';
 interface ChairItemProps extends ComponentPropsWithRef<'div'> {
   isClickable: boolean;
   id: string;
+  // setIsPopoverOpen: any;
+  isPopoverOpen: boolean;
+  onClick: () => void;
 }
-// Chair Component
-export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
-  ({ isClickable, id, ...rest }, ref) => {
-    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-    const [popoverPosition, setPopoverPosition] = useState('');
-    const { selectedItem, setSelectedItem } = useSelectItem();
 
-    const handleTogglePopover = () => {
-      setIsPopoverOpen((prev) => !prev);
-      if (ref && typeof ref !== 'function' && ref.current) {
-        const { transform } = ref.current.style;
-        setPopoverPosition(transform);
-      }
-      setSelectedItem(id);
-    };
+export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
+  ({ isClickable, id, isPopoverOpen, onClick, ...rest }, ref) => {
+    const { getItem } = useLayoutActions();
+
+    const manageId = getItem(id)?.manageId;
+
+    const popoverPosition =
+      (ref && typeof ref !== 'function' && ref.current?.style.transform) || '';
 
     return (
       <>
-        <ChairBorder {...rest} ref={ref} onClick={handleTogglePopover}>
-          <Chair isClickable={isClickable} />
+        <ChairBorder {...rest} ref={ref} onClick={onClick}>
+          <Chair isClickable={isClickable}>
+            <Number>{manageId}</Number>
+          </Chair>
         </ChairBorder>
-        {isPopoverOpen && (
-          <Popover
-            transform={popoverPosition}
-            onClose={() => setIsPopoverOpen(false)}
-          >
-            <ChairBody />
+        {(isPopoverOpen || !manageId) && (
+          <Popover transform={popoverPosition} onClose={onClick}>
+            {/* <ChairBody /> */}
           </Popover>
         )}
       </>
@@ -55,6 +50,7 @@ export const ChairBorder = styled.div`
 
 // 검정 테두리를 준 의자 영역
 export const Chair = styled.div<{ isClickable: boolean }>`
+  ${flexSet()}
   background-color: ${(props): string => props.theme.palette.grey[100]};
 
   width: ${CHAIR_SIZE_PX - CHAIR_BORDER_PX}px;
@@ -64,4 +60,16 @@ export const Chair = styled.div<{ isClickable: boolean }>`
   border-radius: 50%;
 
   cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
+
+  div {
+    font-size: 5px;
+    color: red;
+  }
+`;
+
+const Number = styled.span`
+  color: ${({ theme }) => theme.palette.grey[400]};
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: normal;
 `;
