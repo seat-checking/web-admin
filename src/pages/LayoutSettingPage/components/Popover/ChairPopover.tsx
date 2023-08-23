@@ -81,7 +81,6 @@ const Container = styled.div<{ transform?: string }>`
   align-items: center;
 
   height: ${CHAIR_POPOVER_HEIGHT_REM}rem;
-  background-color: yellow;
   left: calc(
     -${CHAIR_POPOVER_WIDTH_REM / 2}rem + ${TABLE_SIZE_PX / 2}px
   ); //  팝업 너비 반 + 한셀 너비 반

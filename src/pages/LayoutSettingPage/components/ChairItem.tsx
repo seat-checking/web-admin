@@ -33,7 +33,7 @@ export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
             <Number>{manageId}</Number>
           </Chair>
         </ChairBorder>
-        {(isPopoverOpen || !manageId) && (
+        {isClickable && (isPopoverOpen || !manageId) && (
           <ChairPopover transform={popoverPosition} onClose={onClick} />
         )}
       </>

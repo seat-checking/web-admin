@@ -32,7 +32,7 @@ export const TableItem = forwardRef<HTMLDivElement, TableItemProps>(
           ref={ref}
           onClick={handleTogglePopover}
         />
-        {isPopoverOpen && (
+        {isClickable && isPopoverOpen && (
           <TablePopover
             transform={popoverPosition}
             onClose={() => setIsPopoverOpen(false)}

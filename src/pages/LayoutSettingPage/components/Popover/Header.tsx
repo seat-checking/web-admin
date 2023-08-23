@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ number }) => {
 
   return (
     <Wrap>
-      <ManageId>{selectedManageId}번</ManageId>
+      {selectedManageId && <ManageId>{selectedManageId}번</ManageId>}
       <DeleteBtn type='button' onClick={handleDeleteItem}>
         삭제
       </DeleteBtn>
@@ -48,6 +48,7 @@ const ManageId = styled.span`
 `;
 
 const DeleteBtn = styled.button`
+  margin-left: auto;
   color: ${({ theme }) => theme.palette.grey[300]};
   font-size: 1.2rem;
   font-weight: 500;
