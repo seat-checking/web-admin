@@ -12,13 +12,15 @@ import {
 interface SelectInputProps {
   placeholder: string;
   type: React.HTMLInputTypeAttribute;
-  onItemsChange: (items: { value: string }[]) => void; // 상위 컴포넌트에 전달할 함수
+  onItemsChange: (items: { value: string }[]) => void;
+  isActive: boolean; // 상위 컴포넌트에 전달할 함수
 }
 
 export const SelectInput = ({
   placeholder,
   type,
   onItemsChange,
+  isActive,
 }: SelectInputProps) => {
   const [items, setItems] = useState([{ value: '' }]);
 
@@ -58,7 +60,9 @@ export const SelectInput = ({
           <XIcon onClick={() => handleRemove(index)} />
         </SelectInputWrapper>
       ))}
-      <PlusButton onClick={handleAdd}>선택지 추가하기</PlusButton>
+      <PlusButton isActive={isActive} onClick={handleAdd}>
+        선택지 추가하기
+      </PlusButton>
     </>
   );
 };

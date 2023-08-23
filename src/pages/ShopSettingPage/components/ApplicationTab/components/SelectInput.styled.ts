@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import CornerDown from 'assets/icons/corner-down-right.svg';
 import X from 'assets/icons/xicon.svg';
 
+interface PlusButtonProps {
+  isActive?: boolean;
+}
+
 export const SelectInputWrapper = styled.div`
   width: 53.9rem;
   margin: 0 auto;
@@ -26,11 +30,9 @@ export const XIcon = styled.div`
   cursor: pointer;
 `;
 
-export const PlusButton = styled.div`
+export const PlusButton = styled.div<PlusButtonProps>`
   width: 100%;
   height: 4.2rem;
-  background-color: ${({ theme }) => theme.palette.grey[50]};
-  color: ${({ theme }) => theme.palette.grey[400]};
   font-size: 1.6rem;
   font-weight: 600;
   border-radius: 0.8rem;
@@ -39,4 +41,6 @@ export const PlusButton = styled.div`
   justify-content: center;
   margin-top: 1.6rem;
   cursor: pointer;
+  background-color: ${(props) => (props.isActive ? '#FFFFFF' : '#F2F4F8')};
+  color: ${({ theme }) => theme.palette.grey[400]};
 `;
