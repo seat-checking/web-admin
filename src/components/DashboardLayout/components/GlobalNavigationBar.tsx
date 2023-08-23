@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as ChevronLeft } from 'assets/icons/chevron-left-bg-grey.svg';
 import { ReactComponent as AnalyticsActive } from 'assets/icons/snb-analytics-active.svg';
 import { ReactComponent as Analytics } from 'assets/icons/snb-analytics.svg';
@@ -18,6 +17,7 @@ import {
   Wrap,
 } from 'components/DashboardLayout/components/GlobalNavigationBar.styled';
 import { NavigationItem } from 'components/DashboardLayout/components/NavigationItem';
+import { ShopDropdown } from 'components/DashboardLayout/components/ShopDropdown';
 
 /**
  * 글로벌 사이드 네비게이션 바 컴포넌트
@@ -33,10 +33,7 @@ export const GlobalNavigationBar: React.FC = () => {
     <>
       <Wrap folded={isFolded}>
         <img src='' alt='가게 로고' className='shopLogo' />
-        <button type='button' className='shopNameWrap'>
-          <h1 className='shopName'>가게 이름</h1>
-          <ChevronDown className='hideFold' />
-        </button>
+        {!isFolded && <ShopDropdown isFolded={isFolded} />}
         <p className='branchName hideFold'>지점명</p>
         <ul className='naviationList'>
           {getPermission('storeStatus') && (
