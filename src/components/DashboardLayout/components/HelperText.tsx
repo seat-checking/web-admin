@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { ReactComponent as AlertCicleIcon } from 'assets/icons/alert-circle.svg';
+import { ALERT_ICON_WIDTH_REM } from 'components/DashboardLayout/utils/constants';
 
 interface HelperTextProps {
   children: React.ReactNode;
@@ -12,7 +13,7 @@ export const HelperText: React.FC<HelperTextProps> = ({ children }) => {
   return (
     <Wrap>
       <IconWrap>
-        <AlertCicleIcon width='1.2rem' height='1.2rem' />
+        <AlertCicleIcon width={ALERT_ICON_WIDTH_REM + 'rem'} />
       </IconWrap>
       <Text>{children}</Text>
       <DescriptionModal />
@@ -23,6 +24,8 @@ export const HelperText: React.FC<HelperTextProps> = ({ children }) => {
 const Wrap = styled.div`
   display: flex;
   align-items: center;
+
+  position: relative;
 `;
 
 const IconWrap = styled.div`

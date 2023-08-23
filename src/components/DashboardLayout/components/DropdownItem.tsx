@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components/macro';
 import { HelperText } from 'components/DashboardLayout/components/HelperText';
+import { Tooltip } from 'components/DashboardLayout/components/Tooltip';
 import { Toggle } from 'components/Toggle';
 
 /* eslint-disable react/destructuring-assignment */
@@ -35,7 +36,10 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
       </MiddleWrap>
       <RightWrap>
         <Toggle isChecked={props.openNow} />
-        <HelperText>일시 정지</HelperText>
+        <HelperText>
+          일시 정지
+          <Tooltip />
+        </HelperText>
       </RightWrap>
     </Wrap>
   );
