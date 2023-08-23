@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import styled from 'styled-components/macro';
 import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
@@ -74,6 +74,33 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
     saveLayoutChange(layout);
   };
 
+  const isMoved = useRef(false);
+  const dragStartTime = useRef(0);
+
+  const handleDragStart = (event: MouseEvent, itemId: string) => {
+    if (event.type !== 'mousedown') {
+      return;
+    }
+    isMoved.current = false;
+    dragStartTime.current = 0;
+    setTimeout(() => {
+      if (!isMoved.current) {
+        handleTogglePopover(itemId);
+      }
+    }, 100);
+  };
+
+  const handleDrag = () => {
+    isMoved.current = true;
+    if (!dragStartTime.current) dragStartTime.current = Date.now();
+  };
+
+  const handleDragStop = (itemId: string) => {
+    if (Date.now() - dragStartTime.current < 200) {
+      handleTogglePopover(itemId);
+    }
+  };
+
   return (
     <ShopGridBackground
       layout={myLayout}
@@ -95,6 +122,9 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
       onDrop={handleDropItem}
       onDropDragOver={handleDropDragOver}
       onLayoutChange={handleLayoutChange}
+      onDragStart={(l, item, n, p, event) => handleDragStart(event, item.i)}
+      onDrag={handleDrag}
+      onDragStop={(l, item) => handleDragStop(item.i)}
     >
       {myLayout?.map((item) => {
         if (item.sort === 'chair') {
@@ -104,7 +134,7 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
               id={item.i}
               isClickable={activeTab === 1}
               isPopoverOpen={isPopoverOpen && selectedId === item.i}
-              onClick={() => handleTogglePopover(item.i)}
+              onClose={() => setIsPopoverOpen(!isPopoverOpen)}
             />
           );
         }

@@ -14,11 +14,11 @@ interface ChairItemProps extends ComponentPropsWithRef<'div'> {
   id: string;
   // setIsPopoverOpen: any;
   isPopoverOpen: boolean;
-  onClick: () => void;
+  onClose: () => void;
 }
 
 export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
-  ({ isClickable, id, isPopoverOpen, onClick, ...rest }, ref) => {
+  ({ isClickable, id, isPopoverOpen, onClose, ...rest }, ref) => {
     const { getItem } = useLayoutActions();
 
     const manageId = getItem(id)?.manageId;
@@ -28,13 +28,13 @@ export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
 
     return (
       <>
-        <ChairBorder {...rest} ref={ref} onClick={onClick}>
+        <ChairBorder {...rest} ref={ref}>
           <Chair isClickable={isClickable}>
             <Number>{manageId}</Number>
           </Chair>
         </ChairBorder>
         {isClickable && (isPopoverOpen || !manageId) && (
-          <ChairPopover transform={popoverPosition} onClose={onClick} />
+          <ChairPopover transform={popoverPosition} onClose={onClose} />
         )}
       </>
     );
@@ -58,11 +58,6 @@ export const Chair = styled.div<{ isClickable: boolean }>`
   border-radius: 50%;
 
   cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
-
-  div {
-    font-size: 5px;
-    color: red;
-  }
 `;
 
 const Number = styled.span`
@@ -70,4 +65,6 @@ const Number = styled.span`
   font-size: 0.9rem;
   font-weight: 400;
   line-height: normal;
+
+  user-select: none; // 텍스트 선택 막음
 `;
