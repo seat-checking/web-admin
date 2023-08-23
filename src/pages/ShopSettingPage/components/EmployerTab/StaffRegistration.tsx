@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTheme } from 'styled-components';
 import type React from 'react';
 import { EmployeeRegistration } from 'api/store/store';
 import InputCheckBox from 'components/InputCheckBox';
@@ -33,6 +34,8 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
 }) => {
   const [checkboxes, setCheckboxes] = useState([true, false, false, false]);
 
+  const theme = useTheme();
+
   const toggleCheckbox = (index: number) => {
     const newCheckboxes = [...checkboxes];
     newCheckboxes[index] = !newCheckboxes[index];
@@ -55,7 +58,6 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
 
       const resData = await EmployeeRegistration(registrationData);
 
-      console.log('Registration Successful:', resData);
       onEmployeeAdded();
     } catch (error) {
       console.error(error);
@@ -115,7 +117,10 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
       </FlexWrapperContainer>
       {isButtonDisabled ? (
         <RegistrationButton
-          style={{ background: '#EFF0F5', color: '#727582' }}
+          style={{
+            background: theme.palette.primary.orange,
+            color: 'white',
+          }}
           disabled
         >
           직원 등록하기
