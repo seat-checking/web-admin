@@ -12,14 +12,14 @@ interface HeaderProps {
  */
 export const Header: React.FC<HeaderProps> = ({ number }) => {
   const { deleteItem } = useLayoutActions();
-  const { selectedItem } = useSelectItem();
+  const { selectedId } = useSelectItem();
   const { getItem } = useLayoutActions();
 
-  const selectedManageId = selectedItem && getItem(selectedItem).manageId;
+  const selectedManageId = selectedId && getItem(selectedId).manageId;
 
   const handleDeleteItem = () => {
-    if (!selectedItem) return;
-    deleteItem(selectedItem);
+    if (!selectedId) return;
+    deleteItem(selectedId);
   };
 
   return (

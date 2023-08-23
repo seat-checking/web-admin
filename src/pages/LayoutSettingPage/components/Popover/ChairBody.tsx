@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import styled from 'styled-components/macro';
+import { CHAIR_POPOVER_BODY_WIDTH_REM } from 'pages/LayoutSettingPage/utils/constants';
 import { flexSet } from 'styles/mixin';
 
 interface ChairBodyProps {
@@ -54,7 +55,7 @@ const Wrap = styled.div`
   align-items: center;
   gap: 1.2rem;
 
-  width: 13.6rem;
+  width: ${CHAIR_POPOVER_BODY_WIDTH_REM}rem;
 `;
 
 const Label = styled.span`

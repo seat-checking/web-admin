@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import type { ComponentPropsWithRef } from 'react';
-import { Popover } from 'pages/LayoutSettingPage/components/Popover';
+import { ChairPopover } from 'pages/LayoutSettingPage/components/Popover/ChairPopover';
 import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 import {
   CHAIR_BORDER_PX,
@@ -34,9 +34,7 @@ export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
           </Chair>
         </ChairBorder>
         {(isPopoverOpen || !manageId) && (
-          <Popover transform={popoverPosition} onClose={onClick}>
-            {/* <ChairBody /> */}
-          </Popover>
+          <ChairPopover transform={popoverPosition} onClose={onClick} />
         )}
       </>
     );

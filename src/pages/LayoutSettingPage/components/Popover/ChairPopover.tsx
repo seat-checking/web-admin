@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import type React from 'react';
 import { ChairBody } from 'pages/LayoutSettingPage/components/Popover/ChairBody';
 import { Header } from 'pages/LayoutSettingPage/components/Popover/Header';
-import { TableBody } from 'pages/LayoutSettingPage/components/Popover/TableBody';
 import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 import {
+  CHAIR_POPOVER_WIDTH_REM,
+  CHAIR_SIZE_PX,
   POPOVER_PADDING_REM,
   TABLE_POPOVER_WIDTH_REM,
   TABLE_SIZE_PX,
@@ -18,16 +19,16 @@ type PopoverProps = {
   onClose?: () => void;
 };
 
-export const Popover: React.FC<PopoverProps> = ({
+export const ChairPopover: React.FC<PopoverProps> = ({
   children,
   transform,
   onClose,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const { selectedItem } = useSelectItem();
+  const { selectedId } = useSelectItem();
   const { getItem } = useLayoutActions();
-  const selectedManageId = selectedItem && getItem(selectedItem).manageId;
+  const selectedManageId = selectedId && getItem(selectedId).manageId;
 
   const [input, setInput] = useState(
     selectedManageId ? String(selectedManageId) : '',
@@ -40,14 +41,14 @@ export const Popover: React.FC<PopoverProps> = ({
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        if (input === '' || !selectedItem) {
+        if (input === '' || !selectedId) {
           return;
         }
-        setManageId(selectedItem, Number(input));
+        setManageId(selectedId, Number(input));
         onClose?.();
       }
     },
-    [input, onClose, selectedItem, setManageId],
+    [input, onClose, selectedId, setManageId],
   );
 
   useEffect(() => {
@@ -62,13 +63,14 @@ export const Popover: React.FC<PopoverProps> = ({
     <Container transform={transform} ref={containerRef}>
       <Balloon>
         <Header number={152} />
-        {/* {children} */}
         <ChairBody manageId={input} setManageId={setInput} />
       </Balloon>
       <Tail />
     </Container>
   );
 };
+
+const CHAIR_POPOVER_HEIGHT_REM = 7.3;
 
 const Container = styled.div<{ transform?: string }>`
   position: absolute;
@@ -77,9 +79,13 @@ const Container = styled.div<{ transform?: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  bottom: ${TABLE_SIZE_PX}px;
-  left: -${TABLE_POPOVER_WIDTH_REM / 2}rem; // TODO - 팝업 너비만큼 + 테이블 너비 반
-  top: -100px; // TODO - (팝업 높이 만큼 + 여백조금)
+
+  height: ${CHAIR_POPOVER_HEIGHT_REM}rem;
+  background-color: yellow;
+  left: calc(
+    -${CHAIR_POPOVER_WIDTH_REM / 2}rem + ${TABLE_SIZE_PX / 2}px
+  ); //  팝업 너비 반 + 한셀 너비 반
+  top: -${CHAIR_POPOVER_HEIGHT_REM}rem;
   transform: ${({ transform }) => transform};
 
   z-index: 1000;
