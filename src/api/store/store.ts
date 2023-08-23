@@ -19,6 +19,14 @@ interface MemberRegistrationParams {
     storeSetting: boolean;
   };
 }
+interface RequestInformationParams {
+  storeId: string;
+  data: {
+    title: string;
+    type: string;
+    contentGuide: string[];
+  }[];
+}
 
 interface GetEmployeeListParams {
   storeId: string;
@@ -114,5 +122,17 @@ export const modifyPermission = async (
 ): Promise<SuccessOkResponse<any>> => {
   const url = getApiUrl(`/stores/admins/member-registration/${params.storeId}`);
   const response = await axiosClient.patch(url, params);
+  return response.data;
+};
+
+export const RequestInformation = async (
+  Params: RequestInformationParams,
+): Promise<SuccessOkWithoutResultResponse> => {
+  const url = getApiUrl(
+    `/stores/admins/custom-reservation-field/${Params.storeId}`,
+  );
+  const { storeId, data } = Params;
+
+  const response = await axiosClient.post(url, data);
   return response.data;
 };
