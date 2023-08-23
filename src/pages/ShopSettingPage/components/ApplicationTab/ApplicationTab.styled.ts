@@ -6,16 +6,22 @@ interface TitleInputProps {
   focused: boolean;
 }
 
-export const ApplicationTabWrapper = styled.div`
+export const LabelWrapper = styled.div`
   width: 53.9rem;
   margin: 0 auto;
-  margin-top: 4rem;
+  padding-top: 4rem;
+`;
+
+export const ApplicationTabWrapper = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  background-color: ${({ theme }) => theme.palette.grey[50]};
 `;
 
 export const InputWrapper = styled.div`
   width: 53.9rem;
+  margin: 0 auto;
   height: auto;
-  margin-bottom: 4rem;
 `;
 
 export const Border = styled.div`
@@ -34,6 +40,7 @@ export const TitleInput = styled.input<TitleInputProps>`
   border-radius: 0.4rem;
   transition: border 0.3s ease;
   margin-right: ${({ focused }) => (focused ? '1.6rem;' : 'none')};
+  background-color: ${({ focused }) => (focused ? '#fff' : '#F2F4F8')};
 
   ::placeholder {
     color: ${({ theme }) => theme.palette.grey[300]};
@@ -71,9 +78,9 @@ export const RadioWrapper = styled.div`
 export const FlexWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 6rem;
-  margin-bottom: 1.2rem;
-  margin-top: 4.4rem;
+  justify-content: space-between;
+  padding-bottom: 4.4rem;
+  padding-top: 4.4rem;
   width: 53.9rem;
 `;
 
@@ -98,4 +105,11 @@ export const PlusWrapper = styled.div`
   margin: 0 auto;
   width: 10.3rem;
   margin-top: 3.2rem;
+`;
+export const ButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
 `;
