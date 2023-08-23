@@ -37,7 +37,7 @@ export const ShopSettingPage: React.FC = () => {
         <TabsWrap>
           <Tabs
             tabList={tabList}
-            tabWidth='63rem'
+            tabWidth='80rem'
             activeTab={activeTab}
             onClickTab={changeTab}
           />

@@ -1,11 +1,11 @@
 import styled from 'styled-components/macro';
 import upload from 'assets/icons/upload.svg';
 import { Button } from 'components/Button';
-import { Input } from 'components/Input';
 
 export const ContentWrap = styled.ul`
   width: 100%;
 
+  padding-top: 4rem;
   padding-bottom: 10rem;
 `;
 
@@ -15,21 +15,13 @@ export const GrayBackground = styled.div`
   margin-bottom: 4rem;
   background-color: ${({ theme }) => theme.palette.grey[50]};
 `;
+
 export const ListItem = styled.li`
   width: 53.9rem;
   margin: auto;
   & + & {
     margin-top: 6.8rem;
   }
-`;
-
-export const WifiLabelWrap = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.8rem;
-`;
-export const WifiHelperWrap = styled.div`
-  margin-left: 0.6rem;
 `;
 
 export const FileInput = styled.input``;

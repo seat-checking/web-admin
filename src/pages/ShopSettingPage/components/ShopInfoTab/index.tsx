@@ -5,14 +5,11 @@ import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import { Radio } from 'components/Radio';
-import { HelperText } from 'pages/ShopSettingPage/components/HelperText';
 import {
   ContentWrap,
   GrayBackground,
   ListItem,
   RadioRow,
-  WifiHelperWrap,
-  WifiLabelWrap,
   FileInput,
   AddFileBtn,
   AddFileRow,
@@ -20,7 +17,6 @@ import {
 } from 'pages/ShopSettingPage/components/ShopInfoTab/ShopInfoTab.styled';
 
 import { Carousel } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Carousel';
-import { Wifi } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Wifi';
 
 /**
  * 가게 정보 설정 탭
@@ -29,20 +25,6 @@ export const ShopInfoTab: React.FC = () => {
   const theme = useTheme();
   return (
     <ContentWrap>
-      <GrayBackground>
-        <ListItem>
-          <WifiLabelWrap>
-            <Label label='Wi-Fi 등록' marginBottom='0' />
-            <WifiHelperWrap>
-              <HelperText>
-                현재 가게에서 사용중인 Wi-Fi를 통해 고객들의 입실과 퇴실 여부를
-                확인할 수 있어요.
-              </HelperText>
-            </WifiHelperWrap>
-          </WifiLabelWrap>
-          <Wifi />
-        </ListItem>
-      </GrayBackground>
       <ListItem>
         <Input
           label='가게 이름'
