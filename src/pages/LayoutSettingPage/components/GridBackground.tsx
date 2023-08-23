@@ -122,9 +122,9 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
       onDrop={handleDropItem}
       onDropDragOver={handleDropDragOver}
       onLayoutChange={handleLayoutChange}
-      onDragStart={(l, item, n, p, event) => handleDragStart(event, item.i)}
+      onDragStart={(_l, item, _n, _p, event) => handleDragStart(event, item.i)}
       onDrag={handleDrag}
-      onDragStop={(l, item) => handleDragStop(item.i)}
+      onDragStop={(_l, item) => handleDragStop(item.i)}
     >
       {myLayout?.map((item) => {
         if (item.sort === 'chair') {

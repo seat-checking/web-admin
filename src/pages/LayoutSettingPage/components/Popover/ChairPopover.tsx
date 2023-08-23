@@ -63,7 +63,7 @@ export const ChairPopover: React.FC<PopoverProps> = ({
     <Container transform={transform} ref={containerRef}>
       <Balloon>
         <Header number={152} />
-        <ChairBody manageId={input} setManageId={setInput} />
+        <ChairBody manageId={input} setManageId={setInput} onClose={onClose} />
       </Balloon>
       <Tail />
     </Container>

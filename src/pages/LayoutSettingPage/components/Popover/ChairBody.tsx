@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react';
 import styled from 'styled-components/macro';
 import { CHAIR_POPOVER_BODY_WIDTH_REM } from 'pages/LayoutSettingPage/utils/constants';
-import { flexSet } from 'styles/mixin';
 
 interface ChairBodyProps {
   defaultNumber?: number;
   manageId: string;
   setManageId: any;
+  onClose?: () => void;
 }
 
 /**
@@ -15,6 +15,7 @@ interface ChairBodyProps {
 export const ChairBody: React.FC<ChairBodyProps> = ({
   manageId,
   setManageId,
+  onClose,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -22,6 +23,29 @@ export const ChairBody: React.FC<ChairBodyProps> = ({
     if (inputRef.current && inputRef.current.value === '') {
       inputRef.current.focus();
     }
+  };
+
+  const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && manageId !== '') {
+      console.log('ang?');
+      onClose?.();
+    }
+  };
+
+  const handleInput = (event: React.FormEvent<HTMLInputElement>) => {
+    const inputElement = event.currentTarget;
+    if (inputElement.value.length <= inputElement.maxLength) {
+      return;
+    }
+
+    event.currentTarget.value = inputElement.value.slice(
+      0,
+      inputElement.maxLength,
+    );
+  };
+
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setManageId(event.currentTarget.value);
   };
 
   useEffect(() => {
@@ -35,13 +59,12 @@ export const ChairBody: React.FC<ChairBodyProps> = ({
       <Label>좌석번호</Label>
       <Input
         placeholder=''
-        type='text'
-        pattern='\d*'
-        maxLength={3}
+        type='number'
         value={manageId}
-        onChange={(e) => {
-          setManageId(e.currentTarget.value);
-        }}
+        maxLength={3}
+        onChange={handleChangeInput}
+        onKeyUp={handleEnter}
+        onInput={handleInput}
         ref={inputRef}
         onBlur={handleBlur}
       />
