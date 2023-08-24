@@ -102,6 +102,7 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
         <Body>
           {storeResponseList.map((store) => (
             <DropdownItem
+              key={store.storeId}
               props={store}
               isSelected={currentStoreId === store.storeId}
               onClick={() => handleChangeStoreId(store.storeId)}

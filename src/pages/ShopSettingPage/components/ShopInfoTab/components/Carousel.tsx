@@ -6,28 +6,58 @@ import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 import { flexSet } from 'styles/mixin';
 
 interface Image {
-  id: number;
-  url: string;
+  // id: number;
+  // url: string;
+  name: string;
+  file: File;
+  thumbnail: string;
 }
 
 interface CarouselProps {
   imgs?: Image[];
+  setImgFiles: React.Dispatch<React.SetStateAction<Image[]>>;
 }
 
 /**
  * 캐러셀 컴포넌트
  */
-export const Carousel: React.FC<CarouselProps> = ({ imgs }) => {
+export const Carousel: React.FC<CarouselProps> = ({ imgs, setImgFiles }) => {
   const theme = useTheme();
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
+  const handleShowNextImg = () => {
+    if (!imgs) {
+      return;
+    }
+    const imgCount = imgs.length;
+    setCurrentImgIndex((prev) => (prev < imgCount - 1 ? prev + 1 : prev));
+  };
+
+  const handleShowPrevImg = () => {
+    setCurrentImgIndex((prev) => (prev > 0 ? prev - 1 : prev));
+  };
+
+  const handleDeleteImg = (imgName: string) => {
+    if (!imgs) {
+      return;
+    }
+    const isLastImg = currentImgIndex === imgs.length - 1;
+    if (isLastImg && currentImgIndex !== 0) {
+      setCurrentImgIndex((prev) => prev - 1);
+    }
+    const deleted = imgs?.filter((img) => img.name !== imgName);
+    setImgFiles(deleted);
+  };
+
   return (
     <Wrap>
-      {!imgs ? (
+      {!imgs || imgs.length === 0 ? (
         <NoImg>등록된 이미지가 없어요.</NoImg>
       ) : (
-        <ImgWrap $img={imgs[currentImgIndex].url}>
-          <XButtonWrap>
+        <ImgWrap $img={imgs[currentImgIndex].thumbnail}>
+          <XButtonWrap
+            onClick={() => handleDeleteImg(imgs[currentImgIndex].name)}
+          >
             <XIcon width='2.4rem' stroke={theme.palette.grey[300]} />
           </XButtonWrap>
           <Footer>
@@ -36,12 +66,14 @@ export const Carousel: React.FC<CarouselProps> = ({ imgs }) => {
               width='2.4rem'
               height='2.4rem'
               transform='rotate(180)'
+              onClick={handleShowPrevImg}
             />
-            {`${currentImgIndex}/${imgs.length}`}
+            {`${currentImgIndex + 1}/${imgs.length}`}
             <ChevronRight
               fill={theme.palette.grey[300]}
               width='2.4rem'
               height='2.4rem'
+              onClick={handleShowNextImg}
             />
           </Footer>
         </ImgWrap>
@@ -70,11 +102,14 @@ const ImgWrap = styled.div<{ $img?: string }>`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+
+  transition: all 0.3s;
 `;
 
 const XButtonWrap = styled.button`
   margin-left: auto;
 `;
+
 const NoImg = styled.div`
   height: 100%;
   ${flexSet()};

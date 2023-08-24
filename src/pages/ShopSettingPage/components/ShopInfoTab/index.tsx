@@ -1,5 +1,7 @@
+import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTheme } from 'styled-components';
+import type { ChangeEvent } from 'react';
 import type { Address } from 'react-daum-postcode';
 import type { SubmitHandler } from 'react-hook-form';
 
@@ -31,11 +33,18 @@ interface ShopSettingForm {
   mainImage: string;
   introduction: string;
 }
+
+interface ImgFile {
+  name: string;
+  file: File;
+  thumbnail: string;
+}
 /**
  * 가게 정보 설정 탭
  */
 export const ShopInfoTab: React.FC = () => {
   const theme = useTheme();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
@@ -45,6 +54,28 @@ export const ShopInfoTab: React.FC = () => {
   } = useForm<ShopSettingForm>();
 
   const { open, handleComplete } = useAddress();
+  const [imgFiles, setImgFiles] = useState<ImgFile[]>([]);
+
+  const handleOpenFileUpload = (event: React.MouseEvent) => {
+    event.preventDefault();
+    fileInputRef.current?.click();
+  };
+
+  const handleUploadFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (files && files.length > 0) {
+      const fileList = Array.prototype.map.call<
+        FileList,
+        [(file: File) => ImgFile],
+        ImgFile[]
+      >(files, (file: File) => ({
+        name: file.name,
+        file,
+        thumbnail: URL.createObjectURL(file),
+      }));
+      setImgFiles([...imgFiles, ...fileList]);
+    }
+  };
 
   const onSubmit: SubmitHandler<ShopSettingForm> = (data) => {
     console.log('errors :>> ', errors);
@@ -143,14 +174,24 @@ export const ShopInfoTab: React.FC = () => {
         </ListItem>
         <ListItem>
           <Label label='가게 대표 이미지' />
-          <FileInput type='file' hidden />
+          <FileInput
+            type='file'
+            hidden
+            accept='image/jpeg, image/png, image/jpg'
+            multiple
+            ref={fileInputRef}
+            onChange={handleUploadFile}
+          />
           <AddFileRow>
-            <AddFileBtn backgroundColor={theme.palette.grey[50]}>
+            <AddFileBtn
+              backgroundColor={theme.palette.grey[50]}
+              onClick={handleOpenFileUpload}
+            >
               <UploadIconBox />
               첨부파일 업로드 *최대 10장
               <br /> (권장 사이즈 750x480이상)
             </AddFileBtn>
-            <Carousel />
+            <Carousel imgs={imgFiles} setImgFiles={setImgFiles} />
           </AddFileRow>
         </ListItem>
         <ListItem>
