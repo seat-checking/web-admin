@@ -25,3 +25,15 @@ export interface LoginForm {
   email: string;
   password: string;
 }
+
+export interface Shop {
+  storeId: number;
+  storeName: string;
+  mainImage: string | null;
+  introduction: string | null;
+}
+
+export interface DropdownShop extends Shop {
+  isOpenNow: boolean;
+  isClosedTody: boolean;
+}

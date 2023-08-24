@@ -12,6 +12,8 @@ export const STORAGE = {
   accessToken: 'accessToken',
   storeId: 'storeId',
   storeName: 'storeName',
+  mainImage: 'mainImage',
+  introduction: 'introduction',
 } as const;
 
 export const mutationKeys = {

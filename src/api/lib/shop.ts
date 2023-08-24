@@ -1,4 +1,4 @@
-import type { ShopInfoForm } from 'common/utils/types';
+import type { DropdownShop, ShopInfoForm } from 'common/utils/types';
 import { axiosClient } from 'api/apiClient';
 
 export const addShop = async (shopInfoForm: ShopInfoForm) => {
@@ -9,7 +9,7 @@ export const addShop = async (shopInfoForm: ShopInfoForm) => {
   return response.data.result;
 };
 
-export const getOwnedShops = async () => {
+export const getOwnedShops = async (): Promise<DropdownShop[]> => {
   const response = await axiosClient.get('/stores/admins/owned');
-  return response.data.result;
+  return response.data.result.storeResponseList;
 };

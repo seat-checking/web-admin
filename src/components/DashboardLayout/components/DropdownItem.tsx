@@ -1,41 +1,40 @@
 import styled, { css } from 'styled-components/macro';
+import type { DropdownShop } from 'common/utils/types';
+import defaultShopImg from 'assets/images/default-shop.png';
 import { HelperText } from 'components/DashboardLayout/components/HelperText';
 import { Tooltip } from 'components/DashboardLayout/components/Tooltip';
 import { Toggle } from 'components/Toggle';
 
 /* eslint-disable react/destructuring-assignment */
 interface DropdownItemProps {
-  //   isOpen: boolean;
-  //   text: string | number;
-  //   func: () => void;
-  props: any;
   isSelected: boolean;
   onClick: VoidFunction;
+  shop: DropdownShop;
 }
 
 /**
  * 컴포넌트
  */
 export const DropdownItem: React.FC<DropdownItemProps> = ({
-  props,
+  shop,
   isSelected,
   onClick,
 }) => {
   return (
     <Wrap type='button' $isSelected={isSelected} onClick={onClick}>
-      <Img src={props.mainImage} alt='' />
+      <Img src={shop.mainImage || defaultShopImg} alt='' />
       <MiddleWrap>
         <UpperWrap>
-          <StoreName>{props.storeName}</StoreName>
-          <Circle $isClosed={props.closedToday} />
+          <StoreName>{shop.storeName}</StoreName>
+          <Circle $isClosed={shop.isClosedTody} />
           <ClosedToday>
-            {props.closedToday ? '영업 중' : '영업 종료'}
+            {shop.isClosedTody ? '영업 중' : '영업 종료'}
           </ClosedToday>
         </UpperWrap>
-        <Introduction>{props.introduction}</Introduction>
+        <Introduction>{shop.introduction}</Introduction>
       </MiddleWrap>
       <RightWrap>
-        <Toggle isChecked={props.openNow} />
+        <Toggle isChecked={shop.isOpenNow} />
         <HelperText>
           일시 정지
           <Tooltip />
