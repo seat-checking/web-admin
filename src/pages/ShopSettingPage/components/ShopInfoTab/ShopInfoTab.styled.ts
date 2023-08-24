@@ -1,12 +1,17 @@
 import styled from 'styled-components/macro';
 import upload from 'assets/icons/upload.svg';
 import { Button } from 'components/Button';
+import { ErrorMessage } from 'components/ErrorMessage';
 
 export const ContentWrap = styled.ul`
   width: 100%;
 
   padding-top: 4rem;
   padding-bottom: 10rem;
+`;
+
+export const GappedErrorMessage = styled(ErrorMessage)`
+  margin-top: 0.8rem;
 `;
 
 export const GrayBackground = styled.div`
