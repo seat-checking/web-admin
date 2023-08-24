@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react';
 import styled from 'styled-components/macro';
+import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
+import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 import { CHAIR_POPOVER_BODY_WIDTH_REM } from 'pages/LayoutSettingPage/utils/constants';
 
 interface ChairBodyProps {
   defaultNumber?: number;
-  manageId: string;
-  setManageId: any;
+  input: string;
+  setInput: any;
   onClose?: () => void;
 }
 
@@ -13,11 +15,13 @@ interface ChairBodyProps {
  * 의자 클릭했을 때의 팝오버 바디 영역
  */
 export const ChairBody: React.FC<ChairBodyProps> = ({
-  manageId,
-  setManageId,
+  input,
+  setInput,
   onClose,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { setManageId } = useLayoutActions();
+  const { selectedId } = useSelectItem();
 
   const handleBlur = () => {
     if (inputRef.current && inputRef.current.value === '') {
@@ -26,8 +30,8 @@ export const ChairBody: React.FC<ChairBodyProps> = ({
   };
 
   const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && manageId !== '') {
-      console.log('ang?');
+    if (event.key === 'Enter' && input !== '' && selectedId) {
+      setManageId(selectedId, Number(input));
       onClose?.();
     }
   };
@@ -45,7 +49,7 @@ export const ChairBody: React.FC<ChairBodyProps> = ({
   };
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setManageId(event.currentTarget.value);
+    setInput(event.currentTarget.value);
   };
 
   useEffect(() => {
@@ -60,7 +64,7 @@ export const ChairBody: React.FC<ChairBodyProps> = ({
       <Input
         placeholder=''
         type='number'
-        value={manageId}
+        value={input}
         maxLength={3}
         onChange={handleChangeInput}
         onKeyUp={handleEnter}

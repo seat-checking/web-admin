@@ -24,7 +24,9 @@ export const Header: React.FC<HeaderProps> = ({ number }) => {
 
   return (
     <Wrap>
-      {selectedManageId && <ManageId>{selectedManageId}번</ManageId>}
+      {typeof selectedManageId === 'number' && (
+        <ManageId>{selectedManageId}번</ManageId>
+      )}
       <DeleteBtn type='button' onClick={handleDeleteItem}>
         삭제
       </DeleteBtn>

@@ -97,13 +97,21 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
     setChange(true);
     onClose();
   };
+
+  const handleSubmit = () => {
+    if (type === 'CREATE') {
+      handleAddSpace();
+      return;
+    }
+    handleEditSpace();
+  };
   /* eslint-disable-next-line */
   return (
     <Modal onClose={onClose} closeOnOusideClick={false}>
       <Modal.Header>
         {type === 'CREATE' ? '스페이스 생성' : ' 스페이스 수정'}
       </Modal.Header>
-      <Content>
+      <FormContent onSubmit={handleSubmit}>
         <SpaceNameLabel>사용할 스페이스의 이름을 적어주세요</SpaceNameLabel>
         <SpaceNameInput
           type='text'
@@ -141,16 +149,15 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
             input.length === 0 ||
             (!reservationUnits.chair && !reservationUnits.space)
           }
-          onClick={type === 'CREATE' ? handleAddSpace : handleEditSpace}
         >
           {type === 'CREATE' ? '스페이스 생성' : ' 스페이스 수정'}
         </Button>
-      </Content>
+      </FormContent>
     </Modal>
   );
 };
 
-const Content = styled.div`
+const FormContent = styled.form`
   padding: 1.6rem;
 `;
 const SpaceNameLabel = styled.div`

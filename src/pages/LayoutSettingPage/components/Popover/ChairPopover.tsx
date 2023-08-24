@@ -31,7 +31,7 @@ export const ChairPopover: React.FC<PopoverProps> = ({
   const selectedManageId = selectedId && getItem(selectedId).manageId;
 
   const [input, setInput] = useState(
-    selectedManageId ? String(selectedManageId) : '',
+    typeof selectedManageId === 'number' ? String(selectedManageId) : '',
   );
   const { setManageId } = useLayoutActions();
 
@@ -63,7 +63,7 @@ export const ChairPopover: React.FC<PopoverProps> = ({
     <Container transform={transform} ref={containerRef}>
       <Balloon>
         <Header number={152} />
-        <ChairBody manageId={input} setManageId={setInput} onClose={onClose} />
+        <ChairBody input={input} setInput={setInput} onClose={onClose} />
       </Balloon>
       <Tail />
     </Container>

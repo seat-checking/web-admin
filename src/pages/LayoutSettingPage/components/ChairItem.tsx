@@ -12,16 +12,18 @@ import { flexSet } from 'styles/mixin';
 interface ChairItemProps extends ComponentPropsWithRef<'div'> {
   isClickable: boolean;
   id: string;
-  // setIsPopoverOpen: any;
-  isPopoverOpen: boolean;
+  isChairClicked: boolean;
   onClose: () => void;
 }
 
 export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
-  ({ isClickable, id, isPopoverOpen, onClose, ...rest }, ref) => {
+  ({ isClickable, id, isChairClicked, onClose, ...rest }, ref) => {
     const { getItem } = useLayoutActions();
 
     const manageId = getItem(id)?.manageId;
+
+    const isPopoverOpen =
+      isClickable && (isChairClicked || typeof manageId !== 'number');
 
     const popoverPosition =
       (ref && typeof ref !== 'function' && ref.current?.style.transform) || '';
@@ -33,7 +35,7 @@ export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
             <Number>{manageId}</Number>
           </Chair>
         </ChairBorder>
-        {isClickable && (isPopoverOpen || !manageId) && (
+        {isPopoverOpen && (
           <ChairPopover transform={popoverPosition} onClose={onClose} />
         )}
       </>

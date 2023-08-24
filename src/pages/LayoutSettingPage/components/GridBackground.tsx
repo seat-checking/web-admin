@@ -32,11 +32,11 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
 }) => {
   const myLayout = useLayout();
   const { saveLayoutChange, addItem } = useLayoutActions();
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isChairClicked, setIsChairClicked] = useState(false);
   const { selectedId, setSelectedId } = useSelectItem();
 
   const handleTogglePopover = (id: string) => {
-    setIsPopoverOpen(!isPopoverOpen);
+    setIsChairClicked(!isChairClicked);
     setSelectedId(id);
   };
 
@@ -133,8 +133,8 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
               key={item.i}
               id={item.i}
               isClickable={activeTab === 1}
-              isPopoverOpen={isPopoverOpen && selectedId === item.i}
-              onClose={() => setIsPopoverOpen(!isPopoverOpen)}
+              isChairClicked={isChairClicked && selectedId === item.i}
+              onClose={() => setIsChairClicked(!isChairClicked)}
             />
           );
         }
