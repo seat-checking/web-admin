@@ -10,7 +10,7 @@ interface ToggleProps {
 export const Toggle: React.FC<ToggleProps> = ({ isChecked }) => {
   //   const [isChecked, setIsChecked] = useState(false);
   return (
-    <Wrap>
+    <Wrap onClick={(e) => e.stopPropagation()}>
       <input role='switch' type='checkbox' />
     </Wrap>
   );

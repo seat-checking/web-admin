@@ -13,8 +13,8 @@ export const Tooltip: React.FC = () => {
   );
 };
 
-const BALLOON_WIDTH_REM = 8;
-const BALLOON_HEIGHT_REM = 4.1;
+const BALLOON_WIDTH_REM = 9;
+const BALLOON_HEIGHT_REM = 4.7;
 
 const Container = styled.div`
   position: absolute;

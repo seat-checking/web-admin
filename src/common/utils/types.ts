@@ -29,11 +29,11 @@ export interface LoginForm {
 export interface Shop {
   storeId: number;
   storeName: string;
-  mainImage: string | null;
   introduction: string | null;
+  mainImage: string | null;
 }
 
 export interface DropdownShop extends Shop {
   isOpenNow: boolean;
-  isClosedTody: boolean;
+  isClosedToday: boolean;
 }

@@ -24,6 +24,7 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({
   setSelectedShop,
 }) => {
   const { data: storeResponseList, isLoading } = useGetOwnedShops();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement | null>(null);

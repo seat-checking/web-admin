@@ -26,19 +26,16 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
       <MiddleWrap>
         <UpperWrap>
           <StoreName>{shop.storeName}</StoreName>
-          <Circle $isClosed={shop.isClosedTody} />
-          <ClosedToday>
-            {shop.isClosedTody ? '영업 중' : '영업 종료'}
-          </ClosedToday>
+          <Circle $isOpen={shop.isOpenNow} />
+          <IsOpenText $isOpen={shop.isOpenNow}>
+            {shop.isOpenNow ? '영업 중' : '준비 중'}
+          </IsOpenText>
         </UpperWrap>
         <Introduction>{shop.introduction}</Introduction>
       </MiddleWrap>
       <RightWrap>
-        <Toggle isChecked={shop.isOpenNow} />
-        <HelperText>
-          일시 정지
-          <Tooltip />
-        </HelperText>
+        <Toggle isChecked={shop.isClosedToday} />
+        <HelperText>일시 정지</HelperText>
       </RightWrap>
     </Wrap>
   );
@@ -84,20 +81,23 @@ const StoreName = styled.span`
   color: white;
 `;
 
-const ClosedToday = styled.span`
+const IsOpenText = styled.span<{ $isOpen: boolean }>`
   font-size: 1.2rem;
   font-weight: 400;
+
+  color: ${({ $isOpen: $isClosed, theme }) =>
+    $isClosed ? theme.palette.primary.orange : theme.palette.grey[200]};
 `;
 
-const Circle = styled.div<{ $isClosed: boolean }>`
+const Circle = styled.div<{ $isOpen: boolean }>`
   margin-left: 0.6rem;
   margin-right: 0.4rem;
 
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 50%;
-  background-color: ${({ $isClosed, theme }) =>
-    $isClosed ? theme.palette.primary.orange : theme.palette.grey[300]};
+  background-color: ${({ $isOpen: $isClosed, theme }) =>
+    $isClosed ? theme.palette.primary.orange : theme.palette.grey[200]};
 `;
 
 const Introduction = styled.div`
