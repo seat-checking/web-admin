@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ReservationUnit } from 'pages/LayoutSettingPage/utils/types';
+import type { ReservationUnit } from 'api/lib/shop';
 
 interface SpaceInfoStoreState {
   spaceName: string;
@@ -13,14 +13,14 @@ interface SpaceInfoStoreState {
 
 export const useSpaceInfoStore = create<SpaceInfoStoreState>()((set) => ({
   spaceName: '',
-  reservationUnit: { seat: true, space: false },
+  reservationUnit: { chair: true, space: false },
   actions: {
     setSpaceName: (name: string) => set(() => ({ spaceName: name })),
     setReservationUnit: (unit: ReservationUnit) =>
       set(() => ({ reservationUnit: unit })),
     clear: () =>
       set(() => ({
-        reservationUnit: { seat: true, space: false },
+        reservationUnit: { chair: true, space: false },
         spaceName: '',
       })),
   },

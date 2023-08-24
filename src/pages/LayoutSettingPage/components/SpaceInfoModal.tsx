@@ -1,10 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components/macro';
-import type {
-  ReservationUnit,
-  SpaceType,
-} from 'pages/LayoutSettingPage/utils/types';
+import type { ReservationUnit } from 'api/lib/shop';
+import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { queryKeys } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import InputCheckBox from 'components/InputCheckBox';
@@ -47,7 +45,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
 
   const defaultName = type === 'CREATE' ? '' : spaceName;
   const defaultUnit =
-    type === 'CREATE' ? { seat: true, space: false } : reservationUnit;
+    type === 'CREATE' ? { chair: true, space: false } : reservationUnit;
 
   const [input, setInput] = useState(defaultName);
   const [reservationUnits, setReservationUnits] =
@@ -66,11 +64,11 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
   };
 
   const getReservationHelperText = () => {
-    if (reservationUnits.seat && !reservationUnits.space)
+    if (reservationUnits.chair && !reservationUnits.space)
       return '고객이 좌석만 예약할 수 있어요';
-    if (!reservationUnits.seat && reservationUnits.space)
+    if (!reservationUnits.chair && reservationUnits.space)
       return '고객이 스페이스만 예약할 수 있어요';
-    if (reservationUnits.seat && reservationUnits.space)
+    if (reservationUnits.chair && reservationUnits.space)
       return '고객이 좌석과 스페이스 모두 예약할 수 있어요';
     return '예약 단위를 선택하셔야 돼요';
   };
@@ -119,7 +117,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
           <InputLabel>
             <InputCheckBox
               name='seat'
-              checked={reservationUnits.seat}
+              checked={reservationUnits.chair}
               onChange={handleChangeUnit}
             />
             <InputLabelText>좌석</InputLabelText>
@@ -141,7 +139,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
           fontSize='1.4rem'
           isDisabled={
             input.length === 0 ||
-            (!reservationUnits.seat && !reservationUnits.space)
+            (!reservationUnits.chair && !reservationUnits.space)
           }
           onClick={type === 'CREATE' ? handleAddSpace : handleEditSpace}
         >

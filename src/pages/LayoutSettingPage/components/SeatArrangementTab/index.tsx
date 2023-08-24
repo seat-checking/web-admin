@@ -1,9 +1,6 @@
 import { useTheme } from 'styled-components';
-import type { EditShopLayout } from 'api/lib/shop';
-import type {
-  CustomItemLayout,
-  ReservationUnit,
-} from 'pages/LayoutSettingPage/utils/types';
+import type { CreateShopLayout, ReservationUnit } from 'api/lib/shop';
+import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
 import { useCreateSpace } from 'common/hooks/mutations/useCreateSpace';
 import { useEditLayout } from 'common/hooks/mutations/useEditLayout';
 import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
@@ -25,10 +22,7 @@ import {
 import { Chair } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Chair';
 import { Table } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Table';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
-import {
-  useChange,
-  useChangeStore,
-} from 'pages/LayoutSettingPage/stores/changeStore';
+import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useLayout } from 'pages/LayoutSettingPage/stores/layoutStore';
 import {
   useReservationUnit,
@@ -40,41 +34,35 @@ interface SeatArrangementTabProps {
   rowCnt: number;
 }
 
-const getReservationUnitString = (reservationUnit: ReservationUnit) => {
-  if (reservationUnit.seat && !reservationUnit.space) return '좌석';
-  if (!reservationUnit.seat && reservationUnit.space) return '스페이스';
-  return '스페이스/좌석';
-};
-
 const mappingData = (
   layout: CustomItemLayout[],
   rowCnt: number,
-  spaceName: string,
+  name: string,
   reservationUnit: ReservationUnit,
 ) => {
-  const request: EditShopLayout = {
-    name: spaceName,
+  const request: CreateShopLayout = {
+    name,
     height: rowCnt,
-    reservationUnit: getReservationUnitString(reservationUnit),
+    reservationUnit,
     tableList: [],
     chairList: [],
   };
-  layout.forEach((item) => {
-    if (item.sort === 'table') {
+  layout.forEach(({ i, w, h, x, y, sort, manageId }) => {
+    if (sort === 'table') {
       const tableData = {
-        storeTableId: item.i,
-        tableWidth: item.w,
-        tableHeight: item.h,
-        tableX: item.x,
-        tableY: item.y,
+        i,
+        w,
+        h,
+        x,
+        y,
       };
       request.tableList.push(tableData);
     } else {
       const chair = {
-        storeChairId: item.i,
-        manageId: 0,
-        chairX: item.x,
-        chairY: item.y,
+        i,
+        manageId,
+        x,
+        y,
       };
       request.chairList.push(chair);
     }
@@ -106,10 +94,10 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
       );
       return;
     }
-    editLayoutMutate({
-      spaceId,
-      layout: mappingData(layout, rowCnt, spaceName, reservationUnit),
-    });
+    // editLayoutMutate({
+    //   spaceId,
+    //   layout: mappingData(layout, rowCnt, spaceName, reservationUnit),
+    // });
     setChange(false);
   };
 

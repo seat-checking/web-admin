@@ -1,59 +1,49 @@
-import { useQuery } from '@tanstack/react-query';
-import type { AxiosResponse } from 'axios';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { axiosClient } from 'api/apiClient';
 import { STORAGE } from 'common/utils/constants';
 
 interface Chair {
-  storeChairId: string;
-  manageId: number;
-  chairX: number;
-  chairY: number;
+  i: string;
+  manageId: number | undefined;
+  x: number;
+  y: number;
 }
 
 interface Table {
-  storeTableId: string;
-  manageId: number; // 필요없음 (의자만 좌석 번호 필요함)
-  width: number;
-  height: number;
-  tableX: number;
-  tableY: number;
+  i: string;
+  w: number;
+  h: number;
+  x: number;
+  y: number;
 }
 
-interface TableForEdit {
-  storeTableId: string;
-  tableWidth: number;
-  tableHeight: number;
-  tableX: number;
-  tableY: number;
+export interface ReservationUnit {
+  space: boolean;
+  chair: boolean;
 }
 
 export interface ShopLayout {
-  storeSpaceId: number;
   storeSpaceName: string;
-  reservationUnit: string; // 추가
-  width: number; // 필요없음 (가로 길이 고정돼있음)
+  reservationUnit: ReservationUnit;
+  height: number;
+  tableList: Table[];
+  chairList: Chair[];
+}
+export interface CreateShopLayout {
+  name: string;
+  reservationUnit: ReservationUnit;
   height: number;
   tableList: Table[];
   chairList: Chair[];
 }
 
-export interface EditShopLayout {
-  name: string;
-  height: number;
-  reservationUnit: string;
-  tableList: TableForEdit[];
-  chairList: Chair[];
+export interface GetShopLayoutResponse extends ShopLayout {
+  storeSpaceId: number;
 }
 
 export interface EditShopRequest {
   spaceId: number;
-  layout: EditShopLayout;
-}
-
-interface LayoutResponse {
-  storeId: number;
-  adminStoreSpaceResponseList: ShopLayout[];
+  layout: ShopLayout;
 }
 
 export class ShopApi {
@@ -69,7 +59,9 @@ export class ShopApi {
   };
 
   // 스페이스별 가게 형태 조회
-  static getLayout = async (spaceId: number): Promise<ShopLayout> => {
+  static getLayout = async (
+    spaceId: number,
+  ): Promise<GetShopLayoutResponse> => {
     const response = await axiosClient.get(
       `${this.apiPrefix}/spaces/seats/${spaceId}`,
     );
@@ -77,14 +69,16 @@ export class ShopApi {
   };
 
   // 스페이스 생성
-  static createShopLayout = async (layout: EditShopLayout) => {
+  static createShopLayout = async (
+    layout: CreateShopLayout,
+  ): Promise<number> => {
     const storeId = localStorage.getItem(STORAGE.storeId);
 
     const response = await axiosClient.post(
       `${this.apiPrefix}/spaces/${storeId}`,
       layout,
     );
-    return response;
+    return response.data.result.storeSpaceId;
   };
 
   // 스페이스 삭제

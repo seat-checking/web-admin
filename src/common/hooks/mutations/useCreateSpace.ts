@@ -1,36 +1,25 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { EditShopLayout } from 'api/lib/shop';
-import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
+import type { CreateShopLayout } from 'api/lib/shop';
 import { ShopApi } from 'api/lib/shop';
 import { queryKeys } from 'common/utils/constants';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
+import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 
 export const useCreateSpace = () => {
   const queryClient = useQueryClient();
-  const { setFirstSpaceId } = useSpaceId();
+  const { setSpaceId } = useSpaceId();
+  const { setChange } = useChange();
 
   return useMutation({
-    mutationFn: (layout: EditShopLayout) => {
+    mutationFn: (layout: CreateShopLayout) => {
       return ShopApi.createShopLayout(layout);
     },
-    onSuccess(data, layout: EditShopLayout) {
-      console.log('data :>> ', data);
-      // queryClient.setQueryData(
-      //   [queryKeys.GET_SPACES],
-      //   (data: SpaceType[] | undefined) => {
-      //     console.log('data :>> ', data);
-      //     const changeId = data?.map((space) =>
-      //       space.storeSpaceId === -1
-      //         ? { ...space, storeSpaceId: // 새로 넘겨받은 id로 교체  }
-      //         : space,
-      //     );
-      //     return changeId;
-      //   },
-      // );
+    onSuccess(createdSpaceId) {
       queryClient.invalidateQueries({
         queryKey: [queryKeys.GET_SPACES],
       });
-      setFirstSpaceId();
+      setSpaceId(createdSpaceId);
+      setChange(false);
     },
   });
 };

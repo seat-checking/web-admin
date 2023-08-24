@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import type { ShopLayout } from 'api/lib/shop';
 import type {
   ItemType,
-  ReservationUnit,
   ShopFormState,
 } from 'pages/LayoutSettingPage/utils/types';
 import type { SyntheticEvent } from 'react';
@@ -40,27 +39,27 @@ import {
 } from 'pages/LayoutSettingPage/utils/constants';
 
 const initialLayouts = (shop: ShopLayout) => {
-  const tables = shop?.tableList.map((table) => {
+  const tables = shop?.tableList.map(({ i, x, y, w, h }) => {
     return {
-      i: table.storeTableId,
-      x: table.tableX,
-      y: table.tableY,
-      w: table.width,
-      h: table.height,
+      i,
+      x,
+      y,
+      w,
+      h,
       sort: 'table' as ItemType,
       isResizable: false,
       isDraggable: false,
     };
   });
-  const chairs = shop?.chairList.map((chair) => {
+  const chairs = shop?.chairList.map(({ i, x, y, manageId }) => {
     return {
-      i: chair.storeChairId,
-      x: chair.chairX,
-      y: chair.chairY,
+      i,
+      x,
+      y,
       w: 1,
       h: 1,
       sort: 'chair' as ItemType,
-      manageId: chair.manageId,
+      manageId,
       isResizable: false,
       isDraggable: false,
     };
@@ -68,16 +67,16 @@ const initialLayouts = (shop: ShopLayout) => {
   return [...tables, ...chairs];
 };
 
-const parseReservationUnitString = (unit: string) => {
-  const reservationUnit: ReservationUnit = { seat: true, space: true };
-  if (unit === '좌석') {
-    reservationUnit.space = false;
-  }
-  if (unit === '스페이스') {
-    reservationUnit.seat = false;
-  }
-  return reservationUnit;
-};
+// const parseReservationUnitString = (unit: string) => {
+//   const reservationUnit: ReservationUnit = { seat: true, space: true };
+//   if (unit === '좌석') {
+//     reservationUnit.space = false;
+//   }
+//   if (unit === '스페이스') {
+//     reservationUnit.seat = false;
+//   }
+//   return reservationUnit;
+// };
 
 /**
  * 좌석 설정 페이지
@@ -131,9 +130,7 @@ export const LayoutSettingPage: React.FC = () => {
     if (spaceLayout) {
       saveLayout(initialLayouts(spaceLayout));
       setSpaceName(spaceLayout.storeSpaceName);
-      setReservationUnit(
-        parseReservationUnitString(spaceLayout.reservationUnit),
-      );
+      setReservationUnit(spaceLayout.reservationUnit);
       changeRowCnt(spaceLayout.height);
     }
   }, [spaceLayout, saveLayout]); // FIXME changeRowCnt 추가

@@ -13,8 +13,3 @@ export interface CustomItemLayout extends Layout {
   sort: ItemType;
   manageId?: number;
 }
-
-export interface ReservationUnit {
-  seat: boolean;
-  space: boolean;
-}
