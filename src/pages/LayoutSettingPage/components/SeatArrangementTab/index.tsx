@@ -1,5 +1,6 @@
 import { useTheme } from 'styled-components';
-import type { CreateShopLayout, ReservationUnit } from 'api/lib/shop';
+
+import type { ReservationUnit, ShopLayout } from 'api/lib/shop';
 import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
 import { useCreateSpace } from 'common/hooks/mutations/useCreateSpace';
 import { useEditLayout } from 'common/hooks/mutations/useEditLayout';
@@ -37,11 +38,11 @@ interface SeatArrangementTabProps {
 const mappingData = (
   layout: CustomItemLayout[],
   rowCnt: number,
-  name: string,
+  storeSpaceName: string,
   reservationUnit: ReservationUnit,
 ) => {
-  const request: CreateShopLayout = {
-    name,
+  const request: ShopLayout = {
+    storeSpaceName,
     height: rowCnt,
     reservationUnit,
     tableList: [],
@@ -94,10 +95,10 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
       );
       return;
     }
-    // editLayoutMutate({
-    //   spaceId,
-    //   layout: mappingData(layout, rowCnt, spaceName, reservationUnit),
-    // });
+    editLayoutMutate({
+      spaceId,
+      layout: mappingData(layout, rowCnt, spaceName, reservationUnit),
+    });
     setChange(false);
   };
 

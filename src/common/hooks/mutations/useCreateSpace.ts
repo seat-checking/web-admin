@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { CreateShopLayout } from 'api/lib/shop';
+import type { ShopLayout } from 'api/lib/shop';
 import { ShopApi } from 'api/lib/shop';
 import { queryKeys } from 'common/utils/constants';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
@@ -11,7 +11,7 @@ export const useCreateSpace = () => {
   const { setChange } = useChange();
 
   return useMutation({
-    mutationFn: (layout: CreateShopLayout) => {
+    mutationFn: (layout: ShopLayout) => {
       return ShopApi.createShopLayout(layout);
     },
     onSuccess(createdSpaceId) {

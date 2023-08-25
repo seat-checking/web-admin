@@ -31,7 +31,7 @@ export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
     return (
       <>
         <ChairBorder {...rest} ref={ref}>
-          <Chair isClickable={isClickable}>
+          <Chair $isClickable={isClickable} $isSelected={isPopoverOpen}>
             <Number>{manageId}</Number>
           </Chair>
         </ChairBorder>
@@ -49,17 +49,22 @@ export const ChairBorder = styled.div`
 `;
 
 // 검정 테두리를 준 의자 영역
-export const Chair = styled.div<{ isClickable: boolean }>`
+export const Chair = styled.div<{
+  $isClickable: boolean;
+  $isSelected: boolean;
+}>`
   ${flexSet()}
   background-color: ${(props): string => props.theme.palette.grey[100]};
 
   width: ${CHAIR_SIZE_PX - CHAIR_BORDER_PX}px;
   height: ${CHAIR_SIZE_PX - CHAIR_BORDER_PX}px;
 
-  border: ${CHAIR_BORDER_PX}px solid ${({ theme }) => theme.palette.black.main};
+  border: ${CHAIR_BORDER_PX}px solid
+    ${({ theme, $isSelected }) =>
+      $isSelected ? theme.palette.primary.orange : theme.palette.black.main};
   border-radius: 50%;
 
-  cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
+  cursor: ${({ $isClickable }) => ($isClickable ? 'pointer' : 'default')};
 `;
 
 const Number = styled.span`

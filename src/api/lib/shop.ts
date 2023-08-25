@@ -29,13 +29,6 @@ export interface ShopLayout {
   tableList: Table[];
   chairList: Chair[];
 }
-export interface CreateShopLayout {
-  name: string;
-  reservationUnit: ReservationUnit;
-  height: number;
-  tableList: Table[];
-  chairList: Chair[];
-}
 
 export interface GetShopLayoutResponse extends ShopLayout {
   storeSpaceId: number;
@@ -69,9 +62,7 @@ export class ShopApi {
   };
 
   // 스페이스 생성
-  static createShopLayout = async (
-    layout: CreateShopLayout,
-  ): Promise<number> => {
+  static createShopLayout = async (layout: ShopLayout): Promise<number> => {
     const storeId = localStorage.getItem(STORAGE.storeId);
 
     const response = await axiosClient.post(

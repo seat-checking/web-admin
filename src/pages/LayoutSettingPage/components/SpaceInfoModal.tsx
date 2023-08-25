@@ -124,7 +124,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
         <UnitInputsWrap>
           <InputLabel>
             <InputCheckBox
-              name='seat'
+              name='chair'
               checked={reservationUnits.chair}
               onChange={handleChangeUnit}
             />
