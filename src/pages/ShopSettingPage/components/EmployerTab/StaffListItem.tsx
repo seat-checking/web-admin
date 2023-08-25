@@ -53,7 +53,7 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
     permissions.storeStatistics,
     permissions.storeSetting,
   ]);
-  const toggleIsOpen = () => {
+  const handleToggleIsOpen = () => {
     setIsOpen(!isOpen);
   };
 
@@ -63,17 +63,17 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
     setCheckboxes(newCheckboxes);
   };
 
-  const openModal = () => {
+  const handleOpenModal = () => {
     setModalOpen(true);
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setModalOpen(false);
   };
 
   return (
     <StaffListItemWrapper>
-      <StaffInfoWrapper onClick={toggleIsOpen}>
+      <StaffInfoWrapper onClick={handleToggleIsOpen}>
         <StaffInfoFlex>
           <StaffName>{name}</StaffName>
           <StaffEmail>{email}</StaffEmail>
@@ -118,7 +118,7 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
             </InputCheckBoxWrapper>
           </FlexWrapper>
           <ButtonWrapper>
-            <TextButton onClick={openModal}>직원 삭제</TextButton>
+            <TextButton onClick={handleOpenModal}>직원 삭제</TextButton>
             <TextButton
               style={{ backgroundColor: '#FF8D4E', color: 'white' }}
               onClick={() => modifyPermissionClick(checkboxes)}
@@ -128,14 +128,14 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
           </ButtonWrapper>
         </>
       )}
-      <Modal isOpen={modalOpen} onClose={closeModal}>
+      <Modal isOpen={modalOpen} onClose={handleCloseModal}>
         <ModalHeader>직원삭제</ModalHeader>
         <ModalContent>
           <ModaMainText>정말 직원을 삭제하시나요?</ModaMainText>
           <ModaSubText>삭제한 직원은 복구할 수 없어요!</ModaSubText>
         </ModalContent>
         <ModalButtonWrapper>
-          <ModalCancel onClick={closeModal}>취소</ModalCancel>
+          <ModalCancel onClick={handleCloseModal}>취소</ModalCancel>
           <ModalButton onClick={staffDeleteClick}>직원삭제</ModalButton>
         </ModalButtonWrapper>
       </Modal>
