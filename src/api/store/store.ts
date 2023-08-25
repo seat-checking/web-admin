@@ -25,9 +25,18 @@ interface RequestInformationParams {
     title: string;
     type: string;
     contentGuide: string[];
-  }[];
+  };
 }
 
+interface PatchRequestInformationParams {
+  storeId: string;
+  customid: number;
+  data: {
+    title: string;
+    type: string;
+    contentGuide: string[];
+  };
+}
 interface GetEmployeeListParams {
   storeId: string;
 }
@@ -46,7 +55,14 @@ interface ModifyPermissionpParams {
     storeSetting: boolean;
   };
 }
+interface GetRequestInformationParams {
+  storeId: string;
+}
 
+interface DeleteRequestInformationParams {
+  storeId: string;
+  customid: number;
+}
 export interface SearchListResponse {
   email: string;
   name: string;
@@ -67,6 +83,17 @@ export interface EmployeeResponse {
 
 interface EmployeeListResponse {
   storeMemberResponseList: EmployeeResponse[];
+}
+
+export interface StoreCustomReservationField {
+  id: number;
+  title: string;
+  type: string;
+  contentGuide: string;
+}
+
+export interface StoreCustomReservationResponse {
+  storeCustomReservationFieldList: StoreCustomReservationField[];
 }
 
 export interface ErrorResponse {
@@ -125,7 +152,7 @@ export const modifyPermission = async (
   return response.data;
 };
 
-export const RequestInformation = async (
+export const requestInformation = async (
   Params: RequestInformationParams,
 ): Promise<SuccessOkWithoutResultResponse> => {
   const url = getApiUrl(
@@ -134,5 +161,37 @@ export const RequestInformation = async (
   const { storeId, data } = Params;
 
   const response = await axiosClient.post(url, data);
+  return response.data;
+};
+
+export const getRequestInformation = async (
+  Params: GetRequestInformationParams,
+): Promise<SuccessOkResponse<StoreCustomReservationResponse>> => {
+  const url = getApiUrl(
+    `/stores/admins/custom-reservation-field/${Params.storeId}`,
+  );
+  const response = await axiosClient.get(url);
+  return response.data;
+};
+
+export const deleteRequestInformation = async (
+  Params: DeleteRequestInformationParams,
+): Promise<SuccessOkWithoutResultResponse> => {
+  const url = getApiUrl(
+    `/stores/admins/custom-reservation-field/${Params.storeId}?custom-id=${Params.customid}`,
+  );
+  const response = await axiosClient.delete(url);
+  return response.data;
+};
+
+export const patchRequestInformation = async (
+  Params: PatchRequestInformationParams,
+): Promise<SuccessOkWithoutResultResponse> => {
+  const url = getApiUrl(
+    `/stores/admins/custom-reservation-field/${Params.storeId}?custom-id=${Params.customid}`,
+  );
+  const { storeId, data } = Params;
+
+  const response = await axiosClient.patch(url, data);
   return response.data;
 };
