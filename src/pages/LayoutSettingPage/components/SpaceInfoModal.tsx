@@ -1,13 +1,10 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components/macro';
 import type { ReservationUnit } from 'api/lib/shop';
-import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
-import { queryKeys } from 'common/utils/constants';
+
 import { Button } from 'components/Button';
 import InputCheckBox from 'components/InputCheckBox';
 import { Modal } from 'components/Modal';
-import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { useChangeStore } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
@@ -22,22 +19,25 @@ type ModalType = 'CREATE' | 'EDIT';
 interface SpaceInfoModalProps {
   onClose: () => void;
   type: ModalType;
+  addSpace?: (name: string) => void;
+  editSpace?: (id: number, name: string) => void;
 }
+
 /**
  * 스페이스 정보 모달
  */
 export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
   onClose,
   type,
+  addSpace,
+  editSpace,
 }) => {
-  const { addSpace } = useSpace();
   const ref = useRef<HTMLInputElement | null>(null);
   const theme = useTheme();
 
   const spaceName = useSpaceName();
   const { spaceId } = useSpaceId();
   const reservationUnit = useReservationUnit();
-  const queryClient = useQueryClient();
   const { setChange } = useChangeStore();
 
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
@@ -63,36 +63,21 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
     });
   };
 
-  const getReservationHelperText = () => {
-    if (reservationUnits.chair && !reservationUnits.space)
-      return '고객이 좌석만 예약할 수 있어요';
-    if (!reservationUnits.chair && reservationUnits.space)
-      return '고객이 스페이스만 예약할 수 있어요';
-    if (reservationUnits.chair && reservationUnits.space)
-      return '고객이 좌석과 스페이스 모두 예약할 수 있어요';
-    return '예약 단위를 선택하셔야 돼요';
-  };
-
   const handleEditSpace = () => {
     setSpaceName(input);
     setReservationUnit(reservationUnits);
 
-    queryClient.setQueryData(
-      [queryKeys.GET_SPACES],
-      (data: SpaceType[] | undefined) =>
-        data?.map((space: SpaceType) =>
-          space.storeSpaceId === spaceId ? { ...space, name: input } : space,
-        ),
-    );
-    setChange(true);
+    editSpace?.(spaceId, input);
 
+    setChange(true);
     onClose();
   };
 
   const handleAddSpace = () => {
     setSpaceName(input);
     setReservationUnit(reservationUnits);
-    addSpace(input);
+
+    addSpace?.(input);
     clearLayout();
     setChange(true);
     onClose();
@@ -139,7 +124,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
             <InputLabelText>스페이스</InputLabelText>
           </InputLabel>
         </UnitInputsWrap>
-        <UnitHelper>{getReservationHelperText()}</UnitHelper>
+        <UnitHelper>{getReservationHelperText(reservationUnits)}</UnitHelper>
         <Button
           height='4.5rem'
           backgroundColor={theme.palette.grey[500]}
@@ -155,6 +140,16 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
       </FormContent>
     </Modal>
   );
+};
+
+const getReservationHelperText = (reservationUnits: ReservationUnit) => {
+  if (reservationUnits.chair && !reservationUnits.space)
+    return '고객이 좌석만 예약할 수 있어요';
+  if (!reservationUnits.chair && reservationUnits.space)
+    return '고객이 스페이스만 예약할 수 있어요';
+  if (reservationUnits.chair && reservationUnits.space)
+    return '고객이 좌석과 스페이스 모두 예약할 수 있어요';
+  return '예약 단위를 선택하셔야 돼요';
 };
 
 const FormContent = styled.form`

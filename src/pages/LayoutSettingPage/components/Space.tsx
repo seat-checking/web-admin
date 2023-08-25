@@ -13,12 +13,18 @@ interface SpaceProps {
   id: number;
   name: string;
   onClick: () => void;
+  editSpace: (id: number, name: string) => void;
 }
 
 /**
  * Space 컴포넌트 (흰색 네모)
  */
-export const Space: React.FC<SpaceProps> = ({ id, name, onClick }) => {
+export const Space: React.FC<SpaceProps> = ({
+  id,
+  name,
+  onClick,
+  editSpace,
+}) => {
   const theme = useTheme();
   const { spaceId } = useSpaceId();
 
@@ -53,7 +59,11 @@ export const Space: React.FC<SpaceProps> = ({ id, name, onClick }) => {
         <DeleteSpaceModal onClose={() => setIsDeleteModalOn(false)} />
       )}
       {isEditModalOn && (
-        <SpaceInfoModal onClose={() => setIsEditModalOn(false)} type='EDIT' />
+        <SpaceInfoModal
+          onClose={() => setIsEditModalOn(false)}
+          type='EDIT'
+          editSpace={editSpace}
+        />
       )}
     </SpaceBox>
   );

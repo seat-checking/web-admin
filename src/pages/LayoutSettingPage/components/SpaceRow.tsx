@@ -1,7 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { useLoaderData, useSearchParams } from 'react-router-dom';
-import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { ReactComponent as AlertCircleBorderIcon } from 'assets/icons/alert-circle-border.svg';
 import { ReactComponent as PlusCircle } from 'assets/icons/plus-circle.svg';
 
@@ -18,6 +15,7 @@ import {
   SpaceWrap,
 } from 'pages/LayoutSettingPage/components/SpaceRow.styled';
 
+import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
@@ -33,7 +31,8 @@ export const SpaceRow: React.FC = () => {
   const [isChangeConfirmModalOn, setIsChangeConfirmModalOn] = useState(false);
   const [clickedSpaceId, setClickedSpaceId] = useState(-1);
 
-  const { data: spacesList, isLoading } = useGetSpaces();
+  const { spaceList, isLoading, addSpace, editSpace } = useSpace();
+
   const firstLoadedRef = useRef(false);
 
   const handleAddModalClose = () => {
@@ -65,15 +64,15 @@ export const SpaceRow: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!spacesList || spacesList?.length === 0) {
+    if (!spaceList || spaceList?.length === 0) {
       setSpaceId(TEMPORARY_SPACE_ID);
       return;
     }
     if (!firstLoadedRef.current) {
-      setSpaceId(spacesList[0].storeSpaceId);
+      setSpaceId(spaceList[0].storeSpaceId);
       firstLoadedRef.current = true;
     }
-  }, [spacesList]);
+  }, [spaceList]);
 
   return (
     <>
@@ -84,12 +83,13 @@ export const SpaceRow: React.FC = () => {
       <SpaceWrap>
         {isLoading
           ? 'loading..'
-          : spacesList?.map((space) => (
+          : spaceList?.map((space) => (
               <Space
                 key={space.storeSpaceId}
                 id={space.storeSpaceId}
                 name={space.name}
                 onClick={() => handleClickSpace(space.storeSpaceId)}
+                editSpace={editSpace}
                 // isSelected={space.storeSpaceId === selected}
                 // deleteSpace={deleteSpace}
               />
@@ -111,7 +111,11 @@ export const SpaceRow: React.FC = () => {
           )}
         </AddRow>
         {isAddOn && (
-          <SpaceInfoModal onClose={handleAddModalClose} type='CREATE' />
+          <SpaceInfoModal
+            onClose={handleAddModalClose}
+            addSpace={addSpace}
+            type='CREATE'
+          />
         )}
       </SpaceWrap>
     </>

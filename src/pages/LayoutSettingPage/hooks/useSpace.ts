@@ -1,27 +1,27 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
-import { TEMPORARY_SPACE_ID, queryKeys } from 'common/utils/constants';
+import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
+import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 
 export interface UseSpaceReturn {
-  spaceList: SpaceType[];
+  spaceList: SpaceType[] | undefined;
   setSpaces: (space: SpaceType[]) => void;
   addSpace: (name: string) => void;
   deleteSpace: (id: number) => void;
-  setSelectedSpace: (id: number) => void;
-  selected: number;
+  editSpace: (id: number, name: string) => void;
+  isLoading: boolean;
 }
 
 export const useSpace = (): UseSpaceReturn => {
-  const [spaceList, setSpaceList] = useState<SpaceType[]>([]);
-  const [selected, setSelected] = useState(spaceList?.[0]?.storeSpaceId);
-  const [searchParams, setSearchParmas] = useSearchParams();
+  const { data, isLoading } = useGetSpaces();
+  const [spaceList, setSpaceList] = useState<SpaceType[] | undefined>(data);
 
-  const queryClient = useQueryClient();
-  const setSelectedSpace = (id: number) => {
-    setSelected(id);
-  };
+  useEffect(() => {
+    setSpaceList(data);
+  }, [data]);
+
+  const [searchParams, setSearchParmas] = useSearchParams();
 
   const setSpaces = useCallback((space: SpaceType[]) => {
     setSpaceList(space);
@@ -29,26 +29,35 @@ export const useSpace = (): UseSpaceReturn => {
 
   const addSpace = useCallback(
     (name: string) => {
-      // const newId = Date.now();
       const newId = TEMPORARY_SPACE_ID;
       const newSpace: SpaceType = {
         storeSpaceId: newId,
         name,
       };
       setSearchParmas({ space: String(newId) });
-      queryClient.setQueryData(
-        [queryKeys.GET_SPACES],
-        (data: SpaceType[] | undefined) => {
-          return data ? [...data, newSpace] : [newSpace];
-        },
-      );
+
+      if (spaceList) {
+        setSpaces([...spaceList, newSpace]);
+      } else {
+        setSpaces([newSpace]);
+      }
     },
-    [queryClient, spaceList, setSearchParmas],
+    [setSpaces, spaceList, setSearchParmas],
+  );
+
+  const editSpace = useCallback(
+    (id: number, name: string) => {
+      const changedSpaceList = spaceList?.map((space: SpaceType) =>
+        space.storeSpaceId === id ? { ...space, name } : space,
+      );
+      setSpaceList(changedSpaceList);
+    },
+    [spaceList],
   );
 
   const deleteSpace = useCallback(
     (id: number) => {
-      const deleted = spaceList.filter((space) => space.storeSpaceId !== id);
+      const deleted = spaceList?.filter((space) => space.storeSpaceId !== id);
       setSpaceList(deleted);
     },
     [spaceList],
@@ -59,7 +68,7 @@ export const useSpace = (): UseSpaceReturn => {
     setSpaces,
     addSpace,
     deleteSpace,
-    selected,
-    setSelectedSpace,
+    editSpace,
+    isLoading,
   };
 };
