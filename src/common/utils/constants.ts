@@ -23,4 +23,5 @@ export const mutationKeys = {
 export const queryKeys = {
   GET_SHOP: 'getShop',
   GET_OWNED_SHOPS: 'getOwnedShops',
+  GET_PERMISSION: 'getPermission',
 };

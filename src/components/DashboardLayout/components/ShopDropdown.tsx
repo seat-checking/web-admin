@@ -5,6 +5,7 @@ import type { DropdownShop, Shop } from 'common/utils/types';
 import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as PlusSquareIcon } from 'assets/icons/plus-square.svg';
 import { useGetOwnedShops } from 'common/hooks/queries/useGetOwnedShops';
+import { useGetPermission } from 'common/hooks/queries/useGetPermission';
 import { PATH } from 'common/utils/constants';
 import { ShopDropdownItem } from 'components/DashboardLayout/components/ShopDropdownItem';
 
@@ -24,6 +25,7 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({
   setSelectedShop,
 }) => {
   const { data: storeResponseList } = useGetOwnedShops();
+  const { fetchPermission } = useGetPermission();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -48,7 +50,8 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({
     setIsOpen((prev) => !prev);
   };
 
-  const handleChangeSelectedShop = (shop: DropdownShop) => {
+  const handleChangeSelectedShop = async (shop: DropdownShop) => {
+    await fetchPermission(shop.storeId);
     setSelectedShop({
       storeId: shop.storeId,
       storeName: shop.storeName,

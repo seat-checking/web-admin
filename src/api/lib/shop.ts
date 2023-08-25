@@ -29,3 +29,9 @@ export const toggleCloseToday = async ({
   );
   return response.data.result;
 };
+
+export const getShopPermission = async (shopId: number): Promise<string> => {
+  const response = await axiosClient.get(`/stores/admins/permission/${shopId}`);
+  console.log('response.data.result :>> ', response.data.result);
+  return response.data.result;
+};
