@@ -13,15 +13,15 @@ export const LabelWrapper = styled.div`
 width:53.9rem;
 display: flex;
 margin 0 auto;
+padding-top:4rem;
 gap:0.6rem;
 `;
 
 export const InputWrapper = styled.div`
   width: 53.9rem;
-  margin: 0 auto;
+  display: flex;
   position: relative;
-  display: flex; // Flexbox로 변경
-  align-items: center;
+  margin: 0 auto;
 `;
 
 export const SearchIcon = styled.div`
