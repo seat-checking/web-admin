@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import type { Shop } from 'common/utils/types';
 import { ReactComponent as ChevronLeft } from 'assets/icons/chevron-left-bg-grey.svg';

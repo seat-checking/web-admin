@@ -5,8 +5,8 @@ import type { DropdownShop, Shop } from 'common/utils/types';
 import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as PlusSquareIcon } from 'assets/icons/plus-square.svg';
 import { useGetOwnedShops } from 'common/hooks/queries/useGetOwnedShops';
-import { PATH, STORAGE } from 'common/utils/constants';
-import { ShopDropdownItem } from 'components/DashboardLayout/components/DropdownItem';
+import { PATH } from 'common/utils/constants';
+import { ShopDropdownItem } from 'components/DashboardLayout/components/ShopDropdownItem';
 
 interface ShopDropdownProps {
   onClose?: () => void;
@@ -23,7 +23,7 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({
   selectedShop,
   setSelectedShop,
 }) => {
-  const { data: storeResponseList, isLoading } = useGetOwnedShops();
+  const { data: storeResponseList } = useGetOwnedShops();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
