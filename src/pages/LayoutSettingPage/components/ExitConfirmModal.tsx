@@ -25,6 +25,15 @@ export const ExitConfirmModal: React.FC<ExitConfirmModalProps> = ({
   const handleCancel = () => {
     setChange(false);
     onComplete?.();
+
+    /**
+     * 스페이스 추가 중(id -1)이었으면 스페이스 목록에서 추가된 스페이스 삭제시켜야함
+     *
+     * 스페이스 명을 변경했으면 스페이스 목록에서 변경된 스페이스명 다시 복구시켜야함
+     *
+     * -> 스페이스 목록 불러오는 쿼리만 다시 호출하면 될듯..^^... 그게 싫으면 initialData도 같이 들고있어야함..
+     * queryData를 다시 상태 변수에 저장시켜도 되겠다!!
+     */
     handleClose();
   };
 

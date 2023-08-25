@@ -1,8 +1,9 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
-import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
+import { TEMPORARY_SPACE_ID, queryKeys } from 'common/utils/constants';
 
 export interface UseSpaceReturn {
   spaceList: SpaceType[] | undefined;
@@ -11,17 +12,26 @@ export interface UseSpaceReturn {
   deleteSpace: (id: number) => void;
   editSpace: (id: number, name: string) => void;
   isLoading: boolean;
+  clear: () => void;
 }
 
 export const useSpace = (): UseSpaceReturn => {
   const { data, isLoading } = useGetSpaces();
   const [spaceList, setSpaceList] = useState<SpaceType[] | undefined>(data);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     setSpaceList(data);
   }, [data]);
 
   const [searchParams, setSearchParmas] = useSearchParams();
+
+  const clear = useCallback(() => {
+    const cached = queryClient.getQueryData([
+      queryKeys.GET_SPACES,
+    ]) as SpaceType[];
+    setSpaceList(cached);
+  }, [queryClient]);
 
   const setSpaces = useCallback((space: SpaceType[]) => {
     setSpaceList(space);
@@ -70,5 +80,6 @@ export const useSpace = (): UseSpaceReturn => {
     deleteSpace,
     editSpace,
     isLoading,
+    clear,
   };
 };
