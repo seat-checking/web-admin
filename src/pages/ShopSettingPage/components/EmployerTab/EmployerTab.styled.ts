@@ -10,11 +10,11 @@ export const EmployerTabWrapper = styled.div`
 `;
 
 export const LabelWrapper = styled.div`
-width:53.9rem;
-display: flex;
-margin 0 auto;
-padding-top:4rem;
-gap:0.6rem;
+  width: 53.9rem;
+  display: flex;
+  margin: 0 auto;
+  padding-top: 4rem;
+  gap: 0.6rem;
 `;
 
 export const InputWrapper = styled.div`
