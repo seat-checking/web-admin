@@ -1,17 +1,65 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
+import type { DropdownShop } from 'common/utils/types';
+import type { ChangeEvent } from 'react';
+import { useToggleCloseToday } from 'common/hooks/mutations/useToggleCloseToday';
+import { queryKeys } from 'common/utils/constants';
 
 interface ToggleProps {
+  shopId: number;
   isChecked: boolean;
 }
 
 /**
- * 토글
+ * 오늘 영업 임시 중단 여부 토글
  */
-export const Toggle: React.FC<ToggleProps> = ({ isChecked }) => {
-  //   const [isChecked, setIsChecked] = useState(false);
+export const Toggle: React.FC<ToggleProps> = ({ shopId, isChecked }) => {
+  const isToggledRef = useRef(isChecked);
+  const queryClient = useQueryClient();
+
+  const { mutate: toggleMutate } = useToggleCloseToday();
+
+  const handleToggle = (event: ChangeEvent<HTMLInputElement>) => {
+    isToggledRef.current = event.currentTarget.checked;
+  };
+
+  useEffect(() => {
+    return () => {
+      if (isChecked === isToggledRef.current) {
+        return;
+      }
+
+      const isClosedToday = isToggledRef.current;
+
+      toggleMutate({ shopId, isClosedToday });
+
+      queryClient.setQueryData(
+        [queryKeys.GET_OWNED_SHOPS],
+        (data: DropdownShop[] | undefined) => {
+          return data?.map((shop) => {
+            if (shop.storeId === shopId) {
+              const changedShop = { ...shop, isClosedToday };
+              if (!isClosedToday) {
+                changedShop.isOpenNow = false;
+              }
+              return changedShop;
+            }
+            return shop;
+          });
+        },
+      );
+    };
+  }, [isChecked, toggleMutate, queryClient, shopId]);
+
   return (
     <Wrap onClick={(e) => e.stopPropagation()}>
-      <input role='switch' type='checkbox' />
+      <input
+        role='switch'
+        type='checkbox'
+        defaultChecked={isChecked}
+        onChange={handleToggle}
+      />
     </Wrap>
   );
 };

@@ -6,7 +6,7 @@ import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as PlusSquareIcon } from 'assets/icons/plus-square.svg';
 import { useGetOwnedShops } from 'common/hooks/queries/useGetOwnedShops';
 import { PATH, STORAGE } from 'common/utils/constants';
-import { DropdownItem } from 'components/DashboardLayout/components/DropdownItem';
+import { ShopDropdownItem } from 'components/DashboardLayout/components/DropdownItem';
 
 interface ShopDropdownProps {
   onClose?: () => void;
@@ -27,7 +27,7 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -75,23 +75,26 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({
         <SelecteText folded={isFolded}>{selectedShop.storeName}</SelecteText>
         <ChevronDown stroke='white' />
       </TriggerBtn>
-      <DropdownWrap ref={containerRef} $isOpen={isOpen}>
-        <Header>
-          <AddShopBtn onClick={handleAddShop}>
-            <PlusSquareIcon stroke={theme.palette.grey[300]} />
-            가게 추가
-          </AddShopBtn>
-        </Header>
-        <Body>
-          {storeResponseList?.map((shop) => (
-            <DropdownItem
-              shop={shop}
-              isSelected={selectedShop.storeId === shop.storeId}
-              onClick={() => handleChangeSelectedShop(shop)}
-            />
-          ))}
-        </Body>
-      </DropdownWrap>
+      {isOpen && (
+        <DropdownWrap>
+          <Header>
+            <AddShopBtn onClick={handleAddShop}>
+              <PlusSquareIcon stroke={theme.palette.grey[300]} />
+              가게 추가
+            </AddShopBtn>
+          </Header>
+          <Body>
+            {storeResponseList?.map((shop) => (
+              <ShopDropdownItem
+                key={shop.storeId}
+                shop={shop}
+                isSelected={selectedShop.storeId === shop.storeId}
+                onClick={() => handleChangeSelectedShop(shop)}
+              />
+            ))}
+          </Body>
+        </DropdownWrap>
+      )}
     </Wrap>
   );
 };
@@ -130,8 +133,7 @@ const SelecteText = styled.div<{ folded: boolean }>`
   -webkit-box-orient: vertical;
 `;
 
-const DropdownWrap = styled.div<{ $isOpen: boolean }>`
-  display: ${({ $isOpen }): string => ($isOpen ? 'block' : 'none')};
+const DropdownWrap = styled.div`
   position: absolute;
   top: 5rem;
   left: 4rem;

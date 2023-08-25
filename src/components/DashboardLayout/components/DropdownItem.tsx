@@ -2,10 +2,9 @@ import styled, { css } from 'styled-components/macro';
 import type { DropdownShop } from 'common/utils/types';
 import defaultShopImg from 'assets/images/default-shop.png';
 import { HelperText } from 'components/DashboardLayout/components/HelperText';
-import { Tooltip } from 'components/DashboardLayout/components/Tooltip';
+
 import { Toggle } from 'components/Toggle';
 
-/* eslint-disable react/destructuring-assignment */
 interface DropdownItemProps {
   isSelected: boolean;
   onClick: VoidFunction;
@@ -13,9 +12,9 @@ interface DropdownItemProps {
 }
 
 /**
- * 컴포넌트
+ * 가게 리스트 드롭다운 아이템
  */
-export const DropdownItem: React.FC<DropdownItemProps> = ({
+export const ShopDropdownItem: React.FC<DropdownItemProps> = ({
   shop,
   isSelected,
   onClick,
@@ -34,7 +33,7 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
         <Introduction>{shop.introduction}</Introduction>
       </MiddleWrap>
       <RightWrap>
-        <Toggle isChecked={shop.isClosedToday} />
+        <Toggle isChecked={shop.isClosedToday} shopId={shop.storeId} />
         <HelperText>일시 정지</HelperText>
       </RightWrap>
     </Wrap>
