@@ -1,6 +1,7 @@
 import { Slide, ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
-import checkCircl from 'assets/icons/check-circle.svg';
+import checkCircleIcon from 'assets/icons/check-circle.svg';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface CustomToastContainerProps {
   hideProggressBar?: boolean;
@@ -58,7 +59,7 @@ const Wrap = styled.div`
 export const CheckCircleIcon = styled.div`
   width: 2rem;
   height: 2rem;
-  background-image: url(${checkCircl});
+  background-image: url(${checkCircleIcon});
   background-size: cover;
   margin-bottom: 0.3rem;
 `;
