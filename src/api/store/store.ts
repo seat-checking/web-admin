@@ -155,43 +155,40 @@ export const modifyPermission = async (
 export const requestInformation = async (
   Params: RequestInformationParams,
 ): Promise<SuccessOkWithoutResultResponse> => {
-  const url = getApiUrl(
-    `/stores/admins/custom-reservation-field/${Params.storeId}`,
-  );
-  const { storeId, data } = Params;
+  const { data } = Params;
 
-  const response = await axiosClient.post(url, data);
+  const response = await axiosClient.post(
+    `/stores/admins/custom-reservation-field/${Params.storeId}`,
+    data,
+  );
   return response.data;
 };
 
 export const getRequestInformation = async (
   Params: GetRequestInformationParams,
 ): Promise<SuccessOkResponse<StoreCustomReservationResponse>> => {
-  const url = getApiUrl(
+  const response = await axiosClient.get(
     `/stores/admins/custom-reservation-field/${Params.storeId}`,
   );
-  const response = await axiosClient.get(url);
   return response.data;
 };
 
 export const deleteRequestInformation = async (
   Params: DeleteRequestInformationParams,
 ): Promise<SuccessOkWithoutResultResponse> => {
-  const url = getApiUrl(
+  const response = await axiosClient.delete(
     `/stores/admins/custom-reservation-field/${Params.storeId}?custom-id=${Params.customid}`,
   );
-  const response = await axiosClient.delete(url);
   return response.data;
 };
 
 export const patchRequestInformation = async (
   Params: PatchRequestInformationParams,
 ): Promise<SuccessOkWithoutResultResponse> => {
-  const url = getApiUrl(
+  const { data } = Params;
+  const response = await axiosClient.patch(
     `/stores/admins/custom-reservation-field/${Params.storeId}?custom-id=${Params.customid}`,
+    data,
   );
-  const { storeId, data } = Params;
-
-  const response = await axiosClient.patch(url, data);
   return response.data;
 };
