@@ -20,6 +20,7 @@ import {
   HelperCircle,
   HelperText,
   HelperTextWrapper,
+  InputForm,
   InputWrapper,
   LabelWrapper,
   NoResults,
@@ -41,7 +42,8 @@ export const EmployerTab: React.FC = () => {
   const navigate = useNavigate();
   const storeId = localStorage.getItem('storeId') || '';
 
-  const handleSearch = async () => {
+  const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (email) {
       try {
         const resData = await getSeachList({ email });
@@ -139,15 +141,17 @@ export const EmployerTab: React.FC = () => {
             </HelperText>
           </HelperTextWrapper>
         </LabelWrapper>
-        <InputWrapper>
-          <SearchIcon />
-          <StyledInput
-            placeholder='직원의 이메일을 검색해 주세요.'
-            onChange={handleChange}
-            value={email}
-          />
-          <SearchButton onClick={handleSearch}>검색</SearchButton>
-        </InputWrapper>
+        <InputForm onSubmit={handleSearch}>
+          <InputWrapper>
+            <SearchIcon />
+            <StyledInput
+              placeholder='직원의 이메일을 검색해 주세요.'
+              onChange={handleChange}
+              value={email}
+            />
+            <SearchButton type='submit'>검색</SearchButton>
+          </InputWrapper>
+        </InputForm>
         {searchResult ? (
           <StaffRegistration
             email={searchResult.email}
