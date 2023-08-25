@@ -42,9 +42,9 @@ export const EmployerTab: React.FC = () => {
   const storeId = localStorage.getItem('storeId') || '';
 
   const handleSearch = async () => {
-    if (email && storeId) {
+    if (email) {
       try {
-        const resData = await getSeachList({ storeId, email });
+        const resData = await getSeachList({ email });
         setSearched(true);
         setSearchResult(resData.result);
       } catch (error) {

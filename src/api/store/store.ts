@@ -6,7 +6,6 @@ import { axiosClient } from 'api/apiClient';
 import { getApiUrl } from 'api/store/common';
 
 interface SearchParams {
-  storeId: string;
   email: string;
 }
 interface MemberRegistrationParams {
@@ -72,12 +71,8 @@ export interface ErrorResponse {
 export const getSeachList = async (
   params: SearchParams,
 ): Promise<SuccessOkResponse<SearchListResponse>> => {
-  const url = getApiUrl(
-    `/stores/admins/member-registration/${params.storeId}/search`,
-  );
-  const response = await axiosClient.get(url, {
-    params: { email: params.email },
-  });
+  const url = getApiUrl(`/users/search?email=${params.email}`);
+  const response = await axiosClient.get(url);
   return response.data;
 };
 
