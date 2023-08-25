@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import type { JoinFormInputs } from 'common/utils/types';
+import type { JoinForm } from 'common/utils/types';
 import type { JoinStatus } from 'pages/JoinPage/utils/types';
 import type { UseFormReturn } from 'react-hook-form';
 import { AdminInfo } from 'pages/JoinPage/components/AdminInfo';
@@ -22,7 +22,7 @@ import {
  * 회원가입 페이지
  */
 export const JoinPage: React.FC = () => {
-  const useJoinForm: UseFormReturn<JoinFormInputs> = useForm<JoinFormInputs>({
+  const useJoinForm: UseFormReturn<JoinForm> = useForm<JoinForm>({
     mode: 'onChange',
   });
 
@@ -50,17 +50,14 @@ export const JoinPage: React.FC = () => {
             </ProgressBackground>
             <ProgressText>{joinStatus === 'FIRST' ? 1 : 2}/2</ProgressText>
           </ProgressWrap>
-          {joinStatus === 'FIRST' ? (
+          {/* {joinStatus === 'FIRST' ? (
             <AdminInfo
               onClickNext={handleSwitchPage}
               useJoinForm={useJoinForm}
             />
-          ) : (
-            <StoreInfo
-              onClickNext={handleSwitchPage}
-              useJoinForm={useJoinForm}
-            />
-          )}
+          ) : ( */}
+          <StoreInfo onClickNext={handleSwitchPage} useJoinForm={useJoinForm} />
+          {/* )} */}
         </RightContentWrap>
       </RightSide>
     </Wrap>

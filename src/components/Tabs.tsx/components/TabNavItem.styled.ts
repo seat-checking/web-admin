@@ -5,6 +5,7 @@ export const ListItem = styled.li<{
   $isClickable: boolean;
 }>`
   flex: 1;
+  z-index: 1;
 
   ${({ $isClickable }) =>
     $isClickable &&

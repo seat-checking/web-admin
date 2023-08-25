@@ -1,43 +1,75 @@
-import styled from 'styled-components';
-
-export const Wrap = styled.div`
-  padding-top: 4rem;
-  width: 100%;
-  /* background-color: red; */
-`;
+import styled from 'styled-components/macro';
+import upload from 'assets/icons/upload.svg';
+import { Button } from 'components/Button';
+import { Input } from 'components/Input';
 
 export const ContentWrap = styled.ul`
-  width: 53.9rem;
-  margin: auto;
-  /* background-color: yellow; */
+  width: 100%;
+
+  padding-bottom: 10rem;
 `;
 
+export const GrayBackground = styled.div`
+  width: 100%;
+  padding: 4rem 0;
+  margin-bottom: 4rem;
+  background-color: ${({ theme }) => theme.palette.grey[50]};
+`;
 export const ListItem = styled.li`
+  width: 53.9rem;
+  margin: auto;
   & + & {
     margin-top: 6.8rem;
   }
 `;
 
-export const CurrentWifiBtn = styled.button`
-  width: 100%;
-  height: 4.2rem;
-  border-radius: 0.8rem;
-
-  background-color: ${({ theme }) => theme.palette.grey[500]};
-
-  color: white;
-  font-size: 1.4rem;
-  font-weight: 500;
-
-  &:hover {
-    filter: brightness(95%);
-  }
-`;
-
-export const RadioRow = styled.li`
+export const WifiLabelWrap = styled.div`
   display: flex;
   align-items: center;
-  gap: 4rem;
+  margin-bottom: 0.8rem;
+`;
+export const WifiHelperWrap = styled.div`
+  margin-left: 0.6rem;
+`;
+
+export const FileInput = styled.input``;
+
+export const AddFileRow = styled.div`
+  height: 10.9rem;
+
+  display: flex;
+  gap: 1.2rem;
+`;
+export const AddFileBtn = styled(Button)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  flex: 1;
+  height: 100%;
+  background-color: ${({ theme }) => theme.palette.grey[50]};
+  color: ${({ theme }) => theme.palette.grey[300]};
+
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: normal;
+`;
+
+export const UploadIconBox = styled.div`
+  margin-bottom: 0.8rem;
+
+  width: 2.4rem;
+  height: 2.4rem;
+  background-image: url(${upload});
+  background-size: contain;
+  background-repeat: no-repeat;
+`;
+
+export const RadioRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8.7rem;
 
   padding-top: 0.8rem;
 `;

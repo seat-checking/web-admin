@@ -1,14 +1,21 @@
+import dayjs from 'dayjs';
 import { useEffect } from 'react';
+import { Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import type { JoinFormInputs } from 'common/utils/types';
+import type { JoinForm } from 'common/utils/types';
 import type { InnerPageProps } from 'pages/JoinPage/utils/types';
+import type { Address } from 'react-daum-postcode';
 import type { SubmitHandler } from 'react-hook-form';
-import { signUp } from 'api/lib/auth';
+import { useJoin } from 'common/hooks/mutations/useJoin';
+import { useAddress } from 'common/hooks/useAddress';
 import { PATH } from 'common/utils/constants';
+import { AddressBox } from 'components/AddressBox';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
+import { Label } from 'components/Label';
 import {
   BottomWrap,
+  DateInput,
   GappedErrorMessage,
   InputWrap,
 } from 'pages/JoinPage/components/StoreInfo.styled';
@@ -21,21 +28,27 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
   useJoinForm,
 }) => {
   const navigate = useNavigate();
+  const { mutate: joinMutate } = useJoin();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
+    control,
   } = useJoinForm;
 
-  const onSubmit: SubmitHandler<JoinFormInputs> = async (data) => {
-    try {
-      await signUp(data);
-      onClickNext('FIRST'); // 초기화
-      navigate(`/${PATH.login}`, { replace: true });
-    } catch (error) {
-      console.log(error);
-    }
+  const { open, handleComplete } = useAddress();
+
+  const onSubmit: SubmitHandler<JoinForm> = (data) => {
+    joinMutate(data, {
+      onSuccess: () => {
+        onClickNext('FIRST'); // 초기화
+        navigate(`/${PATH.login}`, { replace: true });
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
   };
 
   // 뒤로가기 발생 시 회원가입 첫번째 페이지로 전환
@@ -55,9 +68,57 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <InputWrap>
         <Input
+          label='가게 이름'
+          placeholder='가게 이름을 입력해주세요'
+          {...register('storeName', {
+            required: '가게 이름은 필수 입력입니다.',
+          })}
+        />
+        {errors.storeName && (
+          <GappedErrorMessage>{errors.storeName?.message}</GappedErrorMessage>
+        )}
+      </InputWrap>
+      <InputWrap>
+        <Label label='가게 위치' />
+        <Controller
+          control={control}
+          name='address'
+          rules={{ required: '주소를 선택해주세요' }}
+          render={({ field: { onChange, value } }) => (
+            <AddressBox
+              value={value}
+              onClick={(e) => {
+                e.preventDefault();
+                open({
+                  onComplete: (data: Address) => {
+                    const fullAddress = handleComplete(data);
+                    onChange(fullAddress);
+                  },
+                });
+              }}
+            />
+          )}
+        />
+        <Input
+          placeholder='상세 주소'
+          {...register('detailAddress', {
+            required: '상세 주소를 입력해주세요.',
+          })}
+        />
+        {errors.detailAddress && (
+          <GappedErrorMessage>
+            {errors.detailAddress?.message}
+          </GappedErrorMessage>
+        )}
+        {errors.address && (
+          <GappedErrorMessage>{errors.address?.message}</GappedErrorMessage>
+        )}
+      </InputWrap>
+      <InputWrap>
+        <Input
           label='사업자등록번호'
           placeholder='숫자 10자리를 입력해주세요.'
-          {...register('employerIdNumber', {
+          {...register('businessRegistrationNumber', {
             required: '사업자등록번호는 필수 입력입니다.',
             pattern: {
               value: /^\d{10}$/,
@@ -65,16 +126,18 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
             },
           })}
         />
-        {errors.employerIdNumber && (
+        {errors.businessRegistrationNumber && (
           <GappedErrorMessage>
-            {errors.employerIdNumber?.message}
+            {errors.businessRegistrationNumber?.message}
           </GappedErrorMessage>
         )}
       </InputWrap>
       <InputWrap>
-        <Input
+        <DateInput
           label='개업일자'
           type='date'
+          min='1900-01-01'
+          max={dayjs(Date.now()).format('YYYY-MM-DD')}
           {...register('openDate', {
             required: '개업일자는 필수 입력입니다.',
             pattern: {
@@ -83,7 +146,6 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
               message: '유효한 날짜를 입력해주세요',
             },
           })}
-          style={{ width: 'fit-content' }}
         />
         {errors.openDate && (
           <GappedErrorMessage>{errors.openDate?.message}</GappedErrorMessage>

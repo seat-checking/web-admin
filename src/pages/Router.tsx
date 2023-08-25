@@ -4,6 +4,7 @@ import { PATH } from 'common/utils/constants';
 import { AuthGuard } from 'components/AuthGuard';
 import { DashboardLayout } from 'components/DashboardLayout';
 import { GuestGuard } from 'components/GuestGuard';
+import { TabGuard } from 'components/TabGuard';
 import { JoinPage } from 'pages/JoinPage';
 import { DragContextProvider } from 'pages/LayoutSettingPage/utils/DragContext';
 import { LoginPage } from 'pages/LoginPage';
@@ -35,7 +36,9 @@ export const router = createBrowserRouter([
     path: '/',
     element: (
       <AuthGuard>
-        <DashboardLayout />
+        <TabGuard>
+          <DashboardLayout />
+        </TabGuard>
       </AuthGuard>
     ),
     children: [
@@ -64,7 +67,7 @@ export const router = createBrowserRouter([
         },
       },
       {
-        path: PATH.setting,
+        path: `${PATH.setting}/:shopId`,
         async lazy(): Promise<{ Component: React.FC }> {
           const { ShopSettingPage } = await import('./ShopSettingPage');
           return { Component: ShopSettingPage };

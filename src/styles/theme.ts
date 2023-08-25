@@ -14,7 +14,7 @@ export const theme: DefaultTheme = {
     },
     grey: {
       30: '#F7F8FA',
-      50: '#F3F3F3',
+      50: '#F2F4F8',
       100: '#EFF0F5',
       200: '#D8D9E1',
       300: '#A9ABB6',

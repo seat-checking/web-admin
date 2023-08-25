@@ -1,12 +1,13 @@
 import { forwardRef } from 'react';
-import styled from 'styled-components/macro';
-import type { Ref } from 'react';
+import styled, { css } from 'styled-components/macro';
+import type { HtmlHTMLAttributes, Ref } from 'react';
 
-interface RadioProps extends React.HtmlHTMLAttributes<HTMLInputElement> {
+interface RadioProps extends HtmlHTMLAttributes<HTMLInputElement> {
   id: string;
   name: string; // radio group 내에서 동일한 이름 사용해야함
   value: string;
   label: string;
+  size?: 'small' | 'medium';
 }
 
 /**
@@ -14,7 +15,7 @@ interface RadioProps extends React.HtmlHTMLAttributes<HTMLInputElement> {
  */
 export const Radio = forwardRef(
   (
-    { id, name, value, label, ...rest }: RadioProps,
+    { id, name, value, label, size, ...rest }: RadioProps,
     ref: Ref<HTMLInputElement>,
   ) => {
     return (
@@ -25,9 +26,10 @@ export const Radio = forwardRef(
           name={name}
           value={value}
           ref={ref}
+          $size={size}
           {...rest}
         />
-        <LabelText>{label}</LabelText>
+        <LabelText className='label'>{label}</LabelText>
       </Label>
     );
   },
@@ -36,18 +38,17 @@ export const Radio = forwardRef(
 const Label = styled.label`
   display: inline-flex;
   align-items: center;
-  /* background-color: aqua; */
 `;
 
 const LabelText = styled.span`
-  font-weight: 400;
+  font-weight: 600;
   font-size: 1.6rem;
   line-height: 1.8rem;
-  color: ${({ theme }) => theme.palette.grey[400]};
+  color: ${({ theme }) => theme.palette.grey[300]};
   margin-left: 1.6rem;
 `;
 
-const RadioInput = styled.input`
+const RadioInput = styled.input<{ $size?: 'small' | 'medium' }>`
   &[type='radio'] {
     appearance: none;
 
@@ -67,7 +68,29 @@ const RadioInput = styled.input`
     border: 0.3rem solid white;
     background-color: ${({ theme }) => theme.palette.primary.orange};
     margin: 0.3rem;
+
+    & + .label {
+      color: black;
+    }
   }
+
+  ${({ $size }) =>
+    $size === 'small' &&
+    css`
+      &[type='radio'] {
+        width: 2rem;
+        height: 2rem;
+      }
+
+      &[type='radio']:checked {
+        width: 1.6rem;
+        height: 1.6rem;
+        outline: 0.2rem solid ${({ theme }) => theme.palette.primary.orange};
+        border: 0.2rem solid white;
+        background-color: ${({ theme }) => theme.palette.primary.orange};
+        margin: 0.2rem;
+      }
+    `}
 
   &[type='radio']:hover {
     filter: brightness(95%);

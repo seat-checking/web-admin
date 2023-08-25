@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import type React from 'react';
 import { TabNavItem } from 'components/Tabs.tsx/components/TabNavItem';
 
@@ -39,7 +39,7 @@ export const Tabs: React.FC<TabsProps> = ({
 
   return (
     <Wrap {...rest}>
-      <TabWrap>{tabNavItemList}</TabWrap>
+      <TabWrap $tabWidth={tabWidth}>{tabNavItemList}</TabWrap>
       {tabList.map((item, index) => (
         <ContentWrap hidden={activeTab !== index} key={item.label}>
           {item.content}
@@ -56,13 +56,31 @@ const Wrap = styled.div`
   flex-direction: column;
 `;
 
-const TabWrap = styled.ul`
+const TabWrap = styled.ul<{ $tabWidth?: string }>`
   display: flex;
+
   height: 6rem;
 
-  box-shadow: inset 0px -0.3rem 0px #e6e6e6;
+  ${({ $tabWidth }) =>
+    $tabWidth &&
+    css`
+      max-width: ${$tabWidth};
+      width: 100%;
+      margin: auto;
+    `}
 `;
 
 const ContentWrap = styled.div`
+  position: relative;
+
+  ::before {
+    content: '';
+    position: absolute;
+    top: -0.3rem;
+    left: 0;
+    right: 0;
+    border-bottom: 0.35rem solid #e6e6e6;
+  }
+
   flex: 1;
 `;

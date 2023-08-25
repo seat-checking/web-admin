@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import dayjs from 'dayjs';
 import { Form } from 'react-router-dom';
-import type { JoinFormInputs } from 'common/utils/types';
+import type { JoinForm } from 'common/utils/types';
 import type { InnerPageProps } from 'pages/JoinPage/utils/types';
 import type { SubmitHandler, ChangeHandler } from 'react-hook-form';
-import { validateEmail, validateNickname } from 'api/lib/auth';
+import { AuthApi } from 'api/lib/auth';
 import { PATH } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
@@ -17,6 +17,7 @@ import {
   GappedErrorMessage,
   InputWrap,
   RadioRow,
+  DateInput,
 } from 'pages/JoinPage/components/AdminInfo.styled';
 
 /**
@@ -35,7 +36,7 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
     handleSubmit,
   } = useJoinForm;
 
-  const onSubmit: SubmitHandler<JoinFormInputs> = () => {
+  const onSubmit: SubmitHandler<JoinForm> = () => {
     onClickNext('SECOND');
     window.history.pushState({ page: 1 }, '');
   };
@@ -43,7 +44,7 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
   const handleValidateNickname: ChangeHandler = async (e) => {
     if (errors.nickname) return;
     try {
-      const response = await validateNickname(e.target.value);
+      const response = await AuthApi.validateNickname(e.target.value);
 
       const isValidNickname = response.data.result.isValid;
       if (!isValidNickname) {
@@ -57,7 +58,7 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
   const handleValidateEmail: ChangeHandler = async (event) => {
     if (errors.email) return;
     try {
-      const response = await validateEmail(event.target.value);
+      const response = await AuthApi.validateEmail(event.target.value);
 
       const isValidEmail = response.data.result.isValid;
       if (!isValidEmail) {
@@ -72,14 +73,12 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const passwordChecked = getValues('passwordChecked');
-    if (
-      passwordChecked.length === 0 ||
-      errors.passwordChecked?.type === 'pattern'
-    ) {
+    if (passwordChecked.length === 0) {
       return;
     }
+
     const password = event.target.value;
-    if (password === getValues('passwordChecked')) {
+    if (password === passwordChecked) {
       clearErrors('passwordChecked');
     } else {
       setError('passwordChecked', {
@@ -131,13 +130,9 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
           placeholder='비밀번호를 한번 더 입력해주세요'
           type='password'
           {...register('passwordChecked', {
-            required: '비밀번호는 필수 입력입니다.',
-            pattern: {
-              value: /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/,
-              message: '영문, 숫자, 특수기호를 포함하여 8~20자로 입력해주세요.',
-            },
+            required: '비밀번호 확인은 필수 입력입니다.',
             validate: {
-              isSame: (value, formValues: JoinFormInputs) =>
+              isSame: (value, formValues: JoinForm) =>
                 value === formValues.password ||
                 '비밀번호가 일치하지 않습니다.',
             },
@@ -169,19 +164,37 @@ export const AdminInfo: React.FC<InnerPageProps> = ({
       </InputWrap>
       <InputWrap>
         <Input
-          className='gap'
-          label='나이'
-          placeholder='나이를 입력해주세요'
-          {...register('age', {
-            required: '나이는 필수 입력입니다.',
+          label='이름'
+          placeholder='이름을 입력해주세요'
+          {...register('name', {
+            required: '이름은 필수 입력입니다.',
             pattern: {
-              value: /^(?:[1-9]|[1-9][0-9])$/,
-              message: '유효한 나이를 입력해주세요.',
+              value: /^[가-힣]+$/,
+              message: '공백없이 한글만 입력가능합니다.',
             },
           })}
         />
-        {errors.age && (
-          <GappedErrorMessage>{errors.age?.message}</GappedErrorMessage>
+        {errors.name && (
+          <GappedErrorMessage>{errors.name?.message}</GappedErrorMessage>
+        )}
+      </InputWrap>
+      <InputWrap>
+        <DateInput
+          label='생년월일'
+          type='date'
+          min='1900-01-01'
+          max={dayjs(Date.now()).format('YYYY-MM-DD')}
+          {...register('birthDate', {
+            required: '생년월일은 필수 입력입니다.',
+            pattern: {
+              value:
+                /^(?:(?:19|20)\d\d)-(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-9]|3[01])$/,
+              message: '유효한 생년월일를 입력해주세요',
+            },
+          })}
+        />
+        {errors.birthDate && (
+          <GappedErrorMessage>{errors.birthDate?.message}</GappedErrorMessage>
         )}
       </InputWrap>
       <InputWrap>

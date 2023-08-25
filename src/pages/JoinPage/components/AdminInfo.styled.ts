@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { ErrorMessage } from 'components/ErrorMessage';
+import { Input } from 'components/Input';
 import { flexSet } from 'styles/mixin';
 
 export const Form = styled.form``;
@@ -8,6 +9,16 @@ export const Form = styled.form``;
 export const InputWrap = styled.div`
   & + & {
     margin-top: 6.8rem;
+  }
+`;
+
+export const DateInput = styled(Input)`
+  width: fit-content;
+  &:hover {
+    cursor: text;
+  }
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
   }
 `;
 
