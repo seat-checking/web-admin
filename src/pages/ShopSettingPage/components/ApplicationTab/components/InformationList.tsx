@@ -15,6 +15,7 @@ import {
 import { STORAGE } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
+import { Label } from 'components/Label';
 import { Modal } from 'components/Modal';
 import { Radio } from 'components/Radio';
 
@@ -27,6 +28,7 @@ import {
 import {
   ButtonWrap,
   InputWrapper,
+  LabelWrapper,
   ListContent,
   ListWrapper,
   RadioWrapper,
@@ -159,23 +161,23 @@ export const InformationList: React.FC<InformationListProps> = ({
       type: radioStates[item.id],
       contentGuide: editedContentGuide,
     };
-    const Params = {
+    const params = {
       storeId,
       data: resData,
       customid: item.id,
     };
 
     try {
-      await patchRequestInformation(Params);
+      await patchRequestInformation(params);
       fetchData();
-      console.log('Data saved successfully');
     } catch (error) {
       console.error('Error saving data:', error);
     }
   };
 
   return (
-    <>
+    <LabelWrapper>
+      <Label required={false} label='요청 정보 목록' />
       {data.result.storeCustomReservationFieldList.map((item) => (
         <ListWrapper key={item.id}>
           <ListContent>
@@ -292,6 +294,6 @@ export const InformationList: React.FC<InformationListProps> = ({
           </Modal>
         </ListWrapper>
       ))}
-    </>
+    </LabelWrapper>
   );
 };
