@@ -14,6 +14,7 @@ interface SelectInputProps {
   type: React.HTMLInputTypeAttribute;
   onItemsChange: (items: { value: string }[]) => void;
   isActive: boolean; // 상위 컴포넌트에 전달할 함수
+  defaultValue?: string[];
 }
 
 export const SelectInput = ({
@@ -21,8 +22,11 @@ export const SelectInput = ({
   type,
   onItemsChange,
   isActive,
+  defaultValue,
 }: SelectInputProps) => {
-  const [items, setItems] = useState([{ value: '' }]);
+  const [items, setItems] = useState(
+    defaultValue ? defaultValue.map((value) => ({ value })) : [{ value: '' }],
+  );
 
   const handleAdd = () => {
     setItems([...items, { value: '' }]);
@@ -56,6 +60,7 @@ export const SelectInput = ({
             value={item.value} // 배열의 항목별 상태값을 사용
             type={type}
             onChange={(e) => handleChange(e, index)}
+            defaultValue={defaultValue}
           />
           <XIcon onClick={() => handleRemove(index)} />
         </SelectInputWrapper>
