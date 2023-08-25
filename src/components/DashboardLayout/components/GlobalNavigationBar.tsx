@@ -35,21 +35,27 @@ export const GlobalNavigationBar: React.FC = () => {
   const defaultSelectedShop: Shop = {
     storeId: Number(localStorage.getItem(STORAGE.storeId)),
     storeName: localStorage.getItem(STORAGE.storeName) || '',
-    mainImage: null,
-    introduction: null,
+    mainImage: localStorage.getItem(STORAGE.mainImage) || '',
+    introduction: localStorage.getItem(STORAGE.introduction) || '',
   };
 
   const [selectedShop, setSelectedShop] = useState<Shop>(defaultSelectedShop);
 
   useEffect(() => {
-    return () => {
-      localStorage.setItem(STORAGE.storeId, selectedShop.storeId.toString());
+    localStorage.setItem(STORAGE.storeId, selectedShop.storeId.toString());
+
+    // storeId 외 정보는 새로고침 하기 전에만 저장시킴
+    const saveShopInformation = () => {
       localStorage.setItem(
         STORAGE.introduction,
         selectedShop.introduction || '',
       );
       localStorage.setItem(STORAGE.mainImage, selectedShop.mainImage || '');
       localStorage.setItem(STORAGE.storeName, selectedShop.storeName);
+    };
+    window.addEventListener('beforeunload', saveShopInformation);
+    return () => {
+      window.removeEventListener('beforeunload', saveShopInformation);
     };
   }, [selectedShop]);
 

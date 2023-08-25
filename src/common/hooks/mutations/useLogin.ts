@@ -15,7 +15,14 @@ export const useLogin = () => {
       return AuthApi.signIn(loginform);
     },
     onSuccess: (data: LoginResponse) => {
-      const { accessToken, permissionByMenu, storeId, storeName } = data;
+      const {
+        accessToken,
+        permissionByMenu,
+        storeId,
+        storeName,
+        mainImage,
+        introduction,
+      } = data;
 
       setAccessToken(accessToken);
 
@@ -24,8 +31,8 @@ export const useLogin = () => {
 
       localStorage.setItem(STORAGE.storeId, String(storeId));
       localStorage.setItem(STORAGE.storeName, storeName);
-      // localStorage.setItem(STORAGE.introduction, String(storeId));
-      // localStorage.setItem(STORAGE.mainImage, String(storeId));
+      localStorage.setItem(STORAGE.mainImage, mainImage || '');
+      localStorage.setItem(STORAGE.introduction, introduction || '');
 
       navigate('/');
     },
