@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
@@ -17,10 +17,24 @@ export const Header: React.FC<HeaderProps> = ({ number }) => {
 
   const selectedManageId = selectedId && getItem(selectedId).manageId;
 
-  const handleDeleteItem = () => {
+  const handleDeleteItem = useCallback(() => {
     if (!selectedId) return;
     deleteItem(selectedId);
-  };
+  }, [deleteItem, selectedId]);
+
+  const handleDeleteKey = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Delete') {
+        handleDeleteItem();
+      }
+    },
+    [handleDeleteItem],
+  );
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleDeleteKey);
+    return () => window.removeEventListener('keydown', handleDeleteKey);
+  }, [handleDeleteKey]);
 
   return (
     <Wrap>
