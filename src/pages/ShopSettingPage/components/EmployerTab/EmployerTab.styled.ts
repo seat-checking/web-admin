@@ -115,3 +115,5 @@ export const CheckCircleIcon = styled.div`
   background-size: cover;
   margin-top: 0.4rem;
 `;
+
+export const InputForm = styled.form``;
