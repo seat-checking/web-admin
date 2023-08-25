@@ -22,9 +22,8 @@ import { LabelWrapper } from 'pages/ShopSettingPage/components/EmployerTab/Emplo
 
 interface InputFieldProps {
   id: number;
-  option: string;
   title: string;
-  type: string;
+  type: '자유 입력' | '선택지 제공';
   contentGuide: string;
 }
 
@@ -39,7 +38,6 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
   const [inputFields, setInputFields] = useState<InputFieldProps[]>([
     {
       id: Date.now(),
-      option: 'option1',
       title: '',
       type: '자유 입력',
       contentGuide: '',
@@ -66,7 +64,7 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
           ? {
               ...field,
               contentGuide: items.map((item) => item.value).join(','),
-            } // 모든 아이템의 value를 쉼표로 구분된 문자열로 저장
+            }
           : field,
       ),
     );
@@ -117,7 +115,6 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
       setInputFields([
         {
           id: Date.now(),
-          option: 'option1',
           title: '',
           type: '자유 입력',
           contentGuide: '',
@@ -129,78 +126,73 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
   };
 
   return (
-    <>
-      <ApplicationTabWrapper>
-        <LabelWrapper>
-          <Label label='고객에게 받을 정보' />
-        </LabelWrapper>
-        {inputFields.map((field) => (
-          <InputWrapper key={field.id}>
-            <FlexWrapper>
-              <IconWrapper>
-                <TitleInput
-                  placeholder='*제목을 입력해주세요'
-                  onFocus={() => setIsEditing(true)}
-                  onBlur={() => setIsEditing(false)}
-                  focused={isEditing}
-                  value={field.title}
-                  onChange={handleTitleChange(field.id)}
-                />
-                {!isEditing && <EditIcon />}
-              </IconWrapper>
-              <RadioWrapper>
-                <Radio
-                  label='자유 입력'
-                  id='option1'
-                  name={field.id.toString()}
-                  value={field.type}
-                  size='small'
-                  onChange={() => handleRadioChange(field.id, 'option1')}
-                  defaultChecked
-                />
-                <Radio
-                  label='선택지 제공'
-                  id='option2'
-                  name={field.id.toString()}
-                  value={field.type}
-                  size='small'
-                  onChange={() => handleRadioChange(field.id, 'option2')}
-                />
-              </RadioWrapper>
-            </FlexWrapper>
-            {field.option === 'option1' && (
-              <Input
-                placeholder='고객에게 가이드를 작성해주세요.(ex: 사용 목적을 입력해주세요)'
-                value={field.contentGuide}
-                onChange={handleContentGuideChange(field.id)}
-              />
-            )}
-            {field.option === 'option2' && (
-              <SelectInput
-                placeholder='고객에게 가이드를 작성해주세요.(ex: 사용 목적을 입력해주세요)'
-                type='text'
-                onItemsChange={(items) => handleItemsChange(field.id, items)}
-                isActive
-              />
-            )}
-          </InputWrapper>
-        ))}
-        <ButtonWrapper>
-          <Button
-            style={{
-              marginTop: '2.4rem',
-              width: '53.9rem',
-              marginBottom: '4rem',
-            }}
-            onClick={handleSubmit}
-          >
-            요청 추가하기
-          </Button>
-        </ButtonWrapper>
-      </ApplicationTabWrapper>
+    <ApplicationTabWrapper>
       <LabelWrapper>
-        <Label required={false} label='요청 정보 목록' />
+        <Label label='고객에게 받을 정보' />
       </LabelWrapper>
-    </>
+      {inputFields.map((field) => (
+        <InputWrapper key={field.id}>
+          <FlexWrapper>
+            <IconWrapper>
+              <TitleInput
+                placeholder='*제목을 입력해주세요'
+                onFocus={() => setIsEditing(true)}
+                onBlur={() => setIsEditing(false)}
+                focused={isEditing}
+                value={field.title}
+                onChange={handleTitleChange(field.id)}
+              />
+              {!isEditing && <EditIcon />}
+            </IconWrapper>
+            <RadioWrapper>
+              <Radio
+                label='자유 입력'
+                id='option1'
+                name={field.id.toString()}
+                value={field.type}
+                size='small'
+                onChange={() => handleRadioChange(field.id, 'option1')}
+                defaultChecked
+              />
+              <Radio
+                label='선택지 제공'
+                id='option2'
+                name={field.id.toString()}
+                value={field.type}
+                size='small'
+                onChange={() => handleRadioChange(field.id, 'option2')}
+              />
+            </RadioWrapper>
+          </FlexWrapper>
+          {field.type === '자유 입력' && (
+            <Input
+              placeholder='고객에게 가이드를 작성해주세요.(ex: 사용 목적을 입력해주세요)'
+              value={field.contentGuide}
+              onChange={handleContentGuideChange(field.id)}
+            />
+          )}
+          {field.type === '선택지 제공' && (
+            <SelectInput
+              placeholder='고객에게 가이드를 작성해주세요.(ex: 사용 목적을 입력해주세요)'
+              type='text'
+              onItemsChange={(items) => handleItemsChange(field.id, items)}
+              isActive
+            />
+          )}
+        </InputWrapper>
+      ))}
+      <ButtonWrapper>
+        <Button
+          style={{
+            marginTop: '2.4rem',
+            width: '53.9rem',
+            marginBottom: '4rem',
+          }}
+          onClick={handleSubmit}
+        >
+          요청 추가하기
+        </Button>
+      </ButtonWrapper>
+    </ApplicationTabWrapper>
   );
 };
