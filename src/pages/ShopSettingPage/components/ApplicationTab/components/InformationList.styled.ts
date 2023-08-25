@@ -44,3 +44,10 @@ export const RadioWrapper = styled.div`
   gap: 4rem;
   pointer-events: none;
 `;
+
+export const LabelWrapper = styled.div`
+  width: 57.1rem;
+  margin: 0 auto;
+  padding-top: 4rem;
+  margin-bottom: 10rem;
+`;
