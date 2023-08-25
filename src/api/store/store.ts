@@ -71,8 +71,7 @@ export interface ErrorResponse {
 export const getSeachList = async (
   params: SearchParams,
 ): Promise<SuccessOkResponse<SearchListResponse>> => {
-  const url = getApiUrl(`/users/search?email=${params.email}`);
-  const response = await axiosClient.get(url);
+  const response = await axiosClient.get(`/users/search?email=${params.email}`);
   return response.data;
 };
 
@@ -80,28 +79,31 @@ export const EmployeeRegistration = async (
   params: MemberRegistrationParams,
 ): Promise<SuccessOkWithoutResultResponse> => {
   const { storeId, ...restParams } = params;
-  const url = getApiUrl(`/stores/admins/member-registration/${storeId}`);
-  const response = await axiosClient.post(url, restParams);
+  const response = await axiosClient.post(
+    `/stores/admins/member-registration/${storeId}`,
+    restParams,
+  );
   return response.data;
 };
 
 export const getEmployeeList = async (
   params: GetEmployeeListParams,
 ): Promise<SuccessOkResponse<EmployeeListResponse>> => {
-  const url = getApiUrl(`/stores/admins/member-registration/${params.storeId}`);
-  const response = await axiosClient.get(url, {
-    params,
-  });
+  const response = await axiosClient.get(
+    `/stores/admins/member-registration/${params.storeId}`,
+    {
+      params,
+    },
+  );
   return response.data;
 };
 
 export const deleteMember = async (
   params: DeleteMemberParams,
 ): Promise<SuccessOkResponse<any>> => {
-  const url = getApiUrl(
+  const response = await axiosClient.delete(
     `/stores/admins/member-registration/${params.storeId}?member-id=${params.memberId}`,
   );
-  const response = await axiosClient.delete(url);
   return response.data;
 };
 
@@ -109,7 +111,9 @@ export const modifyPermission = async (
   params: ModifyPermissionpParams,
 ): Promise<SuccessOkResponse<any>> => {
   const { storeId, ...restParams } = params;
-  const url = getApiUrl(`/stores/admins/member-registration/${storeId}`);
-  const response = await axiosClient.patch(url, restParams);
+  const response = await axiosClient.patch(
+    `/stores/admins/member-registration/${storeId}`,
+    restParams,
+  );
   return response.data;
 };
