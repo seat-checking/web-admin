@@ -4,6 +4,7 @@ export const ListWrapper = styled.div`
   width: 57.1rem;
   margin: 0 auto;
   margin-top: 0.4rem;
+  margin-bottom: 1.6rem;
   border-radius: 0.8rem;
   border: 0.1rem solid ${({ theme }) => theme.palette.grey[200]};
   background: #fff;
@@ -31,7 +32,15 @@ export const ButtonWrap = styled.div`
 `;
 
 export const TitleText = styled.div`
-  color: ${({ theme }) => theme.palette.grey[300]};
+  color: ${({ theme }) => theme.palette.grey[500]};
   font-size: 1.6rem;
   font-weight: 600;
+  width: 118px;
+`;
+
+export const RadioWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  pointer-events: none;
 `;
