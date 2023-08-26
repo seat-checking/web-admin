@@ -16,6 +16,7 @@ interface LayoutStoreState {
     addItem: (item: CustomItemLayout) => void;
     deleteItem: (id: string) => void;
     setManageId: (itemId: string, value: number) => void;
+    setTableSize: (id: string, value: number, size: 'w' | 'h') => void;
   };
 }
 
@@ -31,6 +32,18 @@ const useLayoutStore = create<LayoutStoreState>()(
         const finded = get().layout.find((item) => item.i === id);
         if (!finded) throw new Error('존재하지 않는 아이템입니다.');
         return finded;
+      },
+      setTableSize: (id: string, value: number, size: 'w' | 'h') => {
+        set(
+          (state) => {
+            const copy = [...state.layout];
+            const idx = copy.findIndex((item) => item.i === id);
+            copy[idx][size] = value;
+            return { layout: copy };
+          },
+          false,
+          'setTableSize',
+        );
       },
       addItem: (item: CustomItemLayout) => {
         useChangeStore.getState().setChange(true);
