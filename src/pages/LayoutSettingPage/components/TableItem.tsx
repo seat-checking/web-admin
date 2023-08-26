@@ -5,38 +5,24 @@ import { TablePopover } from 'pages/LayoutSettingPage/components/Popover/TablePo
 import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 
 interface TableItemProps extends ComponentPropsWithRef<'div'> {
-  isClickable: boolean;
   id: string;
+  isClickable: boolean;
+  isTableClicked: boolean;
+  onClose: () => void;
 }
 
 export const TableItem = forwardRef<HTMLDivElement, TableItemProps>(
-  ({ isClickable, id, ...rest }, ref) => {
-    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-    const [popoverPosition, setPopoverPosition] = useState('');
-    const { setSelectedId } = useSelectItem();
+  ({ isClickable, id, isTableClicked, onClose, ...rest }, ref) => {
+    const isPopoverOpen = isClickable && isTableClicked;
 
-    const handleTogglePopover = () => {
-      setIsPopoverOpen(!isPopoverOpen);
-      if (ref && typeof ref !== 'function' && ref.current) {
-        const { transform } = ref.current.style;
-        setPopoverPosition(transform);
-      }
-      setSelectedId(id);
-    };
+    const popoverPosition =
+      (ref && typeof ref !== 'function' && ref.current?.style.transform) || '';
 
     return (
       <>
-        <GridTable
-          isClickable={isClickable}
-          {...rest}
-          ref={ref}
-          onClick={handleTogglePopover}
-        />
-        {isClickable && isPopoverOpen && (
-          <TablePopover
-            transform={popoverPosition}
-            onClose={() => setIsPopoverOpen(false)}
-          />
+        <GridTable isClickable={isClickable} {...rest} ref={ref} />
+        {isPopoverOpen && (
+          <TablePopover transform={popoverPosition} onClose={onClose} />
         )}
       </>
     );

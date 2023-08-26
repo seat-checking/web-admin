@@ -24,7 +24,6 @@ export const TablePopover: React.FC<PopoverProps> = ({
 
   const { selectedId } = useSelectItem();
   const { getItem } = useLayoutActions();
-  const selectedItem = selectedId && getItem(selectedId);
   const tableWidth =
     (selectedId && getItem(selectedId).w * TABLE_SIZE_PX) || TABLE_SIZE_PX;
   const tableHeight =
@@ -39,7 +38,7 @@ export const TablePopover: React.FC<PopoverProps> = ({
         onClose?.();
       }
     },
-    [onClose, selectedId],
+    [onClose],
   );
 
   useEffect(() => {

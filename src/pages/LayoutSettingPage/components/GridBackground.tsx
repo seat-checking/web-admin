@@ -32,15 +32,18 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
 }) => {
   const myLayout = useLayout();
   const { saveLayoutChange, addItem } = useLayoutActions();
-  const [isChairClicked, setIsChairClicked] = useState(false);
+  const [isItemClicked, setIsItemClicked] = useState(false);
   const { selectedId, setSelectedId } = useSelectItem();
 
+  const { size } = useContext(DragContext);
+
+  const isMoved = useRef(false);
+  const dragStartTime = useRef(0);
+
   const handleTogglePopover = (id: string) => {
-    setIsChairClicked(!isChairClicked);
+    setIsItemClicked(!isItemClicked);
     setSelectedId(id);
   };
-
-  const { size } = useContext(DragContext);
 
   const handleDropDragOver = () => {
     return { ...size.current };
@@ -74,9 +77,6 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
     saveLayoutChange(layout);
   };
 
-  const isMoved = useRef(false);
-  const dragStartTime = useRef(0);
-
   const handleDragStart = (event: MouseEvent, itemId: string) => {
     if (event.type !== 'mousedown') {
       return;
@@ -102,6 +102,7 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
   };
 
   return (
+    /* eslint-disable-line */
     <ShopGridBackground
       layout={myLayout}
       rowHeight={TABLE_SIZE_PX}
@@ -133,13 +134,19 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
               key={item.i}
               id={item.i}
               isClickable={activeTab === 1}
-              isChairClicked={isChairClicked && selectedId === item.i}
-              onClose={() => setIsChairClicked(!isChairClicked)}
+              isChairClicked={isItemClicked && selectedId === item.i}
+              onClose={() => setIsItemClicked(!isItemClicked)}
             />
           );
         }
         return (
-          <TableItem key={item.i} id={item.i} isClickable={activeTab === 1} />
+          <TableItem
+            key={item.i}
+            id={item.i}
+            isClickable={activeTab === 1}
+            isTableClicked={isItemClicked && selectedId === item.i}
+            onClose={() => setIsItemClicked(!isItemClicked)}
+          />
         );
       })}
     </ShopGridBackground>

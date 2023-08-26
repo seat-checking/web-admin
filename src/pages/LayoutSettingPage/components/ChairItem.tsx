@@ -10,8 +10,8 @@ import {
 import { flexSet } from 'styles/mixin';
 
 interface ChairItemProps extends ComponentPropsWithRef<'div'> {
-  isClickable: boolean;
   id: string;
+  isClickable: boolean;
   isChairClicked: boolean;
   onClose: () => void;
 }

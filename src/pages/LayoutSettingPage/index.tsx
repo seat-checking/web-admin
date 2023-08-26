@@ -67,17 +67,6 @@ const initialLayouts = (shop: ShopLayout) => {
   return [...tables, ...chairs];
 };
 
-// const parseReservationUnitString = (unit: string) => {
-//   const reservationUnit: ReservationUnit = { seat: true, space: true };
-//   if (unit === '좌석') {
-//     reservationUnit.space = false;
-//   }
-//   if (unit === '스페이스') {
-//     reservationUnit.seat = false;
-//   }
-//   return reservationUnit;
-// };
-
 /**
  * 좌석 설정 페이지
  */
