@@ -9,6 +9,8 @@ export const Wrap = styled.div`
   width: 100%;
   height: 100%; // 부모에 height: 100 줘야 자식에 flex-grow 적용 가능
   padding: 2.3rem;
+
+  user-select: none;
 `;
 export const SeatCountWrap = styled.div`
   margin-top: 2.4rem;
