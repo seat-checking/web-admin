@@ -24,3 +24,4 @@ export const queryKeys = {
 };
 
 export const TEMPORARY_SPACE_ID = -1;
+export const NO_SPACE_ID = -2;

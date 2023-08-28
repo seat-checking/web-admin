@@ -7,9 +7,7 @@ export const useGetSpaceLayout = (spaceId: number) => {
     queryKey: [queryKeys.GET_SPACE_LAYOUT, spaceId],
     queryFn: () => ShopApi.getLayout(spaceId),
     enabled:
-      typeof spaceId === 'number' &&
-      !Number.isNaN(spaceId) &&
-      spaceId !== TEMPORARY_SPACE_ID,
+      typeof spaceId === 'number' && !Number.isNaN(spaceId) && spaceId >= 0,
     refetchOnWindowFocus: false,
   });
 };

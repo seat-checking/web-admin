@@ -37,9 +37,15 @@ export const Wrap = styled.div`
   }
 `;
 
-export const StyledSideBar = styled(SideBar)`
+export const StyledSideBar = styled(SideBar)<{ $isDisabled: boolean }>`
   padding-top: 6rem;
   padding-bottom: 8rem;
+
+  ${({ $isDisabled }) =>
+    $isDisabled &&
+    `
+  pointer-events: none;
+  `}
 `;
 
 export const RightWrap = styled.div`

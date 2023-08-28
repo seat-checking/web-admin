@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import type { ShopLayout } from 'api/lib/shop';
 import type {
   ItemType,
@@ -9,6 +10,8 @@ import type { ResizeCallbackData } from 'react-resizable';
 
 import { useGetSpaceLayout } from 'common/hooks/queries/useGetSpaceLayout';
 import { useTab } from 'common/hooks/useTab';
+import { NO_SPACE_ID } from 'common/utils/constants';
+import { Modal } from 'components/Modal';
 import { Tabs } from 'components/Tabs.tsx';
 import {
   Wrap,
@@ -75,6 +78,7 @@ const initialLayouts = (shop: ShopLayout) => {
  */
 export const LayoutSettingPage: React.FC = () => {
   const { spaceId } = useSpaceId();
+
   const { setChange, isChanged } = useChange();
 
   const { data: spaceLayout } = useGetSpaceLayout(spaceId);
@@ -144,7 +148,7 @@ export const LayoutSettingPage: React.FC = () => {
   }, [isChanged]);
   return (
     <Wrap>
-      <StyledSideBar>
+      <StyledSideBar $isDisabled={spaceId === NO_SPACE_ID}>
         <Tabs
           activeTab={activeTab}
           tabList={[
