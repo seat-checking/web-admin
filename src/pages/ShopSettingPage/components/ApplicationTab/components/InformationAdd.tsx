@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTheme } from 'styled-components';
 import type React from 'react';
 import { requestInformation } from 'api/store/store';
 import { STORAGE } from 'common/utils/constants';
@@ -34,6 +35,7 @@ interface InformationAddProps {
 export const InformationAdd: React.FC<InformationAddProps> = ({
   fetchData,
 }) => {
+  const theme = useTheme();
   const [isEditing, setIsEditing] = useState(false);
   const [inputFields, setInputFields] = useState<InputFieldProps[]>([
     {
@@ -125,6 +127,15 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
     }
   };
 
+  const isAnyInputFilled = (): boolean => {
+    for (const field of inputFields) {
+      if (field.title && field.contentGuide) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   return (
     <ApplicationTabWrapper>
       <LabelWrapper>
@@ -182,16 +193,30 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
         </InputWrapper>
       ))}
       <ButtonWrapper>
-        <Button
-          style={{
-            marginTop: '2.4rem',
-            width: '53.9rem',
-            marginBottom: '4rem',
-          }}
-          onClick={handleSubmit}
-        >
-          요청 추가하기
-        </Button>
+        {isAnyInputFilled() ? (
+          <Button
+            style={{
+              marginTop: '2.4rem',
+              width: '53.9rem',
+              marginBottom: '4rem',
+            }}
+            onClick={handleSubmit}
+          >
+            요청 추가하기
+          </Button>
+        ) : (
+          <Button
+            style={{
+              marginTop: '2.4rem',
+              width: '53.9rem',
+              marginBottom: '4rem',
+              color: theme.palette.grey[400],
+            }}
+            isDisabled
+          >
+            요청 추가하기
+          </Button>
+        )}
       </ButtonWrapper>
     </ApplicationTabWrapper>
   );
