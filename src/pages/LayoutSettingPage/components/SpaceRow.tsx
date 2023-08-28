@@ -38,11 +38,6 @@ export const SpaceRow: React.FC = () => {
     setIsAddOn(false);
   };
 
-  const handleDeleteSpace = () => {
-    clearSpaces();
-    setFirstSpaceId();
-  };
-
   const handleAddSpace = () => {
     if (isChanged) {
       setIsAddConfirmModalOn(true);
@@ -68,15 +63,12 @@ export const SpaceRow: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!spaceList || spaceList?.length === 0) {
-      // setSpaceId(TEMPORARY_SPACE_ID);
-      return;
-    }
     if (!firstLoadedRef.current) {
-      setSpaceId(spaceList[0].storeSpaceId);
+      console.log('hihi2');
+      setFirstSpaceId();
       firstLoadedRef.current = true;
     }
-  }, [spaceList, setSpaceId]);
+  }, [spaceList, setFirstSpaceId]);
 
   return (
     <>
@@ -94,7 +86,7 @@ export const SpaceRow: React.FC = () => {
                 name={space.name}
                 onClick={() => handleClickSpace(space.storeSpaceId)}
                 editSpace={editSpace}
-                onDeleteSpace={handleDeleteSpace}
+                clearSpaces={clearSpaces}
               />
             ))}
         {isChangeConfirmModalOn && (

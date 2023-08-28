@@ -7,17 +7,17 @@ import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 
 interface DeleteSpaceModalProps {
   onClose: () => void;
-  onDeleteSpace: () => void;
+  clearSpaces: () => void;
 }
 /**
  * 스페이스 삭제 모달
  */
 export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
   onClose,
-  onDeleteSpace,
+  clearSpaces,
 }) => {
   const theme = useTheme();
-  const { spaceId } = useSpaceId();
+  const { spaceId, setFirstSpaceId } = useSpaceId();
 
   const { mutate: deleteMutate } = useDeleteSpace();
 
@@ -25,17 +25,19 @@ export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
     onClose();
   };
 
-  const deleteSpace = () => {
-    onDeleteSpace();
-    onClose();
-  };
-
   const handleDelete = () => {
     if (spaceId === TEMPORARY_SPACE_ID) {
-      deleteSpace();
+      clearSpaces();
+      setFirstSpaceId();
+      onClose();
       return;
     }
-    deleteMutate(spaceId, { onSuccess: deleteSpace });
+    deleteMutate(spaceId, {
+      onSuccess: () => {
+        setFirstSpaceId();
+        onClose();
+      },
+    });
   };
 
   return (
