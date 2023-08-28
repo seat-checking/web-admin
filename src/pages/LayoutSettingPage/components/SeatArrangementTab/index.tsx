@@ -2,7 +2,6 @@ import { useTheme } from 'styled-components';
 
 import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import {
-  Door,
   DoorChairBox,
   LabelText,
   SeatCountBox,
@@ -10,8 +9,6 @@ import {
   TableBox,
   TableRow,
   Wrap,
-  DoorChairRow,
-  DoorText,
   ButtonRow,
   StyledButton,
   DescriptionText,
@@ -67,23 +64,10 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
           <Table width={2} height={2} />
         </TableBox>
       </TableRow>
-      <DoorChairRow>
-        <div>
-          <LabelText>매장</LabelText>
-          <DoorChairBox>
-            <div>
-              <Door />
-              <DoorText>입구</DoorText>
-            </div>
-          </DoorChairBox>
-        </div>
-        <div>
-          <LabelText>의자</LabelText>
-          <DoorChairBox>
-            <Chair />
-          </DoorChairBox>
-        </div>
-      </DoorChairRow>
+      <LabelText>의자</LabelText>
+      <DoorChairBox>
+        <Chair />
+      </DoorChairBox>
 
       <ButtonRow>
         <StyledButton

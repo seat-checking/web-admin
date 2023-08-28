@@ -63,29 +63,12 @@ export const TableBox = styled.div`
   border-radius: 0.5rem;
 `;
 
-export const DoorChairRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 export const DoorChairBox = styled.div`
   ${grayBorderBoxStyle}
   ${flexSet()}
-  width: 19.9rem;
+  width: 100%;
   height: 9.6rem;
   border-radius: 0.5rem;
-`;
-
-export const Door = styled.div`
-  width: 6.4rem;
-  height: 1.3rem;
-  background-color: black;
-`;
-
-export const DoorText = styled.p`
-  font-weight: 500;
-  font-size: 1.4rem;
-  text-align: center;
 `;
 
 export const ButtonRow = styled.div`
