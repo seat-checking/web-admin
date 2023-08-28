@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { ShopApi } from 'api/lib/shop';
 import { queryKeys } from 'common/utils/constants';

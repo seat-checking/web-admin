@@ -1,9 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
 import { TEMPORARY_SPACE_ID, queryKeys } from 'common/utils/constants';
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 
 export interface UseSpaceReturn {
   spaceList: SpaceType[] | undefined;
@@ -12,7 +12,7 @@ export interface UseSpaceReturn {
   deleteSpace: (id: number) => void;
   editSpace: (id: number, name: string) => void;
   isLoading: boolean;
-  clear: () => void;
+  clearSpaces: () => void;
 }
 
 export const useSpace = (): UseSpaceReturn => {
@@ -24,9 +24,9 @@ export const useSpace = (): UseSpaceReturn => {
     setSpaceList(data);
   }, [data]);
 
-  const [searchParams, setSearchParmas] = useSearchParams();
+  const { setSpaceId } = useSpaceId();
 
-  const clear = useCallback(() => {
+  const clearSpaces = useCallback(() => {
     const cached = queryClient.getQueryData([
       queryKeys.GET_SPACES,
     ]) as SpaceType[];
@@ -44,7 +44,7 @@ export const useSpace = (): UseSpaceReturn => {
         storeSpaceId: newId,
         name,
       };
-      setSearchParmas({ space: String(newId) });
+      setSpaceId(newId);
 
       if (spaceList) {
         setSpaces([...spaceList, newSpace]);
@@ -52,7 +52,7 @@ export const useSpace = (): UseSpaceReturn => {
         setSpaces([newSpace]);
       }
     },
-    [setSpaces, spaceList, setSearchParmas],
+    [setSpaces, spaceList, setSpaceId],
   );
 
   const editSpace = useCallback(
@@ -80,6 +80,6 @@ export const useSpace = (): UseSpaceReturn => {
     deleteSpace,
     editSpace,
     isLoading,
-    clear,
+    clearSpaces,
   };
 };

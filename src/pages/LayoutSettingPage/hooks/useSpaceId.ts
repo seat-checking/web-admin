@@ -11,11 +11,14 @@ export const useSpaceId = () => {
   const { setChange } = useChange();
   const spaceId = Number(searchParams.get('space'));
 
-  const setSpaceId = useCallback((id: number) => {
-    setSearchParams({
-      space: String(id),
-    });
-  }, []);
+  const setSpaceId = useCallback(
+    (id: number) => {
+      setSearchParams({
+        space: String(id),
+      });
+    },
+    [setSearchParams],
+  );
 
   const setFirstSpaceId = useCallback(() => {
     const spacesList: SpaceType[] | undefined = queryClient.getQueryData([
@@ -28,7 +31,7 @@ export const useSpaceId = () => {
       setSpaceId(spacesList[0].storeSpaceId);
     }
     setChange(false);
-  }, [queryClient, setSpaceId]);
+  }, [queryClient, setSpaceId, setChange]);
 
   return { spaceId, setSpaceId, setFirstSpaceId };
 };

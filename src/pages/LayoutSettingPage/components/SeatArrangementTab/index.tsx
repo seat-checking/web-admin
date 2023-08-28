@@ -1,9 +1,5 @@
 import { useTheme } from 'styled-components';
 
-import type { ReservationUnit, ShopLayout } from 'api/lib/shop';
-import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
-import { useCreateSpace } from 'common/hooks/mutations/useCreateSpace';
-import { useEditLayout } from 'common/hooks/mutations/useEditLayout';
 import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import {
   Door,
@@ -25,11 +21,6 @@ import { Table } from 'pages/LayoutSettingPage/components/SeatArrangementTab/com
 import { useSaveLayout } from 'pages/LayoutSettingPage/hooks/useSaveLayout';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
-import { useLayout } from 'pages/LayoutSettingPage/stores/layoutStore';
-import {
-  useReservationUnit,
-  useSpaceName,
-} from 'pages/LayoutSettingPage/stores/spaceInfoStore';
 
 interface SeatArrangementTabProps {
   changeTab: (index: number) => void;

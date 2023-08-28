@@ -8,6 +8,7 @@ import { Modal } from 'components/Modal';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { useChangeStore } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
+import { useShopHeightActions } from 'pages/LayoutSettingPage/stores/shopHeightStore';
 import {
   useReservationUnit,
   useSpaceInfoActions,
@@ -42,6 +43,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
 
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
   const { clear: clearLayout } = useLayoutActions();
+  const { clearHeight } = useShopHeightActions();
 
   const defaultName = type === 'CREATE' ? '' : spaceName;
   const defaultUnit =
@@ -79,6 +81,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
 
     addSpace?.(input);
     clearLayout();
+    clearHeight();
     setChange(true);
     onClose();
   };

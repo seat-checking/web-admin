@@ -38,7 +38,6 @@ import {
 import { useSpaceInfoActions } from 'pages/LayoutSettingPage/stores/spaceInfoStore';
 import {
   COLUMN_CNT,
-  DEFAULT_ROW_CNT,
   TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
 

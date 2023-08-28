@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { ReactComponent as AlertCircleBorderIcon } from 'assets/icons/alert-circle-border.svg';
 import { ReactComponent as PlusCircle } from 'assets/icons/plus-circle.svg';
 
-import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
 import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import { ExitConfirmModal } from 'pages/LayoutSettingPage/components/ExitConfirmModal';
 import { Space } from 'pages/LayoutSettingPage/components/Space';
@@ -31,7 +30,7 @@ export const SpaceRow: React.FC = () => {
   const [isChangeConfirmModalOn, setIsChangeConfirmModalOn] = useState(false);
   const [clickedSpaceId, setClickedSpaceId] = useState(-1);
 
-  const { spaceList, isLoading, addSpace, editSpace, clear } = useSpace();
+  const { spaceList, isLoading, addSpace, editSpace, clearSpaces } = useSpace();
 
   const firstLoadedRef = useRef(false);
 
@@ -72,7 +71,7 @@ export const SpaceRow: React.FC = () => {
       setSpaceId(spaceList[0].storeSpaceId);
       firstLoadedRef.current = true;
     }
-  }, [spaceList]);
+  }, [spaceList, setSpaceId]);
 
   return (
     <>
@@ -90,15 +89,13 @@ export const SpaceRow: React.FC = () => {
                 name={space.name}
                 onClick={() => handleClickSpace(space.storeSpaceId)}
                 editSpace={editSpace}
-                // isSelected={space.storeSpaceId === selected}
-                // deleteSpace={deleteSpace}
               />
             ))}
         {isChangeConfirmModalOn && (
           <ExitConfirmModal
             onClose={() => setIsChangeConfirmModalOn(false)}
             onComplete={() => {
-              clear();
+              clearSpaces();
               handleChangeSpaceId(clickedSpaceId);
             }}
           />
@@ -109,7 +106,7 @@ export const SpaceRow: React.FC = () => {
           {isAddConfirmModalOn && (
             <ExitConfirmModal
               onComplete={() => {
-                clear();
+                clearSpaces();
                 setIsAddOn(true);
               }}
               onClose={() => setIsAddConfirmModalOn(false)}

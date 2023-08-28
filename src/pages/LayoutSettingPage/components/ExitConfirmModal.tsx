@@ -1,11 +1,12 @@
 import styled, { useTheme } from 'styled-components';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
+import { useSaveLayout } from 'pages/LayoutSettingPage/hooks/useSaveLayout';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 
 interface ExitConfirmModalProps {
   onComplete?: () => void;
-  onClose?: () => void;
+  onClose: () => void;
 }
 /**
  * 저장하지 않았을 때 뜨는 확인 모달
@@ -16,35 +17,26 @@ export const ExitConfirmModal: React.FC<ExitConfirmModalProps> = ({
 }) => {
   const theme = useTheme();
   const { setChange } = useChange();
-
-  const handleClose = () => {
-    onClose?.();
-  };
+  const saveLayout = useSaveLayout();
 
   const handleCancel = () => {
     setChange(false);
     onComplete?.();
 
-    /**
-     * 스페이스 추가 중(id -1)이었으면 스페이스 목록에서 추가된 스페이스 삭제시켜야함
-     *
-     * 스페이스 명을 변경했으면 스페이스 목록에서 변경된 스페이스명 다시 복구시켜야함
-     *
-     * -> 스페이스 목록 불러오는 쿼리만 다시 호출하면 될듯..^^... 그게 싫으면 initialData도 같이 들고있어야함..
-     * queryData를 다시 상태 변수에 저장시켜도 되겠다!!
-     */
-    handleClose();
+    onClose();
   };
 
   const handleSave = () => {
     setChange(false);
     onComplete?.();
-    // TODO 저장 처리
-    handleClose();
+
+    saveLayout();
+
+    onClose();
   };
 
   return (
-    <Modal onClose={handleClose}>
+    <Modal onClose={onClose}>
       <Modal.Header>좌석 설정</Modal.Header>
       <Content>
         <ConfirmText>

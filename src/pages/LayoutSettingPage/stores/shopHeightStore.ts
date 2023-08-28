@@ -9,7 +9,7 @@ interface ShopHeightStoreState {
   height: number;
   actions: {
     changeHeight: (value: number | ChangeRowCommand, minHeight: number) => void;
-    // changeMinHeight: (height: number) => void;
+    clearHeight: () => void;
   };
 }
 
@@ -27,7 +27,7 @@ export const useShopHeightStore = create<ShopHeightStoreState>()(
           }
           return { height: getValidHeight(value, minHeight) };
         }),
-      //   changeMinHeight: (height: number) => set(() => ({ minHeight: height })),
+      clearHeight: () => set(() => ({ height: DEFAULT_ROW_CNT })),
     },
   }),
 );
