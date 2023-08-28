@@ -12,32 +12,16 @@ export const Wrap = styled.div`
 
   user-select: none;
 `;
-export const SeatCountWrap = styled.div`
-  margin-top: 2.4rem;
-  margin-bottom: 4.8rem;
-
-  display: flex;
-  gap: 1.3rem;
-`;
 
 export const DescriptionText = styled.p`
+  margin-bottom: 2.4rem;
+
   color: ${({ theme }) => theme.palette.grey[300]};
   font-weight: 400;
   font-size: 2rem;
   line-height: normal;
 
   text-align: center;
-`;
-
-export const SeatCountBox = styled.div`
-  ${grayBorderBoxStyle}
-  ${flexSet()}
-  flex: 1;
-  height: 6.2rem;
-
-  font-weight: 500;
-  font-size: 1.7rem;
-  color: ${({ theme }) => theme.palette.grey[500]};
 `;
 
 export const LabelText = styled.p`

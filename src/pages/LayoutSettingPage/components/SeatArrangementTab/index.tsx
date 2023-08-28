@@ -4,8 +4,6 @@ import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import {
   DoorChairBox,
   LabelText,
-  SeatCountBox,
-  SeatCountWrap,
   TableBox,
   TableRow,
   Wrap,
@@ -45,10 +43,6 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
         <br />
         마우스로 오른쪽에 끌어서 넣어주세요.
       </DescriptionText>
-      <SeatCountWrap>
-        <SeatCountBox>총 좌석:144개</SeatCountBox>
-        <SeatCountBox>배치한 좌석:111개</SeatCountBox>
-      </SeatCountWrap>
       <LabelText>책상</LabelText>
       <TableRow>
         <TableBox>
