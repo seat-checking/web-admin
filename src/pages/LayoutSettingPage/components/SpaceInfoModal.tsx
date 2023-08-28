@@ -42,7 +42,7 @@ export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
   const { setChange } = useChangeStore();
 
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
-  const { clear: clearLayout } = useLayoutActions();
+  const { clearLayout } = useLayoutActions();
   const { clearHeight } = useShopHeightActions();
 
   const defaultName = type === 'CREATE' ? '' : spaceName;

@@ -64,7 +64,6 @@ export const SpaceRow: React.FC = () => {
 
   useEffect(() => {
     if (!firstLoadedRef.current) {
-      console.log('hihi2');
       setFirstSpaceId();
       firstLoadedRef.current = true;
     }

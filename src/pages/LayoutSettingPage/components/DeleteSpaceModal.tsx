@@ -4,6 +4,7 @@ import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
+import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 
 interface DeleteSpaceModalProps {
   onClose: () => void;
@@ -18,6 +19,7 @@ export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
 }) => {
   const theme = useTheme();
   const { spaceId, setFirstSpaceId } = useSpaceId();
+  const { clearLayout } = useLayoutActions();
 
   const { mutate: deleteMutate } = useDeleteSpace();
 
@@ -28,12 +30,14 @@ export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
   const handleDelete = () => {
     if (spaceId === TEMPORARY_SPACE_ID) {
       clearSpaces();
+      clearLayout();
       setFirstSpaceId();
       onClose();
       return;
     }
     deleteMutate(spaceId, {
       onSuccess: () => {
+        clearLayout();
         setFirstSpaceId();
         onClose();
       },

@@ -7,7 +7,7 @@ import { useChangeStore } from 'pages/LayoutSettingPage/stores/changeStore';
 interface LayoutStoreState {
   layout: CustomItemLayout[];
   actions: {
-    clear: () => void;
+    clearLayout: () => void;
     getItem: (id: string) => CustomItemLayout;
     saveInitialLayout: (layout: CustomItemLayout[]) => void;
     saveLayoutChange: (changedLayout: Layout[]) => void;
@@ -27,7 +27,7 @@ const useLayoutStore = create<LayoutStoreState>()(
   devtools((set, get) => ({
     layout: [],
     actions: {
-      clear: () => set(() => ({ layout: [] })),
+      clearLayout: () => set(() => ({ layout: [] })),
       getItem: (id: string) => {
         const finded = get().layout.find((item) => item.i === id);
         if (!finded) throw new Error('존재하지 않는 아이템입니다.');
