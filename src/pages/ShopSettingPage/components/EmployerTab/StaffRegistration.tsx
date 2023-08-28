@@ -3,6 +3,7 @@ import { useTheme } from 'styled-components';
 import type React from 'react';
 import { EmployeeRegistration } from 'api/store/store';
 import InputCheckBox from 'components/InputCheckBox';
+import { NoResults } from 'pages/ShopSettingPage/components/EmployerTab/EmployerTab.styled';
 import {
   CheckBoxLabel,
   FlexWrapper,
@@ -10,6 +11,7 @@ import {
   InputCheckBoxWrapper,
 } from 'pages/ShopSettingPage/components/EmployerTab/StaffListItem.styled';
 import {
+  ErrorMessage,
   FlexWrapperContainer,
   Registration,
   RegistrationButton,
@@ -33,6 +35,7 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
   onEmployeeAdded,
 }) => {
   const [checkboxes, setCheckboxes] = useState([true, false, false, false]);
+  const [errorMessage, setErrorMessage] = useState(false); // 오류 메세지를 관리하는 state를 추가
 
   const theme = useTheme();
 
@@ -57,10 +60,11 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
       };
 
       const resData = await EmployeeRegistration(registrationData);
-
+      setErrorMessage(false);
       onEmployeeAdded();
     } catch (error) {
       console.error(error);
+      setErrorMessage(true);
     }
   };
 
@@ -130,6 +134,11 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
           직원 등록하기
         </RegistrationButton>
       )}
+      {errorMessage ? (
+        <ErrorMessage>
+          해당 이메일로 등록된 직원이 이미 존재합니다.
+        </ErrorMessage>
+      ) : null}
     </Registration>
   );
 };

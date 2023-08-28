@@ -52,3 +52,19 @@ export const FlexWrapperContainer = styled.div`
   margin-top: 4rem;
   padding-bottom: 2.4rem;
 `;
+
+export const ErrorMessage = styled.div`
+  width: 50.8rem;
+  height: 3.1rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  border-radius: 0.8rem;
+  background: ${({ theme }) => theme.palette.grey[200]};
+  color: ${({ theme }) => theme.palette.grey[500]};
+  font-size: 1.4rem;
+  font-weight: 400;
+  padding-left: 0.8rem;
+  margin-top: 1.1rem;
+  margin-bottom: 1.1rem;
+`;
