@@ -23,7 +23,7 @@ import 'react-grid-layout/css/styles.css';
 
 import { ShopFormTab } from 'pages/LayoutSettingPage/components/ShopFormTab';
 import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
-import { useShopHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
+import { useShopMinHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
 
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
@@ -31,6 +31,10 @@ import {
   useLayout,
   useLayoutActions,
 } from 'pages/LayoutSettingPage/stores/layoutStore';
+import {
+  useShopHeight,
+  useShopHeightActions,
+} from 'pages/LayoutSettingPage/stores/shopHeightStore';
 import { useSpaceInfoActions } from 'pages/LayoutSettingPage/stores/spaceInfoStore';
 import {
   COLUMN_CNT,
@@ -77,8 +81,9 @@ export const LayoutSettingPage: React.FC = () => {
   const { data: spaceLayout } = useGetSpaceLayout(spaceId);
 
   const { activeTab, changeTab } = useTab();
-  const { rowCnt, minRowCnt, changeRowCnt, changeMinRowCnt, findMinRowCnt } =
-    useShopHeight(DEFAULT_ROW_CNT);
+  const { minRowCnt, changeMinRowCnt, findMinRowCnt } = useShopMinHeight();
+  const shopHeight = useShopHeight();
+  const { changeHeight } = useShopHeightActions();
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
 
   const [shopFormState, setShopFormState] =
@@ -92,7 +97,7 @@ export const LayoutSettingPage: React.FC = () => {
 
   const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
     const { height } = data.size;
-    changeRowCnt(height / TABLE_SIZE_PX);
+    changeHeight(height / TABLE_SIZE_PX, minRowCnt);
     setChange(true);
 
     setShopFormState('NONE');
@@ -120,7 +125,7 @@ export const LayoutSettingPage: React.FC = () => {
       saveLayout(initialLayouts(spaceLayout));
       setSpaceName(spaceLayout.storeSpaceName);
       setReservationUnit(spaceLayout.reservationUnit);
-      changeRowCnt(spaceLayout.height);
+      changeHeight(spaceLayout.height, minRowCnt);
     }
   }, [spaceLayout, saveLayout]); // FIXME changeRowCnt 추가
 
@@ -148,8 +153,6 @@ export const LayoutSettingPage: React.FC = () => {
               label: '가게 형태',
               content: (
                 <ShopFormTab
-                  changeRowCnt={changeRowCnt}
-                  rowCnt={rowCnt}
                   minRowCnt={minRowCnt}
                   changeTab={changeTab}
                   shopFormState={shopFormState}
@@ -159,9 +162,7 @@ export const LayoutSettingPage: React.FC = () => {
             },
             {
               label: '좌석 배치',
-              content: (
-                <SeatArrangementTab changeTab={changeTab} rowCnt={rowCnt} />
-              ),
+              content: <SeatArrangementTab changeTab={changeTab} />,
             },
           ]}
         />
@@ -171,7 +172,7 @@ export const LayoutSettingPage: React.FC = () => {
         {activeTab === 0 ? (
           <ResizableWrap
             width={TABLE_SIZE_PX * COLUMN_CNT}
-            height={rowCnt * TABLE_SIZE_PX}
+            height={shopHeight * TABLE_SIZE_PX}
             resizeHandles={['s']}
             draggableOpts={{
               grid: [TABLE_SIZE_PX, TABLE_SIZE_PX],
@@ -184,11 +185,11 @@ export const LayoutSettingPage: React.FC = () => {
             axis={undefined}
             onResize={handleResize}
           >
-            <GridBackground rowCnt={rowCnt} activeTab={activeTab} />
+            <GridBackground activeTab={activeTab} />
           </ResizableWrap>
         ) : (
           <ResizableWrap as='div' $width={TABLE_SIZE_PX * COLUMN_CNT}>
-            <GridBackground rowCnt={rowCnt} activeTab={activeTab} />
+            <GridBackground activeTab={activeTab} />
           </ResizableWrap>
         )}
       </RightWrap>

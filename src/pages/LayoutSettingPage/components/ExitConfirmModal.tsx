@@ -2,7 +2,6 @@ import styled, { useTheme } from 'styled-components';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
-import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
 
 interface ExitConfirmModalProps {
   onComplete?: () => void;

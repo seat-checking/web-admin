@@ -22,6 +22,7 @@ import {
 } from 'pages/LayoutSettingPage/components/SeatArrangementTab/SeatArrangementTab.styled';
 import { Chair } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Chair';
 import { Table } from 'pages/LayoutSettingPage/components/SeatArrangementTab/components/Table';
+import { useSaveLayout } from 'pages/LayoutSettingPage/hooks/useSaveLayout';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useLayout } from 'pages/LayoutSettingPage/stores/layoutStore';
@@ -32,75 +33,19 @@ import {
 
 interface SeatArrangementTabProps {
   changeTab: (index: number) => void;
-  rowCnt: number;
 }
 
-const mappingData = (
-  layout: CustomItemLayout[],
-  rowCnt: number,
-  storeSpaceName: string,
-  reservationUnit: ReservationUnit,
-) => {
-  const request: ShopLayout = {
-    storeSpaceName,
-    height: rowCnt,
-    reservationUnit,
-    tableList: [],
-    chairList: [],
-  };
-  layout.forEach(({ i, w, h, x, y, sort, manageId }) => {
-    if (sort === 'table') {
-      const tableData = {
-        i,
-        w,
-        h,
-        x,
-        y,
-      };
-      request.tableList.push(tableData);
-    } else {
-      const chair = {
-        i,
-        manageId,
-        x,
-        y,
-      };
-      request.chairList.push(chair);
-    }
-  });
-  return request;
-};
 /**
  * '좌석 설정' > '좌석 배치' 탭 클릭했을 때 보여줄 컴포넌트
  */
 export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
   changeTab,
-  rowCnt,
 }) => {
   const theme = useTheme();
-  const { mutate: editLayoutMutate } = useEditLayout();
-  const { mutate: createSpaceMutate } = useCreateSpace();
+
+  const saveLayout = useSaveLayout();
+  const { isChanged } = useChange();
   const { spaceId } = useSpaceId();
-
-  const layout = useLayout();
-  const { isChanged, setChange } = useChange();
-
-  const spaceName = useSpaceName();
-  const reservationUnit = useReservationUnit();
-
-  const handleSave = () => {
-    if (spaceId === TEMPORARY_SPACE_ID) {
-      createSpaceMutate(
-        mappingData(layout, rowCnt, spaceName, reservationUnit),
-      );
-      return;
-    }
-    editLayoutMutate({
-      spaceId,
-      layout: mappingData(layout, rowCnt, spaceName, reservationUnit),
-    });
-    setChange(false);
-  };
 
   const handleChangePreviousTab = () => {
     changeTab(0);
@@ -157,7 +102,7 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
         >
           이전으로
         </StyledButton>
-        <StyledButton onClick={handleSave} $isChanged={isChanged}>
+        <StyledButton onClick={saveLayout} $isChanged={isChanged}>
           {spaceId === TEMPORARY_SPACE_ID ? '생성하기' : '저장하기'}
         </StyledButton>
       </ButtonRow>

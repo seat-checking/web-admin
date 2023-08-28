@@ -12,6 +12,7 @@ import {
   useLayoutActions,
 } from 'pages/LayoutSettingPage/stores/layoutStore';
 import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
+import { useShopHeight } from 'pages/LayoutSettingPage/stores/shopHeightStore';
 import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
 import {
   COLUMN_CNT,
@@ -20,7 +21,6 @@ import {
 
 interface GridBackgroundProps {
   activeTab: number;
-  rowCnt: number;
 }
 
 /**
@@ -28,12 +28,12 @@ interface GridBackgroundProps {
  */
 export const GridBackground: React.FC<GridBackgroundProps> = ({
   activeTab,
-  rowCnt,
 }) => {
   const myLayout = useLayout();
   const { saveLayoutChange, addItem } = useLayoutActions();
   const [isItemClicked, setIsItemClicked] = useState(false);
   const { selectedId, setSelectedId } = useSelectItem();
+  const shopHeight = useShopHeight();
 
   const { size } = useContext(DragContext);
 
@@ -109,12 +109,12 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
       // width/cols = rowHeight가 나와야 정사각형 나옴
       cols={COLUMN_CNT}
       width={TABLE_SIZE_PX * COLUMN_CNT}
-      $height={rowCnt * TABLE_SIZE_PX}
+      $height={shopHeight * TABLE_SIZE_PX}
       margin={[0, 0]}
       // 이게 없어야 배경색 보임, 드래그앤드롭 자유배치 가능
       autoSize={false}
       compactType={null}
-      maxRows={rowCnt}
+      maxRows={shopHeight}
       // 이게 있어야 아이템이 이동시킬 때 다른 아이템이 움직이지 않음
       preventCollision
       isDroppable

@@ -19,6 +19,10 @@ import {
 import { CheckRadioButton } from 'pages/LayoutSettingPage/components/ShopFormTab/components/CheckRadioButton';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import {
+  useShopHeight,
+  useShopHeightActions,
+} from 'pages/LayoutSettingPage/stores/shopHeightStore';
+import {
   COLUMN_CNT,
   DEFAULT_ROW_CNT,
   TABLE_SIZE_PX,
@@ -35,9 +39,7 @@ function nearestDivisible(n: number): number {
 }
 
 interface ShopFormTabProps {
-  rowCnt: number;
   minRowCnt: number;
-  changeRowCnt: (value: number | ChangeRowCommand) => void;
   changeTab: (index: number) => void;
   shopFormState: ShopFormState;
   setShopFormState: React.Dispatch<React.SetStateAction<ShopFormState>>;
@@ -46,22 +48,23 @@ interface ShopFormTabProps {
  * '좌석 설정' > '가게 형태' 탭 클릭했을 때 보여줄 컴포넌트
  */
 export const ShopFormTab: React.FC<ShopFormTabProps> = ({
-  rowCnt,
   minRowCnt,
-  changeRowCnt,
   changeTab,
   shopFormState: checkState,
   setShopFormState: setCheckState,
 }) => {
-  const [heightInput, setHeightInput] = useState(rowCnt * TABLE_SIZE_PX);
+  const shopHeight = useShopHeight();
+  const { changeHeight } = useShopHeightActions();
+
+  const [heightInput, setHeightInput] = useState(shopHeight * TABLE_SIZE_PX);
   const { setChange } = useChange();
 
   const handleResizeUpDown = (command: ChangeRowCommand) => {
-    if (command === 'DOWN' && rowCnt <= 2) {
+    if (command === 'DOWN' && shopHeight <= 2) {
       return;
     }
     setCheckState('NONE');
-    changeRowCnt(command);
+    changeHeight(command, minRowCnt);
     setChange(true);
   };
 
@@ -70,12 +73,12 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
 
     const size = e.currentTarget.value;
     if (size === 'SQUARE') {
-      changeRowCnt(COLUMN_CNT);
+      changeHeight(COLUMN_CNT, minRowCnt);
       setCheckState(size);
       return;
     }
     if (size === 'RECTANGLE') {
-      changeRowCnt(DEFAULT_ROW_CNT);
+      changeHeight(DEFAULT_ROW_CNT, minRowCnt);
       setCheckState(size);
     }
   };
@@ -90,13 +93,13 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
     const minHeight = minRowCnt * TABLE_SIZE_PX;
     if (heightInput < minHeight) {
       setHeightInput(minHeight);
-      changeRowCnt(minRowCnt);
+      changeHeight(minRowCnt, minRowCnt);
       return;
     }
 
     const nearestHeight = nearestDivisible(heightInput);
     setHeightInput(nearestHeight);
-    changeRowCnt(nearestHeight / TABLE_SIZE_PX);
+    changeHeight(nearestHeight / TABLE_SIZE_PX, minRowCnt);
   };
 
   const handleChangeNextTab = () => {
@@ -104,8 +107,8 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
   };
 
   useEffect(() => {
-    setHeightInput(rowCnt * TABLE_SIZE_PX);
-  }, [rowCnt]);
+    setHeightInput(shopHeight * TABLE_SIZE_PX);
+  }, [shopHeight]);
 
   return (
     <Wrap>
