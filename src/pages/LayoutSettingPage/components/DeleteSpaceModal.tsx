@@ -1,17 +1,20 @@
 import styled, { useTheme } from 'styled-components';
 import { useDeleteSpace } from 'common/hooks/mutations/useDeleteSpace';
+import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 
 interface DeleteSpaceModalProps {
   onClose: () => void;
+  onDeleteSpace: () => void;
 }
 /**
  * 스페이스 삭제 모달
  */
 export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
   onClose,
+  onDeleteSpace,
 }) => {
   const theme = useTheme();
   const { spaceId } = useSpaceId();
@@ -22,8 +25,17 @@ export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
     onClose();
   };
 
+  const deleteSpace = () => {
+    onDeleteSpace();
+    onClose();
+  };
+
   const handleDelete = () => {
-    deleteMutate(spaceId, { onSuccess: () => onClose() });
+    if (spaceId === TEMPORARY_SPACE_ID) {
+      deleteSpace();
+      return;
+    }
+    deleteMutate(spaceId, { onSuccess: deleteSpace });
   };
 
   return (

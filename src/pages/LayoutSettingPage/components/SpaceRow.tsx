@@ -23,7 +23,7 @@ import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
  * space 목록 컴포넌트 (검은색 영역)
  */
 export const SpaceRow: React.FC = () => {
-  const { setSpaceId, spaceId } = useSpaceId();
+  const { setSpaceId, spaceId, setFirstSpaceId } = useSpaceId();
   const { isChanged } = useChange();
   const { setIsAddOn, isAddOn } = useModal();
   const [isAddConfirmModalOn, setIsAddConfirmModalOn] = useState(false);
@@ -36,6 +36,11 @@ export const SpaceRow: React.FC = () => {
 
   const handleAddModalClose = () => {
     setIsAddOn(false);
+  };
+
+  const handleDeleteSpace = () => {
+    clearSpaces();
+    setFirstSpaceId();
   };
 
   const handleAddSpace = () => {
@@ -64,7 +69,7 @@ export const SpaceRow: React.FC = () => {
 
   useEffect(() => {
     if (!spaceList || spaceList?.length === 0) {
-      setSpaceId(TEMPORARY_SPACE_ID);
+      // setSpaceId(TEMPORARY_SPACE_ID);
       return;
     }
     if (!firstLoadedRef.current) {
@@ -89,6 +94,7 @@ export const SpaceRow: React.FC = () => {
                 name={space.name}
                 onClick={() => handleClickSpace(space.storeSpaceId)}
                 editSpace={editSpace}
+                onDeleteSpace={handleDeleteSpace}
               />
             ))}
         {isChangeConfirmModalOn && (

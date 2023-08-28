@@ -7,7 +7,6 @@ import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 
 export interface UseSpaceReturn {
   spaceList: SpaceType[] | undefined;
-  setSpaces: (space: SpaceType[]) => void;
   addSpace: (name: string) => void;
   deleteSpace: (id: number) => void;
   editSpace: (id: number, name: string) => void;
@@ -75,7 +74,6 @@ export const useSpace = (): UseSpaceReturn => {
 
   return {
     spaceList,
-    setSpaces,
     addSpace,
     deleteSpace,
     editSpace,

@@ -14,6 +14,7 @@ interface SpaceProps {
   name: string;
   onClick: () => void;
   editSpace: (id: number, name: string) => void;
+  onDeleteSpace: () => void;
 }
 
 /**
@@ -24,6 +25,7 @@ export const Space: React.FC<SpaceProps> = ({
   name,
   onClick,
   editSpace,
+  onDeleteSpace,
 }) => {
   const theme = useTheme();
   const { spaceId } = useSpaceId();
@@ -56,7 +58,10 @@ export const Space: React.FC<SpaceProps> = ({
         </BtnsRow>
       )}
       {isDeleteModalOn && (
-        <DeleteSpaceModal onClose={() => setIsDeleteModalOn(false)} />
+        <DeleteSpaceModal
+          onClose={() => setIsDeleteModalOn(false)}
+          onDeleteSpace={onDeleteSpace}
+        />
       )}
       {isEditModalOn && (
         <SpaceInfoModal
