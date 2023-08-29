@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { ReactComponent as AlertCircleBorderIcon } from 'assets/icons/alert-circle-border.svg';
 import { ReactComponent as PlusCircle } from 'assets/icons/plus-circle.svg';
 
-import { NO_SPACE_ID } from 'common/utils/constants';
 import { ExitConfirmModal } from 'pages/LayoutSettingPage/components/ExitConfirmModal';
 import { Space } from 'pages/LayoutSettingPage/components/Space';
 import { SpaceAddEditModal } from 'pages/LayoutSettingPage/components/SpaceAddEditModal';
@@ -68,17 +67,16 @@ export const SpaceRow: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!firstLoadedRef.current) {
-      setFirstSpaceId();
-      firstLoadedRef.current = true;
+    if (spaceList == null || firstLoadedRef.current) {
+      return;
     }
-  }, [spaceList, setFirstSpaceId]);
+    setFirstSpaceId();
+    firstLoadedRef.current = true;
 
-  useEffect(() => {
-    if (spaceId === NO_SPACE_ID) {
+    if (spaceList?.length === 0) {
       setIsAddOn(true);
     }
-  }, []);
+  }, [spaceList, setFirstSpaceId, setIsAddOn]);
 
   return (
     <>
