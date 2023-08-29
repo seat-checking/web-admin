@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
 import { DEFAULT_ROW_CNT } from 'pages/LayoutSettingPage/utils/constants';
 import { getValidHeight } from 'pages/LayoutSettingPage/utils/functions';
 

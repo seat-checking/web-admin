@@ -7,7 +7,7 @@ import { CHAIR_POPOVER_BODY_WIDTH_REM } from 'pages/LayoutSettingPage/utils/cons
 interface ChairBodyProps {
   defaultNumber?: number;
   input: string;
-  setInput: any;
+  setInput: React.Dispatch<React.SetStateAction<string>>;
   onClose?: () => void;
 }
 

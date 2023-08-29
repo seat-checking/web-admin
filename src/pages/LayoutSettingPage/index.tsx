@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import type { ShopLayout } from 'api/lib/shop';
 import type {
   ItemType,
@@ -135,6 +134,7 @@ export const LayoutSettingPage: React.FC = () => {
       changeHeight(spaceLayout.height, minRowCnt);
       setChairCount(spaceLayout.chairList.length);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spaceLayout, saveLayout]); // FIXME changeRowCnt 추가
 
   useEffect(() => {

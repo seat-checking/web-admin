@@ -34,7 +34,7 @@ export const useSpaceId = () => {
       setSpaceId(spacesList[0].storeSpaceId);
     }
     setChange(false);
-  }, [queryClient, setSpaceId, setChange]);
+  }, [queryClient, setSpaceId, setChange, setSearchParams]);
 
   return { spaceId, setSpaceId, setFirstSpaceId };
 };

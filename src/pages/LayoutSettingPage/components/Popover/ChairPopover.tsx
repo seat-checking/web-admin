@@ -7,20 +7,16 @@ import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 import {
   CHAIR_POPOVER_WIDTH_REM,
-  CHAIR_SIZE_PX,
   POPOVER_PADDING_REM,
-  TABLE_POPOVER_WIDTH_REM,
   TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
 
 type PopoverProps = {
-  children?: React.ReactNode;
-  transform?: string;
-  onClose?: () => void;
+  transform: string;
+  onClose: () => void;
 };
 
 export const ChairPopover: React.FC<PopoverProps> = ({
-  children,
   transform,
   onClose,
 }) => {
@@ -62,7 +58,7 @@ export const ChairPopover: React.FC<PopoverProps> = ({
   return (
     <Container transform={transform} ref={containerRef}>
       <Balloon>
-        <Header number={152} />
+        <Header />
         <ChairBody input={input} setInput={setInput} onClose={onClose} />
       </Balloon>
       <Tail />

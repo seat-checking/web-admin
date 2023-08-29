@@ -1,6 +1,5 @@
 import { Suspense, lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import { ShopApi } from 'api/lib/shop';
 import { PATH } from 'common/utils/constants';
 import { AuthGuard } from 'components/AuthGuard';
 import { DashboardLayout } from 'components/DashboardLayout';

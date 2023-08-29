@@ -1,8 +1,7 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
 import styled from 'styled-components';
 import type { ComponentPropsWithRef } from 'react';
 import { TablePopover } from 'pages/LayoutSettingPage/components/Popover/TablePopover';
-import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 
 interface TableItemProps extends ComponentPropsWithRef<'div'> {
   id: string;

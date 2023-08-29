@@ -4,14 +4,10 @@ import { useChairCountActions } from 'pages/LayoutSettingPage/stores/chairCountS
 import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 
-interface HeaderProps {
-  number?: number;
-}
-
 /**
  * 팝오버 헤더 영역 (숫자 + 삭제 버튼)
  */
-export const Header: React.FC<HeaderProps> = ({ number }) => {
+export const Header: React.FC = () => {
   const { deleteItem } = useLayoutActions();
   const { selectedId } = useSelectItem();
   const { getItem } = useLayoutActions();
@@ -27,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({ number }) => {
     if (selectedItemSort === 'chair') {
       decreaseChairCount();
     }
-  }, [deleteItem, selectedId]);
+  }, [deleteItem, selectedId, decreaseChairCount, selectedItemSort]);
 
   const handleDeleteKey = useCallback(
     (event: KeyboardEvent) => {

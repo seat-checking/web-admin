@@ -1,5 +1,4 @@
-import { forwardRef, useState } from 'react';
-import type { Ref } from 'react';
+import { useState } from 'react';
 import type React from 'react';
 import { Input } from 'components/Input';
 import {

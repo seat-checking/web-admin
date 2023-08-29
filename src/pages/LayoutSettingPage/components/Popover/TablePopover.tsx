@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import type React from 'react';
 import { Header } from 'pages/LayoutSettingPage/components/Popover/Header';
@@ -12,8 +12,8 @@ import {
 } from 'pages/LayoutSettingPage/utils/constants';
 
 type PopoverProps = {
-  transform?: string;
-  onClose?: () => void;
+  transform: string;
+  onClose: () => void;
 };
 
 export const TablePopover: React.FC<PopoverProps> = ({
@@ -57,7 +57,7 @@ export const TablePopover: React.FC<PopoverProps> = ({
       $tableHeight={tableHeight}
     >
       <Balloon>
-        <Header number={152} />
+        <Header />
         <TableBody />
       </Balloon>
       <Tail />

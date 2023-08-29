@@ -15,7 +15,7 @@ interface ModalProps {
 
 export const Modal: React.FC<ModalProps> & {
   Header: React.FC<HeaderProps>;
-} = ({ onClose, children, closeOnOusideClick = true }) => {
+} = ({ children, closeOnOusideClick = true, onClose = undefined }) => {
   const handleWrapperClick = (event: React.MouseEvent) => {
     event.stopPropagation();
   };

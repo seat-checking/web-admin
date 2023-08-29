@@ -15,7 +15,7 @@ interface RadioProps extends HtmlHTMLAttributes<HTMLInputElement> {
  */
 export const Radio = forwardRef(
   (
-    { id, name, value, label, size, ...rest }: RadioProps,
+    { id, name, value, label, size = 'medium', ...rest }: RadioProps,
     ref: Ref<HTMLInputElement>,
   ) => {
     return (

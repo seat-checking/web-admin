@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
 import styled from 'styled-components/macro';
 import type { ComponentPropsWithRef } from 'react';
 import { ChairPopover } from 'pages/LayoutSettingPage/components/Popover/ChairPopover';
