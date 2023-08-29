@@ -1,9 +1,9 @@
+/* eslint-disable no-console */
 import { useState } from 'react';
 import { useTheme } from 'styled-components';
 import type React from 'react';
 import { EmployeeRegistration } from 'api/store/store';
 import InputCheckBox from 'components/InputCheckBox';
-import { NoResults } from 'pages/ShopSettingPage/components/EmployerTab/EmployerTab.styled';
 import {
   CheckBoxLabel,
   FlexWrapper,
@@ -64,6 +64,7 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
       const resData = await EmployeeRegistration(registrationData);
       setErrorMessage(false);
       onEmployeeAdded();
+      console.log(resData);
     } catch (error) {
       console.error(error);
       setErrorMessage(true);

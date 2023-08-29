@@ -18,7 +18,24 @@ interface MemberRegistrationParams {
     storeSetting: boolean;
   };
 }
+interface RequestInformationParams {
+  storeId: string;
+  data: {
+    title: string;
+    type: string;
+    contentGuide: string[];
+  };
+}
 
+interface PatchRequestInformationParams {
+  storeId: string;
+  customid: number;
+  data: {
+    title: string;
+    type: string;
+    contentGuide: string[];
+  };
+}
 interface GetEmployeeListParams {
   storeId: string;
 }
@@ -37,7 +54,14 @@ interface ModifyPermissionpParams {
     storeSetting: boolean;
   };
 }
+interface GetRequestInformationParams {
+  storeId: string;
+}
 
+interface DeleteRequestInformationParams {
+  storeId: string;
+  customid: number;
+}
 export interface SearchListResponse {
   email: string;
   name: string;
@@ -58,6 +82,17 @@ export interface EmployeeResponse {
 
 interface EmployeeListResponse {
   storeMemberResponseList: EmployeeResponse[];
+}
+
+export interface StoreCustomReservationField {
+  id: number;
+  title: string;
+  type: string;
+  contentGuide: string;
+}
+
+export interface StoreCustomReservationResponse {
+  storeCustomReservationFieldList: StoreCustomReservationField[];
 }
 
 export interface ErrorResponse {
@@ -114,6 +149,47 @@ export const modifyPermission = async (
   const response = await axiosClient.patch(
     `/stores/admins/member-registration/${storeId}`,
     restParams,
+  );
+  return response.data;
+};
+
+export const requestInformation = async (
+  Params: RequestInformationParams,
+): Promise<SuccessOkWithoutResultResponse> => {
+  const { data } = Params;
+
+  const response = await axiosClient.post(
+    `/stores/admins/custom-reservation-field/${Params.storeId}`,
+    data,
+  );
+  return response.data;
+};
+
+export const getRequestInformation = async (
+  Params: GetRequestInformationParams,
+): Promise<SuccessOkResponse<StoreCustomReservationResponse>> => {
+  const response = await axiosClient.get(
+    `/stores/admins/custom-reservation-field/${Params.storeId}`,
+  );
+  return response.data;
+};
+
+export const deleteRequestInformation = async (
+  Params: DeleteRequestInformationParams,
+): Promise<SuccessOkWithoutResultResponse> => {
+  const response = await axiosClient.delete(
+    `/stores/admins/custom-reservation-field/${Params.storeId}?custom-id=${Params.customid}`,
+  );
+  return response.data;
+};
+
+export const patchRequestInformation = async (
+  Params: PatchRequestInformationParams,
+): Promise<SuccessOkWithoutResultResponse> => {
+  const { data } = Params;
+  const response = await axiosClient.patch(
+    `/stores/admins/custom-reservation-field/${Params.storeId}?custom-id=${Params.customid}`,
+    data,
   );
   return response.data;
 };
