@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Edit from 'assets/icons/edit-3.svg';
-import PlusCircl from 'assets/icons/plus.svg';
+import edit from 'assets/icons/edit-3.svg';
+import plusCircl from 'assets/icons/plus.svg';
 
 interface TitleInputProps {
   focused: boolean;
@@ -56,7 +56,7 @@ export const IconWrapper = styled.div`
 export const EditIcon = styled.div`
   width: 1.6rem;
   height: 1.6rem;
-  background-image: url(${Edit});
+  background-image: url(${edit});
   background-size: cover;
   cursor: pointer;
 `;
@@ -87,7 +87,7 @@ export const FlexWrapper = styled.div`
 export const PlusCirclIcon = styled.div`
   width: 3.2rem;
   height: 3.2rem;
-  background-image: url(${PlusCircl});
+  background-image: url(${plusCircl});
   background-size: cover;
 `;
 
