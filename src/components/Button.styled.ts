@@ -26,7 +26,7 @@ export const StyledButton = styled.button<{
     disabled &&
     css`
       color: ${theme.palette.grey[400]};
-      background-color: ${theme.palette.grey[200]};
+      background-color: ${theme.palette.grey[100]};
       cursor: default;
 
       &:hover {
