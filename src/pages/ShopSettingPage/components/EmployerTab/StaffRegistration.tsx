@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useState } from 'react';
 import type React from 'react';
 import { EmployeeRegistration } from 'api/store/store';

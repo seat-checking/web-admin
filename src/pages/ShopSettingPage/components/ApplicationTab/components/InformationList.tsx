@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { useTheme } from 'styled-components';
 import type { SuccessOkResponse } from 'api/store/common';
@@ -8,7 +9,6 @@ import type {
 import type React from 'react';
 import {
   deleteRequestInformation,
-  getRequestInformation,
   patchRequestInformation,
 } from 'api/store/store';
 
@@ -57,7 +57,7 @@ export const InformationList: React.FC<InformationListProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedItems, setSelectedItems] = useState<{ value: string }[]>([]);
-  const [selectedRadio, setSelectedRadio] = useState('자유 입력');
+  const [, setSelectedRadio] = useState('자유 입력');
   const [modalOpen, setModalOpen] = useState<number | null>(null);
   const [openedItems, setOpenedItems] = useState<{ [id: number]: boolean }>({});
   const [editedItems, setEditedItems] = useState<{
@@ -119,7 +119,6 @@ export const InformationList: React.FC<InformationListProps> = ({
       try {
         const storeId = localStorage.getItem(STORAGE.storeId);
         if (!storeId) {
-          console.error('Store ID is missing.');
           return;
         }
 
@@ -132,7 +131,7 @@ export const InformationList: React.FC<InformationListProps> = ({
         fetchData();
         closeModal();
       } catch (error) {
-        console.error('error');
+        console.log(error);
       }
     }
   };
@@ -140,7 +139,6 @@ export const InformationList: React.FC<InformationListProps> = ({
   const handleSave = async (item: StoreCustomReservationField) => {
     const storeId = localStorage.getItem(STORAGE.storeId);
     if (!storeId) {
-      console.error('Store ID is missing.');
       return;
     }
 

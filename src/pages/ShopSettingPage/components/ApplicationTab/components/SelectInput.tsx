@@ -1,5 +1,4 @@
-import { forwardRef, useState } from 'react';
-import type { Ref } from 'react';
+import { useState } from 'react';
 import type React from 'react';
 import { Input } from 'components/Input';
 import {
@@ -14,6 +13,7 @@ interface SelectInputProps {
   type: React.HTMLInputTypeAttribute;
   onItemsChange: (items: { value: string }[]) => void;
   isActive: boolean; // 상위 컴포넌트에 전달할 함수
+  // eslint-disable-next-line react/require-default-props
   defaultValue?: string[];
 }
 

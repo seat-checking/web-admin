@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import InputCheckBox from 'components/InputCheckBox';
 
 import { Modal } from 'components/Modal';

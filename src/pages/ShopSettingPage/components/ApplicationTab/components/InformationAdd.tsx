@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useState } from 'react';
 import { useTheme } from 'styled-components';
 import type React from 'react';
@@ -45,7 +46,6 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
       contentGuide: '',
     },
   ]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleRadioChange = (fieldId: number, value: string) => {
     const selectedType = value === 'option1' ? '자유 입력' : '선택지 제공';
@@ -95,11 +95,8 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
   const handleSubmit = async () => {
     const storeId = localStorage.getItem(STORAGE.storeId);
     if (!storeId) {
-      console.error('error');
       return;
     }
-
-    setIsLoading(true);
 
     const formattedData = inputFields.map((field) => ({
       title: field.title,
@@ -112,8 +109,9 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
         storeId,
         data: formattedData[0],
       });
+      console.log(response);
+
       fetchData();
-      setIsLoading(false);
       setInputFields([
         {
           id: Date.now(),
