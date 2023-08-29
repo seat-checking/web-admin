@@ -17,6 +17,7 @@ export const ItemWrapFlex = styled(ItemWrap)`
 `;
 
 export const DayItem = styled.li`
+  margin-bottom: 2.4rem;
   & + & {
     margin-top: 2.4em;
   }
