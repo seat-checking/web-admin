@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import Circle from 'assets/icons/alert-circle.svg';
+import circle from 'assets/icons/alert-circle.svg';
+import checkCircle from 'assets/icons/check-circle.svg';
 import Search from 'assets/icons/search.svg';
 
 export const EmployerTabWrapper = styled.div`
@@ -10,10 +11,10 @@ export const EmployerTabWrapper = styled.div`
 `;
 
 export const LabelWrapper = styled.div`
-width:53.9rem;
-display: flex;
-margin 0 auto;
-gap:0.6rem;
+  width: 53.9rem;
+  display: flex;
+  margin: 0 auto;
+  gap: 0.6rem;
 `;
 
 export const InputWrapper = styled.div`
@@ -63,7 +64,7 @@ export const HelperTextWrapper = styled.div`
 export const HelperCircle = styled.div`
   width: 1.6rem;
   height: 1.6rem;
-  background-image: url(${Circle});
+  background-image: url(${circle});
   background-size: cover;
   margin-right: 0.4rem;
 `;
@@ -107,3 +108,12 @@ export const NoResults = styled.div`
   padding-left: 0.8rem;
   margin-top: 1.1rem;
 `;
+export const CheckCircleIcon = styled.div`
+  width: 2rem;
+  height: 2rem;
+  background-image: url(${checkCircle});
+  background-size: cover;
+  margin-top: 0.4rem;
+`;
+
+export const InputForm = styled.form``;

@@ -6,7 +6,6 @@ import { axiosClient } from 'api/apiClient';
 import { getApiUrl } from 'api/store/common';
 
 interface SearchParams {
-  storeId: string;
   email: string;
 }
 interface MemberRegistrationParams {
@@ -72,47 +71,49 @@ export interface ErrorResponse {
 export const getSeachList = async (
   params: SearchParams,
 ): Promise<SuccessOkResponse<SearchListResponse>> => {
-  const url = getApiUrl(
-    `/stores/admins/member-registration/${params.storeId}/search`,
-  );
-  const response = await axiosClient.get(url, {
-    params: { email: params.email },
-  });
+  const response = await axiosClient.get(`/users/search?email=${params.email}`);
   return response.data;
 };
 
 export const EmployeeRegistration = async (
   params: MemberRegistrationParams,
 ): Promise<SuccessOkWithoutResultResponse> => {
-  const url = getApiUrl(`/stores/admins/member-registration/${params.storeId}`);
-  const response = await axiosClient.post(url, { params });
+  const { storeId, ...restParams } = params;
+  const response = await axiosClient.post(
+    `/stores/admins/member-registration/${storeId}`,
+    restParams,
+  );
   return response.data;
 };
 
 export const getEmployeeList = async (
   params: GetEmployeeListParams,
 ): Promise<SuccessOkResponse<EmployeeListResponse>> => {
-  const url = getApiUrl(`/stores/admins/member-registration/${params.storeId}`);
-  const response = await axiosClient.get(url, {
-    params,
-  });
+  const response = await axiosClient.get(
+    `/stores/admins/member-registration/${params.storeId}`,
+    {
+      params,
+    },
+  );
   return response.data;
 };
 
 export const deleteMember = async (
   params: DeleteMemberParams,
 ): Promise<SuccessOkResponse<any>> => {
-  const url = getApiUrl(
+  const response = await axiosClient.delete(
     `/stores/admins/member-registration/${params.storeId}?member-id=${params.memberId}`,
   );
-  const response = await axiosClient.delete(url);
   return response.data;
 };
 
 export const modifyPermission = async (
   params: ModifyPermissionpParams,
 ): Promise<SuccessOkResponse<any>> => {
-  const url = getApiUrl(`/stores/admins/member-registration/${params.storeId}`);
-  const response = await axiosClient.patch(url, params);
+  const { storeId, ...restParams } = params;
+  const response = await axiosClient.patch(
+    `/stores/admins/member-registration/${storeId}`,
+    restParams,
+  );
   return response.data;
 };
