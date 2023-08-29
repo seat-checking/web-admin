@@ -65,6 +65,7 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
       const resData = await EmployeeRegistration(registrationData);
       setErrorMessage(false);
       onEmployeeAdded();
+      console.log(resData);
     } catch (error) {
       console.error(error);
       setErrorMessage(true);
