@@ -4,7 +4,6 @@ import { useTheme } from 'styled-components';
 import type React from 'react';
 import { EmployeeRegistration } from 'api/store/store';
 import InputCheckBox from 'components/InputCheckBox';
-import { NoResults } from 'pages/ShopSettingPage/components/EmployerTab/EmployerTab.styled';
 import {
   CheckBoxLabel,
   FlexWrapper,

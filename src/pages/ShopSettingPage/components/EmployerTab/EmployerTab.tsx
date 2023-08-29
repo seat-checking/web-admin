@@ -1,4 +1,4 @@
-import { notification } from 'antd';
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -15,7 +15,6 @@ import { PATH } from 'common/utils/constants';
 import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Label } from 'components/Label';
 import {
-  CheckCircleIcon,
   EmployerTabWrapper,
   HelperCircle,
   HelperText,
@@ -82,7 +81,7 @@ export const EmployerTab: React.FC = () => {
 
   useEffect(() => {
     fetchEmployeeList();
-  }, [storeId]);
+  });
 
   const handleDeleteMember = async (employeeId: number) => {
     if (!storeId) {
