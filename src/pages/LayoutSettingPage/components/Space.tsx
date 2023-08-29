@@ -5,7 +5,7 @@ import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 
 import { IconButton } from 'components/XButton';
 import { DeleteSpaceModal } from 'pages/LayoutSettingPage/components/DeleteSpaceModal';
-import { SpaceInfoModal } from 'pages/LayoutSettingPage/components/SpaceInfoModal';
+import { SpaceAddEditModal } from 'pages/LayoutSettingPage/components/SpaceAddEditModal';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { flexSet } from 'styles/mixin';
 
@@ -64,7 +64,7 @@ export const Space: React.FC<SpaceProps> = ({
         />
       )}
       {isEditModalOn && (
-        <SpaceInfoModal
+        <SpaceAddEditModal
           onClose={() => setIsEditModalOn(false)}
           type='EDIT'
           editSpace={editSpace}

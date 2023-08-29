@@ -5,7 +5,7 @@ import { ReactComponent as PlusCircle } from 'assets/icons/plus-circle.svg';
 import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import { ExitConfirmModal } from 'pages/LayoutSettingPage/components/ExitConfirmModal';
 import { Space } from 'pages/LayoutSettingPage/components/Space';
-import { SpaceInfoModal } from 'pages/LayoutSettingPage/components/SpaceInfoModal';
+import { SpaceAddEditModal } from 'pages/LayoutSettingPage/components/SpaceAddEditModal';
 import {
   AddRow,
   AddText,
@@ -111,7 +111,7 @@ export const SpaceRow: React.FC = () => {
           )}
         </AddRow>
         {isAddOn && (
-          <SpaceInfoModal
+          <SpaceAddEditModal
             onClose={handleAddModalClose}
             addSpace={addSpace}
             type='CREATE'

@@ -17,7 +17,7 @@ import {
 
 type ModalType = 'CREATE' | 'EDIT';
 
-interface SpaceInfoModalProps {
+interface SpaceAddEditModalProps {
   onClose: () => void;
   type: ModalType;
   addSpace?: (name: string) => void;
@@ -27,7 +27,7 @@ interface SpaceInfoModalProps {
 /**
  * 스페이스 정보 모달
  */
-export const SpaceInfoModal: React.FC<SpaceInfoModalProps> = ({
+export const SpaceAddEditModal: React.FC<SpaceAddEditModalProps> = ({
   onClose,
   type,
   addSpace,
