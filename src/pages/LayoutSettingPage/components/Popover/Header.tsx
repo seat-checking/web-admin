@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import styled from 'styled-components/macro';
+import { useChairCountActions } from 'pages/LayoutSettingPage/stores/chairCountStore';
 import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 import { useSelectItem } from 'pages/LayoutSettingPage/stores/selectItemStore';
 
@@ -14,12 +15,18 @@ export const Header: React.FC<HeaderProps> = ({ number }) => {
   const { deleteItem } = useLayoutActions();
   const { selectedId } = useSelectItem();
   const { getItem } = useLayoutActions();
+  const { decreaseChairCount } = useChairCountActions();
 
-  const selectedManageId = selectedId && getItem(selectedId).manageId;
+  const selectedItem = selectedId == null ? null : getItem(selectedId);
+  const selectedManageId = selectedItem?.manageId;
+  const selectedItemSort = selectedItem?.sort;
 
   const handleDeleteItem = useCallback(() => {
     if (!selectedId) return;
     deleteItem(selectedId);
+    if (selectedItemSort === 'chair') {
+      decreaseChairCount();
+    }
   }, [deleteItem, selectedId]);
 
   const handleDeleteKey = useCallback(

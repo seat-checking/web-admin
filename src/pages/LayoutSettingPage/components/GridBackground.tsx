@@ -7,6 +7,7 @@ import type { Layout } from 'react-grid-layout';
 import { ChairItem } from 'pages/LayoutSettingPage/components/ChairItem';
 
 import { TableItem } from 'pages/LayoutSettingPage/components/TableItem';
+import { useChairCountActions } from 'pages/LayoutSettingPage/stores/chairCountStore';
 import {
   useLayout,
   useLayoutActions,
@@ -37,6 +38,8 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
 
   const { size } = useContext(DragContext);
 
+  const { increaseChairCount } = useChairCountActions();
+
   const isMoved = useRef(false);
   const dragStartTime = useRef(0);
 
@@ -63,6 +66,7 @@ export const GridBackground: React.FC<GridBackgroundProps> = ({
       handleTogglePopover(item.i);
       item.isResizable = false;
       item.sort = 'chair';
+      increaseChairCount();
     } else {
       item.isResizable = true;
       item.sort = 'table';

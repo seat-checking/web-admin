@@ -11,7 +11,6 @@ import type { ResizeCallbackData } from 'react-resizable';
 import { useGetSpaceLayout } from 'common/hooks/queries/useGetSpaceLayout';
 import { useTab } from 'common/hooks/useTab';
 import { NO_SPACE_ID } from 'common/utils/constants';
-import { Modal } from 'components/Modal';
 import { Tabs } from 'components/Tabs.tsx';
 import {
   Wrap,
@@ -29,6 +28,7 @@ import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
 import { useShopMinHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
 
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
+import { useChairCountActions } from 'pages/LayoutSettingPage/stores/chairCountStore';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import {
   useLayout,
@@ -87,6 +87,7 @@ export const LayoutSettingPage: React.FC = () => {
   const { activeTab, changeTab } = useTab();
   const { minRowCnt, changeMinRowCnt, findMinRowCnt } = useShopMinHeight();
   const shopHeight = useShopHeight();
+  const { setChairCount } = useChairCountActions();
   const { changeHeight } = useShopHeightActions();
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
 
@@ -132,6 +133,7 @@ export const LayoutSettingPage: React.FC = () => {
       setSpaceName(spaceLayout.storeSpaceName);
       setReservationUnit(spaceLayout.reservationUnit);
       changeHeight(spaceLayout.height, minRowCnt);
+      setChairCount(spaceLayout.chairList.length);
     }
   }, [spaceLayout, saveLayout]); // FIXME changeRowCnt 추가
 

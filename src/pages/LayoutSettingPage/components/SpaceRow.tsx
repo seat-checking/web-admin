@@ -10,12 +10,15 @@ import {
   AddRow,
   AddText,
   BoldText,
-  InfoWrap,
+  ChairCountText,
+  SpaceHelperWrap,
+  SpaceInfoWrap,
   SpaceWrap,
 } from 'pages/LayoutSettingPage/components/SpaceRow.styled';
 
 import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
+import { useChairCount } from 'pages/LayoutSettingPage/stores/chairCountStore';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
 
@@ -31,6 +34,8 @@ export const SpaceRow: React.FC = () => {
   const [clickedSpaceId, setClickedSpaceId] = useState(-1);
 
   const { spaceList, isLoading, addSpace, editSpace, clearSpaces } = useSpace();
+
+  const chairCount = useChairCount();
 
   const firstLoadedRef = useRef(false);
 
@@ -77,10 +82,13 @@ export const SpaceRow: React.FC = () => {
 
   return (
     <>
-      <InfoWrap>
-        <AlertCircleBorderIcon />
-        <BoldText>스페이스란?</BoldText> 가게의 방이나 분리된 공간을 의미해요.
-      </InfoWrap>
+      <SpaceInfoWrap>
+        <SpaceHelperWrap>
+          <AlertCircleBorderIcon />
+          <BoldText>스페이스란?</BoldText> 가게의 방이나 분리된 공간을 의미해요.
+        </SpaceHelperWrap>
+        <ChairCountText>해당 스페이스 좌석 수 : {chairCount}개</ChairCountText>
+      </SpaceInfoWrap>
       <SpaceWrap>
         {isLoading
           ? 'loading..'

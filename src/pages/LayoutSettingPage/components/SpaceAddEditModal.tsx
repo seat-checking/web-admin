@@ -6,6 +6,7 @@ import { Button } from 'components/Button';
 import InputCheckBox from 'components/InputCheckBox';
 import { Modal } from 'components/Modal';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
+import { useChairCountActions } from 'pages/LayoutSettingPage/stores/chairCountStore';
 import { useChangeStore } from 'pages/LayoutSettingPage/stores/changeStore';
 import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 import { useShopHeightActions } from 'pages/LayoutSettingPage/stores/shopHeightStore';
@@ -44,6 +45,7 @@ export const SpaceAddEditModal: React.FC<SpaceAddEditModalProps> = ({
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
   const { clearLayout } = useLayoutActions();
   const { clearHeight } = useShopHeightActions();
+  const { setChairCount } = useChairCountActions();
 
   const defaultName = type === 'CREATE' ? '' : spaceName;
   const defaultUnit =
@@ -82,6 +84,7 @@ export const SpaceAddEditModal: React.FC<SpaceAddEditModalProps> = ({
     addSpace?.(input);
     clearLayout();
     clearHeight();
+    setChairCount(0);
     setChange(true);
     onClose();
   };
