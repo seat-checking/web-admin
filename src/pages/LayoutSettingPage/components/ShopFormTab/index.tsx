@@ -43,6 +43,7 @@ interface ShopFormTabProps {
   changeTab: (index: number) => void;
   shopFormState: ShopFormState;
   setShopFormState: React.Dispatch<React.SetStateAction<ShopFormState>>;
+  isDisabled: boolean;
 }
 /**
  * '좌석 설정' > '가게 형태' 탭 클릭했을 때 보여줄 컴포넌트
@@ -52,6 +53,7 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
   changeTab,
   shopFormState: checkState,
   setShopFormState: setCheckState,
+  isDisabled,
 }) => {
   const shopHeight = useShopHeight();
   const { changeHeight } = useShopHeightActions();
@@ -111,7 +113,7 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
   }, [shopHeight]);
 
   return (
-    <Wrap>
+    <Wrap $isDisabled={isDisabled}>
       <DescriptionText>
         우리 가게와 가장 비슷한 형태를 선택해주세요.
       </DescriptionText>
@@ -153,7 +155,9 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
           onClick={() => handleResizeUpDown('UP')}
         />
       </WidthSettingBox>
-      <StyledButton onClick={handleChangeNextTab}>다음</StyledButton>
+      <StyledButton onClick={handleChangeNextTab} isDisabled={isDisabled}>
+        다음
+      </StyledButton>
     </Wrap>
   );
 };

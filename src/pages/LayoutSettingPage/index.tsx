@@ -34,6 +34,7 @@ import {
   useLayout,
   useLayoutActions,
 } from 'pages/LayoutSettingPage/stores/layoutStore';
+
 import {
   useShopHeight,
   useShopHeightActions,
@@ -98,6 +99,8 @@ export const LayoutSettingPage: React.FC = () => {
     enableMove,
   } = useLayoutActions();
 
+  const isSideBarDisabled = spaceId === NO_SPACE_ID;
+
   const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
     const { height } = data.size;
     changeHeight(height / TABLE_SIZE_PX, minRowCnt);
@@ -148,7 +151,7 @@ export const LayoutSettingPage: React.FC = () => {
   }, [isChanged]);
   return (
     <Wrap>
-      <StyledSideBar $isDisabled={spaceId === NO_SPACE_ID}>
+      <StyledSideBar>
         <Tabs
           activeTab={activeTab}
           tabList={[
@@ -160,6 +163,7 @@ export const LayoutSettingPage: React.FC = () => {
                   changeTab={changeTab}
                   shopFormState={shopFormState}
                   setShopFormState={setShopFormState}
+                  isDisabled={isSideBarDisabled}
                 />
               ),
             },
