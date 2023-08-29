@@ -50,19 +50,20 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
   const [checkboxes, setCheckboxes] = useState([
     permissions.storeStatus,
     permissions.seatSetting,
-    permissions.storeStatistics,
     permissions.storeSetting,
+    false,
   ]);
   const handleToggleIsOpen = () => {
     setIsOpen(!isOpen);
   };
 
   const toggleCheckbox = (index: number) => {
+    if (index === 2) return; // "가게설정" 체크박스는 상태를 변경하지 않음
+
     const newCheckboxes = [...checkboxes];
     newCheckboxes[index] = !newCheckboxes[index];
     setCheckboxes(newCheckboxes);
   };
-
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -105,6 +106,7 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
                 id='storeStatistics'
                 checked={checkboxes[2]}
                 onChange={() => toggleCheckbox(2)}
+                disabled
               />
               <CheckBoxLabel htmlFor='storeStatistics'>가게통계</CheckBoxLabel>
             </InputCheckBoxWrapper>

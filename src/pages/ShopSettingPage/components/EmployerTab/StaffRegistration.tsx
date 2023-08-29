@@ -40,6 +40,8 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
   const theme = useTheme();
 
   const toggleCheckbox = (index: number) => {
+    if (index === 2) return; // "가게통계" 체크박스는 상태를 변경하지 않음
+
     const newCheckboxes = [...checkboxes];
     newCheckboxes[index] = !newCheckboxes[index];
     setCheckboxes(newCheckboxes);
@@ -104,6 +106,7 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
               <InputCheckBox
                 checked={checkboxes[2]}
                 onChange={() => toggleCheckbox(2)}
+                disabled
               />
               가게통계
             </CheckBoxLabel>
