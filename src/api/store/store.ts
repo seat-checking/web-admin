@@ -5,6 +5,8 @@ import type {
 import { axiosClient } from 'api/apiClient';
 import { getApiUrl } from 'api/store/common';
 
+export type DayOfWeek = 'SUN' | 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT';
+
 interface SearchParams {
   storeId: string;
   email: string;
@@ -38,7 +40,29 @@ interface ModifyPermissionpParams {
     storeSetting: boolean;
   };
 }
+export interface OperatingTimeResponse {
+  dayOff: DayOfWeek[];
+  monOpenTime: string;
+  monCloseTime: string;
+  tueOpenTime: string;
+  tueCloseTime: string;
+  wedOpenTime: string;
+  wedCloseTime: string;
+  thuOpenTime: string;
+  thuCloseTime: string;
+  friOpenTime: string;
+  friCloseTime: string;
+  satOpenTime: string;
+  satCloseTime: string;
+  sunOpenTime: string;
+  sunCloseTime: string;
+  breakTime: string;
+  useTimeLimit: string;
+}
 
+interface OperatingTimeParams {
+  storeId: string;
+}
 export interface SearchListResponse {
   email: string;
   name: string;
@@ -114,5 +138,25 @@ export const modifyPermission = async (
 ): Promise<SuccessOkResponse<any>> => {
   const url = getApiUrl(`/stores/admins/member-registration/${params.storeId}`);
   const response = await axiosClient.patch(url, params);
+  return response.data;
+};
+
+export const getOperatingTime = async (
+  params: OperatingTimeParams,
+): Promise<SuccessOkResponse<OperatingTimeResponse>> => {
+  const response = await axiosClient.get(
+    `/stores/admins/operating-time/${params.storeId}`,
+    { params },
+  );
+  return response.data;
+};
+
+export const patchOperatingTime = async (
+  params: OperatingTimeParams,
+): Promise<SuccessOkResponse<any>> => {
+  const response = await axiosClient.patch(
+    `/stores/admins/operating-time/${params.storeId}`,
+    { params },
+  );
   return response.data;
 };
