@@ -1,20 +1,12 @@
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
+import type { Reservation } from 'api/lib/reservations';
 import { ReactComponent as ChevronDownIcon } from 'assets/icons/chevron-down.svg';
 import { Button } from 'components/Button';
 import { flexSet } from 'styles/mixin';
 
-export interface InformationCardProps {
-  id: number;
-  name: string;
-  reservationStatus: string;
-  storeSpaceName: string; // 공간이름
-  reservationUnit: string; // 좌석 | 스페이스
-  manageId: number; // 좌석 번호
-  reservationStartDateAndTime: string;
-  reservationEndDateAndTime: string;
-  createdAt: string;
-}
+export type InformationCardProps = Reservation;
 /* eslint-disable react/destructuring-assignment */
 
 /**
@@ -27,16 +19,23 @@ export const InformationCard: React.FC<InformationCardProps> = (props) => {
   const handleToggleDetail = () => {
     setIsOpened((prev) => !prev);
   };
+
+  const date = dayjs(props.startSchedule).format('YY년 M월 D일');
+  const startUsingTime = dayjs(props.startSchedule).format('hh:mm');
+  const endUsingTime = dayjs(props.endSchedule).format('hh:mm');
+
   return (
     <Wrap>
       <Header>
         <StatusTag>{props.reservationStatus}</StatusTag>
-        <CreatedText>{props.createdAt}</CreatedText>
+        <CreatedText>
+          {dayjs(props.createdAt).format('M월 D일 H:m')}
+        </CreatedText>
       </Header>
       <Tab onClick={handleToggleDetail}>
         <Name>{props.name}님</Name>
         <Circle />
-        <Reservation>{props.manageId}번</Reservation>
+        <ReservationPlace>{props.reservedPlace}번</ReservationPlace>
         <ChevronDownIcon
           stroke={`${theme.palette.grey[300]}`}
           width='4rem'
@@ -52,16 +51,18 @@ export const InformationCard: React.FC<InformationCardProps> = (props) => {
               <ValueText>{props.storeSpaceName}</ValueText>
             </TextRow>
             <TextRow>
-              <LabelText>· 신청한 {props.reservationUnit}</LabelText>
-              <ValueText>{props.manageId}</ValueText>
+              <LabelText>
+                · 신청한 {props.reservationUnitReservedByUser}
+              </LabelText>
+              <ValueText>{props.reservedPlace}</ValueText>
             </TextRow>
             <TextRow>
               <LabelText>· 희망 이용 날짜</LabelText>
-              <ValueText>{props.manageId}</ValueText>
+              <ValueText>{date}</ValueText>
             </TextRow>
             <TextRow>
               <LabelText>· 희망 이용 시간</LabelText>
-              <ValueText>{props.manageId}</ValueText>
+              <ValueText>{`${startUsingTime} ~ ${endUsingTime}`}</ValueText>
             </TextRow>
           </Body>
           <BtnsRow>
@@ -138,7 +139,7 @@ const Circle = styled.div`
   margin-right: 0.4rem;
 `;
 
-const Reservation = styled.span`
+const ReservationPlace = styled.span`
   margin-right: auto;
 
   color: ${({ theme }) => theme.palette.grey[500]};
