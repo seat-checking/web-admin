@@ -1,7 +1,10 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components/macro';
+import type { DropdownShop } from 'common/utils/types';
 import type { ChangeEvent } from 'react';
 import { useToggleCloseToday } from 'common/hooks/mutations/useToggleCloseToday';
+import { queryKeys } from 'common/utils/constants';
 
 interface ToggleProps {
   shopId: number;
@@ -13,11 +16,29 @@ interface ToggleProps {
  */
 export const Toggle: React.FC<ToggleProps> = ({ shopId, isChecked }) => {
   const isToggledRef = useRef(isChecked);
+  const queryClient = useQueryClient();
 
   const { mutate: toggleMutate } = useToggleCloseToday();
 
   const handleToggle = (event: ChangeEvent<HTMLInputElement>) => {
     isToggledRef.current = event.currentTarget.checked;
+
+    if (event.currentTarget.checked) {
+      queryClient.invalidateQueries([queryKeys.GET_OWNED_SHOPS]);
+      return;
+    }
+
+    queryClient.setQueryData(
+      [queryKeys.GET_OWNED_SHOPS],
+      (data: DropdownShop[] | undefined) => {
+        return data?.map((shop) => {
+          if (shop.storeId === shopId) {
+            return { ...shop, isOpenNow: false };
+          }
+          return shop;
+        });
+      },
+    );
   };
 
   useEffect(() => {
