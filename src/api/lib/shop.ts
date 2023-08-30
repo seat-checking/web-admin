@@ -1,3 +1,4 @@
+import type { Permission } from 'common/utils/auth';
 import type { DropdownShop, ShopInfoForm } from 'common/utils/types';
 import { axiosClient } from 'api/apiClient';
 
@@ -30,8 +31,10 @@ export const toggleCloseToday = async ({
   return response.data.result;
 };
 
-export const getShopPermission = async (shopId: number): Promise<string> => {
+export const getShopPermission = async (
+  shopId: number,
+): Promise<Permission> => {
   const response = await axiosClient.get(`/stores/admins/permission/${shopId}`);
-  console.log('response.data.result :>> ', response.data.result);
-  return response.data.result;
+
+  return JSON.parse(response.data.result.permissionByMenu);
 };

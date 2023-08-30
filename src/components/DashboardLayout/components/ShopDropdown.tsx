@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components/macro';
+import type { Permission } from 'common/utils/auth';
 import type { DropdownShop, Shop } from 'common/utils/types';
 import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as PlusSquareIcon } from 'assets/icons/plus-square.svg';
 import { useGetOwnedShops } from 'common/hooks/queries/useGetOwnedShops';
 import { useGetPermission } from 'common/hooks/queries/useGetPermission';
+import { setPermissions } from 'common/utils/auth';
 import { PATH } from 'common/utils/constants';
 import { ShopDropdownItem } from 'components/DashboardLayout/components/ShopDropdownItem';
 import { ellipsisText } from 'styles/mixin';
@@ -51,7 +53,8 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({
   };
 
   const handleChangeSelectedShop = async (shop: DropdownShop) => {
-    await fetchPermission(shop.storeId);
+    const permissions = await fetchPermission(shop.storeId);
+    setPermissions(permissions);
     setSelectedShop({
       storeId: shop.storeId,
       storeName: shop.storeName,
