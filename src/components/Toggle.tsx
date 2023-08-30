@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import type { ChangeEvent } from 'react';
 import { useToggleCloseToday } from 'common/hooks/mutations/useToggleCloseToday';
 
@@ -33,7 +33,7 @@ export const Toggle: React.FC<ToggleProps> = ({ shopId, isChecked }) => {
   }, [isChecked, toggleMutate, shopId]);
 
   return (
-    <Wrap onClick={(e) => e.stopPropagation()}>
+    <Wrap onClick={(e) => e.stopPropagation()} $isInActive={isChecked == null}>
       <input
         role='switch'
         type='checkbox'
@@ -44,7 +44,7 @@ export const Toggle: React.FC<ToggleProps> = ({ shopId, isChecked }) => {
   );
 };
 
-const Wrap = styled.div`
+const Wrap = styled.div<{ $isInActive: boolean }>`
   display: flex; // 여백 없애기 위함
   [type='checkbox'] {
     cursor: pointer;
@@ -68,6 +68,12 @@ const Wrap = styled.div`
       background-color: white;
       transition: all 250ms linear;
     }
+
+    ${({ $isInActive }) =>
+      $isInActive &&
+      css`
+        pointer-events: none;
+      `}
   }
 
   [type='checkbox']:checked {
@@ -80,4 +86,10 @@ const Wrap = styled.div`
       transition: all 250ms linear;
     }
   }
+
+  ${({ $isInActive }) =>
+    $isInActive &&
+    css`
+      cursor: not-allowed;
+    `}
 `;
