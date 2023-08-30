@@ -10,6 +10,7 @@ export const useGetPermission = () => {
       return queryClient.fetchQuery({
         queryKey: [queryKeys.GET_PERMISSION, shopId],
         queryFn: () => getShopPermission(shopId),
+        staleTime: Infinity,
       });
     },
   };

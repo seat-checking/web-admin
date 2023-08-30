@@ -1,10 +1,7 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components/macro';
-import type { DropdownShop } from 'common/utils/types';
 import type { ChangeEvent } from 'react';
 import { useToggleCloseToday } from 'common/hooks/mutations/useToggleCloseToday';
-import { queryKeys } from 'common/utils/constants';
 
 interface ToggleProps {
   shopId: number;
@@ -16,7 +13,6 @@ interface ToggleProps {
  */
 export const Toggle: React.FC<ToggleProps> = ({ shopId, isChecked }) => {
   const isToggledRef = useRef(isChecked);
-  const queryClient = useQueryClient();
 
   const { mutate: toggleMutate } = useToggleCloseToday();
 
@@ -33,24 +29,8 @@ export const Toggle: React.FC<ToggleProps> = ({ shopId, isChecked }) => {
       const isClosedToday = isToggledRef.current;
 
       toggleMutate({ shopId, isClosedToday });
-
-      queryClient.setQueryData(
-        [queryKeys.GET_OWNED_SHOPS],
-        (data: DropdownShop[] | undefined) => {
-          return data?.map((shop) => {
-            if (shop.storeId === shopId) {
-              const changedShop = { ...shop, isClosedToday };
-              if (!isClosedToday) {
-                changedShop.isOpenNow = false;
-              }
-              return changedShop;
-            }
-            return shop;
-          });
-        },
-      );
     };
-  }, [isChecked, toggleMutate, queryClient, shopId]);
+  }, [isChecked, toggleMutate, shopId]);
 
   return (
     <Wrap onClick={(e) => e.stopPropagation()}>

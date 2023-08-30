@@ -24,10 +24,9 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({
   selectedShop,
   setSelectedShop,
 }) => {
-  const { data: storeResponseList } = useGetOwnedShops();
-  const { fetchPermission } = useGetPermission();
-
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { data: storeResponseList } = useGetOwnedShops(isOpen);
+  const { fetchPermission } = useGetPermission();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
