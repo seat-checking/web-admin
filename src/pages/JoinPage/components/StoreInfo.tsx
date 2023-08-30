@@ -46,7 +46,7 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
         navigate(`/${PATH.login}`, { replace: true });
       },
       onError: (error) => {
-        console.log(error);
+        console.error(error);
       },
     });
   };
@@ -118,6 +118,7 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
         <Input
           label='사업자등록번호'
           placeholder='숫자 10자리를 입력해주세요.'
+          maxLength={10}
           {...register('businessRegistrationNumber', {
             required: '사업자등록번호는 필수 입력입니다.',
             pattern: {

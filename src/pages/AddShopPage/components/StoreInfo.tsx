@@ -37,7 +37,7 @@ export const StoreInfo: React.FC = () => {
         navigate(`/`);
       },
       onError: (error) => {
-        console.log(error);
+        console.error(error);
       },
     });
   };
@@ -95,6 +95,7 @@ export const StoreInfo: React.FC = () => {
       <InputWrap>
         <Input
           label='사업자등록번호'
+          maxLength={10}
           placeholder='숫자 10자리를 입력해주세요.'
           {...register('businessRegistrationNumber', {
             required: '사업자등록번호는 필수 입력입니다.',

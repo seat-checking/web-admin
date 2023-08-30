@@ -4,6 +4,7 @@ import defaultShopImg from 'assets/images/default-shop.png';
 import { HelperText } from 'components/DashboardLayout/components/HelperText';
 
 import { Toggle } from 'components/Toggle';
+import { ellipsisText } from 'styles/mixin';
 
 interface DropdownItemProps {
   isSelected: boolean;
@@ -45,8 +46,9 @@ const Wrap = styled.button<{ $isSelected: boolean }>`
   align-items: center;
 
   width: 100%;
-
   padding: 2rem 1.6rem;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
   ${({ $isSelected }) =>
     $isSelected &&
@@ -78,6 +80,10 @@ const StoreName = styled.span`
   font-size: 1.8rem;
   font-weight: 600;
   color: white;
+
+  max-width: 13.5rem;
+  ${ellipsisText(1)}
+  text-align: start;
 `;
 
 const IsOpenText = styled.span<{ $isOpen: boolean }>`

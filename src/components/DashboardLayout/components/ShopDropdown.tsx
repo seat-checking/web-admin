@@ -8,6 +8,7 @@ import { useGetOwnedShops } from 'common/hooks/queries/useGetOwnedShops';
 import { useGetPermission } from 'common/hooks/queries/useGetPermission';
 import { PATH } from 'common/utils/constants';
 import { ShopDropdownItem } from 'components/DashboardLayout/components/ShopDropdownItem';
+import { ellipsisText } from 'styles/mixin';
 
 interface ShopDropdownProps {
   onClose?: () => void;
@@ -127,12 +128,9 @@ const SelecteText = styled.div<{ folded: boolean }>`
   font-weight: 600;
   font-size: ${({ folded }): string => (folded ? '1.4rem' : '2.4rem')};
   color: white;
-  // 말줄임 표시
+
   max-width: ${({ folded }): string => (folded ? '7.6rem' : '18rem')};
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  ${ellipsisText(1)}
 `;
 
 const DropdownWrap = styled.div`
@@ -143,8 +141,7 @@ const DropdownWrap = styled.div`
   width: 34.8rem;
   background-color: ${({ theme }) => theme.palette.primary.dark};
   border: 0.2rem solid ${({ theme }) => theme.palette.grey[400]};
-  box-shadow: 0px 18.333332061767578px 68.33332824707031px 0px
-    rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 1.8rem 6.8rem 0px rgba(0, 0, 0, 0.25);
 
   border-radius: 1.2rem;
 `;
