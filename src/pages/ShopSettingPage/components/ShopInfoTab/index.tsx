@@ -27,7 +27,6 @@ import { Wifi } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Wi
  */
 export const ShopInfoTab: React.FC = () => {
   const theme = useTheme();
-
   return (
     <ContentWrap>
       <GrayBackground>

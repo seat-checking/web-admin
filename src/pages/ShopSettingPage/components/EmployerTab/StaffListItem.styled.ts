@@ -6,6 +6,7 @@ export const StaffListItemWrapper = styled.div`
   width: 54rem;
   border-radius: 0.8rem;
   border: 0.1rem solid ${({ theme }) => theme.palette.grey[200]};
+  margin-bottom: 1.6rem;
 `;
 
 export const StaffInfoWrapper = styled.div`
@@ -14,6 +15,7 @@ export const StaffInfoWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
 `;
 
 export const StaffInfoFlex = styled.div``;
@@ -56,6 +58,9 @@ export const CheckBoxLabel = styled.label`
   font-size: 1.4rem;
   font-weight: 600;
   padding-top: 0.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 `;
 
 export const ButtonWrapper = styled.div`
@@ -124,6 +129,7 @@ export const ModalButtonWrapper = styled.div`
   justify-content: center;
   gap: 2rem;
   padding-top: 1.6rem;
+  padding-bottom: 1.6rem;
 `;
 
 export const ModalCancel = styled.div`
