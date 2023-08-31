@@ -3,10 +3,11 @@ import { axiosClient } from 'api/apiClient';
 const apiPrefix = '/reservations/admins';
 const storeId = localStorage.getItem('storeId');
 
+export type ReservationStatusType = '거절' | '취소' | '대기' | '승인';
 export interface Reservation {
   id: number;
   name: string;
-  reservationStatus: string; // 거절 취소
+  reservationStatus: ReservationStatusType;
   storeSpaceName: string; // 공간이름
   reservationUnitReservedByUser: '좌석' | '스페이스';
   reservedPlace: string;
@@ -28,6 +29,24 @@ export interface ReservationsRequest {
   page: number;
   reservationStatus: ReservationStatus;
 }
+
+export interface ProcessReservationRequest {
+  reservationId: number;
+  isApproved: boolean;
+}
+
+export const processReservation = async ({
+  reservationId,
+  isApproved,
+}: ProcessReservationRequest) => {
+  const response = await axiosClient.post(
+    `${apiPrefix}/${storeId}/${
+      isApproved ? 'approve' : 'reject'
+    }/?reservation-id=${reservationId}`,
+  );
+  console.log('response.data :>> ', response.data);
+  return response.data;
+};
 
 export const getReservations = async ({
   page = 1,
