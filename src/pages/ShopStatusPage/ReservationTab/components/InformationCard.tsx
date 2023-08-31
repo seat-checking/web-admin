@@ -1,8 +1,13 @@
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import styled, { useTheme } from 'styled-components';
-import type { Reservation } from 'api/lib/reservations';
+import styled, { css, useTheme } from 'styled-components';
+import type {
+  Reservation,
+  ProcessReservationRequest,
+  ReservationStatusType,
+} from 'api/lib/reservations';
 import { ReactComponent as ChevronDownIcon } from 'assets/icons/chevron-down.svg';
+import { useProcessReservation } from 'common/hooks/mutations/useProcessReservation';
 import { Button } from 'components/Button';
 import { flexSet } from 'styles/mixin';
 
@@ -15,6 +20,7 @@ export type InformationCardProps = Reservation;
 export const InformationCard: React.FC<InformationCardProps> = (props) => {
   const theme = useTheme();
   const [isOpened, setIsOpened] = useState(false);
+  const { mutate: processReservationMutate } = useProcessReservation();
 
   const handleToggleDetail = () => {
     setIsOpened((prev) => !prev);
@@ -24,18 +30,30 @@ export const InformationCard: React.FC<InformationCardProps> = (props) => {
   const startUsingTime = dayjs(props.startSchedule).format('hh:mm');
   const endUsingTime = dayjs(props.endSchedule).format('hh:mm');
 
+  const handleProcessReservation = ({
+    reservationId,
+    isApproved,
+  }: ProcessReservationRequest) => {
+    processReservationMutate({ reservationId, isApproved });
+  };
+
   return (
     <Wrap>
       <Header>
-        <StatusTag>{props.reservationStatus}</StatusTag>
+        <StatusTag $reservationStatus={props.reservationStatus}>
+          {getReservationStatusText(props.reservationStatus)}
+        </StatusTag>
         <CreatedText>
           {dayjs(props.createdAt).format('M월 D일 H:m')}
         </CreatedText>
       </Header>
       <Tab onClick={handleToggleDetail}>
         <Name>{props.name}님</Name>
-        <Circle />
-        <ReservationPlace>{props.reservedPlace}번</ReservationPlace>
+        <Circle $isActive={props.reservationStatus === '대기'} />
+        <ReservationPlace>
+          {props.reservedPlace}
+          {props.reservationUnitReservedByUser === '좌석' && '번'}
+        </ReservationPlace>
         <ChevronDownIcon
           stroke={`${theme.palette.grey[300]}`}
           width='4rem'
@@ -65,19 +83,53 @@ export const InformationCard: React.FC<InformationCardProps> = (props) => {
               <ValueText>{`${startUsingTime} ~ ${endUsingTime}`}</ValueText>
             </TextRow>
           </Body>
-          <BtnsRow>
-            <StyledBtn
-              backgroundColor={`${theme.palette.grey[100]}`}
-              color={`${theme.palette.grey[400]}`}
-            >
-              거절
-            </StyledBtn>
-            <StyledBtn>수락</StyledBtn>
-          </BtnsRow>
+          {props.reservationStatus === '대기' ? (
+            <BtnsRow>
+              <StyledBtn
+                backgroundColor={`${theme.palette.grey[100]}`}
+                color={`${theme.palette.grey[400]}`}
+                onClick={() =>
+                  handleProcessReservation({
+                    reservationId: props.id,
+                    isApproved: false,
+                  })
+                }
+              >
+                거절
+              </StyledBtn>
+              <StyledBtn
+                onClick={() =>
+                  handleProcessReservation({
+                    reservationId: props.id,
+                    isApproved: true,
+                  })
+                }
+              >
+                수락
+              </StyledBtn>
+            </BtnsRow>
+          ) : (
+            <Footer>예약이 거절되거나 취소된 고객입니다.</Footer>
+          )}
         </>
       )}
     </Wrap>
   );
+};
+
+const getReservationStatusText = (reservationStatus: ReservationStatusType) => {
+  if (reservationStatus === '대기') {
+    return '예약 대기 중';
+  }
+  if (reservationStatus === '취소') {
+    return '예약 취소';
+  }
+  if (reservationStatus === '거절') {
+    return '예약 거절';
+  }
+  if (reservationStatus === '승인') {
+    return '예약 완료';
+  }
 };
 
 const Wrap = styled.li`
@@ -96,11 +148,10 @@ const Header = styled.div`
   ${flexSet('space-between', 'center')};
   margin-bottom: 0.6rem;
 `;
-const StatusTag = styled.span`
+const StatusTag = styled.span<{ $reservationStatus: ReservationStatusType }>`
   padding: 0.6rem 0.8rem;
   border-radius: 0.4rem;
 
-  background-color: ${({ theme }) => theme.palette.grey[100]};
   background-color: rgba(255, 141, 78, 0.15);
   border: 1px solid ${({ theme }) => theme.palette.primary.orange};
 
@@ -108,6 +159,28 @@ const StatusTag = styled.span`
   font-size: 1.4rem;
   font-weight: 400;
   line-height: normal;
+
+  ${({ theme, $reservationStatus }) => {
+    if ($reservationStatus === '승인')
+      return css`
+        background-color: ${theme.palette.grey[100]};
+        border: 1px solid ${theme.palette.grey[300]};
+        color: ${theme.palette.grey[500]};
+      `;
+    if ($reservationStatus === '취소')
+      return css`
+        background-color: ${theme.palette.grey[200]};
+        border: 1px solid ${theme.palette.grey[300]};
+        color: ${theme.palette.grey[500]};
+      `;
+    if ($reservationStatus === '거절')
+      // TODO : 수정
+      return css`
+        background-color: ${theme.palette.grey[200]};
+        border: 1px solid ${theme.palette.grey[300]};
+        color: ${theme.palette.grey[500]};
+      `;
+  }}
 `;
 
 const CreatedText = styled.div`
@@ -129,10 +202,11 @@ const Name = styled.span`
   line-height: normal;
 `;
 
-const Circle = styled.div`
+const Circle = styled.div<{ $isActive: boolean }>`
   width: 0.8rem;
   height: 0.8rem;
-  background-color: ${({ theme }) => theme.palette.primary.orange};
+  background-color: ${({ theme, $isActive }) =>
+    $isActive ? theme.palette.primary.orange : theme.palette.grey[300]};
   border-radius: 50%;
 
   margin-left: 0.8rem;
@@ -167,7 +241,7 @@ const TextRow = styled.div`
 `;
 
 const LabelText = styled.div`
-  flex: 1.2;
+  flex: 1.3;
   color: ${({ theme }) => theme.palette.grey[500]};
   font-size: 1.6rem;
   font-weight: 700;
@@ -181,6 +255,17 @@ const ValueText = styled.div`
   line-height: normal;
 `;
 
+const Footer = styled.div`
+  padding: 1.6rem 0;
+  text-align: center;
+
+  border-radius: 0.8rem;
+  background-color: ${({ theme }) => theme.palette.grey[100]};
+
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.palette.grey[400]};
+`;
 const BtnsRow = styled.div`
   display: flex;
   gap: 1.2rem;
