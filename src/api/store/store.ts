@@ -3,7 +3,6 @@ import type {
   SuccessOkWithoutResultResponse,
 } from 'api/store/common';
 import { axiosClient } from 'api/apiClient';
-import { getApiUrl } from 'api/store/common';
 
 export type DayOfWeek = 'SUN' | 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT';
 
@@ -38,6 +37,9 @@ interface PatchRequestInformationParams {
     contentGuide: string[];
   };
 }
+interface GetRequestInformationParams {
+  storeId: string;
+}
 interface GetEmployeeListParams {
   storeId: string;
 }
@@ -45,6 +47,10 @@ interface GetEmployeeListParams {
 interface DeleteMemberParams {
   storeId: string;
   memberId: number;
+}
+interface DeleteRequestInformationParams {
+  storeId: string;
+  customid: number;
 }
 interface ModifyPermissionpParams {
   storeId: string;
@@ -57,23 +63,25 @@ interface ModifyPermissionpParams {
   };
 }
 export interface OperatingTimeResponse {
-  dayOff: DayOfWeek[];
-  monOpenTime: string;
-  monCloseTime: string;
-  tueOpenTime: string;
-  tueCloseTime: string;
-  wedOpenTime: string;
-  wedCloseTime: string;
-  thuOpenTime: string;
-  thuCloseTime: string;
-  friOpenTime: string;
-  friCloseTime: string;
-  satOpenTime: string;
-  satCloseTime: string;
-  sunOpenTime: string;
-  sunCloseTime: string;
-  breakTime: string;
-  useTimeLimit: string;
+  breakTimeStart: string;
+  breakTimeEnd: string;
+  dayOff: DayOfWeek[] | null;
+  monOpenTime: string | null;
+  monCloseTime: string | null;
+  tueOpenTime: string | null;
+  tueCloseTime: string | null;
+  wedOpenTime: string | null;
+  wedCloseTime: string | null;
+  thuOpenTime: string | null;
+  thuCloseTime: string | null;
+  friOpenTime: string | null;
+  friCloseTime: string | null;
+  satOpenTime: string | null;
+  satCloseTime: string | null;
+  sunOpenTime: string | null;
+  sunCloseTime: string | null;
+  breakTime: string | null;
+  useTimeLimit: string | null;
 }
 
 interface OperatingTimeParams {
@@ -199,7 +207,6 @@ export const deleteRequestInformation = async (
   );
   return response.data;
 };
-
 export const patchRequestInformation = async (
   Params: PatchRequestInformationParams,
 ): Promise<SuccessOkWithoutResultResponse> => {
@@ -216,7 +223,6 @@ export const getOperatingTime = async (
 ): Promise<SuccessOkResponse<OperatingTimeResponse>> => {
   const response = await axiosClient.get(
     `/stores/admins/operating-time/${params.storeId}`,
-    { params },
   );
   return response.data;
 };
@@ -224,9 +230,12 @@ export const getOperatingTime = async (
 export const patchOperatingTime = async (
   params: OperatingTimeParams,
 ): Promise<SuccessOkResponse<any>> => {
+  const { storeId, ...restOfParams } = params;
+
   const response = await axiosClient.patch(
-    `/stores/admins/operating-time/${params.storeId}`,
-    { params },
+    `/stores/admins/operating-time/${storeId}`,
+    restOfParams,
   );
+
   return response.data;
 };
