@@ -69,7 +69,7 @@ export const StyledButton = styled(Button)<{ $isChanged?: boolean }>`
     return (
       $isChanged &&
       css`
-        background-color: red;
+        /* background-color: red; */
       `
     );
   }}

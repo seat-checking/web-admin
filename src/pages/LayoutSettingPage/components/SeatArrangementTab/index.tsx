@@ -71,7 +71,11 @@ export const SeatArrangementTab: React.FC<SeatArrangementTabProps> = ({
         >
           이전으로
         </StyledButton>
-        <StyledButton onClick={saveLayout} $isChanged={isChanged}>
+        <StyledButton
+          onClick={saveLayout}
+          $isChanged={isChanged}
+          isDisabled={!isChanged}
+        >
           {spaceId === TEMPORARY_SPACE_ID ? '생성하기' : '저장하기'}
         </StyledButton>
       </ButtonRow>
