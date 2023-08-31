@@ -1,9 +1,10 @@
 import { ConfigProvider } from 'antd';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { DayOfWeek, OperatingTimeResponse } from 'api/store/store';
 import { getOperatingTime, patchOperatingTime } from 'api/store/store';
+import { STORAGE } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Label } from 'components/Label';
@@ -43,7 +44,6 @@ interface FormValues {
 
 const dayCodes = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 
-// 1. 초기값 설정 추가
 const initialToggledDays = dayCodes.reduce(
   (acc: { [key: string]: boolean }, code) => {
     acc[code] = false;
@@ -53,21 +53,24 @@ const initialToggledDays = dayCodes.reduce(
 );
 
 export const BusinessHourTab: React.FC = () => {
-  const { handleSubmit, control, reset } = useForm<FormValues>({});
+  const { handleSubmit, control, reset, getValues, watch } =
+    useForm<FormValues>({});
   const [operatingTime, setOperatingTime] =
     useState<OperatingTimeResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [, setIsFormReady] = useState(false);
 
   const [toggledDays, setToggledDays] = useState<{ [key: string]: boolean }>(
     initialToggledDays,
   );
   const days = ['월', '화', '수', '목', '금', '토', '일'];
   const times = ['OpenTime', 'CloseTime'] as const;
-  const storeId = localStorage.getItem('storeId') || '';
+  const storeId = localStorage.getItem(STORAGE.storeId) || '';
 
   const nullToUndefined = (value: string | null): string | undefined => {
     return value === null ? undefined : value;
   };
+  const watchedValues = watch();
 
   const handleToggle = (day: string, active: boolean) => {
     setToggledDays((prev) => ({
@@ -95,6 +98,25 @@ export const BusinessHourTab: React.FC = () => {
       toast.success('변경사항이 성공적으로 저장되었습니다.');
     }
   };
+
+  const isFormValid = useCallback(() => {
+    for (const dayCode of dayCodes) {
+      if (!toggledDays[dayCode]) {
+        const openTime = getValues(`${dayCode}OpenTime`);
+        const closeTime = getValues(`${dayCode}CloseTime`);
+
+        // 값이 없는 경우
+        if (!openTime || !closeTime) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }, [toggledDays, getValues]);
+
+  useEffect(() => {
+    setIsFormReady(isFormValid());
+  }, [watchedValues, toggledDays, isFormValid]);
 
   useEffect(() => {
     const fetchOperatingTime = async () => {
@@ -143,7 +165,6 @@ export const BusinessHourTab: React.FC = () => {
 
           setToggledDays(updatedToggledDays);
         }
-        console.error('Error:', response.message);
       } catch (error) {
         console.error('Error fetching operating time:', error);
       }
@@ -229,7 +250,7 @@ export const BusinessHourTab: React.FC = () => {
             />
           </ItemWrapFlex>
           <ItemWrap>
-            <Label label='좌석별 최대 이용 시간' />
+            <Label label='좌석별 최대 이용 시간' required={false} />
             <MaxTimeWrap>
               <Controller
                 control={control}
@@ -246,7 +267,11 @@ export const BusinessHourTab: React.FC = () => {
             </MaxTimeWrap>
           </ItemWrap>
           <SaveBtnWrap>
-            <Button type='submit'>저장하기</Button>
+            {isFormValid() ? (
+              <Button type='submit'>저장하기</Button>
+            ) : (
+              <Button isDisabled>저장하기</Button>
+            )}
           </SaveBtnWrap>
         </form>
       </Wrap>
