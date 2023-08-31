@@ -58,7 +58,7 @@ export const ToggleWrap = styled.div`
   align-items: center;
   position: absolute;
   right: -7rem;
-  top: -0.2rem;
+  top: -0.6rem;
   color: ${({ theme }) => theme.palette.grey[300]};
   font-family: Pretendard;
   font-size: 1.7rem;
