@@ -81,7 +81,7 @@ export const EmployerTab: React.FC = () => {
 
   useEffect(() => {
     fetchEmployeeList();
-  });
+  }, []);
 
   const handleDeleteMember = async (employeeId: number) => {
     if (!storeId) {
