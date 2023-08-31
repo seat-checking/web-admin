@@ -1,9 +1,11 @@
 import { ConfigProvider } from 'antd';
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import type { DayOfWeek, OperatingTimeResponse } from 'api/store/store';
 import { getOperatingTime, patchOperatingTime } from 'api/store/store';
 import { Button } from 'components/Button';
+import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Label } from 'components/Label';
 import {
   DayItem,
@@ -18,11 +20,6 @@ import {
 } from 'pages/ShopSettingPage/components/BusinessHourTab/BusinessHourTab.styled';
 import { TimeSelect } from 'pages/ShopSettingPage/components/BusinessHourTab/components/TimeSelect';
 import ToggleSwitch from 'pages/ShopSettingPage/components/BusinessHourTab/components/ToggleSwitch';
-
-type ExtendedOperatingTimeResponse = OperatingTimeResponse & {
-  breakTimeStart: string;
-  breakTimeEnd: string;
-};
 
 interface FormValues {
   monOpenTime: string;
@@ -58,7 +55,7 @@ const initialToggledDays = dayCodes.reduce(
 export const BusinessHourTab: React.FC = () => {
   const { handleSubmit, control, reset } = useForm<FormValues>({});
   const [operatingTime, setOperatingTime] =
-    useState<ExtendedOperatingTimeResponse | null>(null);
+    useState<OperatingTimeResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const [toggledDays, setToggledDays] = useState<{ [key: string]: boolean }>(
@@ -67,6 +64,10 @@ export const BusinessHourTab: React.FC = () => {
   const days = ['월', '화', '수', '목', '금', '토', '일'];
   const times = ['OpenTime', 'CloseTime'] as const;
   const storeId = localStorage.getItem('storeId') || '';
+
+  const nullToUndefined = (value: string | null): string | undefined => {
+    return value === null ? undefined : value;
+  };
 
   const handleToggle = (day: string, active: boolean) => {
     setToggledDays((prev) => ({
@@ -79,44 +80,70 @@ export const BusinessHourTab: React.FC = () => {
       .filter((day) => toggledDays[day])
       .map((day) => day.toUpperCase());
 
+    const breakTime = `${data.breakTimeStart}~${data.breakTimeEnd}`;
+
+    const { breakTimeStart, breakTimeEnd, ...rest } = data;
+
     const payload = {
-      ...data,
+      ...rest,
       dayOff,
+      breakTime,
     };
+
     const response = await patchOperatingTime({ storeId, ...payload });
     if (response.isSuccess) {
-      alert('Success');
+      toast.success('변경사항이 성공적으로 저장되었습니다.');
     }
   };
+
   useEffect(() => {
     const fetchOperatingTime = async () => {
       setIsLoading(true);
       try {
         const response = await getOperatingTime({ storeId });
-        if (response.isSuccess) {
-          const { dayOff, breakTime, ...rest } = response.result;
-          const [breakTimeStart, breakTimeEnd] = breakTime.split('~');
-          const newOperatingTime = {
-            ...rest,
-            dayOff,
-            breakTime,
-            breakTimeStart,
-            breakTimeEnd,
-          };
-          setOperatingTime(newOperatingTime);
-          reset(newOperatingTime);
 
+        if (response.isSuccess) {
+          const resData = response.result;
+
+          if (resData.breakTime) {
+            const [breakTimeStart, breakTimeEnd] = resData.breakTime.split('~');
+            resData.breakTimeStart = breakTimeStart.trim();
+            resData.breakTimeEnd = breakTimeEnd.trim();
+          }
+
+          setOperatingTime(resData);
+          reset({
+            monOpenTime: nullToUndefined(resData.monOpenTime),
+            monCloseTime: nullToUndefined(resData.monCloseTime),
+            tueOpenTime: nullToUndefined(resData.tueOpenTime),
+            tueCloseTime: nullToUndefined(resData.tueCloseTime),
+            wedOpenTime: nullToUndefined(resData.wedOpenTime),
+            wedCloseTime: nullToUndefined(resData.wedCloseTime),
+            thuOpenTime: nullToUndefined(resData.thuOpenTime),
+            thuCloseTime: nullToUndefined(resData.thuCloseTime),
+            friOpenTime: nullToUndefined(resData.friOpenTime),
+            friCloseTime: nullToUndefined(resData.friCloseTime),
+            satOpenTime: nullToUndefined(resData.satOpenTime),
+            satCloseTime: nullToUndefined(resData.satCloseTime),
+            sunOpenTime: nullToUndefined(resData.sunOpenTime),
+            sunCloseTime: nullToUndefined(resData.sunCloseTime),
+            breakTimeStart: nullToUndefined(resData.breakTimeStart),
+            breakTimeEnd: nullToUndefined(resData.breakTimeEnd),
+            useTimeLimit: nullToUndefined(resData.useTimeLimit),
+          });
           const updatedToggledDays = dayCodes.reduce(
-            (acc: { [key: string]: boolean }, code) => {
-              acc[code] = dayOff.includes(code.toUpperCase() as DayOfWeek);
+            (acc: { [key in (typeof dayCodes)[number]]?: boolean }, code) => {
+              acc[code] = resData?.dayOff?.includes(
+                code.toUpperCase() as DayOfWeek,
+              );
               return acc;
             },
             {},
           );
+
           setToggledDays(updatedToggledDays);
-        } else {
-          console.error('Error:', response.message);
         }
+        console.error('Error:', response.message);
       } catch (error) {
         console.error('Error fetching operating time:', error);
       }
@@ -132,9 +159,7 @@ export const BusinessHourTab: React.FC = () => {
   return (
     <ConfigProvider theme={{ token: { colorPrimary: 'darkorange' } }}>
       <Wrap>
-        <form
-          onSubmit={handleSubmit((data) => console.log(handleOnSubmit(data)))}
-        >
+        <form onSubmit={handleSubmit(handleOnSubmit)}>
           <ItemWrap>
             {dayCodes.map((dayCode, index) => (
               <ul key={dayCode}>
@@ -225,6 +250,7 @@ export const BusinessHourTab: React.FC = () => {
           </SaveBtnWrap>
         </form>
       </Wrap>
+      <CustomToastContainer />
     </ConfigProvider>
   );
 };
