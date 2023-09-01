@@ -166,7 +166,7 @@ export const BusinessHourTab: React.FC = () => {
           setToggledDays(updatedToggledDays);
         }
       } catch (error) {
-        console.error('Error fetching operating time:', error);
+        return;
       }
       setIsLoading(false);
     };
