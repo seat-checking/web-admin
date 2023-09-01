@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useTheme } from 'styled-components';
 import type { SuccessOkResponse } from 'api/store/common';
 import type {
@@ -14,6 +15,7 @@ import {
 
 import { STORAGE } from 'common/utils/constants';
 import { Button } from 'components/Button';
+import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import { Modal } from 'components/Modal';
@@ -168,6 +170,7 @@ export const InformationList: React.FC<InformationListProps> = ({
     try {
       await patchRequestInformation(params);
       fetchData();
+      toast.success('변경사항이 성공적으로 저장되었습니다.');
     } catch (error) {
       console.error('Error saving data:', error);
     }
@@ -292,6 +295,7 @@ export const InformationList: React.FC<InformationListProps> = ({
           </Modal>
         </ListWrapper>
       ))}
+      <CustomToastContainer />
     </LabelWrapper>
   );
 };
