@@ -160,7 +160,7 @@ export const getEmployeeList = async (
 
 export const deleteMember = async (
   params: DeleteMemberParams,
-): Promise<SuccessOkResponse<any>> => {
+): Promise<SuccessOkWithoutResultResponse> => {
   const response = await axiosClient.delete(
     `/stores/admins/member-registration/${params.storeId}?member-id=${params.memberId}`,
   );
@@ -169,7 +169,7 @@ export const deleteMember = async (
 
 export const modifyPermission = async (
   params: ModifyPermissionpParams,
-): Promise<SuccessOkResponse<any>> => {
+): Promise<SuccessOkWithoutResultResponse> => {
   const { storeId, ...restParams } = params;
   const response = await axiosClient.patch(
     `/stores/admins/member-registration/${storeId}`,
@@ -229,7 +229,7 @@ export const getOperatingTime = async (
 
 export const patchOperatingTime = async (
   params: OperatingTimeParams,
-): Promise<SuccessOkResponse<any>> => {
+): Promise<SuccessOkWithoutResultResponse> => {
   const { storeId, ...restOfParams } = params;
 
   const response = await axiosClient.patch(
