@@ -51,6 +51,9 @@ const initialToggledDays = dayCodes.reduce(
   },
   {},
 );
+const nullToUndefined = (value: string | null): string | undefined => {
+  return value === null ? undefined : value;
+};
 
 export const BusinessHourTab: React.FC = () => {
   const { handleSubmit, control, reset, getValues, watch } =
@@ -67,9 +70,6 @@ export const BusinessHourTab: React.FC = () => {
   const times = ['OpenTime', 'CloseTime'] as const;
   const storeId = localStorage.getItem(STORAGE.storeId) || '';
 
-  const nullToUndefined = (value: string | null): string | undefined => {
-    return value === null ? undefined : value;
-  };
   const watchedValues = watch();
 
   const handleToggle = (day: string, active: boolean) => {
