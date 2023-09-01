@@ -4,10 +4,11 @@ import type { HtmlHTMLAttributes, Ref } from 'react';
 
 interface RadioProps extends HtmlHTMLAttributes<HTMLInputElement> {
   id: string;
-  name: string; // radio group 내에서 동일한 이름 사용해야함
+  name?: string; // radio group 내에서 동일한 이름 사용해야함
   value: string;
   label: string;
   size?: 'small' | 'medium';
+  checked?: boolean;
 }
 
 /**
@@ -15,7 +16,7 @@ interface RadioProps extends HtmlHTMLAttributes<HTMLInputElement> {
  */
 export const Radio = forwardRef(
   (
-    { id, name, value, label, size = 'medium', ...rest }: RadioProps,
+    { id, name, value, label, checked, size = 'medium', ...rest }: RadioProps,
     ref: Ref<HTMLInputElement>,
   ) => {
     return (
@@ -26,6 +27,7 @@ export const Radio = forwardRef(
           name={name}
           value={value}
           ref={ref}
+          checked={checked}
           $size={size}
           {...rest}
         />

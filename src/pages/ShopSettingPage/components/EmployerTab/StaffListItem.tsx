@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import InputCheckBox from 'components/InputCheckBox';
 
 import { Modal } from 'components/Modal';
@@ -50,35 +50,36 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
   const [checkboxes, setCheckboxes] = useState([
     permissions.storeStatus,
     permissions.seatSetting,
-    permissions.storeStatistics,
     permissions.storeSetting,
+    false,
   ]);
-  const toggleIsOpen = () => {
+  const handleToggleIsOpen = () => {
     setIsOpen(!isOpen);
   };
 
   const toggleCheckbox = (index: number) => {
+    if (index === 2) return; // "가게설정" 체크박스는 상태를 변경하지 않음
+
     const newCheckboxes = [...checkboxes];
     newCheckboxes[index] = !newCheckboxes[index];
     setCheckboxes(newCheckboxes);
   };
-
-  const openModal = () => {
+  const handleOpenModal = () => {
     setModalOpen(true);
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setModalOpen(false);
   };
 
   return (
     <StaffListItemWrapper>
-      <StaffInfoWrapper>
+      <StaffInfoWrapper onClick={handleToggleIsOpen}>
         <StaffInfoFlex>
           <StaffName>{name}</StaffName>
           <StaffEmail>{email}</StaffEmail>
         </StaffInfoFlex>
-        <ToggleIcon onClick={toggleIsOpen} isOpen={isOpen} />
+        <ToggleIcon isOpen={isOpen} />
       </StaffInfoWrapper>
       {isOpen && (
         <>
@@ -105,6 +106,7 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
                 id='storeStatistics'
                 checked={checkboxes[2]}
                 onChange={() => toggleCheckbox(2)}
+                disabled
               />
               <CheckBoxLabel htmlFor='storeStatistics'>가게통계</CheckBoxLabel>
             </InputCheckBoxWrapper>
@@ -118,7 +120,7 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
             </InputCheckBoxWrapper>
           </FlexWrapper>
           <ButtonWrapper>
-            <TextButton onClick={openModal}>직원 삭제</TextButton>
+            <TextButton onClick={handleOpenModal}>직원 삭제</TextButton>
             <TextButton
               style={{ backgroundColor: '#FF8D4E', color: 'white' }}
               onClick={() => modifyPermissionClick(checkboxes)}
@@ -129,14 +131,14 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
         </>
       )}
       {modalOpen && (
-        <Modal onClose={closeModal}>
+        <Modal onClose={handleCloseModal}>
           <ModalHeader>직원삭제</ModalHeader>
           <ModalContent>
             <ModaMainText>정말 직원을 삭제하시나요?</ModaMainText>
             <ModaSubText>삭제한 직원은 복구할 수 없어요!</ModaSubText>
           </ModalContent>
           <ModalButtonWrapper>
-            <ModalCancel onClick={closeModal}>취소</ModalCancel>
+            <ModalCancel onClick={handleCloseModal}>취소</ModalCancel>
             <ModalButton onClick={staffDeleteClick}>직원삭제</ModalButton>
           </ModalButtonWrapper>
         </Modal>
