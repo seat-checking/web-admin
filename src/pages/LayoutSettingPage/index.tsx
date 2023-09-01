@@ -44,35 +44,6 @@ import {
   TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
 
-const initialLayouts = (shop: ShopLayout) => {
-  const tables = shop?.tableList.map(({ i, x, y, w, h }) => {
-    return {
-      i,
-      x,
-      y,
-      w,
-      h,
-      sort: 'table' as ItemType,
-      isResizable: false,
-      isDraggable: false,
-    };
-  });
-  const chairs = shop?.chairList.map(({ i, x, y, manageId }) => {
-    return {
-      i,
-      x,
-      y,
-      w: 1,
-      h: 1,
-      sort: 'chair' as ItemType,
-      manageId,
-      isResizable: false,
-      isDraggable: false,
-    };
-  });
-  return [...tables, ...chairs];
-};
-
 /**
  * 좌석 설정 페이지
  */
@@ -87,7 +58,7 @@ export const LayoutSettingPage: React.FC = () => {
   const { minRowCnt, changeMinRowCnt, findMinRowCnt } = useShopMinHeight();
   const shopHeight = useShopHeight();
   const { setChairCount } = useChairCountActions();
-  const { changeHeight } = useShopHeightActions();
+  const { changeHeight, clearHeight } = useShopHeightActions();
   const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
 
   const [shopFormState, setShopFormState] =
@@ -97,6 +68,7 @@ export const LayoutSettingPage: React.FC = () => {
     saveInitialLayout: saveLayout,
     disableMove,
     enableMove,
+    clearLayout,
   } = useLayoutActions();
 
   const isSideBarDisabled = spaceId === NO_SPACE_ID;
@@ -151,6 +123,14 @@ export const LayoutSettingPage: React.FC = () => {
       };
     }
   }, [isChanged]);
+
+  useEffect(() => {
+    return () => {
+      clearLayout();
+      clearHeight();
+    };
+  }, [clearLayout, clearHeight]);
+
   return (
     <Wrap>
       <StyledSideBar>
@@ -204,4 +184,33 @@ export const LayoutSettingPage: React.FC = () => {
       </RightWrap>
     </Wrap>
   );
+};
+
+const initialLayouts = (shop: ShopLayout) => {
+  const tables = shop?.tableList.map(({ i, x, y, w, h }) => {
+    return {
+      i,
+      x,
+      y,
+      w,
+      h,
+      sort: 'table' as ItemType,
+      isResizable: false,
+      isDraggable: false,
+    };
+  });
+  const chairs = shop?.chairList.map(({ i, x, y, manageId }) => {
+    return {
+      i,
+      x,
+      y,
+      w: 1,
+      h: 1,
+      sort: 'chair' as ItemType,
+      manageId,
+      isResizable: false,
+      isDraggable: false,
+    };
+  });
+  return [...tables, ...chairs];
 };
