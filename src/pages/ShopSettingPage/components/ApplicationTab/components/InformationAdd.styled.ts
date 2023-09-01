@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import edit from 'assets/icons/edit-3.svg';
+import edit from 'assets/icons/edit-sm.svg';
 import plusCircl from 'assets/icons/plus.svg';
 
 interface TitleInputProps {

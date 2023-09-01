@@ -1,7 +1,6 @@
 import { isAxiosError } from 'axios';
 
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import type { ErrorResponse } from 'api/lib/auth';
 
 import type { SubmitHandler } from 'react-hook-form';

@@ -82,7 +82,7 @@ module.exports = {
     // import react 강제성 끔 (react ver 17부턴 해줄 필요 없음)
     'react/react-in-jsx-scope': 'off',
     'react/jsx-props-no-spreading': 'off',
-    'react/require-default-props': 'warn', // 옵셔널 타입 지정 가능하도록 함
+    'react/require-default-props': 'off', // TODO 개선 시 warn으로 변경 예정, 옵셔널 타입 지정 가능하도록 함
     'react/self-closing-comp': [
       'error',
       {

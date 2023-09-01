@@ -8,7 +8,6 @@ import {
 } from 'components/Modal.styled';
 
 interface ModalProps {
-  isOpen: boolean;
   closeOnOusideClick?: boolean;
   onClose?: () => void;
   children: React.ReactNode;
@@ -16,17 +15,23 @@ interface ModalProps {
 
 export const Modal: React.FC<ModalProps> & {
   Header: React.FC<HeaderProps>;
-} = ({ isOpen, onClose, children, closeOnOusideClick = true }) => {
-  if (!isOpen) {
-    return null;
-  }
-
+} = ({ children, closeOnOusideClick = true, onClose = undefined }) => {
   const handleWrapperClick = (event: React.MouseEvent) => {
     event.stopPropagation();
   };
 
+  const handleOverlayClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (closeOnOusideClick) {
+      onClose?.();
+    }
+  };
+
   return (
-    <ModalOverlay {...(closeOnOusideClick && { onClick: onClose })}>
+    <ModalOverlay
+      onClick={handleOverlayClick}
+      $isClickable={closeOnOusideClick}
+    >
       <ModalWrapper onClick={handleWrapperClick}>
         {React.Children.map(children, (child) => {
           if (
