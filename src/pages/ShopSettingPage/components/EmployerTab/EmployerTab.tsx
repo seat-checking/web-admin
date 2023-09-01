@@ -99,6 +99,7 @@ export const EmployerTab: React.FC = () => {
       console.error(error);
     }
   };
+
   const modifyPermissionClick = async (
     employeeId: number,
     newPermissions: boolean[],
