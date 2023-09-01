@@ -60,7 +60,6 @@ export const ToggleWrap = styled.div`
   right: -7rem;
   top: -0.6rem;
   color: ${({ theme }) => theme.palette.grey[300]};
-  font-family: Pretendard;
   font-size: 1.7rem;
   font-style: normal;
   font-weight: 400;
