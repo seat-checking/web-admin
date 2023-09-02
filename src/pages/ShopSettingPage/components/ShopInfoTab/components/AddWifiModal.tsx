@@ -18,7 +18,7 @@ export const AddWifiModal: React.FC<AddWifiModalProps> = ({ onClose }) => {
   };
 
   return (
-    <Modal isOpen onClose={onClose} closeOnOusideClick={false}>
+    <Modal onClose={onClose} closeOnOusideClick={false}>
       <Modal.Header>Wi-Fi 등록</Modal.Header>
       <Content>
         <ConfirmText>등록할 Wi-Fi의 이름을 적어주세요.</ConfirmText>

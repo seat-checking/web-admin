@@ -2,12 +2,18 @@ import styled from 'styled-components/macro';
 import { Button } from 'components/Button';
 import { grayBorderBoxStyle } from 'styles/mixin';
 
-export const Wrap = styled.div`
+export const Wrap = styled.div<{ $isDisabled: boolean }>`
   display: flex;
   flex-direction: column;
 
   height: 100%;
   padding: 2.5rem;
+
+  ${({ $isDisabled }) =>
+    $isDisabled &&
+    `
+  pointer-events: none;
+  `}
 `;
 
 export const DescriptionText = styled.p`

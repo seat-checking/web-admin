@@ -280,19 +280,21 @@ export const InformationList: React.FC<InformationListProps> = ({
               </InputWrapper>
             )}
           </ListContent>
-          <Modal isOpen={modalOpen === item.id} onClose={closeModal}>
-            <ModalHeader>정보 목록 삭제</ModalHeader>
-            <ModalContent>
-              <ModaMainText>정말 목록을 삭제하시나요?</ModaMainText>
-              <ModaSubText>삭제한 목록은 복구할 수 없어요!</ModaSubText>
-            </ModalContent>
-            <ModalButtonWrapper>
-              <ModalCancel onClick={closeModal}>취소</ModalCancel>
-              <ModalButton onClick={() => handleDelete(item.id)}>
-                삭제
-              </ModalButton>
-            </ModalButtonWrapper>
-          </Modal>
+          {modalOpen === item.id && (
+            <Modal onClose={closeModal}>
+              <ModalHeader>정보 목록 삭제</ModalHeader>
+              <ModalContent>
+                <ModaMainText>정말 목록을 삭제하시나요?</ModaMainText>
+                <ModaSubText>삭제한 목록은 복구할 수 없어요!</ModaSubText>
+              </ModalContent>
+              <ModalButtonWrapper>
+                <ModalCancel onClick={closeModal}>취소</ModalCancel>
+                <ModalButton onClick={() => handleDelete(item.id)}>
+                  삭제
+                </ModalButton>
+              </ModalButtonWrapper>
+            </Modal>
+          )}
         </ListWrapper>
       ))}
       <CustomToastContainer />

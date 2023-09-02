@@ -1,144 +1,135 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import type { ShopFormState } from 'pages/LayoutSettingPage/utils/types';
+import { useEffect, useState } from 'react';
+import type { ShopLayout } from 'api/lib/shop';
+import type {
+  ItemType,
+  ShopFormState,
+} from 'pages/LayoutSettingPage/utils/types';
 import type { SyntheticEvent } from 'react';
-import type { Layout } from 'react-grid-layout';
 import type { ResizeCallbackData } from 'react-resizable';
 
+import { useGetSpaceLayout } from 'common/hooks/queries/useGetSpaceLayout';
 import { useTab } from 'common/hooks/useTab';
+import { NO_SPACE_ID } from 'common/utils/constants';
 import { Tabs } from 'components/Tabs.tsx';
 import {
-  ChairBorder,
-  Chair,
   Wrap,
-  ShopGridBackground,
   RightWrap,
-  GridTable,
   StyledSideBar,
   ResizableWrap,
 } from 'pages/LayoutSettingPage/LayoutSettingPage.styled';
+import { GridBackground } from 'pages/LayoutSettingPage/components/GridBackground';
 import { SeatArrangementTab } from 'pages/LayoutSettingPage/components/SeatArrangementTab';
 import 'react-resizable/css/styles.css';
 import 'react-grid-layout/css/styles.css';
 
 import { ShopFormTab } from 'pages/LayoutSettingPage/components/ShopFormTab';
 import { SpaceRow } from 'pages/LayoutSettingPage/components/SpaceRow';
-import { useShopHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
-import { useSpace } from 'pages/LayoutSettingPage/hooks/useSpace';
-import { DragContext } from 'pages/LayoutSettingPage/utils/DragContext';
+import { useShopMinHeight } from 'pages/LayoutSettingPage/hooks/useShopHeight';
+
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
+import { useChairCountActions } from 'pages/LayoutSettingPage/stores/chairCountStore';
+import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
+import {
+  useLayout,
+  useLayoutActions,
+} from 'pages/LayoutSettingPage/stores/layoutStore';
+
+import {
+  useShopHeight,
+  useShopHeightActions,
+} from 'pages/LayoutSettingPage/stores/shopHeightStore';
+import { useSpaceInfoActions } from 'pages/LayoutSettingPage/stores/spaceInfoStore';
 import {
   COLUMN_CNT,
-  DEFAULT_ROW_CNT,
   TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
 
-export interface MyLayout extends Layout {
-  sort: 'chair' | 'table';
-}
 /**
  * 좌석 설정 페이지
  */
 export const LayoutSettingPage: React.FC = () => {
+  const { spaceId } = useSpaceId();
+
+  const { setChange, isChanged } = useChange();
+
+  const { data: spaceLayout } = useGetSpaceLayout(spaceId);
+
   const { activeTab, changeTab } = useTab();
-  const { setSpaces } = useSpace();
-  const { rowCnt, minRowCnt, changeRowCnt, changeMinRowCnt, findMinRowCnt } =
-    useShopHeight(DEFAULT_ROW_CNT);
-  const { size } = useContext(DragContext);
+  const { minRowCnt, changeMinRowCnt, findMinRowCnt } = useShopMinHeight();
+  const shopHeight = useShopHeight();
+  const { setChairCount } = useChairCountActions();
+  const { changeHeight, clearHeight } = useShopHeightActions();
+  const { setSpaceName, setReservationUnit } = useSpaceInfoActions();
 
   const [shopFormState, setShopFormState] =
     useState<ShopFormState>('RECTANGLE');
-  const [shopList, setShopList] = useState([]);
-  const [layouts, setLayouts] = useState<MyLayout[]>([]);
+  const myLayout = useLayout();
+  const {
+    saveInitialLayout: saveLayout,
+    disableMove,
+    enableMove,
+    clearLayout,
+  } = useLayoutActions();
 
-  const itemIndex = useRef(0);
-
-  const itemsDom = layouts.map((item) => {
-    const sort = item.i.split('-')[0];
-    if (sort === 'chair') {
-      return (
-        <ChairBorder key={item.i} className='chair'>
-          <Chair isClickable={activeTab === 1} />
-        </ChairBorder>
-      );
-    }
-    return <GridTable key={item.i} isClickable={activeTab === 1} />;
-  });
+  const isSideBarDisabled = spaceId === NO_SPACE_ID;
 
   const handleResize = (e: SyntheticEvent, data: ResizeCallbackData) => {
     const { height } = data.size;
-    changeRowCnt(height / TABLE_SIZE_PX);
+    changeHeight(height / TABLE_SIZE_PX, minRowCnt);
+    setChange(true);
+
     setShopFormState('NONE');
   };
 
-  const handleDropDragOver = () => {
-    return { ...size.current };
-  };
-
-  const handleDropItem = (
-    myLayout: MyLayout[],
-    item: MyLayout,
-    e: DragEvent,
-  ): void => {
-    const sort = e.dataTransfer?.getData('sort');
-    const { w, h } = size.current;
-    item.w = w;
-    item.h = h;
-    if (sort === 'chair') {
-      item.isResizable = false;
-      item.sort = 'chair';
-      item.i = `chair-${itemIndex.current++}`;
-    } else {
-      item.isResizable = true;
-      item.sort = 'table';
-      item.i = `table-${itemIndex.current++}`;
-    }
-    setLayouts(myLayout);
-  };
-
-  const handleLayoutChange = (layout: MyLayout[]) => {
-    if (layout.at(-1)?.i === '__dropping-elem__') {
-      return;
-    }
-
-    setLayouts(layout);
-  };
+  useEffect(() => {
+    changeMinRowCnt(findMinRowCnt(myLayout));
+  }, [myLayout, changeMinRowCnt, findMinRowCnt]);
 
   useEffect(() => {
-    changeMinRowCnt(findMinRowCnt(layouts));
-  }, [layouts, changeMinRowCnt, findMinRowCnt]);
-
-  useEffect(() => {
-    const spaces = shopList.map(({ storeSpaceId, name }) => ({
-      storeSpaceId,
-      name,
-    }));
-    setSpaces(spaces);
-  }, [shopList, setSpaces]);
+    changeTab(0);
+  }, [spaceId, changeTab]);
 
   useEffect(() => {
     if (activeTab === 0) {
-      setLayouts((prev) =>
-        prev.map((item) => {
-          const result = { ...item, isDraggable: false };
-          if (item.i.split('-')[0] === 'table') {
-            result.isResizable = false;
-          }
-          return result;
-        }),
-      );
-      return;
+      disableMove();
     }
     if (activeTab === 1) {
-      setLayouts((prev) =>
-        prev.map((item) => {
-          const result = { ...item, isDraggable: true };
-          if (item.i.split('-')[0] === 'table') {
-            result.isResizable = true;
-          }
-          return result;
-        }),
-      );
+      enableMove();
     }
-  }, [activeTab]);
+  }, [activeTab, disableMove, enableMove]);
+
+  useEffect(() => {
+    if (spaceLayout) {
+      saveLayout(initialLayouts(spaceLayout));
+      setSpaceName(spaceLayout.storeSpaceName);
+      setReservationUnit(spaceLayout.reservationUnit);
+      changeHeight(spaceLayout.height, minRowCnt);
+      setChairCount(spaceLayout.chairList.length);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [spaceLayout, saveLayout]); // FIXME changeRowCnt 추가
+
+  useEffect(() => {
+    if (isChanged) {
+      const handleUnload = (event: BeforeUnloadEvent) => {
+        event.preventDefault();
+        event.returnValue = ''; // for chrome
+      };
+
+      window.addEventListener('beforeunload', handleUnload);
+
+      return () => {
+        window.removeEventListener('beforeunload', handleUnload);
+      };
+    }
+  }, [isChanged]);
+
+  useEffect(() => {
+    return () => {
+      clearLayout();
+      clearHeight();
+    };
+  }, [clearLayout, clearHeight]);
 
   return (
     <Wrap>
@@ -150,12 +141,11 @@ export const LayoutSettingPage: React.FC = () => {
               label: '가게 형태',
               content: (
                 <ShopFormTab
-                  changeRowCnt={changeRowCnt}
-                  rowCnt={rowCnt}
                   minRowCnt={minRowCnt}
                   changeTab={changeTab}
                   shopFormState={shopFormState}
                   setShopFormState={setShopFormState}
+                  isDisabled={isSideBarDisabled}
                 />
               ),
             },
@@ -171,7 +161,7 @@ export const LayoutSettingPage: React.FC = () => {
         {activeTab === 0 ? (
           <ResizableWrap
             width={TABLE_SIZE_PX * COLUMN_CNT}
-            height={rowCnt * TABLE_SIZE_PX}
+            height={shopHeight * TABLE_SIZE_PX}
             resizeHandles={['s']}
             draggableOpts={{
               grid: [TABLE_SIZE_PX, TABLE_SIZE_PX],
@@ -184,51 +174,43 @@ export const LayoutSettingPage: React.FC = () => {
             axis={undefined}
             onResize={handleResize}
           >
-            <ShopGridBackground
-              layout={layouts}
-              rowHeight={TABLE_SIZE_PX}
-              // width/cols = rowHeight가 나와야 정사각형 나옴
-              cols={COLUMN_CNT}
-              width={TABLE_SIZE_PX * COLUMN_CNT}
-              $height={rowCnt * TABLE_SIZE_PX}
-              margin={[0, 0]}
-              // 이게 없어야 배경색 보임, 드래그앤드롭 자유배치 가능
-              autoSize={false}
-              compactType={null}
-              maxRows={rowCnt}
-              // 이게 있어야 아이템이 이동시킬 때 다른 아이템이 움직이지 않음
-              preventCollision
-              isDroppable
-              onDrop={handleDropItem}
-              onDropDragOver={handleDropDragOver}
-              onLayoutChange={handleLayoutChange}
-            >
-              {itemsDom}
-            </ShopGridBackground>
+            <GridBackground activeTab={activeTab} />
           </ResizableWrap>
         ) : (
           <ResizableWrap as='div' $width={TABLE_SIZE_PX * COLUMN_CNT}>
-            <ShopGridBackground
-              layout={layouts}
-              rowHeight={TABLE_SIZE_PX}
-              cols={COLUMN_CNT}
-              width={TABLE_SIZE_PX * COLUMN_CNT}
-              $height={rowCnt * TABLE_SIZE_PX}
-              margin={[0, 0]}
-              autoSize={false}
-              compactType={null}
-              maxRows={rowCnt}
-              preventCollision
-              isDroppable
-              onDrop={handleDropItem}
-              onDropDragOver={handleDropDragOver}
-              onLayoutChange={handleLayoutChange}
-            >
-              {itemsDom}
-            </ShopGridBackground>
+            <GridBackground activeTab={activeTab} />
           </ResizableWrap>
         )}
       </RightWrap>
     </Wrap>
   );
+};
+
+const initialLayouts = (shop: ShopLayout) => {
+  const tables = shop?.tableList.map(({ i, x, y, w, h }) => {
+    return {
+      i,
+      x,
+      y,
+      w,
+      h,
+      sort: 'table' as ItemType,
+      isResizable: false,
+      isDraggable: false,
+    };
+  });
+  const chairs = shop?.chairList.map(({ i, x, y, manageId }) => {
+    return {
+      i,
+      x,
+      y,
+      w: 1,
+      h: 1,
+      sort: 'chair' as ItemType,
+      manageId,
+      isResizable: false,
+      isDraggable: false,
+    };
+  });
+  return [...tables, ...chairs];
 };
