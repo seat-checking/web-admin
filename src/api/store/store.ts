@@ -3,7 +3,8 @@ import type {
   SuccessOkWithoutResultResponse,
 } from 'api/store/common';
 import { axiosClient } from 'api/apiClient';
-import { getApiUrl } from 'api/store/common';
+
+export type DayOfWeek = 'SUN' | 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT';
 
 interface SearchParams {
   email: string;
@@ -36,6 +37,9 @@ interface PatchRequestInformationParams {
     contentGuide: string[];
   };
 }
+interface GetRequestInformationParams {
+  storeId: string;
+}
 interface GetEmployeeListParams {
   storeId: string;
 }
@@ -43,6 +47,10 @@ interface GetEmployeeListParams {
 interface DeleteMemberParams {
   storeId: string;
   memberId: number;
+}
+interface DeleteRequestInformationParams {
+  storeId: string;
+  customid: number;
 }
 interface ModifyPermissionpParams {
   storeId: string;
@@ -54,13 +62,30 @@ interface ModifyPermissionpParams {
     storeSetting: boolean;
   };
 }
-interface GetRequestInformationParams {
-  storeId: string;
+export interface OperatingTimeResponse {
+  breakTimeStart: string;
+  breakTimeEnd: string;
+  dayOff: DayOfWeek[] | null;
+  monOpenTime: string | null;
+  monCloseTime: string | null;
+  tueOpenTime: string | null;
+  tueCloseTime: string | null;
+  wedOpenTime: string | null;
+  wedCloseTime: string | null;
+  thuOpenTime: string | null;
+  thuCloseTime: string | null;
+  friOpenTime: string | null;
+  friCloseTime: string | null;
+  satOpenTime: string | null;
+  satCloseTime: string | null;
+  sunOpenTime: string | null;
+  sunCloseTime: string | null;
+  breakTime: string | null;
+  useTimeLimit: string | null;
 }
 
-interface DeleteRequestInformationParams {
+interface OperatingTimeParams {
   storeId: string;
-  customid: number;
 }
 export interface SearchListResponse {
   email: string;
@@ -135,7 +160,7 @@ export const getEmployeeList = async (
 
 export const deleteMember = async (
   params: DeleteMemberParams,
-): Promise<SuccessOkResponse<any>> => {
+): Promise<SuccessOkWithoutResultResponse> => {
   const response = await axiosClient.delete(
     `/stores/admins/member-registration/${params.storeId}?member-id=${params.memberId}`,
   );
@@ -144,7 +169,7 @@ export const deleteMember = async (
 
 export const modifyPermission = async (
   params: ModifyPermissionpParams,
-): Promise<SuccessOkResponse<any>> => {
+): Promise<SuccessOkWithoutResultResponse> => {
   const { storeId, ...restParams } = params;
   const response = await axiosClient.patch(
     `/stores/admins/member-registration/${storeId}`,
@@ -182,7 +207,6 @@ export const deleteRequestInformation = async (
   );
   return response.data;
 };
-
 export const patchRequestInformation = async (
   Params: PatchRequestInformationParams,
 ): Promise<SuccessOkWithoutResultResponse> => {
@@ -191,5 +215,27 @@ export const patchRequestInformation = async (
     `/stores/admins/custom-reservation-field/${Params.storeId}?custom-id=${Params.customid}`,
     data,
   );
+  return response.data;
+};
+
+export const getOperatingTime = async (
+  params: OperatingTimeParams,
+): Promise<SuccessOkResponse<OperatingTimeResponse>> => {
+  const response = await axiosClient.get(
+    `/stores/admins/operating-time/${params.storeId}`,
+  );
+  return response.data;
+};
+
+export const patchOperatingTime = async (
+  params: OperatingTimeParams,
+): Promise<SuccessOkWithoutResultResponse> => {
+  const { storeId, ...restOfParams } = params;
+
+  const response = await axiosClient.patch(
+    `/stores/admins/operating-time/${storeId}`,
+    restOfParams,
+  );
+
   return response.data;
 };

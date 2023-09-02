@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { EmployeeResponse, SearchListResponse } from 'api/store/store';
@@ -61,7 +61,7 @@ export const EmployerTab: React.FC = () => {
     setEmail(e.target.value);
   };
 
-  const fetchEmployeeList = async () => {
+  const fetchEmployeeList = useCallback(async () => {
     if (storeId) {
       try {
         const response = await getEmployeeList({ storeId });
@@ -77,11 +77,11 @@ export const EmployerTab: React.FC = () => {
         console.error(error);
       }
     }
-  };
+  }, [storeId]);
 
   useEffect(() => {
     fetchEmployeeList();
-  });
+  }, [fetchEmployeeList]);
 
   const handleDeleteMember = async (employeeId: number) => {
     if (!storeId) {
@@ -99,6 +99,7 @@ export const EmployerTab: React.FC = () => {
       console.error(error);
     }
   };
+
   const modifyPermissionClick = async (
     employeeId: number,
     newPermissions: boolean[],
