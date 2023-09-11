@@ -1,9 +1,18 @@
 import { css } from 'styled-components';
 import type { FlattenSimpleInterpolation } from 'styled-components';
 
+type JustifyContent =
+  | 'flex-start'
+  | 'flex-end'
+  | 'center'
+  | 'space-between'
+  | 'space-around'
+  | 'space-evenly';
+type AlignItems = 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
+
 export const flexSet = (
-  justify = 'center',
-  align = 'center',
+  justify: JustifyContent = 'center',
+  align: AlignItems = 'center',
 ): FlattenSimpleInterpolation => css`
   display: flex;
   justify-content: ${justify};
