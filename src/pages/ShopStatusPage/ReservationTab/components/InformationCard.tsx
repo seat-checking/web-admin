@@ -144,7 +144,11 @@ export const InformationCard: React.FC<InformationCardProps> = ({
               </StyledBtn>
             </BtnsRow>
           ) : (
-            <Footer>예약이 거절되거나 취소된 고객입니다.</Footer>
+            <Footer>
+              {reservationStatus === '취소'
+                ? '예약이 취소된 고객입니다.'
+                : '예약이 거절된 고객입니다.'}
+            </Footer>
           )}
         </>
       )}
@@ -202,29 +206,23 @@ const StatusTag = styled.span<{ $reservationStatus: ReservationStatusType }>`
   padding: 0.6rem 0.8rem;
   border-radius: 0.4rem;
 
-  background-color: rgba(255, 141, 78, 0.15);
-  border: 1px solid ${({ theme }) => theme.palette.primary.orange};
-
-  color: ${({ theme }) => theme.palette.primary.orange};
   font-size: 1.4rem;
   font-weight: 400;
   line-height: normal;
 
+  // 승인, 거절
+  background-color: ${({ theme }) => theme.palette.grey[100]};
+  border: 1px solid ${({ theme }) => theme.palette.grey[300]};
+  color: ${({ theme }) => theme.palette.grey[500]};
+
   ${({ theme, $reservationStatus }) => {
-    if ($reservationStatus === '승인')
+    if ($reservationStatus === '대기')
       return css`
-        background-color: ${theme.palette.grey[100]};
-        border: 1px solid ${theme.palette.grey[300]};
-        color: ${theme.palette.grey[500]};
+        background-color: rgba(255, 141, 78, 0.15);
+        border: 1px solid ${theme.palette.primary.orange};
+        color: ${theme.palette.primary.orange};
       `;
     if ($reservationStatus === '취소')
-      return css`
-        background-color: ${theme.palette.grey[200]};
-        border: 1px solid ${theme.palette.grey[300]};
-        color: ${theme.palette.grey[500]};
-      `;
-    if ($reservationStatus === '거절')
-      // TODO : 수정
       return css`
         background-color: ${theme.palette.grey[200]};
         border: 1px solid ${theme.palette.grey[300]};

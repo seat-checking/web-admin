@@ -19,7 +19,7 @@ export const StatusTabs: React.FC<StatusTabsProps> = ({
         ⏳ 대기 중
       </StatusTag>
       <StatusTag active={activeTab === 1} onClick={() => onClickTab(1)}>
-        ✅ 완료된 예약
+        ✅ 처리된 예약
       </StatusTag>
       <StatusTag active={activeTab === 2} onClick={() => onClickTab(2)}>
         전체
