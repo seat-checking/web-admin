@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import type { LoginResponse } from 'api/lib/auth';
 import type { Permission } from 'common/utils/auth';
@@ -9,19 +9,31 @@ import { STORAGE } from 'common/utils/constants';
 
 export const useLogin = () => {
   const navigate = useNavigate();
+
   return useMutation({
     mutationFn: (loginform: LoginForm) => {
       return AuthApi.signIn(loginform);
     },
     onSuccess: (data: LoginResponse) => {
-      const { accessToken, permissionByMenu, storeId, storeName } = data;
+      const {
+        accessToken,
+        permissionByMenu,
+        storeId,
+        storeName,
+        mainImage,
+        introduction,
+      } = data;
 
       setAccessToken(accessToken);
 
       const permissions: Permission = JSON.parse(permissionByMenu);
       setPermissions(permissions);
+
       localStorage.setItem(STORAGE.storeId, String(storeId));
       localStorage.setItem(STORAGE.storeName, storeName);
+      localStorage.setItem(STORAGE.mainImage, mainImage || '');
+      localStorage.setItem(STORAGE.introduction, introduction || '');
+
       navigate('/');
     },
   });

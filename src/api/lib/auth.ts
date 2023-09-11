@@ -13,6 +13,8 @@ export interface LoginResponse {
   accessToken: string;
   storeId: number;
   storeName: string;
+  mainImage: string | null;
+  introduction: string | null;
   permissionByMenu: string;
 }
 
@@ -39,7 +41,6 @@ export class AuthApi {
 
   static signIn = async (loginForm: LoginForm): Promise<LoginResponse> => {
     const response = await axiosClient.post('/admins/sign-in', loginForm);
-    console.log('response.data.result :>> ', response.data.result);
     return response.data.result;
   };
 
@@ -54,20 +55,4 @@ export class AuthApi {
       email,
     });
   }
-
-  static getShopsTest = async (): Promise<GetShopResponse> => {
-    const response = await axiosClient.get('/stores/admins/owned');
-    return response.data.result;
-  };
-
-  static searchTest = async () => {
-    const response = await axiosClient.get(
-      `/users/search?email=usermember@naver.com`,
-    );
-    return response.data;
-  };
 }
-// return useMutation({
-//   queryKey: [this.SIGN_IN_QUERY_KEY, email, password],
-//   queryFn: () => this.signIn(email, password),
-// });

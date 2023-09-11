@@ -1,25 +1,42 @@
-import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
+import { useSaveLayout } from 'pages/LayoutSettingPage/hooks/useSaveLayout';
+import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 
+interface ExitConfirmModalProps {
+  onComplete?: () => void;
+  onClose: () => void;
+}
 /**
  * 저장하지 않았을 때 뜨는 확인 모달
  */
-export const ExitConfirmModal: React.FC = () => {
+export const ExitConfirmModal: React.FC<ExitConfirmModalProps> = ({
+  onComplete,
+  onClose,
+}) => {
   const theme = useTheme();
-  const [isOpen, setIsOpen] = useState(true);
-
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const { setChange } = useChange();
+  const saveLayout = useSaveLayout();
 
   const handleCancel = () => {
-    setIsOpen(false);
+    setChange(false);
+    onComplete?.();
+
+    onClose();
+  };
+
+  const handleSave = () => {
+    setChange(false);
+    onComplete?.();
+
+    saveLayout();
+
+    onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose}>
+    <Modal onClose={onClose}>
       <Modal.Header>좌석 설정</Modal.Header>
       <Content>
         <ConfirmText>
@@ -46,6 +63,7 @@ export const ExitConfirmModal: React.FC = () => {
           borderRadius='0.4rem'
           fontSize='1.4rem'
           height='4.5rem'
+          onClick={handleSave}
         >
           저장하기
         </Button>

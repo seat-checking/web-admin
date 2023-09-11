@@ -4,11 +4,17 @@ import {
   TABLE_SIZE_PX,
 } from 'pages/LayoutSettingPage/utils/constants';
 
-export const InfoWrap = styled.div`
+export const SpaceInfoWrap = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
 
   margin-bottom: 0.8rem;
+`;
+
+export const SpaceHelperWrap = styled.div`
+  display: flex;
+  align-items: center;
 
   font-size: 1.6rem;
   font-weight: 400;
@@ -19,6 +25,12 @@ export const BoldText = styled.span`
   font-size: 1.6rem;
   font-weight: 700;
   margin: 0 0.8rem 0 0.4rem;
+`;
+
+export const ChairCountText = styled.span`
+  font-weight: 500;
+  font-size: 1.6rem;
+  color: ${({ theme }) => theme.palette.primary.orange};
 `;
 
 export const SpaceWrap = styled.div`
