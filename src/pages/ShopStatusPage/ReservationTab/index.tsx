@@ -13,20 +13,6 @@ const reservationStatusPerTab = {
   2: 'all',
 } as const;
 
-const statusTabs = [
-  {
-    index: 0,
-    label: '⏳ 대기 중',
-  },
-  {
-    index: 1,
-    label: '✅ 완료된 예약',
-  },
-  {
-    index: 2,
-    label: '전체',
-  },
-];
 /**
  * 예약 관리 탭
  */
@@ -34,16 +20,16 @@ export const ReservationTab: React.FC = () => {
   const [ref, inView] = useInView();
   const { activeTab, changeTab } = useTab();
 
+  const currentReservationStatusPerTab =
+    reservationStatusPerTab[activeTab as keyof typeof reservationStatusPerTab];
+
   const {
     data: reservations,
     fetchNextPage,
     status,
     isFetching,
-    isFetchingNextPage,
     error,
-  } = useGetReservations(
-    reservationStatusPerTab[activeTab as keyof typeof reservationStatusPerTab],
-  );
+  } = useGetReservations(currentReservationStatusPerTab);
 
   useEffect(() => {
     // inView가 true 일때만 실행한다.
@@ -51,15 +37,7 @@ export const ReservationTab: React.FC = () => {
       console.log(inView, '무한 스크롤 요청 🎃');
       fetchNextPage();
     }
-  }, [inView]);
-
-  console.log('reservations :>> ', reservations);
-  console.log(
-    'isFetching, isFetchingNextPage :>> ',
-    isFetching,
-    isFetchingNextPage,
-  );
-  console.log('error :>> ', error);
+  }, [inView, fetchNextPage]);
 
   return status === 'loading' ? (
     <LoadingSpinner />
@@ -69,12 +47,15 @@ export const ReservationTab: React.FC = () => {
     <>
       <StatusTabs activeTab={activeTab} onClickTab={changeTab} />
       <ContentWrap>
-        {reservations?.pages.map((group, idx) => {
-          console.log('마지막', group.page, idx);
+        {reservations?.pages.map((group) => {
           return (
             <Fragment key={group.page}>
               {group?.content.map((reservation) => (
-                <InformationCard key={reservation.id} {...reservation} />
+                <InformationCard
+                  key={reservation.id}
+                  currentPageIndex={group.page}
+                  {...reservation}
+                />
               ))}
             </Fragment>
           );

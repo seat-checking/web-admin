@@ -1,23 +1,39 @@
+import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import styled, { css, useTheme } from 'styled-components';
+import type { InfiniteData } from '@tanstack/react-query';
 import type {
   Reservation,
   ProcessReservationRequest,
   ReservationStatusType,
+  ReservationResponse,
 } from 'api/lib/reservations';
 import { ReactComponent as ChevronDownIcon } from 'assets/icons/chevron-down.svg';
 import { useProcessReservation } from 'common/hooks/mutations/useProcessReservation';
+import { queryKeys } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { flexSet } from 'styles/mixin';
 
-export type InformationCardProps = Reservation;
-/* eslint-disable react/destructuring-assignment */
+export interface InformationCardProps extends Reservation {
+  currentPageIndex: number;
+}
 
 /**
  * 예약 정보 카드 컴포넌트
  */
-export const InformationCard: React.FC<InformationCardProps> = (props) => {
+export const InformationCard: React.FC<InformationCardProps> = ({
+  id,
+  storeSpaceName,
+  reservationUnitReservedByUser,
+  currentPageIndex,
+  startSchedule,
+  endSchedule,
+  reservationStatus,
+  createdAt,
+  name,
+  reservedPlace,
+}) => {
   const theme = useTheme();
   const [isOpened, setIsOpened] = useState(false);
   const { mutate: processReservationMutate } = useProcessReservation();
@@ -26,33 +42,54 @@ export const InformationCard: React.FC<InformationCardProps> = (props) => {
     setIsOpened((prev) => !prev);
   };
 
-  const date = dayjs(props.startSchedule).format('YY년 M월 D일');
-  const startUsingTime = dayjs(props.startSchedule).format('hh:mm');
-  const endUsingTime = dayjs(props.endSchedule).format('hh:mm');
+  const date = dayjs(startSchedule).format('YY년 M월 D일');
+  const startUsingTime = dayjs(startSchedule).format('hh:mm');
+  const endUsingTime = dayjs(endSchedule).format('hh:mm');
+
+  const queryClient = useQueryClient();
 
   const handleProcessReservation = ({
     reservationId,
     isApproved,
   }: ProcessReservationRequest) => {
-    processReservationMutate({ reservationId, isApproved });
+    processReservationMutate(
+      { reservationId, isApproved },
+      {
+        onSuccess() {
+          queryClient.setQueryData(
+            [queryKeys.GET_RESERVATIONS, { type: 'pending' }],
+            (data: InfiniteData<ReservationResponse> | undefined) => {
+              if (!data) return data;
+              return {
+                pages: deleteProcessedItem(
+                  data.pages,
+                  currentPageIndex - 1,
+                  reservationId,
+                ),
+                pageParams: data.pageParams,
+              };
+            },
+          );
+        },
+      },
+    );
   };
 
   return (
     <Wrap>
       <Header>
-        <StatusTag $reservationStatus={props.reservationStatus}>
-          {getReservationStatusText(props.reservationStatus)}
+        <StatusTag $reservationStatus={reservationStatus}>
+          {getReservationStatusText(reservationStatus)}
         </StatusTag>
-        <CreatedText>
-          {dayjs(props.createdAt).format('M월 D일 H:m')}
-        </CreatedText>
+        <CreatedText>{dayjs(createdAt).format('M월 D일 H:m')}</CreatedText>
       </Header>
       <Tab onClick={handleToggleDetail}>
-        <Name>{props.name}님</Name>
-        <Circle $isActive={props.reservationStatus === '대기'} />
+        <Name>{name}님</Name>
+        <Circle $isActive={reservationStatus === '대기'} />
         <ReservationPlace>
-          {props.reservedPlace}
-          {props.reservationUnitReservedByUser === '좌석' && '번'}
+          {reservedPlace}
+          {reservationUnitReservedByUser === '좌석' && '번'}
+          {id}
         </ReservationPlace>
         <ChevronDownIcon
           stroke={`${theme.palette.grey[300]}`}
@@ -66,13 +103,11 @@ export const InformationCard: React.FC<InformationCardProps> = (props) => {
           <Body>
             <TextRow>
               <LabelText>· 신청한 공간</LabelText>
-              <ValueText>{props.storeSpaceName}</ValueText>
+              <ValueText>{storeSpaceName}</ValueText>
             </TextRow>
             <TextRow>
-              <LabelText>
-                · 신청한 {props.reservationUnitReservedByUser}
-              </LabelText>
-              <ValueText>{props.reservedPlace}</ValueText>
+              <LabelText>· 신청한 {reservationUnitReservedByUser}</LabelText>
+              <ValueText>{reservedPlace}</ValueText>
             </TextRow>
             <TextRow>
               <LabelText>· 희망 이용 날짜</LabelText>
@@ -83,14 +118,14 @@ export const InformationCard: React.FC<InformationCardProps> = (props) => {
               <ValueText>{`${startUsingTime} ~ ${endUsingTime}`}</ValueText>
             </TextRow>
           </Body>
-          {props.reservationStatus === '대기' ? (
+          {reservationStatus === '대기' ? (
             <BtnsRow>
               <StyledBtn
                 backgroundColor={`${theme.palette.grey[100]}`}
                 color={`${theme.palette.grey[400]}`}
                 onClick={() =>
                   handleProcessReservation({
-                    reservationId: props.id,
+                    reservationId: id,
                     isApproved: false,
                   })
                 }
@@ -100,7 +135,7 @@ export const InformationCard: React.FC<InformationCardProps> = (props) => {
               <StyledBtn
                 onClick={() =>
                   handleProcessReservation({
-                    reservationId: props.id,
+                    reservationId: id,
                     isApproved: true,
                   })
                 }
@@ -130,6 +165,21 @@ const getReservationStatusText = (reservationStatus: ReservationStatusType) => {
   if (reservationStatus === '승인') {
     return '예약 완료';
   }
+};
+
+const deleteProcessedItem = (
+  oldPageArray: ReservationResponse[],
+  arrayIndex: number,
+  reservationId: number,
+): ReservationResponse[] => {
+  const filteredContent = oldPageArray[arrayIndex].content.filter(
+    (reservation) => reservation.id !== reservationId,
+  );
+  const newPage = { ...oldPageArray[arrayIndex], content: filteredContent };
+  const copied = [...oldPageArray];
+  copied.splice(arrayIndex, 1, newPage);
+
+  return copied;
 };
 
 const Wrap = styled.li`

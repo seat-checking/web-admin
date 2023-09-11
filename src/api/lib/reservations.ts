@@ -44,7 +44,6 @@ export const processReservation = async ({
       isApproved ? 'approve' : 'reject'
     }/?reservation-id=${reservationId}`,
   );
-  console.log('response.data :>> ', response.data);
   return response.data;
 };
 
@@ -52,19 +51,17 @@ export const getReservations = async ({
   page = 1,
   reservationStatus,
 }: ReservationsRequest): Promise<ReservationResponse> => {
-  // const response = await axiosClient.get(`${apiPrefix}/${storeId}/all-list`, {
-  //   params: {
-  //     page,
-  //     size: 15,
-  //     sort: 'asc',
-  //   },
-  // });
   const response = await axiosClient.get(
-    `${apiPrefix}/${storeId}/${reservationStatus}-list?page=${page}`,
+    `${apiPrefix}/${storeId}/${reservationStatus}-list`,
+    {
+      params: {
+        page,
+        size: 15,
+        sort: 'asc',
+      },
+    },
   );
-  console.log('response :>> ', response);
   if (response.status === 204) {
-    console.log('204');
     return {
       content: [],
       page: 1,
