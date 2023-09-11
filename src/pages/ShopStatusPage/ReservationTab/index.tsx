@@ -1,9 +1,9 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useGetReservations } from 'common/hooks/queries/useGetReservations';
 import { useTab } from 'common/hooks/useTab';
 import { LoadingSpinner } from 'components/LoadingSpinner';
-import { InformationCard } from 'pages/ShopStatusPage/ReservationTab/components/InformationCard';
+import { ReservationCard } from 'pages/ShopStatusPage/ReservationTab/components/ReservationCard';
 import { StatusTabs } from 'pages/ShopStatusPage/ReservationTab/components/StatusTabs';
 import { ContentWrap } from 'pages/ShopStatusPage/ReservationTab/styled';
 
@@ -32,9 +32,7 @@ export const ReservationTab: React.FC = () => {
   } = useGetReservations(currentReservationStatusPerTab);
 
   useEffect(() => {
-    // inView가 true 일때만 실행한다.
     if (inView) {
-      console.log(inView, '무한 스크롤 요청 🎃');
       fetchNextPage();
     }
   }, [inView, fetchNextPage]);
@@ -51,7 +49,7 @@ export const ReservationTab: React.FC = () => {
           return (
             <Fragment key={group.page}>
               {group?.content.map((reservation) => (
-                <InformationCard
+                <ReservationCard
                   key={reservation.id}
                   currentPageIndex={group.page}
                   {...reservation}
@@ -61,7 +59,7 @@ export const ReservationTab: React.FC = () => {
           );
         })}
         {isFetching && <LoadingSpinner />}
-        <div ref={ref}>안녕</div>
+        <div ref={ref} />
       </ContentWrap>
     </>
   );

@@ -15,14 +15,14 @@ import { queryKeys } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { flexSet } from 'styles/mixin';
 
-export interface InformationCardProps extends Reservation {
+export interface ReservationCardProps extends Reservation {
   currentPageIndex: number;
 }
 
 /**
  * 예약 정보 카드 컴포넌트
  */
-export const InformationCard: React.FC<InformationCardProps> = ({
+export const ReservationCard: React.FC<ReservationCardProps> = ({
   id,
   storeSpaceName,
   reservationUnitReservedByUser,

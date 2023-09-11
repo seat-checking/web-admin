@@ -32,4 +32,6 @@ const CircularLoader = styled.div`
   border-top: ${SPINNER_THICKNESS_REM}rem solid orange;
 
   animation: ${spin} 1s linear infinite;
+
+  margin: 2rem;
 `;
