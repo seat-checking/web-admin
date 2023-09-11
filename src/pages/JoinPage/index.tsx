@@ -50,14 +50,17 @@ export const JoinPage: React.FC = () => {
             </ProgressBackground>
             <ProgressText>{joinStatus === 'FIRST' ? 1 : 2}/2</ProgressText>
           </ProgressWrap>
-          {/* {joinStatus === 'FIRST' ? (
+          {joinStatus === 'FIRST' ? (
             <AdminInfo
               onClickNext={handleSwitchPage}
               useJoinForm={useJoinForm}
             />
-          ) : ( */}
-          <StoreInfo onClickNext={handleSwitchPage} useJoinForm={useJoinForm} />
-          {/* )} */}
+          ) : (
+            <StoreInfo
+              onClickNext={handleSwitchPage}
+              useJoinForm={useJoinForm}
+            />
+          )}
         </RightContentWrap>
       </RightSide>
     </Wrap>

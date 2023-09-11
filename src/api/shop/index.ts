@@ -1,43 +1,47 @@
+import type {
+  EditShopRequest,
+  GetShopLayoutResponse,
+  ShopLayout,
+  ToggleCloseTodayRequest,
+} from 'api/shop/types';
+import type { Permission } from 'common/utils/auth';
+import type { DropdownShop, ShopInfoForm } from 'common/utils/types';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { axiosClient } from 'api/apiClient';
+
 import { STORAGE } from 'common/utils/constants';
 
-interface Chair {
-  i: string;
-  manageId: number | undefined;
-  x: number;
-  y: number;
-}
+export const addShop = async (shopInfoForm: ShopInfoForm) => {
+  const response = await axiosClient.post(
+    '/stores/admins/new-business-information',
+    shopInfoForm,
+  );
+  return response.data.result;
+};
 
-interface Table {
-  i: string;
-  w: number;
-  h: number;
-  x: number;
-  y: number;
-}
+export const getOwnedShops = async (): Promise<DropdownShop[]> => {
+  const response = await axiosClient.get('/stores/admins/owned');
+  return response.data.result.storeResponseList;
+};
 
-export interface ReservationUnit {
-  space: boolean;
-  chair: boolean;
-}
+export const toggleCloseToday = async ({
+  shopId,
+  isClosedToday,
+}: ToggleCloseTodayRequest) => {
+  const response = await axiosClient.patch(
+    `/stores/admins/temporary-closed/${shopId}`,
+    { closedToday: isClosedToday },
+  );
+  return response.data.result;
+};
 
-export interface ShopLayout {
-  storeSpaceName: string;
-  reservationUnit: ReservationUnit;
-  height: number;
-  tableList: Table[];
-  chairList: Chair[];
-}
+export const getShopPermission = async (
+  shopId: number,
+): Promise<Permission> => {
+  const response = await axiosClient.get(`/stores/admins/permission/${shopId}`);
 
-export interface GetShopLayoutResponse extends ShopLayout {
-  storeSpaceId: number;
-}
-
-export interface EditShopRequest {
-  spaceId: number;
-  layout: ShopLayout;
-}
+  return JSON.parse(response.data.result.permissionByMenu);
+};
 
 export class ShopApi {
   static readonly apiPrefix = '/stores/admins';

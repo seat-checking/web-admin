@@ -1,4 +1,4 @@
-import type { ReservationUnit, ShopLayout } from 'api/lib/shop';
+import type { ReservationUnit, ShopLayout } from 'api/shop/types';
 import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
 import { useCreateSpace } from 'common/hooks/mutations/useCreateSpace';
 import { useEditLayout } from 'common/hooks/mutations/useEditLayout';

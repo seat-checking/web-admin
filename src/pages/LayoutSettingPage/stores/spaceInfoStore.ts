@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ReservationUnit } from 'api/lib/shop';
+import type { ReservationUnit } from 'api/shop/types';
 
 interface SpaceInfoStoreState {
   spaceName: string;

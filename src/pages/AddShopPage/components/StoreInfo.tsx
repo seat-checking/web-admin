@@ -1,14 +1,11 @@
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import type { JoinForm } from 'common/utils/types';
-import type { InnerPageProps } from 'pages/JoinPage/utils/types';
+import type { ShopInfoForm } from 'common/utils/types';
 import type { Address } from 'react-daum-postcode';
 import type { SubmitHandler } from 'react-hook-form';
-import { useJoin } from 'common/hooks/mutations/useJoin';
+import { useAddShop } from 'common/hooks/mutations/useAddShop';
 import { useAddress } from 'common/hooks/useAddress';
-import { PATH } from 'common/utils/constants';
 import { AddressBox } from 'components/AddressBox';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
@@ -18,51 +15,32 @@ import {
   DateInput,
   GappedErrorMessage,
   InputWrap,
-} from 'pages/JoinPage/components/StoreInfo.styled';
+} from 'pages/AddShopPage/components/StoreInfo.styled';
 
-/**
- * 관리자 회원가입 > 두 번째 화면에서 보여줄 컴포넌트 (가게 정보 입력 페이지)
- */
-export const StoreInfo: React.FC<InnerPageProps> = ({
-  onClickNext,
-  useJoinForm,
-}) => {
-  const navigate = useNavigate();
-  const { mutate: joinMutate } = useJoin();
-
+export const StoreInfo: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     control,
-  } = useJoinForm;
+  } = useForm<ShopInfoForm>({
+    mode: 'onChange',
+  });
+  const navigate = useNavigate();
+  const { mutate: addShopMutate } = useAddShop();
 
   const { open, handleComplete } = useAddress();
 
-  const onSubmit: SubmitHandler<JoinForm> = (data) => {
-    joinMutate(data, {
+  const onSubmit: SubmitHandler<ShopInfoForm> = (data) => {
+    addShopMutate(data, {
       onSuccess: () => {
-        onClickNext('FIRST'); // 초기화
-        navigate(`/${PATH.login}`, { replace: true });
+        navigate(`/`);
       },
       onError: (error) => {
         console.error(error);
       },
     });
   };
-
-  // 뒤로가기 발생 시 회원가입 첫번째 페이지로 전환
-  useEffect(() => {
-    const handleGoBack = () => {
-      onClickNext('FIRST');
-    };
-
-    window.addEventListener('popstate', handleGoBack);
-
-    return () => {
-      window.removeEventListener('popstate', handleGoBack);
-    };
-  }, [navigate, onClickNext]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -117,8 +95,8 @@ export const StoreInfo: React.FC<InnerPageProps> = ({
       <InputWrap>
         <Input
           label='사업자등록번호'
-          placeholder='숫자 10자리를 입력해주세요.'
           maxLength={10}
+          placeholder='숫자 10자리를 입력해주세요.'
           {...register('businessRegistrationNumber', {
             required: '사업자등록번호는 필수 입력입니다.',
             pattern: {

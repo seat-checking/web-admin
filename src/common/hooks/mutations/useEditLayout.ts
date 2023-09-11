@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { EditShopRequest } from 'api/lib/shop';
-import { ShopApi } from 'api/lib/shop';
+import type { EditShopRequest } from 'api/shop/types';
+import { ShopApi } from 'api/shop';
 import { queryKeys } from 'common/utils/constants';
 
 export const useEditLayout = () => {

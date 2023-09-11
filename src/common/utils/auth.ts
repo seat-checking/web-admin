@@ -29,6 +29,10 @@ export const getPermission = (menu: MenuType) => {
 export const setPermissions = (permissions: Permission) => {
   localStorage.setItem('storeStatus', permissions.storeStatus.toString());
   localStorage.setItem('storeSetting', permissions.storeSetting.toString());
+  localStorage.setItem(
+    'storeStatistics',
+    permissions.storeStatistics.toString(),
+  );
   localStorage.setItem('seatSetting', permissions.seatSetting.toString());
 };
 

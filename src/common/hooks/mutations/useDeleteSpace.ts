@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
-import { ShopApi } from 'api/lib/shop';
+import { ShopApi } from 'api/shop';
 import { queryKeys } from 'common/utils/constants';
 
 export const useDeleteSpace = () => {

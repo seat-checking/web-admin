@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import styled, { useTheme } from 'styled-components/macro';
-import type { ReservationUnit } from 'api/lib/shop';
 
+import type { ReservationUnit } from 'api/shop/types';
 import { Button } from 'components/Button';
 import InputCheckBox from 'components/InputCheckBox';
 import { Modal } from 'components/Modal';

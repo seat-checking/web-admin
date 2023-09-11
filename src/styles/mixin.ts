@@ -24,3 +24,11 @@ export const grayBorderBoxStyle = css`
   background-color: white;
   border-radius: 0.7rem;
 `;
+
+// 말줄임 표시
+export const ellipsisText = (lineCount: number) => css`
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: ${lineCount};
+  -webkit-box-orient: vertical;
+`;

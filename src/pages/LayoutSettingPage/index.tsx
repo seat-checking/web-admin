@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { ShopLayout } from 'api/lib/shop';
+import type { ShopLayout } from 'api/shop/types';
 import type {
   ItemType,
   ShopFormState,
