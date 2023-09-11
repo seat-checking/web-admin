@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import InputCheckBox from 'components/InputCheckBox';
 
 import { Modal } from 'components/Modal';
@@ -50,15 +50,24 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
   const [checkboxes, setCheckboxes] = useState([
     permissions.storeStatus,
     permissions.seatSetting,
+    permissions.storeStatistics,
     permissions.storeSetting,
-    false,
   ]);
+
+  useEffect(() => {
+    setCheckboxes([
+      permissions.storeStatus,
+      permissions.seatSetting,
+      permissions.storeStatistics,
+      permissions.storeSetting,
+    ]);
+  }, [permissions]);
   const handleToggleIsOpen = () => {
     setIsOpen(!isOpen);
   };
 
   const toggleCheckbox = (index: number) => {
-    if (index === 2) return; // "가게설정" 체크박스는 상태를 변경하지 않음
+    if (index === 2) return;
 
     const newCheckboxes = [...checkboxes];
     newCheckboxes[index] = !newCheckboxes[index];
@@ -130,17 +139,19 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({
           </ButtonWrapper>
         </>
       )}
-      <Modal isOpen={modalOpen} onClose={handleCloseModal}>
-        <ModalHeader>직원삭제</ModalHeader>
-        <ModalContent>
-          <ModaMainText>정말 직원을 삭제하시나요?</ModaMainText>
-          <ModaSubText>삭제한 직원은 복구할 수 없어요!</ModaSubText>
-        </ModalContent>
-        <ModalButtonWrapper>
-          <ModalCancel onClick={handleCloseModal}>취소</ModalCancel>
-          <ModalButton onClick={staffDeleteClick}>직원삭제</ModalButton>
-        </ModalButtonWrapper>
-      </Modal>
+      {modalOpen && (
+        <Modal onClose={handleCloseModal}>
+          <ModalHeader>직원삭제</ModalHeader>
+          <ModalContent>
+            <ModaMainText>정말 직원을 삭제하시나요?</ModaMainText>
+            <ModaSubText>삭제한 직원은 복구할 수 없어요!</ModaSubText>
+          </ModalContent>
+          <ModalButtonWrapper>
+            <ModalCancel onClick={handleCloseModal}>취소</ModalCancel>
+            <ModalButton onClick={staffDeleteClick}>직원삭제</ModalButton>
+          </ModalButtonWrapper>
+        </Modal>
+      )}
     </StaffListItemWrapper>
   );
 };

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { ToggleCloseTodayRequest } from 'api/lib/shop';
+import type { ToggleCloseTodayRequest } from 'api/shop/types';
 import type { DropdownShop } from 'common/utils/types';
-import { toggleCloseToday } from 'api/lib/shop';
+import { toggleCloseToday } from 'api/shop';
 import { queryKeys } from 'common/utils/constants';
 
 export const useToggleCloseToday = () => {

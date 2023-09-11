@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Wrap = styled.div`
   padding: 4rem 0;
-  width: 53.8rem;
+  width: 59rem;
   margin: auto;
 `;
 
@@ -13,10 +13,13 @@ export const ItemWrap = styled.div`
 `;
 
 export const ItemWrapFlex = styled(ItemWrap)`
+  position: relative;
+  width: 59rem;
   display: flex;
 `;
 
 export const DayItem = styled.li`
+  margin-bottom: 2.4rem;
   & + & {
     margin-top: 2.4em;
   }
@@ -47,4 +50,17 @@ export const MaxTimeWrap = styled.div`
 
 export const SaveBtnWrap = styled.div`
   margin: 6.8rem 0;
+`;
+
+export const ToggleWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  right: -7rem;
+  top: -0.6rem;
+  color: ${({ theme }) => theme.palette.grey[300]};
+  font-size: 1.7rem;
+  font-style: normal;
+  font-weight: 400;
 `;

@@ -1,25 +1,51 @@
-import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
+import { useDeleteSpace } from 'common/hooks/mutations/useDeleteSpace';
+import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
+import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
+import { useLayoutActions } from 'pages/LayoutSettingPage/stores/layoutStore';
 
+interface DeleteSpaceModalProps {
+  onClose: () => void;
+  clearSpaces: () => void;
+}
 /**
  * 스페이스 삭제 모달
  */
-export const DeleteSpaceModal: React.FC = () => {
+export const DeleteSpaceModal: React.FC<DeleteSpaceModalProps> = ({
+  onClose,
+  clearSpaces,
+}) => {
   const theme = useTheme();
-  const [isOpen, setIsOpen] = useState(true);
+  const { spaceId, setFirstSpaceId } = useSpaceId();
+  const { clearLayout } = useLayoutActions();
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const { mutate: deleteMutate } = useDeleteSpace();
 
   const handleCancel = () => {
-    setIsOpen(false);
+    onClose();
+  };
+
+  const handleDelete = () => {
+    if (spaceId === TEMPORARY_SPACE_ID) {
+      clearSpaces();
+      clearLayout();
+      setFirstSpaceId();
+      onClose();
+      return;
+    }
+    deleteMutate(spaceId, {
+      onSuccess: () => {
+        clearLayout();
+        setFirstSpaceId();
+        onClose();
+      },
+    });
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose}>
+    <Modal onClose={onClose}>
       <Modal.Header>좌석 설정</Modal.Header>
       <Content>
         <ConfirmText>정말 스페이스를 삭제할까요? 😥</ConfirmText>
@@ -43,6 +69,7 @@ export const DeleteSpaceModal: React.FC = () => {
           borderRadius='0.4rem'
           fontSize='1.4rem'
           height='4.5rem'
+          onClick={handleDelete}
         >
           스페이스 삭제
         </Button>

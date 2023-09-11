@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { ShopInfoForm } from 'common/utils/types';
-import { addShop } from 'api/lib/shop';
+import { addShop } from 'api/shop';
 import { queryKeys } from 'common/utils/constants';
 
 export const useAddShop = () => {

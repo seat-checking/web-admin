@@ -21,7 +21,12 @@ export const mutationKeys = {
 };
 
 export const queryKeys = {
-  GET_SHOP: 'getShop',
-  GET_OWNED_SHOPS: 'getOwnedShops',
-  GET_PERMISSION: 'getPermission',
+  GET_SHOP: 'shop',
+  GET_SPACES: 'spaces',
+  GET_SPACE_LAYOUT: 'spaceLayout',
+  GET_PERMISSION: 'permission',
+  GET_OWNED_SHOPS: 'ownedShops',
 };
+
+export const TEMPORARY_SPACE_ID = -1;
+export const NO_SPACE_ID = -2;

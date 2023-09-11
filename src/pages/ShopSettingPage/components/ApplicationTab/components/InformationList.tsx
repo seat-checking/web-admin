@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useTheme } from 'styled-components';
 import type { SuccessOkResponse } from 'api/store/common';
 import type {
@@ -14,6 +15,7 @@ import {
 
 import { STORAGE } from 'common/utils/constants';
 import { Button } from 'components/Button';
+import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import { Modal } from 'components/Modal';
@@ -168,6 +170,7 @@ export const InformationList: React.FC<InformationListProps> = ({
     try {
       await patchRequestInformation(params);
       fetchData();
+      toast.success('변경사항이 성공적으로 저장되었습니다.');
     } catch (error) {
       console.error('Error saving data:', error);
     }
@@ -277,21 +280,24 @@ export const InformationList: React.FC<InformationListProps> = ({
               </InputWrapper>
             )}
           </ListContent>
-          <Modal isOpen={modalOpen === item.id} onClose={closeModal}>
-            <ModalHeader>정보 목록 삭제</ModalHeader>
-            <ModalContent>
-              <ModaMainText>정말 목록을 삭제하시나요?</ModaMainText>
-              <ModaSubText>삭제한 목록은 복구할 수 없어요!</ModaSubText>
-            </ModalContent>
-            <ModalButtonWrapper>
-              <ModalCancel onClick={closeModal}>취소</ModalCancel>
-              <ModalButton onClick={() => handleDelete(item.id)}>
-                삭제
-              </ModalButton>
-            </ModalButtonWrapper>
-          </Modal>
+          {modalOpen === item.id && (
+            <Modal onClose={closeModal}>
+              <ModalHeader>정보 목록 삭제</ModalHeader>
+              <ModalContent>
+                <ModaMainText>정말 목록을 삭제하시나요?</ModaMainText>
+                <ModaSubText>삭제한 목록은 복구할 수 없어요!</ModaSubText>
+              </ModalContent>
+              <ModalButtonWrapper>
+                <ModalCancel onClick={closeModal}>취소</ModalCancel>
+                <ModalButton onClick={() => handleDelete(item.id)}>
+                  삭제
+                </ModalButton>
+              </ModalButtonWrapper>
+            </Modal>
+          )}
         </ListWrapper>
       ))}
+      <CustomToastContainer />
     </LabelWrapper>
   );
 };

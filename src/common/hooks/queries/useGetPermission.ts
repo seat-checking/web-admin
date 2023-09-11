@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { getShopPermission } from 'api/lib/shop';
+import { getShopPermission } from 'api/shop';
 import { queryKeys } from 'common/utils/constants';
 
 export const useGetPermission = () => {
