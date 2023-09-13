@@ -18,7 +18,6 @@ interface TimeSelectProps {
 export const TimeSelect: React.FC<TimeSelectProps> = ({
   defaultValue,
   onChange: propOnChange,
-  onBlur: propOnBlur,
   selected,
   disabled,
 }) => {
