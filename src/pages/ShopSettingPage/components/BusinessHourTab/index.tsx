@@ -100,8 +100,6 @@ export const BusinessHourTab: React.FC = () => {
       breakTime,
     };
 
-    console.log(payload);
-
     const response = await patchOperatingTime({ storeId, ...payload });
     if (response.isSuccess) {
       toast.success('변경사항이 성공적으로 저장되었습니다.');
