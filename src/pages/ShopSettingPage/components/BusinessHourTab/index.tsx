@@ -83,15 +83,24 @@ export const BusinessHourTab: React.FC = () => {
       .filter((day) => toggledDays[day])
       .map((day) => day.toUpperCase());
 
-    const breakTime = `${data.breakTimeStart}~${data.breakTimeEnd}`;
+    const processedData = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [
+        key,
+        value === undefined ? null : value,
+      ]),
+    );
 
-    const { breakTimeStart, breakTimeEnd, ...rest } = data;
+    const { breakTimeStart, breakTimeEnd } = processedData;
+
+    const breakTime = `${breakTimeStart}~${breakTimeEnd}`;
 
     const payload = {
-      ...rest,
+      ...processedData,
       dayOff,
       breakTime,
     };
+
+    console.log(payload);
 
     const response = await patchOperatingTime({ storeId, ...payload });
     if (response.isSuccess) {
@@ -105,7 +114,6 @@ export const BusinessHourTab: React.FC = () => {
         const openTime = getValues(`${dayCode}OpenTime`);
         const closeTime = getValues(`${dayCode}CloseTime`);
 
-        // 값이 없는 경우
         if (!openTime || !closeTime) {
           return false;
         }
