@@ -4,7 +4,7 @@ import { TabNavItem } from 'components/Tabs.tsx/components/TabNavItem';
 
 export interface TabItem {
   label: string;
-  content: React.ReactElement;
+  content: React.ReactElement | null;
 }
 
 interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -40,11 +40,12 @@ export const Tabs: React.FC<TabsProps> = ({
   return (
     <Wrap {...rest}>
       <TabWrap $tabWidth={tabWidth}>{tabNavItemList}</TabWrap>
-      {tabList.map((item, index) => (
-        <ContentWrap hidden={activeTab !== index} key={item.label}>
-          {item.content}
-        </ContentWrap>
-      ))}
+      {tabList.map(
+        (item, index) =>
+          activeTab === index && (
+            <ContentWrap key={item.label}>{item.content}</ContentWrap>
+          ),
+      )}
     </Wrap>
   );
 };
