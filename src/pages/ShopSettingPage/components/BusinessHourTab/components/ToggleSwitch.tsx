@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import type React from 'react';
 
@@ -46,12 +45,15 @@ const SwitchSlider = styled.span<{ active: boolean }>`
   }
 `;
 
-interface Props {
+interface ToggleSwitchProps {
   checked: boolean;
   onToggle?: (active: boolean) => void;
 }
 
-const ToggleSwitch: React.FC<Props> = ({ checked, onToggle }) => {
+export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
+  checked,
+  onToggle,
+}) => {
   const handleChange = () => {
     if (onToggle) onToggle(!checked);
   };
@@ -63,5 +65,3 @@ const ToggleSwitch: React.FC<Props> = ({ checked, onToggle }) => {
     </SwitchContainer>
   );
 };
-
-export default ToggleSwitch;
