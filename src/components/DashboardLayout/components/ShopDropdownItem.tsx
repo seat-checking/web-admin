@@ -1,45 +1,41 @@
 import styled, { css } from 'styled-components/macro';
+import type { DropdownShop } from 'common/utils/types';
+import defaultShopImg from 'assets/images/default-shop.png';
 import { HelperText } from 'components/DashboardLayout/components/HelperText';
-import { Tooltip } from 'components/DashboardLayout/components/Tooltip';
-import { Toggle } from 'components/Toggle';
 
-/* eslint-disable react/destructuring-assignment */
+import { Toggle } from 'components/Toggle';
+import { ellipsisText } from 'styles/mixin';
+
 interface DropdownItemProps {
-  //   isOpen: boolean;
-  //   text: string | number;
-  //   func: () => void;
-  props: any;
   isSelected: boolean;
   onClick: VoidFunction;
+  shop: DropdownShop;
 }
 
 /**
- * 컴포넌트
+ * 가게 리스트 드롭다운 아이템
  */
-export const DropdownItem: React.FC<DropdownItemProps> = ({
-  props,
+export const ShopDropdownItem: React.FC<DropdownItemProps> = ({
+  shop,
   isSelected,
   onClick,
 }) => {
   return (
     <Wrap type='button' $isSelected={isSelected} onClick={onClick}>
-      <Img src={props.mainImage} alt='' />
+      <Img src={shop.mainImage || defaultShopImg} alt='' />
       <MiddleWrap>
         <UpperWrap>
-          <StoreName>{props.storeName}</StoreName>
-          <Circle $isClosed={props.closedToday} />
-          <ClosedToday>
-            {props.closedToday ? '영업 중' : '영업 종료'}
-          </ClosedToday>
+          <StoreName>{shop.storeName}</StoreName>
+          <Circle $isOpen={shop.isOpenNow} />
+          <IsOpenText $isOpen={shop.isOpenNow}>
+            {shop.isOpenNow ? '영업 중' : '준비 중'}
+          </IsOpenText>
         </UpperWrap>
-        <Introduction>{props.introduction}</Introduction>
+        <Introduction>{shop.introduction}</Introduction>
       </MiddleWrap>
       <RightWrap>
-        <Toggle isChecked={props.openNow} />
-        <HelperText>
-          일시 정지
-          <Tooltip />
-        </HelperText>
+        <Toggle isChecked={shop.isClosedToday} shopId={shop.storeId} />
+        <HelperText>일시 정지</HelperText>
       </RightWrap>
     </Wrap>
   );
@@ -50,8 +46,9 @@ const Wrap = styled.button<{ $isSelected: boolean }>`
   align-items: center;
 
   width: 100%;
-
   padding: 2rem 1.6rem;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
   ${({ $isSelected }) =>
     $isSelected &&
@@ -83,22 +80,29 @@ const StoreName = styled.span`
   font-size: 1.8rem;
   font-weight: 600;
   color: white;
+
+  max-width: 13.5rem;
+  ${ellipsisText(1)}
+  text-align: start;
 `;
 
-const ClosedToday = styled.span`
+const IsOpenText = styled.span<{ $isOpen: boolean }>`
   font-size: 1.2rem;
   font-weight: 400;
+
+  color: ${({ $isOpen: $isClosed, theme }) =>
+    $isClosed ? theme.palette.primary.orange : theme.palette.grey[200]};
 `;
 
-const Circle = styled.div<{ $isClosed: boolean }>`
+const Circle = styled.div<{ $isOpen: boolean }>`
   margin-left: 0.6rem;
   margin-right: 0.4rem;
 
   width: 0.6rem;
   height: 0.6rem;
   border-radius: 50%;
-  background-color: ${({ $isClosed, theme }) =>
-    $isClosed ? theme.palette.primary.orange : theme.palette.grey[300]};
+  background-color: ${({ $isOpen: $isClosed, theme }) =>
+    $isClosed ? theme.palette.primary.orange : theme.palette.grey[200]};
 `;
 
 const Introduction = styled.div`

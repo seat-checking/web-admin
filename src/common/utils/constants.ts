@@ -12,6 +12,8 @@ export const STORAGE = {
   accessToken: 'accessToken',
   storeId: 'storeId',
   storeName: 'storeName',
+  mainImage: 'mainImage',
+  introduction: 'introduction',
 } as const;
 
 export const mutationKeys = {
@@ -19,6 +21,13 @@ export const mutationKeys = {
 };
 
 export const queryKeys = {
-  GET_SHOP: 'getShop',
-  GET_OWNED_SHOPS: 'getOwnedShops',
+  GET_SHOP: 'shop',
+  GET_SPACES: 'spaces',
+  GET_SPACE_LAYOUT: 'spaceLayout',
+  GET_PERMISSION: 'permission',
+  GET_OWNED_SHOPS: 'ownedShops',
+  GET_RESERVATIONS: 'reservations',
 };
+
+export const TEMPORARY_SPACE_ID = -1;
+export const NO_SPACE_ID = -2;

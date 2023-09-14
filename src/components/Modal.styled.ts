@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const ModalWrapper = styled.div`
   width: 35.4rem;
@@ -11,7 +11,7 @@ export const ModalWrapper = styled.div`
   box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.3);
 `;
 
-export const ModalOverlay = styled.div`
+export const ModalOverlay = styled.div<{ $isClickable: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -23,6 +23,12 @@ export const ModalOverlay = styled.div`
   align-items: center;
 
   z-index: 100;
+
+  ${({ $isClickable }) =>
+    !$isClickable &&
+    css`
+      cursor: default;
+    `}
 `;
 
 export const HeaderWrap = styled.div`

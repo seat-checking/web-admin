@@ -1,62 +1,39 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components/macro';
+import type { Permission } from 'common/utils/auth';
+import type { DropdownShop, Shop } from 'common/utils/types';
 import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as PlusSquareIcon } from 'assets/icons/plus-square.svg';
 import { useGetOwnedShops } from 'common/hooks/queries/useGetOwnedShops';
-import { PATH, STORAGE } from 'common/utils/constants';
-import { DropdownItem } from 'components/DashboardLayout/components/DropdownItem';
+import { useGetPermission } from 'common/hooks/queries/useGetPermission';
+import { setPermissions } from 'common/utils/auth';
+import { PATH } from 'common/utils/constants';
+import { ShopDropdownItem } from 'components/DashboardLayout/components/ShopDropdownItem';
+import { ellipsisText } from 'styles/mixin';
 
 interface ShopDropdownProps {
   onClose?: () => void;
   isFolded: boolean;
+  selectedShop: Shop;
+  setSelectedShop: React.Dispatch<React.SetStateAction<Shop>>;
 }
 
-const storeResponseList = [
-  {
-    storeId: 48,
-    storeName: 'pc방',
-    introduction: '강남 1호점', // 추가
-    openNow: true,
-    closedToday: false,
-    mainImage: 'https://t1.daumcdn.net/cfile/tistory/24283C3858F778CA2E', // 추가
-  },
-  {
-    storeId: 47,
-    storeName: 'pc방',
-    introduction: '강남 2호점', // 추가
-    openNow: false,
-    closedToday: true,
-    mainImage: 'https://t1.daumcdn.net/cfile/tistory/24283C3858F778CA2E', // 추가
-  },
-  {
-    storeId: 46,
-    storeName: '수민 카페',
-    introduction: '사당점', // 추가
-    openNow: false,
-    closedToday: true,
-    mainImage: 'https://t1.daumcdn.net/cfile/tistory/24283C3858F778CA2E', // 추가
-  },
-];
 /**
  * 가게 드롭다운 컴포넌트
  */
-export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
-  const { data } = useGetOwnedShops();
-  console.log('data :>> ', data);
+export const ShopDropdown: React.FC<ShopDropdownProps> = ({
+  isFolded,
+  selectedShop,
+  setSelectedShop,
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { data: storeResponseList } = useGetOwnedShops(isOpen);
+  const { fetchPermission } = useGetPermission();
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const navigate = useNavigate();
-  const [currentStoreId, setCurrentStoreId] = useState(
-    Number(localStorage.getItem(STORAGE.storeId)),
-  );
-
-  const handleChangeStoreId = (storeId: number) => {
-    localStorage.setItem(STORAGE.storeId, storeId.toString());
-    setCurrentStoreId(storeId);
-  };
 
   const handleAddShop = () => {
     navigate(`/${PATH.addShop}`);
@@ -75,6 +52,18 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
     setIsOpen((prev) => !prev);
   };
 
+  const handleChangeSelectedShop = async (shop: DropdownShop) => {
+    const permissions = await fetchPermission(shop.storeId);
+    setPermissions(permissions);
+    setSelectedShop({
+      storeId: shop.storeId,
+      storeName: shop.storeName,
+      mainImage: shop.mainImage,
+      introduction: shop.introduction,
+    });
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -89,27 +78,29 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
         onClick={handleToggleDropdown}
         folded={isFolded}
       >
-        <SelecteText folded={isFolded}>가게 이름</SelecteText>
+        <SelecteText folded={isFolded}>{selectedShop.storeName}</SelecteText>
         <ChevronDown stroke='white' />
       </TriggerBtn>
-      <DropdownWrap ref={containerRef} $isOpen={isOpen}>
-        <Header>
-          <AddShopBtn onClick={handleAddShop}>
-            <PlusSquareIcon stroke={theme.palette.grey[300]} />
-            가게 추가
-          </AddShopBtn>
-        </Header>
-        <Body>
-          {storeResponseList.map((store) => (
-            <DropdownItem
-              key={store.storeId}
-              props={store}
-              isSelected={currentStoreId === store.storeId}
-              onClick={() => handleChangeStoreId(store.storeId)}
-            />
-          ))}
-        </Body>
-      </DropdownWrap>
+      {isOpen && (
+        <DropdownWrap>
+          <Header>
+            <AddShopBtn onClick={handleAddShop}>
+              <PlusSquareIcon stroke={theme.palette.grey[300]} />
+              가게 추가
+            </AddShopBtn>
+          </Header>
+          <Body>
+            {storeResponseList?.map((shop) => (
+              <ShopDropdownItem
+                key={shop.storeId}
+                shop={shop}
+                isSelected={selectedShop.storeId === shop.storeId}
+                onClick={() => handleChangeSelectedShop(shop)}
+              />
+            ))}
+          </Body>
+        </DropdownWrap>
+      )}
     </Wrap>
   );
 };
@@ -140,16 +131,12 @@ const SelecteText = styled.div<{ folded: boolean }>`
   font-weight: 600;
   font-size: ${({ folded }): string => (folded ? '1.4rem' : '2.4rem')};
   color: white;
-  // 말줄임 표시
+
   max-width: ${({ folded }): string => (folded ? '7.6rem' : '18rem')};
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  ${ellipsisText(1)}
 `;
 
-const DropdownWrap = styled.div<{ $isOpen: boolean }>`
-  display: ${({ $isOpen }): string => ($isOpen ? 'block' : 'none')};
+const DropdownWrap = styled.div`
   position: absolute;
   top: 5rem;
   left: 4rem;
@@ -157,8 +144,7 @@ const DropdownWrap = styled.div<{ $isOpen: boolean }>`
   width: 34.8rem;
   background-color: ${({ theme }) => theme.palette.primary.dark};
   border: 0.2rem solid ${({ theme }) => theme.palette.grey[400]};
-  box-shadow: 0px 18.333332061767578px 68.33332824707031px 0px
-    rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 1.8rem 6.8rem 0px rgba(0, 0, 0, 0.25);
 
   border-radius: 1.2rem;
 `;

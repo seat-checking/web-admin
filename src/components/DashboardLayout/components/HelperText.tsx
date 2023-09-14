@@ -1,5 +1,7 @@
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as AlertCicleIcon } from 'assets/icons/alert-circle.svg';
+import { Tooltip } from 'components/DashboardLayout/components/Tooltip';
 import { ALERT_ICON_WIDTH_REM } from 'components/DashboardLayout/utils/constants';
 
 interface HelperTextProps {
@@ -10,13 +12,35 @@ interface HelperTextProps {
  * 도움말 문구 컴포넌트 (info 아이콘 + 텍스트), 일시 정지 설명 띄움
  */
 export const HelperText: React.FC<HelperTextProps> = ({ children }) => {
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleToggleTooltip = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsTooltipOpen(!isTooltipOpen);
+  };
+
+  const handleOutsideClick = (event: Event) => {
+    if (
+      containerRef.current &&
+      !containerRef.current.contains(event.target as Node)
+    ) {
+      setIsTooltipOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('click', handleOutsideClick);
+    return () => window.removeEventListener('click', handleOutsideClick);
+  }, []);
+
   return (
-    <Wrap>
+    <Wrap ref={containerRef} onClick={handleToggleTooltip}>
       <IconWrap>
         <AlertCicleIcon width={ALERT_ICON_WIDTH_REM + 'rem'} />
       </IconWrap>
       <Text>{children}</Text>
-      <DescriptionModal />
+      {isTooltipOpen && <Tooltip />}
     </Wrap>
   );
 };
@@ -46,8 +70,4 @@ const Text = styled.span`
   letter-spacing: -0.897px;
   font-weight: 400;
   line-height: normal;
-`;
-
-const DescriptionModal = styled.div`
-  background-color: ${({ theme }) => theme.palette.grey[400]};
 `;

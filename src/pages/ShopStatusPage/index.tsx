@@ -1,15 +1,34 @@
-import { useGetShops } from 'common/hooks/queries/useGetShops';
-import { useSearchEmail } from 'common/hooks/queries/useSearchEmail';
+import { useTab } from 'common/hooks/useTab';
+import { Tabs } from 'components/Tabs.tsx';
+import { StyledSideBar } from 'pages/LayoutSettingPage/LayoutSettingPage.styled';
+import { ReservationTab } from 'pages/ShopStatusPage/ReservationTab';
+import { SeatTab } from 'pages/ShopStatusPage/SeatTab';
+import { Wrap } from 'pages/ShopStatusPage/ShopStatusPage.styled';
 
 /**
- * 가게 현황 컴포넌트
+ * 가게 현황 페이지
  */
 export const ShopStatusPage: React.FC = () => {
-  const { data: shops } = useGetShops(); // TODO: 500번 에러로 담겨서 옴
-  console.log('shops :>> ', shops);
+  const { activeTab, changeTab } = useTab();
 
-  const { data: email } = useSearchEmail();
-  console.log('email :>> ', email);
-
-  return <div>ShopStatusPage 루트경로</div>;
+  return (
+    <Wrap>
+      <StyledSideBar>
+        <Tabs
+          onClickTab={changeTab}
+          activeTab={activeTab}
+          tabList={[
+            {
+              label: '예약 관리',
+              content: <ReservationTab />,
+            },
+            {
+              label: '좌석 정보',
+              content: <SeatTab />,
+            },
+          ]}
+        />
+      </StyledSideBar>
+    </Wrap>
+  );
 };

@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable no-console */
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import type { EmployeeResponse, SearchListResponse } from 'api/store/store';
 import type { ChangeEvent } from 'react';
 import type React from 'react';
@@ -9,14 +11,15 @@ import {
   getSeachList,
   modifyPermission,
 } from 'api/store/store';
-
 import { PATH } from 'common/utils/constants';
+import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Label } from 'components/Label';
 import {
   EmployerTabWrapper,
   HelperCircle,
   HelperText,
   HelperTextWrapper,
+  InputForm,
   InputWrapper,
   LabelWrapper,
   NoResults,
@@ -38,10 +41,11 @@ export const EmployerTab: React.FC = () => {
   const navigate = useNavigate();
   const storeId = localStorage.getItem('storeId') || '';
 
-  const handleSearch = async () => {
-    if (email && storeId) {
+  const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (email) {
       try {
-        const resData = await getSeachList({ storeId, email });
+        const resData = await getSeachList({ email });
         setSearched(true);
         setSearchResult(resData.result);
       } catch (error) {
@@ -57,27 +61,27 @@ export const EmployerTab: React.FC = () => {
     setEmail(e.target.value);
   };
 
-  useEffect(() => {
-    const fetchEmployeeList = async () => {
-      if (storeId) {
-        try {
-          const response = await getEmployeeList({ storeId });
-          if (response.isSuccess) {
-            const parsedEmployeeList =
-              response.result.storeMemberResponseList.map((employee) => ({
-                ...employee,
-                permissions: JSON.parse(employee.permissionByMenu), // JSON 파싱
-              }));
-            setEmployeeList(parsedEmployeeList);
-          }
-        } catch (error) {
-          console.error(error);
+  const fetchEmployeeList = useCallback(async () => {
+    if (storeId) {
+      try {
+        const response = await getEmployeeList({ storeId });
+        if (response.isSuccess) {
+          const parsedEmployeeList =
+            response.result.storeMemberResponseList.map((employee) => ({
+              ...employee,
+              permissions: JSON.parse(employee.permissionByMenu), // JSON 파싱
+            }));
+          setEmployeeList(parsedEmployeeList);
         }
+      } catch (error) {
+        console.error(error);
       }
-    };
-
-    fetchEmployeeList();
+    }
   }, [storeId]);
+
+  useEffect(() => {
+    fetchEmployeeList();
+  }, [fetchEmployeeList]);
 
   const handleDeleteMember = async (employeeId: number) => {
     if (!storeId) {
@@ -95,6 +99,7 @@ export const EmployerTab: React.FC = () => {
       console.error(error);
     }
   };
+
   const modifyPermissionClick = async (
     employeeId: number,
     newPermissions: boolean[],
@@ -118,8 +123,7 @@ export const EmployerTab: React.FC = () => {
         permissionByMenu,
       };
       await modifyPermission(params);
-
-      alert('저장이 완료되었습니다.');
+      toast.success('변경사항이 성공적으로 저장되었습니다.');
     } catch (error) {
       console.error(error);
     }
@@ -137,20 +141,23 @@ export const EmployerTab: React.FC = () => {
             </HelperText>
           </HelperTextWrapper>
         </LabelWrapper>
-        <InputWrapper>
-          <SearchIcon />
-          <StyledInput
-            placeholder='직원의 이메일을 검색해 주세요.'
-            onChange={handleChange}
-            value={email}
-          />
-          <SearchButton onClick={handleSearch}>검색</SearchButton>
-        </InputWrapper>
+        <InputForm onSubmit={handleSearch}>
+          <InputWrapper>
+            <SearchIcon />
+            <StyledInput
+              placeholder='직원의 이메일을 검색해 주세요.'
+              onChange={handleChange}
+              value={email}
+            />
+            <SearchButton type='submit'>검색</SearchButton>
+          </InputWrapper>
+        </InputForm>
         {searchResult ? (
           <StaffRegistration
             email={searchResult.email}
             name={searchResult.name}
             storeId={storeId}
+            onEmployeeAdded={fetchEmployeeList}
           />
         ) : searched ? (
           <NoResults>등록되지 않은 사용자입니다.</NoResults>
@@ -174,6 +181,7 @@ export const EmployerTab: React.FC = () => {
             />
           ) : null,
         )}
+        <CustomToastContainer />
       </StaffListWrapper>
     </>
   );

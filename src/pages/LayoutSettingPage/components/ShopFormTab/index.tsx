@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import type { ChangeRowCommand } from 'pages/LayoutSettingPage/hooks/useShopHeight';
 import type { ShopFormState } from 'pages/LayoutSettingPage/utils/types';
-import { ReactComponent as ChevronLeftCircle } from 'assets/icons/chevron-left-circle.svg';
-import { ReactComponent as CheveronRightCircle } from 'assets/icons/chevron-right-circle.svg';
+
+import { CircledArrowButton } from 'components/CircledArrowButton';
 import {
   DescriptionText,
   HeightInput,
-  IconWrap,
   Label,
   LayoutBox,
   Rectangle,
@@ -18,6 +17,11 @@ import {
   Wrap,
 } from 'pages/LayoutSettingPage/components/ShopFormTab/ShopFormTab.styled';
 import { CheckRadioButton } from 'pages/LayoutSettingPage/components/ShopFormTab/components/CheckRadioButton';
+import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
+import {
+  useShopHeight,
+  useShopHeightActions,
+} from 'pages/LayoutSettingPage/stores/shopHeightStore';
 import {
   COLUMN_CNT,
   DEFAULT_ROW_CNT,
@@ -35,43 +39,48 @@ function nearestDivisible(n: number): number {
 }
 
 interface ShopFormTabProps {
-  rowCnt: number;
   minRowCnt: number;
-  changeRowCnt: (value: number | ChangeRowCommand) => void;
   changeTab: (index: number) => void;
   shopFormState: ShopFormState;
   setShopFormState: React.Dispatch<React.SetStateAction<ShopFormState>>;
+  isDisabled: boolean;
 }
 /**
  * '좌석 설정' > '가게 형태' 탭 클릭했을 때 보여줄 컴포넌트
  */
 export const ShopFormTab: React.FC<ShopFormTabProps> = ({
-  rowCnt,
   minRowCnt,
-  changeRowCnt,
   changeTab,
   shopFormState: checkState,
   setShopFormState: setCheckState,
+  isDisabled,
 }) => {
-  const [heightInput, setHeightInput] = useState(rowCnt * TABLE_SIZE_PX);
+  const shopHeight = useShopHeight();
+  const { changeHeight } = useShopHeightActions();
+
+  const [heightInput, setHeightInput] = useState(shopHeight * TABLE_SIZE_PX);
+  const { setChange } = useChange();
 
   const handleResizeUpDown = (command: ChangeRowCommand) => {
-    if (command === 'DOWN' && rowCnt <= 2) {
+    if (command === 'DOWN' && shopHeight <= 2) {
       return;
     }
     setCheckState('NONE');
-    changeRowCnt(command);
+    changeHeight(command, minRowCnt);
+    setChange(true);
   };
 
   const handleResizeByChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChange(true);
+
     const size = e.currentTarget.value;
     if (size === 'SQUARE') {
-      changeRowCnt(COLUMN_CNT);
+      changeHeight(COLUMN_CNT, minRowCnt);
       setCheckState(size);
       return;
     }
     if (size === 'RECTANGLE') {
-      changeRowCnt(DEFAULT_ROW_CNT);
+      changeHeight(DEFAULT_ROW_CNT, minRowCnt);
       setCheckState(size);
     }
   };
@@ -86,13 +95,13 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
     const minHeight = minRowCnt * TABLE_SIZE_PX;
     if (heightInput < minHeight) {
       setHeightInput(minHeight);
-      changeRowCnt(minRowCnt);
+      changeHeight(minRowCnt, minRowCnt);
       return;
     }
 
     const nearestHeight = nearestDivisible(heightInput);
     setHeightInput(nearestHeight);
-    changeRowCnt(nearestHeight / TABLE_SIZE_PX);
+    changeHeight(nearestHeight / TABLE_SIZE_PX, minRowCnt);
   };
 
   const handleChangeNextTab = () => {
@@ -100,11 +109,11 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
   };
 
   useEffect(() => {
-    setHeightInput(rowCnt * TABLE_SIZE_PX);
-  }, [rowCnt]);
+    setHeightInput(shopHeight * TABLE_SIZE_PX);
+  }, [shopHeight]);
 
   return (
-    <Wrap>
+    <Wrap $isDisabled={isDisabled}>
       <DescriptionText>
         우리 가게와 가장 비슷한 형태를 선택해주세요.
       </DescriptionText>
@@ -132,20 +141,23 @@ export const ShopFormTab: React.FC<ShopFormTabProps> = ({
       </LayoutBox>
       <WidthSettingBox>
         <SettingLabel>가게 세로 길이</SettingLabel>
-        <IconWrap onClick={() => handleResizeUpDown('DOWN')}>
-          <ChevronLeftCircle />
-        </IconWrap>
+        <CircledArrowButton
+          direction='LEFT'
+          onClick={() => handleResizeUpDown('DOWN')}
+        />
         <HeightInput
           value={heightInput}
           onChange={handleChangeInput}
           onBlur={handleRoundInput}
         />
-
-        <IconWrap onClick={() => handleResizeUpDown('UP')}>
-          <CheveronRightCircle />
-        </IconWrap>
+        <CircledArrowButton
+          direction='RIGHT'
+          onClick={() => handleResizeUpDown('UP')}
+        />
       </WidthSettingBox>
-      <StyledButton onClick={handleChangeNextTab}>다음</StyledButton>
+      <StyledButton onClick={handleChangeNextTab} isDisabled={isDisabled}>
+        다음
+      </StyledButton>
     </Wrap>
   );
 };

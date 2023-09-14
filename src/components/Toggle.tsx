@@ -1,22 +1,71 @@
-import styled from 'styled-components/macro';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
+import styled, { css } from 'styled-components/macro';
+import type { DropdownShop } from 'common/utils/types';
+import type { ChangeEvent } from 'react';
+import { useToggleCloseToday } from 'common/hooks/mutations/useToggleCloseToday';
+import { queryKeys } from 'common/utils/constants';
 
 interface ToggleProps {
+  shopId: number;
   isChecked: boolean;
 }
 
 /**
- * 토글
+ * 오늘 영업 임시 중단 여부 토글
  */
-export const Toggle: React.FC<ToggleProps> = ({ isChecked }) => {
-  //   const [isChecked, setIsChecked] = useState(false);
+export const Toggle: React.FC<ToggleProps> = ({ shopId, isChecked }) => {
+  const isToggledRef = useRef(isChecked);
+  const queryClient = useQueryClient();
+
+  const { mutate: toggleMutate } = useToggleCloseToday();
+
+  const handleToggle = (event: ChangeEvent<HTMLInputElement>) => {
+    isToggledRef.current = event.currentTarget.checked;
+
+    if (event.currentTarget.checked) {
+      queryClient.invalidateQueries([queryKeys.GET_OWNED_SHOPS]);
+      return;
+    }
+
+    queryClient.setQueryData(
+      [queryKeys.GET_OWNED_SHOPS],
+      (data: DropdownShop[] | undefined) => {
+        return data?.map((shop) => {
+          if (shop.storeId === shopId) {
+            return { ...shop, isOpenNow: false };
+          }
+          return shop;
+        });
+      },
+    );
+  };
+
+  useEffect(() => {
+    return () => {
+      if (isChecked === isToggledRef.current) {
+        return;
+      }
+
+      const isClosedToday = isToggledRef.current;
+
+      toggleMutate({ shopId, isClosedToday });
+    };
+  }, [isChecked, toggleMutate, shopId]);
+
   return (
-    <Wrap>
-      <input role='switch' type='checkbox' />
+    <Wrap onClick={(e) => e.stopPropagation()} $isInActive={isChecked == null}>
+      <input
+        role='switch'
+        type='checkbox'
+        defaultChecked={isChecked}
+        onChange={handleToggle}
+      />
     </Wrap>
   );
 };
 
-const Wrap = styled.div`
+const Wrap = styled.div<{ $isInActive: boolean }>`
   display: flex; // 여백 없애기 위함
   [type='checkbox'] {
     cursor: pointer;
@@ -40,6 +89,12 @@ const Wrap = styled.div`
       background-color: white;
       transition: all 250ms linear;
     }
+
+    ${({ $isInActive }) =>
+      $isInActive &&
+      css`
+        pointer-events: none;
+      `}
   }
 
   [type='checkbox']:checked {
@@ -52,4 +107,10 @@ const Wrap = styled.div`
       transition: all 250ms linear;
     }
   }
+
+  ${({ $isInActive }) =>
+    $isInActive &&
+    css`
+      cursor: not-allowed;
+    `}
 `;
