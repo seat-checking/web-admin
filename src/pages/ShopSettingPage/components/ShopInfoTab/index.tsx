@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTheme } from 'styled-components';
+import type { ShopInformationForm } from 'common/utils/types';
 import type { ChangeEvent } from 'react';
 import type { Address } from 'react-daum-postcode';
 import type { SubmitHandler } from 'react-hook-form';
 
+import { useEditShopInformation } from 'common/hooks/mutations/useEditShopInformation';
 import { useAddress } from 'common/hooks/useAddress';
 import { AddressBox } from 'components/AddressBox';
 import { Button } from 'components/Button';
@@ -25,24 +27,21 @@ import {
 
 import { Carousel } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Carousel';
 
-interface ShopSettingForm {
-  storeName: string;
-  address: string;
-  detailAddress: string;
-  shopType: '음식점' | '카페' | '모임';
-  mainImage: string;
-  introduction: string;
-}
-
 interface ImgFile {
   name: string;
   file: File;
   thumbnail: string;
 }
+
+interface ShopInfoTabProps {
+  shopInformation: ShopInformationForm | undefined;
+}
 /**
  * 가게 정보 설정 탭
  */
-export const ShopInfoTab: React.FC = () => {
+export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
+  shopInformation,
+}) => {
   const theme = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,7 +50,9 @@ export const ShopInfoTab: React.FC = () => {
     handleSubmit,
     formState: { errors, isValid },
     control,
-  } = useForm<ShopSettingForm>();
+  } = useForm<ShopInformationForm>({
+    defaultValues: shopInformation,
+  });
 
   const { open, handleComplete } = useAddress();
   const [imgFiles, setImgFiles] = useState<ImgFile[]>([]);
@@ -77,8 +78,8 @@ export const ShopInfoTab: React.FC = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<ShopSettingForm> = (data) => {
-    console.log('errors :>> ', errors);
+  const onSubmit: SubmitHandler<ShopInformationForm> = async (data) => {
+    // console.log('errors :>> ', errors);
     //   addShopMutate(data, {
     //     onSuccess: () => {
     //       navigate(`/`);
@@ -147,7 +148,7 @@ export const ShopInfoTab: React.FC = () => {
               id='restaurant'
               label='음식점'
               value='음식점'
-              {...register('shopType', {
+              {...register('category', {
                 required: '가게 유형을 선택해주세요.',
               })}
             />
@@ -155,7 +156,7 @@ export const ShopInfoTab: React.FC = () => {
               id='cafe'
               label='카페'
               value='카페'
-              {...register('shopType', {
+              {...register('category', {
                 required: '가게 유형을 선택해주세요.',
               })}
             />
@@ -163,13 +164,13 @@ export const ShopInfoTab: React.FC = () => {
               id='gathering'
               label='모임'
               value='모임'
-              {...register('shopType', {
+              {...register('category', {
                 required: '가게 유형을 선택해주세요.',
               })}
             />
           </RadioRow>
-          {errors.shopType && (
-            <GappedErrorMessage>{errors.shopType?.message}</GappedErrorMessage>
+          {errors.category && (
+            <GappedErrorMessage>{errors.category?.message}</GappedErrorMessage>
           )}
         </ListItem>
         <ListItem>
@@ -193,13 +194,18 @@ export const ShopInfoTab: React.FC = () => {
             </AddFileBtn>
             <Carousel imgs={imgFiles} setImgFiles={setImgFiles} />
           </AddFileRow>
+          {errors.storeImages && (
+            <GappedErrorMessage>
+              {errors.storeImages?.message}
+            </GappedErrorMessage>
+          )}
         </ListItem>
         <ListItem>
           <Input
             label='한 줄 소개'
             placeholder='가게의 소개글을 작성해주세요. (최대 N자 이내)'
             {...register('introduction', {
-              required: '가게 이름은 필수 입력입니다.',
+              required: '한 줄 소개는 필수 입력입니다.',
             })}
           />
           {errors.introduction && (
