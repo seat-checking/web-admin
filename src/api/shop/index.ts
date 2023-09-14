@@ -5,7 +5,11 @@ import type {
   ToggleCloseTodayRequest,
 } from 'api/shop/types';
 import type { Permission } from 'common/utils/auth';
-import type { DropdownShop, ShopInfoForm } from 'common/utils/types';
+import type {
+  DropdownShop,
+  ShopInfoForm,
+  ShopInformationForm,
+} from 'common/utils/types';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { axiosClient } from 'api/apiClient';
 
@@ -41,6 +45,41 @@ export const getShopPermission = async (
   const response = await axiosClient.get(`/stores/admins/permission/${shopId}`);
 
   return JSON.parse(response.data.result.permissionByMenu);
+};
+
+export const getShopInformation = async (): Promise<ShopInformationForm> => {
+  const shopId = localStorage.getItem(STORAGE.storeId);
+
+  const response = await axiosClient.get(
+    `/stores/admins/basic-information/${shopId}`,
+  );
+
+  return response.data.result;
+};
+
+export const editShopInformation = async (mainImage: File[]) => {
+  const shopId = localStorage.getItem(STORAGE.storeId);
+
+  const formData = new FormData();
+  formData.append('storeName', 'history');
+  formData.append('address', '1번지');
+  formData.append('detailAddress', '자세한');
+  formData.append('category', '음식점');
+  formData.append('introduction', '소개');
+  mainImage.forEach((image) => {
+    formData.append(`file`, image);
+  });
+
+  const response = await axiosClient.patch(
+    `/stores/admins/basic-information/${shopId}`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+  return response.data.result;
 };
 
 export class ShopApi {

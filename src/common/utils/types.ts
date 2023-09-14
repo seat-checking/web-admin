@@ -37,3 +37,12 @@ export interface DropdownShop extends Shop {
   isOpenNow: boolean;
   isClosedToday: boolean;
 }
+
+export interface ShopInformationForm {
+  storeName: string;
+  address: string;
+  detailAddress: string;
+  category: '음식점' | '카페' | '모임';
+  storeImages: string[];
+  introduction: string;
+}
