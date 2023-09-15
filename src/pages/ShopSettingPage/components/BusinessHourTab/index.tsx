@@ -81,21 +81,24 @@ export const BusinessHourTab: React.FC = () => {
       [day]: active,
     }));
   };
+
   const handleOnSubmit = async (data: FormValues) => {
     const dayOff = Object.keys(toggledDays)
       .filter((day) => toggledDays[day])
       .map((day) => day.toUpperCase());
 
     const processedData = Object.fromEntries(
-      Object.entries(data).map(([key, value]) => [
-        key,
-        value === undefined ? null : value,
-      ]),
+      Object.entries(data)
+        .filter(([key]) => !['breakTimeStart', 'breakTimeEnd'].includes(key))
+        .map(([key, value]) => [key, value === '' ? null : value]),
     );
 
-    const { breakTimeStart, breakTimeEnd } = processedData;
-
-    const breakTime = `${breakTimeStart}~${breakTimeEnd}`;
+    let breakTime = null;
+    if (data.breakTimeStart && data.breakTimeEnd) {
+      breakTime = `${data.breakTimeStart}~${data.breakTimeEnd}`;
+    } else if (data.breakTimeStart === '' || data.breakTimeEnd === '') {
+      breakTime = null;
+    }
 
     const payload = {
       ...processedData,
@@ -167,8 +170,6 @@ export const BusinessHourTab: React.FC = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
-  console.log('errors', errors);
 
   return (
     <ConfigProvider theme={{ token: { colorPrimary: 'darkorange' } }}>
