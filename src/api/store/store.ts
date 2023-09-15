@@ -117,7 +117,7 @@ export interface StoreCustomReservationField {
 }
 
 export interface StoreCustomReservationResponse {
-  storeCustomReservationFieldList: StoreCustomReservationField[];
+  storeCustomUtilizationFieldList: StoreCustomReservationField[];
 }
 
 export interface ErrorResponse {
@@ -184,7 +184,7 @@ export const requestInformation = async (
   const { data } = Params;
 
   const response = await axiosClient.post(
-    `/stores/admins/custom-reservation-field/${Params.storeId}`,
+    `/stores/admins/custom-utilization-field/${Params.storeId}`,
     data,
   );
   return response.data;
@@ -194,7 +194,7 @@ export const getRequestInformation = async (
   Params: GetRequestInformationParams,
 ): Promise<SuccessOkResponse<StoreCustomReservationResponse>> => {
   const response = await axiosClient.get(
-    `/stores/admins/custom-reservation-field/${Params.storeId}`,
+    `/stores/admins/custom-utilization-field/${Params.storeId}`,
   );
   return response.data;
 };
@@ -203,7 +203,7 @@ export const deleteRequestInformation = async (
   Params: DeleteRequestInformationParams,
 ): Promise<SuccessOkWithoutResultResponse> => {
   const response = await axiosClient.delete(
-    `/stores/admins/custom-reservation-field/${Params.storeId}?custom-id=${Params.customid}`,
+    `/stores/admins/custom-utilization-field/${Params.storeId}?custom-id=${Params.customid}`,
   );
   return response.data;
 };
@@ -212,7 +212,7 @@ export const patchRequestInformation = async (
 ): Promise<SuccessOkWithoutResultResponse> => {
   const { data } = Params;
   const response = await axiosClient.patch(
-    `/stores/admins/custom-reservation-field/${Params.storeId}?custom-id=${Params.customid}`,
+    `/stores/admins/custom-utilization-field/${Params.storeId}?custom-id=${Params.customid}`,
     data,
   );
   return response.data;
