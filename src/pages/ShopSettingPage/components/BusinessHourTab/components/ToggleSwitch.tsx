@@ -1,6 +1,27 @@
 import styled from 'styled-components';
 import type React from 'react';
 
+interface ToggleSwitchProps {
+  checked: boolean;
+  onToggle?: (active: boolean) => void;
+}
+
+export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
+  checked,
+  onToggle,
+}) => {
+  const handleChange = () => {
+    if (onToggle) onToggle(!checked);
+  };
+
+  return (
+    <SwitchContainer>
+      <SwitchInput type='checkbox' checked={checked} onChange={handleChange} />
+      <SwitchSlider active={checked} />
+    </SwitchContainer>
+  );
+};
+
 const SwitchContainer = styled.label`
   position: relative;
   display: inline-block;
@@ -44,24 +65,3 @@ const SwitchSlider = styled.span<{ active: boolean }>`
         : 'none'}; // 수정: 움직이는 거리를 조절해야 합니다.
   }
 `;
-
-interface ToggleSwitchProps {
-  checked: boolean;
-  onToggle?: (active: boolean) => void;
-}
-
-export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
-  checked,
-  onToggle,
-}) => {
-  const handleChange = () => {
-    if (onToggle) onToggle(!checked);
-  };
-
-  return (
-    <SwitchContainer>
-      <SwitchInput type='checkbox' checked={checked} onChange={handleChange} />
-      <SwitchSlider active={checked} />
-    </SwitchContainer>
-  );
-};
