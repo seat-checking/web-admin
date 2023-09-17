@@ -1,5 +1,5 @@
 import { ConfigProvider } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { DayOfWeek, OperatingTimeResponse } from 'api/store/store';
@@ -8,9 +8,11 @@ import { STORAGE } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Label } from 'components/Label';
+
 import {
   DayItem,
   DayText,
+  GappedErrorMessage,
   ItemWrap,
   ItemWrapFlex,
   MaxTimeWrap,
@@ -20,7 +22,7 @@ import {
   Wrap,
 } from 'pages/ShopSettingPage/components/BusinessHourTab/BusinessHourTab.styled';
 import { TimeSelect } from 'pages/ShopSettingPage/components/BusinessHourTab/components/TimeSelect';
-import ToggleSwitch from 'pages/ShopSettingPage/components/BusinessHourTab/components/ToggleSwitch';
+import { ToggleSwitch } from 'pages/ShopSettingPage/components/BusinessHourTab/components/ToggleSwitch';
 
 interface FormValues {
   monOpenTime: string;
@@ -56,12 +58,15 @@ const nullToUndefined = (value: string | null): string | undefined => {
 };
 
 export const BusinessHourTab: React.FC = () => {
-  const { handleSubmit, control, reset, getValues, watch } =
-    useForm<FormValues>({});
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({});
   const [operatingTime, setOperatingTime] =
     useState<OperatingTimeResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [, setIsFormReady] = useState(false);
 
   const [toggledDays, setToggledDays] = useState<{ [key: string]: boolean }>(
     initialToggledDays,
@@ -70,25 +75,33 @@ export const BusinessHourTab: React.FC = () => {
   const times = ['OpenTime', 'CloseTime'] as const;
   const storeId = localStorage.getItem(STORAGE.storeId) || '';
 
-  const watchedValues = watch();
-
   const handleToggle = (day: string, active: boolean) => {
     setToggledDays((prev) => ({
       ...prev,
       [day]: active,
     }));
   };
+
   const handleOnSubmit = async (data: FormValues) => {
     const dayOff = Object.keys(toggledDays)
       .filter((day) => toggledDays[day])
       .map((day) => day.toUpperCase());
 
-    const breakTime = `${data.breakTimeStart}~${data.breakTimeEnd}`;
+    const processedData = Object.fromEntries(
+      Object.entries(data)
+        .filter(([key]) => !['breakTimeStart', 'breakTimeEnd'].includes(key))
+        .map(([key, value]) => [key, value === '' ? null : value]),
+    );
 
-    const { breakTimeStart, breakTimeEnd, ...rest } = data;
+    let breakTime = null;
+    if (data.breakTimeStart && data.breakTimeEnd) {
+      breakTime = `${data.breakTimeStart}~${data.breakTimeEnd}`;
+    } else if (data.breakTimeStart === '' || data.breakTimeEnd === '') {
+      breakTime = null;
+    }
 
     const payload = {
-      ...rest,
+      ...processedData,
       dayOff,
       breakTime,
     };
@@ -98,25 +111,6 @@ export const BusinessHourTab: React.FC = () => {
       toast.success('변경사항이 성공적으로 저장되었습니다.');
     }
   };
-
-  const isFormValid = useCallback(() => {
-    for (const dayCode of dayCodes) {
-      if (!toggledDays[dayCode]) {
-        const openTime = getValues(`${dayCode}OpenTime`);
-        const closeTime = getValues(`${dayCode}CloseTime`);
-
-        // 값이 없는 경우
-        if (!openTime || !closeTime) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }, [toggledDays, getValues]);
-
-  useEffect(() => {
-    setIsFormReady(isFormValid());
-  }, [watchedValues, toggledDays, isFormValid]);
 
   useEffect(() => {
     const fetchOperatingTime = async () => {
@@ -193,6 +187,11 @@ export const BusinessHourTab: React.FC = () => {
                           key={`${dayCode}${time}`}
                           control={control}
                           name={`${dayCode}${time}`}
+                          rules={{
+                            required: !toggledDays[dayCode]
+                              ? '요일별 영업시간은 필수 입력 사항입니다.'
+                              : '',
+                          }}
                           render={({ field: { onChange, onBlur, value } }) => (
                             <TimeSelect
                               defaultValue={
@@ -209,6 +208,7 @@ export const BusinessHourTab: React.FC = () => {
                         {time === 'OpenTime' && <Slash>~</Slash>}
                       </>
                     ))}
+
                     <ToggleWrap>
                       휴무일
                       <ToggleSwitch
@@ -217,6 +217,13 @@ export const BusinessHourTab: React.FC = () => {
                       />
                     </ToggleWrap>
                   </ItemWrapFlex>
+                  {(errors[`${dayCode}OpenTime`] ||
+                    errors[`${dayCode}CloseTime`]) && (
+                    <GappedErrorMessage>
+                      {errors[`${dayCode}OpenTime`]?.message ||
+                        errors[`${dayCode}CloseTime`]?.message}
+                    </GappedErrorMessage>
+                  )}
                 </DayItem>
               </ul>
             ))}
@@ -267,11 +274,7 @@ export const BusinessHourTab: React.FC = () => {
             </MaxTimeWrap>
           </ItemWrap>
           <SaveBtnWrap>
-            {isFormValid() ? (
-              <Button type='submit'>저장하기</Button>
-            ) : (
-              <Button isDisabled>저장하기</Button>
-            )}
+            <Button type='submit'>저장하기</Button>
           </SaveBtnWrap>
         </form>
       </Wrap>

@@ -95,9 +95,9 @@ export const InformationList: React.FC<InformationListProps> = ({
   };
 
   useEffect(() => {
-    if (data) {
+    if (data && data.result.storeCustomUtilizationFieldList) {
       const initialRadioStates =
-        data.result.storeCustomReservationFieldList.reduce<{
+        data.result.storeCustomUtilizationFieldList.reduce<{
           [key: number]: string;
         }>((acc, item) => {
           acc[item.id] = item.type;
@@ -108,13 +108,19 @@ export const InformationList: React.FC<InformationListProps> = ({
   }, [data]);
 
   useEffect(() => {
-    if (data && data.result.storeCustomReservationFieldList.length > 0) {
-      const fieldType = data.result.storeCustomReservationFieldList[0].type;
+    if (
+      data &&
+      data.result.storeCustomUtilizationFieldList &&
+      data.result.storeCustomUtilizationFieldList.length > 0
+    ) {
+      const fieldType = data.result.storeCustomUtilizationFieldList[0].type;
       setSelectedRadio(fieldType);
     }
   }, [data]);
 
-  if (!data) return null;
+  if (!data || !data.result.storeCustomUtilizationFieldList) {
+    return null;
+  }
 
   const handleDelete = async (customid: number) => {
     if (modalOpen !== null) {
@@ -179,7 +185,7 @@ export const InformationList: React.FC<InformationListProps> = ({
   return (
     <LabelWrapper>
       <Label required={false} label='요청 정보 목록' />
-      {data.result.storeCustomReservationFieldList.map((item) => (
+      {data.result.storeCustomUtilizationFieldList.map((item) => (
         <ListWrapper key={item.id}>
           <ListContent>
             <FlexWrapper>

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { ErrorMessage } from 'components/ErrorMessage';
 
 export const Wrap = styled.div`
   padding: 4rem 0;
@@ -14,12 +15,12 @@ export const ItemWrap = styled.div`
 
 export const ItemWrapFlex = styled(ItemWrap)`
   position: relative;
-  width: 59rem;
   display: flex;
+  align-items: center;
 `;
 
 export const DayItem = styled.li`
-  margin-bottom: 2.4rem;
+  margin-bottom: 2.5rem;
   & + & {
     margin-top: 2.4em;
   }
@@ -37,7 +38,6 @@ export const Slash = styled.div`
   display: flex;
   align-items: center;
   padding: 0 1.2rem;
-
   font-size: 1.8rem;
   font-weight: 600;
   line-height: 2.4rem;
@@ -63,4 +63,8 @@ export const ToggleWrap = styled.div`
   font-size: 1.7rem;
   font-style: normal;
   font-weight: 400;
+`;
+
+export const GappedErrorMessage = styled(ErrorMessage)`
+  margin-top: 1.4rem;
 `;

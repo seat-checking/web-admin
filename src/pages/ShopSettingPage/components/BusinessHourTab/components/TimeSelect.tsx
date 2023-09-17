@@ -5,7 +5,7 @@ import type { Dayjs } from 'dayjs';
 import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 
 interface TimeSelectProps {
-  defaultValue?: string | null; // '23:30' 형태
+  defaultValue?: string | null;
   onChange?: (event: string) => void;
   onBlur?: (event: string) => void;
   selected?: string; //
@@ -18,7 +18,6 @@ interface TimeSelectProps {
 export const TimeSelect: React.FC<TimeSelectProps> = ({
   defaultValue,
   onChange: propOnChange,
-  onBlur: propOnBlur,
   selected,
   disabled,
 }) => {
@@ -28,6 +27,7 @@ export const TimeSelect: React.FC<TimeSelectProps> = ({
       propOnChange(timeString);
     }
   };
+
   return (
     <StyledTimePicker
       use12Hours={false}
@@ -53,7 +53,16 @@ export const TimeSelect: React.FC<TimeSelectProps> = ({
 };
 
 const StyledTimePicker = styled(TimePicker)`
+  // 다른 스타일들
+
+  .ant-picker-suffix {
+    position: relative;
+  }
+
   .ant-picker-clear {
-    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.5rem;
   }
 `;
