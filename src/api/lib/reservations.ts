@@ -28,6 +28,7 @@ export type ReservationStatus = 'processed' | 'pending' | 'all';
 export interface ReservationsRequest {
   page: number;
   reservationStatus: ReservationStatus;
+  shopId: number;
 }
 
 export interface ProcessReservationRequest {
@@ -50,9 +51,10 @@ export const processReservation = async ({
 export const getReservations = async ({
   page = 1,
   reservationStatus,
+  shopId,
 }: ReservationsRequest): Promise<ReservationResponse> => {
   const response = await axiosClient.get(
-    `${apiPrefix}/${storeId}/${reservationStatus}-list`,
+    `${apiPrefix}/${shopId}/${reservationStatus}-list`,
     {
       params: {
         page,
