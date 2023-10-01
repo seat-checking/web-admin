@@ -59,9 +59,7 @@ export class ShopApi {
   static getLayout = async (
     spaceId: number,
   ): Promise<GetShopLayoutResponse> => {
-    const response = await axiosClient.get(
-      `${this.apiPrefix}/spaces/seats/${spaceId}`,
-    );
+    const response = await axiosClient.get(`/stores/spaces/seats/${spaceId}`);
     return response.data.result;
   };
 

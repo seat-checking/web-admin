@@ -189,7 +189,7 @@ export const LayoutSettingPage: React.FC = () => {
 const initialLayouts = (shop: ShopLayout) => {
   const tables = shop?.tableList.map(({ i, x, y, w, h }) => {
     return {
-      i,
+      i: String(i),
       x,
       y,
       w,
@@ -201,7 +201,7 @@ const initialLayouts = (shop: ShopLayout) => {
   });
   const chairs = shop?.chairList.map(({ i, x, y, manageId }) => {
     return {
-      i,
+      i: String(i),
       x,
       y,
       w: 1,
