@@ -22,6 +22,7 @@ export interface ReservationResponse {
   size: number;
   hasNext: boolean;
 }
+export type ReservationResponseType = ReservationResponse | null;
 
 export type ReservationStatus = 'processed' | 'pending' | 'all';
 
@@ -52,7 +53,7 @@ export const getReservations = async ({
   page = 1,
   reservationStatus,
   shopId,
-}: ReservationsRequest): Promise<ReservationResponse> => {
+}: ReservationsRequest): Promise<ReservationResponseType> => {
   const response = await axiosClient.get(
     `${apiPrefix}/${shopId}/${reservationStatus}-list`,
     {
@@ -64,12 +65,7 @@ export const getReservations = async ({
     },
   );
   if (response.status === 204) {
-    return {
-      content: [],
-      page: 1,
-      size: 1,
-      hasNext: false,
-    };
+    return null;
   }
 
   return response.data.result;

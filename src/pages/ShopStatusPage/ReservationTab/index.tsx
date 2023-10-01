@@ -47,19 +47,23 @@ export const ReservationTab: React.FC = () => {
     <>
       <StatusTabs activeTab={activeTab} onClickTab={changeTab} />
       <ContentWrap>
-        {reservations?.pages.map((group) => {
-          return (
-            <Fragment key={group.page}>
-              {group?.content.map((reservation) => (
-                <ReservationCard
-                  key={reservation.id}
-                  currentPageIndex={group.page}
-                  {...reservation}
-                />
-              ))}
-            </Fragment>
-          );
-        })}
+        {reservations.pages[0] == null ? (
+          <div>데이터가 없습니다.</div>
+        ) : (
+          reservations.pages.map((group) => {
+            return (
+              <Fragment key={group?.page}>
+                {group?.content.map((reservation) => (
+                  <ReservationCard
+                    key={reservation.id}
+                    currentPageIndex={group.page}
+                    {...reservation}
+                  />
+                ))}
+              </Fragment>
+            );
+          })
+        )}
         {isFetching && <LoadingSpinner />}
         <div ref={ref} />
       </ContentWrap>
