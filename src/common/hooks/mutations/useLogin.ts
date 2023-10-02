@@ -1,14 +1,14 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import type { LoginResponse } from 'api/lib/auth';
 import type { Permission } from 'common/utils/auth';
 import type { LoginForm } from 'common/utils/types';
 import { AuthApi } from 'api/lib/auth';
-import { setAccessToken, setPermissions } from 'common/utils/auth';
-import { STORAGE } from 'common/utils/constants';
+import { useAuthActions } from 'common/stores/authStore';
 
 export const useLogin = () => {
   const navigate = useNavigate();
+  const { setAccessToken, setPermissions, setSelectedShop } = useAuthActions();
 
   return useMutation({
     mutationFn: (loginform: LoginForm) => {
@@ -29,10 +29,7 @@ export const useLogin = () => {
       const permissions: Permission = JSON.parse(permissionByMenu);
       setPermissions(permissions);
 
-      localStorage.setItem(STORAGE.storeId, String(storeId));
-      localStorage.setItem(STORAGE.storeName, storeName);
-      localStorage.setItem(STORAGE.mainImage, mainImage || '');
-      localStorage.setItem(STORAGE.introduction, introduction || '');
+      setSelectedShop({ storeId, storeName, mainImage, introduction });
 
       navigate('/');
     },
