@@ -9,6 +9,7 @@ export const PATH = {
 } as const;
 
 export const STORAGE = {
+  auth: 'auth',
   accessToken: 'accessToken',
   storeId: 'storeId',
   storeName: 'storeName',
