@@ -39,3 +39,14 @@ export interface EditShopRequest {
   spaceId: number;
   layout: ShopLayout;
 }
+
+interface ChairId {
+  id: number;
+}
+
+export interface CurrentlyInUseResponse {
+  isThisSpaceCurrentlyInUse: boolean;
+  isThisSpaceCurrentlyHolding: boolean;
+  allChairsCurrentlyInUse: ChairId[];
+  allChairsCurrentlyHolding: ChairId[];
+}

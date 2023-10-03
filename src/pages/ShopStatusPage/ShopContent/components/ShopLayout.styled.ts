@@ -58,6 +58,7 @@ export const ChairBorder = styled.div<{
 export const Chair = styled.div<{
   isClickable?: boolean;
   isSelected?: boolean;
+  isUsing?: boolean;
 }>`
   ${flexSet()};
   background-color: ${(props): string => props.theme.palette.grey[100]};
@@ -74,6 +75,13 @@ export const Chair = styled.div<{
   font-size: ${CHAIR_SIZE_PX - 1}px;
   font-weight: 400;
   color: ${({ theme }) => theme.palette.grey[400]};
+
+  ${({ isUsing }) =>
+    isUsing &&
+    css`
+      background-color: ${({ theme }) => theme.palette.primary.orange};
+      color: white;
+    `}
 
   ${({ isClickable }) =>
     isClickable &&

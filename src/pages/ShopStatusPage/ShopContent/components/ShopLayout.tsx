@@ -1,4 +1,7 @@
-import type { GetShopLayoutResponse } from 'api/shop/types';
+import type {
+  CurrentlyInUseResponse,
+  GetShopLayoutResponse,
+} from 'api/shop/types';
 import {
   Chair,
   ChairBorder,
@@ -9,13 +12,25 @@ import {
 interface ShopLayoutProps {
   layout: GetShopLayoutResponse | undefined;
   isLoading: boolean;
+  inUse: CurrentlyInUseResponse;
 }
 
 /**
  * 가게 좌석 배치도 영역
  */
 
-export const ShopLayout: React.FC<ShopLayoutProps> = ({ layout }) => {
+export const ShopLayout: React.FC<ShopLayoutProps> = ({ layout, inUse }) => {
+  const isUsingNow = (chairId: number) =>
+    inUse.allChairsCurrentlyInUse.findIndex(({ id }) => id === chairId) !== -1;
+
+  const chairsDom = () => {
+    return layout?.chairList.map((chair) => (
+      <ChairBorder key={chair.i} x={chair.x} y={chair.y}>
+        <Chair isUsing={isUsingNow(+chair.i)}>{chair.manageId}</Chair>
+      </ChairBorder>
+    ));
+  };
+
   return (
     <GridWrap $height={layout?.height}>
       {layout?.tableList.map((table) => (
@@ -28,11 +43,7 @@ export const ShopLayout: React.FC<ShopLayoutProps> = ({ layout }) => {
         />
       ))}
 
-      {layout?.chairList.map((chair) => (
-        <ChairBorder key={chair.i} x={chair.x} y={chair.y}>
-          <Chair>{chair.manageId}</Chair>
-        </ChairBorder>
-      ))}
+      {chairsDom()}
     </GridWrap>
   );
 };
