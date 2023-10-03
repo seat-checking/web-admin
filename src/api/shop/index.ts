@@ -9,8 +9,6 @@ import type { DropdownShop, ShopInfoForm } from 'common/utils/types';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { axiosClient } from 'api/apiClient';
 
-import { STORAGE } from 'common/utils/constants';
-
 export const addShop = async (shopInfoForm: ShopInfoForm) => {
   const response = await axiosClient.post(
     '/stores/admins/new-business-information',
@@ -47,10 +45,9 @@ export class ShopApi {
   static readonly apiPrefix = '/stores/admins';
 
   // 가게의 모든 스페이스 기본 정보 조회
-  static getSpaceList = async (): Promise<SpaceType[]> => {
-    const storeId = localStorage.getItem(STORAGE.storeId);
+  static getSpaceList = async (shopId: number | null): Promise<SpaceType[]> => {
     const response = await axiosClient.get(
-      `${this.apiPrefix}/spaces/${storeId}`,
+      `${this.apiPrefix}/spaces/${shopId}`,
     );
     return response.data.result;
   };
@@ -64,11 +61,12 @@ export class ShopApi {
   };
 
   // 스페이스 생성
-  static createShopLayout = async (layout: ShopLayout): Promise<number> => {
-    const storeId = localStorage.getItem(STORAGE.storeId);
-
+  static createShopLayout = async (
+    shopId: number,
+    layout: ShopLayout,
+  ): Promise<number> => {
     const response = await axiosClient.post(
-      `${this.apiPrefix}/spaces/${storeId}`,
+      `${this.apiPrefix}/spaces/${shopId}`,
       layout,
     );
     return response.data.result.storeSpaceId;

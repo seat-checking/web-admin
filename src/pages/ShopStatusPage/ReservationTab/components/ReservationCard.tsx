@@ -11,6 +11,7 @@ import type {
 } from 'api/lib/reservations';
 import { ReactComponent as ChevronDownIcon } from 'assets/icons/chevron-down.svg';
 import { useProcessReservation } from 'common/hooks/mutations/useProcessReservation';
+import { useSelectedShop } from 'common/stores/authStore';
 import { queryKeys } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { flexSet } from 'styles/mixin';
@@ -37,6 +38,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
   const theme = useTheme();
   const [isOpened, setIsOpened] = useState(false);
   const { mutate: processReservationMutate } = useProcessReservation();
+  const { storeId: shopId } = useSelectedShop();
 
   const handleToggleDetail = () => {
     setIsOpened((prev) => !prev);
@@ -53,7 +55,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
     isApproved,
   }: ProcessReservationRequest) => {
     processReservationMutate(
-      { reservationId, isApproved },
+      { reservationId, isApproved, shopId },
       {
         onSuccess() {
           queryClient.setQueryData(
@@ -127,6 +129,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
                   handleProcessReservation({
                     reservationId: id,
                     isApproved: false,
+                    shopId,
                   })
                 }
               >
@@ -137,6 +140,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
                   handleProcessReservation({
                     reservationId: id,
                     isApproved: true,
+                    shopId,
                   })
                 }
               >

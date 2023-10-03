@@ -1,19 +1,16 @@
 import { STORAGE } from 'common/utils/constants';
 
 export const getAccessToken = () => {
-  const accessToken = localStorage.getItem(STORAGE.accessToken);
-  return accessToken;
+  const authStorage = JSON.parse(localStorage.getItem(STORAGE.auth) || '');
+  if (authStorage === '') return undefined;
+  return authStorage.state.accessToken;
 };
 
 export const setAccessToken = (accessToken: string) => {
-  localStorage.setItem(STORAGE.accessToken, accessToken);
+  const authStorage = JSON.parse(localStorage.getItem(STORAGE.auth) || '');
+  authStorage.state.accessToken = accessToken;
+  localStorage.setItem(STORAGE.auth, JSON.stringify(authStorage));
 };
-
-type MenuType =
-  | 'storeStatus'
-  | 'storeSetting'
-  | 'storeStatistics'
-  | 'seatSetting';
 
 export interface Permission {
   storeStatus: boolean;
@@ -21,20 +18,6 @@ export interface Permission {
   storeStatistics: boolean; // not using
   seatSetting: boolean;
 }
-
-export const getPermission = (menu: MenuType) => {
-  return localStorage.getItem(menu) === 'true';
-};
-
-export const setPermissions = (permissions: Permission) => {
-  localStorage.setItem('storeStatus', permissions.storeStatus.toString());
-  localStorage.setItem('storeSetting', permissions.storeSetting.toString());
-  localStorage.setItem(
-    'storeStatistics',
-    permissions.storeStatistics.toString(),
-  );
-  localStorage.setItem('seatSetting', permissions.seatSetting.toString());
-};
 
 export const isAuthenticated = () => {
   const token = getAccessToken();

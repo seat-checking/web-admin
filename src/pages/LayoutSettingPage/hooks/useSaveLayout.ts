@@ -2,6 +2,7 @@ import type { ReservationUnit, ShopLayout } from 'api/shop/types';
 import type { CustomItemLayout } from 'pages/LayoutSettingPage/utils/types';
 import { useCreateSpace } from 'common/hooks/mutations/useCreateSpace';
 import { useEditLayout } from 'common/hooks/mutations/useEditLayout';
+import { useSelectedShop } from 'common/stores/authStore';
 import { TEMPORARY_SPACE_ID } from 'common/utils/constants';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
@@ -54,15 +55,23 @@ export const useSaveLayout = () => {
   const { mutate: editLayoutMutate } = useEditLayout();
   const { mutate: createSpaceMutate } = useCreateSpace();
 
+  const { storeId: shopId } = useSelectedShop();
   const { spaceId } = useSpaceId();
   const spaceName = useSpaceName();
   const reservationUnit = useReservationUnit();
 
   const handleSave = () => {
+    if (!shopId) return;
     if (spaceId === TEMPORARY_SPACE_ID) {
-      createSpaceMutate(
-        convertDataForServer(layout, height, spaceName, reservationUnit),
-      );
+      createSpaceMutate({
+        layout: convertDataForServer(
+          layout,
+          height,
+          spaceName,
+          reservationUnit,
+        ),
+        shopId,
+      });
       return;
     }
     editLayoutMutate({

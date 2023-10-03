@@ -24,7 +24,7 @@ import {
 interface StaffRegistrationProps {
   email: string;
   name: string;
-  storeId: string;
+  storeId: number | null;
   onEmployeeAdded: () => void;
 }
 
@@ -56,7 +56,7 @@ export const StaffRegistration: React.FC<StaffRegistrationProps> = ({
       };
 
       const registrationData = {
-        storeId,
+        storeId: String(storeId),
         email,
         permissionByMenu,
       };

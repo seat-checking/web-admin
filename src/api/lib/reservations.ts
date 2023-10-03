@@ -1,7 +1,6 @@
 import { axiosClient } from 'api/apiClient';
 
 const apiPrefix = '/reservations/admins';
-const storeId = localStorage.getItem('storeId');
 
 export type ReservationStatusType = '거절' | '취소' | '대기' | '승인';
 export interface Reservation {
@@ -29,20 +28,22 @@ export type ReservationStatus = 'processed' | 'pending' | 'all';
 export interface ReservationsRequest {
   page: number;
   reservationStatus: ReservationStatus;
-  shopId: number;
+  shopId: number | null;
 }
 
 export interface ProcessReservationRequest {
   reservationId: number;
   isApproved: boolean;
+  shopId: number | null;
 }
 
 export const processReservation = async ({
   reservationId,
   isApproved,
+  shopId,
 }: ProcessReservationRequest) => {
   const response = await axiosClient.post(
-    `${apiPrefix}/${storeId}/${
+    `${apiPrefix}/${shopId}/${
       isApproved ? 'approve' : 'reject'
     }/?reservation-id=${reservationId}`,
   );

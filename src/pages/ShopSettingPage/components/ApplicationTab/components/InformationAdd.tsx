@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useTheme } from 'styled-components';
 import type React from 'react';
 import { requestInformation } from 'api/store/store';
-import { STORAGE } from 'common/utils/constants';
+import { useSelectedShop } from 'common/stores/authStore';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
@@ -46,6 +46,7 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
       contentGuide: '',
     },
   ]);
+  const { storeId } = useSelectedShop();
 
   const handleRadioChange = (fieldId: number, value: string) => {
     const selectedType = value === 'option1' ? '자유 입력' : '선택지 제공';
@@ -93,7 +94,6 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
     };
 
   const handleSubmit = async () => {
-    const storeId = localStorage.getItem(STORAGE.storeId);
     if (!storeId) {
       return;
     }
@@ -106,7 +106,7 @@ export const InformationAdd: React.FC<InformationAddProps> = ({
 
     try {
       const response = await requestInformation({
-        storeId,
+        storeId: String(storeId),
         data: formattedData[0],
       });
       console.log(response);

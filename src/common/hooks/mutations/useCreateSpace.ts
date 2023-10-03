@@ -11,8 +11,14 @@ export const useCreateSpace = () => {
   const { setChange } = useChange();
 
   return useMutation({
-    mutationFn: (layout: ShopLayout) => {
-      return ShopApi.createShopLayout(layout);
+    mutationFn: ({
+      layout,
+      shopId,
+    }: {
+      layout: ShopLayout;
+      shopId: number;
+    }) => {
+      return ShopApi.createShopLayout(shopId, layout);
     },
     onSuccess(createdSpaceId) {
       queryClient.invalidateQueries({

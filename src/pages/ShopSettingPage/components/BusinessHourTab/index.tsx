@@ -4,7 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import type { DayOfWeek, OperatingTimeResponse } from 'api/store/store';
 import { getOperatingTime, patchOperatingTime } from 'api/store/store';
-import { STORAGE } from 'common/utils/constants';
+import { useSelectedShop } from 'common/stores/authStore';
 import { Button } from 'components/Button';
 import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Label } from 'components/Label';
@@ -73,7 +73,7 @@ export const BusinessHourTab: React.FC = () => {
   );
   const days = ['월', '화', '수', '목', '금', '토', '일'];
   const times = ['OpenTime', 'CloseTime'] as const;
-  const storeId = localStorage.getItem(STORAGE.storeId) || '';
+  const { storeId } = useSelectedShop();
 
   const handleToggle = (day: string, active: boolean) => {
     setToggledDays((prev) => ({
@@ -106,7 +106,10 @@ export const BusinessHourTab: React.FC = () => {
       breakTime,
     };
 
-    const response = await patchOperatingTime({ storeId, ...payload });
+    const response = await patchOperatingTime({
+      storeId: String(storeId),
+      ...payload,
+    });
     if (response.isSuccess) {
       toast.success('변경사항이 성공적으로 저장되었습니다.');
     }
@@ -116,7 +119,7 @@ export const BusinessHourTab: React.FC = () => {
     const fetchOperatingTime = async () => {
       setIsLoading(true);
       try {
-        const response = await getOperatingTime({ storeId });
+        const response = await getOperatingTime({ storeId: String(storeId) });
 
         if (response.isSuccess) {
           const resData = response.result;

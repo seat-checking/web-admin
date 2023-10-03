@@ -1,10 +1,11 @@
 import { isAxiosError } from 'axios';
 
 import { useForm } from 'react-hook-form';
-import type { ErrorResponse } from 'api/lib/auth';
+import type { ErrorResponse, LoginResponse } from 'api/lib/auth';
 
 import type { SubmitHandler } from 'react-hook-form';
 import { useLogin } from 'common/hooks/mutations/useLogin';
+
 import { PATH } from 'common/utils/constants';
 import { Button } from 'components/Button';
 

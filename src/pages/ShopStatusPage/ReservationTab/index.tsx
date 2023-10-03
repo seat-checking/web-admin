@@ -2,7 +2,7 @@ import { Fragment, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useGetReservations } from 'common/hooks/queries/useGetReservations';
 import { useTab } from 'common/hooks/useTab';
-import { STORAGE } from 'common/utils/constants';
+import { useSelectedShop } from 'common/stores/authStore';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { ReservationCard } from 'pages/ShopStatusPage/ReservationTab/components/ReservationCard';
 import { StatusTabs } from 'pages/ShopStatusPage/ReservationTab/components/StatusTabs';
@@ -18,7 +18,8 @@ const reservationStatusPerTab = {
  * 예약 관리 탭
  */
 export const ReservationTab: React.FC = () => {
-  const shopId = Number(localStorage.getItem(STORAGE.storeId));
+  const { storeId } = useSelectedShop();
+
   const [ref, inView] = useInView();
   const { activeTab, changeTab } = useTab();
 
@@ -31,7 +32,7 @@ export const ReservationTab: React.FC = () => {
     status,
     isFetching,
     error,
-  } = useGetReservations(shopId, currentReservationStatusPerTab);
+  } = useGetReservations(storeId, currentReservationStatusPerTab);
 
   useEffect(() => {
     if (inView) {
