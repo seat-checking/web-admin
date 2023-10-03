@@ -20,19 +20,14 @@ interface AuthStoreState {
   accessToken: string | null;
   selectedShop: ShopInformation;
   permissions: Permission | null;
-  actions: {
-    getAccessToken: () => string | null;
-    getSelectedShop: () => ShopInformation | null;
-    getPermissions: () => Permission | null;
-    setAccessToken: (newAccessToken: string) => void;
-    setSelectedShop: (shopInformation: ShopInformation) => void;
-    setPermissions: (permissions: Permission) => void;
-  };
+  setAccessToken: (newAccessToken: string) => void;
+  setSelectedShop: (shopInformation: ShopInformation) => void;
+  setPermissions: (permissions: Permission) => void;
 }
 
 export const useAuthStore = create(
   persist<AuthStoreState>(
-    (set, get) => ({
+    (set) => ({
       accessToken: null,
       selectedShop: {
         storeId: null,
@@ -41,19 +36,14 @@ export const useAuthStore = create(
         introduction: null,
       },
       permissions: null,
-      actions: {
-        getAccessToken: () => get().accessToken,
-        getSelectedShop: () => get().selectedShop,
-        getPermissions: () => get().permissions,
-        setAccessToken: (newAccessToken: string) => {
-          set(() => ({ accessToken: newAccessToken }));
-        },
-        setSelectedShop: (shopInformation: ShopInformation) => {
-          set(() => ({ selectedShop: shopInformation }));
-        },
-        setPermissions: (newPermissions: Permission) => {
-          set(() => ({ permissions: newPermissions }));
-        },
+      setAccessToken: (newAccessToken: string) => {
+        set(() => ({ accessToken: newAccessToken }));
+      },
+      setSelectedShop: (shopInformation: ShopInformation) => {
+        set(() => ({ selectedShop: shopInformation }));
+      },
+      setPermissions: (newPermissions: Permission) => {
+        set(() => ({ permissions: newPermissions }));
       },
     }),
     {
@@ -70,4 +60,9 @@ export const useSelectedShop = () =>
 
 export const usePermissions = () => useAuthStore((state) => state.permissions);
 
-export const useAuthActions = () => useAuthStore((state) => state.actions);
+export const useAuthActions = () =>
+  useAuthStore((state) => ({
+    setAccessToken: state.setAccessToken,
+    setSelectedShop: state.setSelectedShop,
+    setPermissions: state.setPermissions,
+  }));
