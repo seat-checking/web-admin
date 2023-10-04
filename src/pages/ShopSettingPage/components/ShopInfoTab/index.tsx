@@ -139,6 +139,18 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
           )}
         </ListItem>
         <ListItem>
+          <Input
+            label='가게 전화번호'
+            placeholder='(ex. 010-1234-5678)'
+            {...register('telNum', {
+              required: '가게 전화번호는 필수 입력입니다.',
+            })}
+          />
+          {errors.telNum && (
+            <GappedErrorMessage>{errors.telNum?.message}</GappedErrorMessage>
+          )}
+        </ListItem>
+        <ListItem>
           <Label label='가게 유형' required={false} />
           <RadioRow>
             <Radio
@@ -211,7 +223,8 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
         <ListItem>
           <Input
             label='한 줄 소개'
-            placeholder='가게의 소개글을 작성해주세요. (최대 N자 이내)'
+            maxLength={30}
+            placeholder='가게의 소개글을 작성해주세요. (최대 30자 이내)'
             {...register('introduction', {
               required: '한 줄 소개는 필수 입력입니다.',
             })}

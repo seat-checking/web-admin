@@ -1,3 +1,4 @@
+import type { ShopInformationForm } from 'common/utils/types';
 import type { ImgFile } from 'pages/ShopSettingPage/components/ShopInfoTab';
 
 export interface ToggleCloseTodayRequest {
@@ -42,12 +43,6 @@ export interface EditShopLayoutRequest {
   layout: ShopLayout;
 }
 
-export interface EditShopInformationRequest {
+export interface EditShopInformationRequest extends ShopInformationForm {
   shopId: number;
-  storeName: string;
-  address: string;
-  detailAddress: string;
-  category: '음식점' | '카페' | '모임';
-  introduction: string;
-  storeImages: (string | ImgFile)[];
 }

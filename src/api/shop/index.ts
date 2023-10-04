@@ -70,7 +70,7 @@ export const editShopInformation = async (
   formData.append('detailAddress', params.detailAddress);
   formData.append('category', params.category);
   formData.append('introduction', params.introduction);
-  formData.append('telNum', '0123');
+  formData.append('telNum', params.telNum);
   params.storeImages.forEach((image) => {
     if (typeof image === 'string') {
       formData.append(`originImages`, image);
