@@ -104,7 +104,7 @@ export const GlobalNavigationBar: React.FC = () => {
           )}
           {getPermission('storeSetting') && (
             <NavigationItem
-              to={`/${PATH.setting}/1`}
+              to={`/${PATH.setting}`}
               label='가게 설정'
               activeIcon={SettingStoreActive}
               defaultIcon={SettingStore}

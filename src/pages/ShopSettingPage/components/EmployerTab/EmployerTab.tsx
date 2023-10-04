@@ -93,7 +93,7 @@ export const EmployerTab: React.FC = () => {
         (employee) => employee.id !== employeeId,
       );
       setEmployeeList(updatedEmployeeList);
-      navigate(`/${PATH.setting}/1`);
+      navigate(`/${PATH.setting}`);
     } catch (error) {
       console.error(error);
     }
