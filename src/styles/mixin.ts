@@ -41,3 +41,19 @@ export const ellipsisText = (lineCount: number) => css`
   -webkit-line-clamp: ${lineCount};
   -webkit-box-orient: vertical;
 `;
+
+// 버튼에 마우스 오버 시 어두운 배경색 나오게 함
+export const darkerOnHover = (sizeInRem: number) => css`
+  position: relative;
+  :hover::after {
+    display: inline-block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: ${sizeInRem}rem;
+    height: ${sizeInRem}rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 20%;
+  }
+`;
