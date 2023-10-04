@@ -72,8 +72,10 @@ export const Chair = styled.div<{
   transition: all 0.1s ease;
   cursor: pointer;
 
-  font-size: ${CHAIR_SIZE_PX - 1}px;
+  font-size: 0.9rem;
   font-weight: 400;
+  user-select: none; // 텍스트 선택 막음
+
   color: ${({ theme }) => theme.palette.grey[400]};
 
   ${({ isUsing }) =>

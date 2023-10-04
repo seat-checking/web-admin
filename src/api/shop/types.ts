@@ -50,3 +50,9 @@ export interface CurrentlyInUseResponse {
   allChairsCurrentlyInUse: ChairId[];
   allChairsCurrentlyHolding: ChairId[];
 }
+
+export interface GetSeatStatisticsResponse {
+  totalNumberOfSeats: number;
+  numberOfRemainingSeats: number;
+  averageSeatUsageMinute: number;
+}

@@ -1,5 +1,6 @@
 import type {
   EditShopRequest,
+  GetSeatStatisticsResponse,
   GetShopLayoutResponse,
   ShopLayout,
   ToggleCloseTodayRequest,
@@ -39,6 +40,15 @@ export const getShopPermission = async (
   const response = await axiosClient.get(`/stores/admins/permission/${shopId}`);
 
   return JSON.parse(response.data.result.permissionByMenu);
+};
+
+export const getSeatStatistics = async (
+  shopId: number | null,
+): Promise<GetSeatStatisticsResponse> => {
+  const response = await axiosClient.get(
+    `/stores/seats/statistics_information/${shopId}`,
+  );
+  return response.data.result;
 };
 
 export class ShopApi {
