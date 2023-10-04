@@ -71,3 +71,15 @@ export const getReservations = async ({
 
   return response.data.result;
 };
+
+export const forceCheckout = async (chairId: number) => {
+  const response = await axiosClient.post(
+    `/utilization/admins/forced_check_out/${chairId}`,
+    {
+      params: {
+        'utilization-id': chairId,
+      },
+    },
+  );
+  return response.data;
+};

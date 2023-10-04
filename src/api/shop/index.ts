@@ -1,4 +1,5 @@
 import type {
+  CurrentlyInUseResponse,
   EditShopRequest,
   GetSeatStatisticsResponse,
   GetShopLayoutResponse,
@@ -47,6 +48,15 @@ export const getSeatStatistics = async (
 ): Promise<GetSeatStatisticsResponse> => {
   const response = await axiosClient.get(
     `/stores/seats/statistics_information/${shopId}`,
+  );
+  return response.data.result;
+};
+
+export const getCurrentlyInUse = async (
+  spaceId: number,
+): Promise<CurrentlyInUseResponse> => {
+  const response = await axiosClient.get(
+    `/utilization/seat/current-in-use/${spaceId}`,
   );
   return response.data.result;
 };

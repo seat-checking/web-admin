@@ -29,6 +29,7 @@ export const queryKeys = {
   GET_OWNED_SHOPS: 'ownedShops',
   GET_RESERVATIONS: 'reservations',
   GET_SEAT_STATISTICS: 'spaceStatistics',
+  GET_CURRENTLY_IN_USE: 'currentlyInUse',
 };
 
 export const TEMPORARY_SPACE_ID = -1;
