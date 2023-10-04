@@ -61,6 +61,7 @@ export const SpaceAddEditModal: React.FC<SpaceAddEditModalProps> = ({
 
   const handleChangeUnit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const unit = e.currentTarget.name;
+
     setReservationUnits({
       ...reservationUnits,
       [unit]: e.currentTarget.checked,

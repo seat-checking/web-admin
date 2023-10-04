@@ -1,4 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
 import styled, { useTheme } from 'styled-components';
+import { useSelectedShop } from 'common/stores/authStore';
+import { queryKeys } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
 import { useSaveLayout } from 'pages/LayoutSettingPage/hooks/useSaveLayout';
@@ -7,6 +10,7 @@ import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 interface ExitConfirmModalProps {
   onComplete?: () => void;
   onClose: () => void;
+  clearSpaces: () => void;
 }
 /**
  * 저장하지 않았을 때 뜨는 확인 모달
@@ -14,13 +18,18 @@ interface ExitConfirmModalProps {
 export const ExitConfirmModal: React.FC<ExitConfirmModalProps> = ({
   onComplete,
   onClose,
+  clearSpaces,
 }) => {
   const theme = useTheme();
   const { setChange } = useChange();
   const saveLayout = useSaveLayout();
 
+  const queryClient = useQueryClient();
+  const { storeId: shopId } = useSelectedShop();
+
   const handleCancel = () => {
     setChange(false);
+    clearSpaces();
     onComplete?.();
 
     onClose();
@@ -28,6 +37,7 @@ export const ExitConfirmModal: React.FC<ExitConfirmModalProps> = ({
 
   const handleSave = () => {
     setChange(false);
+    queryClient.invalidateQueries([queryKeys.GET_SPACES, shopId]);
     onComplete?.();
 
     saveLayout();
