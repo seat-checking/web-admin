@@ -64,8 +64,25 @@ export const ResizableWrap = styled(ResizableBox)<{
   border-left: 2px solid ${({ theme }) => theme.palette.grey[200]};
   border-right: 2px solid ${({ theme }) => theme.palette.grey[200]};
   border-radius: 0 0 12px 12px;
+
+  transition: height 0.2s ease;
 `;
 
-export const GridWrap = styled.div`
-  background-color: skyblue;
+export const GridWrap = styled.div<{
+  $width?: number;
+}>`
+  background-color: white;
+
+  width: ${({ $width }) => $width && $width + 'px'};
+
+  box-sizing: content-box;
+  padding-top: 4px;
+  padding-bottom: 4px;
+
+  border-bottom: 2px solid ${({ theme }) => theme.palette.grey[200]};
+  border-left: 2px solid ${({ theme }) => theme.palette.grey[200]};
+  border-right: 2px solid ${({ theme }) => theme.palette.grey[200]};
+  border-radius: 0 0 12px 12px;
+
+  transition: height 0.2s ease;
 `;

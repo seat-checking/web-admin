@@ -10,12 +10,14 @@ import type { ResizeCallbackData } from 'react-resizable';
 import { useGetSpaceLayout } from 'common/hooks/queries/useGetSpaceLayout';
 import { useTab } from 'common/hooks/useTab';
 import { NO_SPACE_ID } from 'common/utils/constants';
+import { LoadingSpinner } from 'components/LoadingSpinner';
 import { Tabs } from 'components/Tabs.tsx';
 import {
   Wrap,
   RightWrap,
   StyledSideBar,
   ResizableWrap,
+  GridWrap,
 } from 'pages/LayoutSettingPage/LayoutSettingPage.styled';
 import { GridBackground } from 'pages/LayoutSettingPage/components/GridBackground';
 import { SeatArrangementTab } from 'pages/LayoutSettingPage/components/SeatArrangementTab';
@@ -52,7 +54,8 @@ export const LayoutSettingPage: React.FC = () => {
 
   const { setChange, isChanged } = useChange();
 
-  const { data: spaceLayout } = useGetSpaceLayout(spaceId);
+  const { data: spaceLayout, isLoading: isLayoutLoading } =
+    useGetSpaceLayout(spaceId);
 
   const { activeTab, changeTab } = useTab();
   const { minRowCnt, changeMinRowCnt, findMinRowCnt } = useShopMinHeight();
@@ -174,12 +177,16 @@ export const LayoutSettingPage: React.FC = () => {
             axis={undefined}
             onResize={handleResize}
           >
-            <GridBackground activeTab={activeTab} />
+            {isLayoutLoading ? (
+              <LoadingSpinner />
+            ) : (
+              <GridBackground activeTab={activeTab} />
+            )}
           </ResizableWrap>
         ) : (
-          <ResizableWrap as='div' $width={TABLE_SIZE_PX * COLUMN_CNT}>
+          <GridWrap $width={TABLE_SIZE_PX * COLUMN_CNT}>
             <GridBackground activeTab={activeTab} />
-          </ResizableWrap>
+          </GridWrap>
         )}
       </RightWrap>
     </Wrap>

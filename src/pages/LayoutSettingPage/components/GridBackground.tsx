@@ -166,4 +166,5 @@ const ShopGridBackground = styled(GridLayout)<{
   }};
 
   height: ${({ $height }) => $height + 'px'};
+  transition: height 0.2s ease;
 `;
