@@ -49,6 +49,7 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
     register,
     handleSubmit,
     formState: { errors },
+    setError,
     control,
   } = useForm<ShopInformationForm>({
     defaultValues: shopInformation,
@@ -69,6 +70,13 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
   ) => {
     const { files } = event.target;
     if (files && files.length > 0) {
+      if (files.length + prevImgs.length > 10) {
+        setError('storeImages', {
+          type: 'custom',
+          message: '최대 10장의 이미지를 등록할 수 있습니다.',
+        });
+        return;
+      }
       const fileList = Array.prototype.map.call<
         FileList,
         [(file: File) => ImgFile],
