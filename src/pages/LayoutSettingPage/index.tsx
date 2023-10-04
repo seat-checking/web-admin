@@ -54,7 +54,7 @@ export const LayoutSettingPage: React.FC = () => {
 
   const { setChange, isChanged } = useChange();
 
-  const { data: spaceLayout, isLoading: isLayoutLoading } =
+  const { data: spaceLayout, isInitialLoading: isLayoutInitialLoading } =
     useGetSpaceLayout(spaceId);
 
   const { activeTab, changeTab } = useTab();
@@ -177,7 +177,7 @@ export const LayoutSettingPage: React.FC = () => {
             axis={undefined}
             onResize={handleResize}
           >
-            {isLayoutLoading ? (
+            {isLayoutInitialLoading ? (
               <LoadingSpinner />
             ) : (
               <GridBackground activeTab={activeTab} />
@@ -196,7 +196,7 @@ export const LayoutSettingPage: React.FC = () => {
 const initialLayouts = (shop: ShopLayout) => {
   const tables = shop?.tableList.map(({ i, x, y, w, h }) => {
     return {
-      i: String(i),
+      i: i + 't',
       x,
       y,
       w,
