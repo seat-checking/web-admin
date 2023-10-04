@@ -1,3 +1,5 @@
+import type { ImgFile } from 'pages/ShopSettingPage/components/ShopInfoTab';
+
 interface AdminInfoForm {
   email: string;
   password: string;
@@ -43,6 +45,6 @@ export interface ShopInformationForm {
   address: string;
   detailAddress: string;
   category: '음식점' | '카페' | '모임';
-  storeImages: string[];
   introduction: string;
+  storeImages: (string | ImgFile)[];
 }

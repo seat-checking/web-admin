@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTheme } from 'styled-components';
 import type { ShopInformationForm } from 'common/utils/types';
@@ -8,6 +8,7 @@ import type { SubmitHandler } from 'react-hook-form';
 
 import { useEditShopInformation } from 'common/hooks/mutations/useEditShopInformation';
 import { useAddress } from 'common/hooks/useAddress';
+import { STORAGE } from 'common/utils/constants';
 import { AddressBox } from 'components/AddressBox';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
@@ -15,7 +16,6 @@ import { Label } from 'components/Label';
 import { Radio } from 'components/Radio';
 import {
   ContentWrap,
-  GrayBackground,
   ListItem,
   RadioRow,
   FileInput,
@@ -27,7 +27,7 @@ import {
 
 import { Carousel } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Carousel';
 
-interface ImgFile {
+export interface ImgFile {
   name: string;
   file: File;
   thumbnail: string;
@@ -48,21 +48,25 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     control,
   } = useForm<ShopInformationForm>({
     defaultValues: shopInformation,
   });
 
   const { open, handleComplete } = useAddress();
-  const [imgFiles, setImgFiles] = useState<ImgFile[]>([]);
+  const { mutate: editShopSettingMutate } = useEditShopInformation();
 
   const handleOpenFileUpload = (event: React.MouseEvent) => {
     event.preventDefault();
     fileInputRef.current?.click();
   };
 
-  const handleUploadFile = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleUploadFile = (
+    event: ChangeEvent<HTMLInputElement>,
+    onChange: (event: (string | ImgFile)[] | ChangeEvent<Element>) => void,
+    prevImgs: (string | ImgFile)[],
+  ) => {
     const { files } = event.target;
     if (files && files.length > 0) {
       const fileList = Array.prototype.map.call<
@@ -74,20 +78,13 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
         file,
         thumbnail: URL.createObjectURL(file),
       }));
-      setImgFiles([...imgFiles, ...fileList]);
+      onChange([...prevImgs, ...fileList]);
     }
   };
 
-  const onSubmit: SubmitHandler<ShopInformationForm> = async (data) => {
-    // console.log('errors :>> ', errors);
-    //   addShopMutate(data, {
-    //     onSuccess: () => {
-    //       navigate(`/`);
-    //     },
-    //     onError: (error) => {
-    //       console.log(error);
-    //     },
-    //   });
+  const onSubmit: SubmitHandler<ShopInformationForm> = (data) => {
+    const shopId = Number(localStorage.getItem(STORAGE.storeId));
+    editShopSettingMutate({ ...data, shopId });
   };
 
   return (
@@ -175,25 +172,36 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
         </ListItem>
         <ListItem>
           <Label label='가게 대표 이미지' />
-          <FileInput
-            type='file'
-            hidden
-            accept='image/jpeg, image/png, image/jpg'
-            multiple
-            ref={fileInputRef}
-            onChange={handleUploadFile}
+          <Controller
+            control={control}
+            name='storeImages'
+            rules={{ required: '이미지를 선택해주세요.' }}
+            render={({ field: { onChange: onChangeValue, value } }) => (
+              <>
+                <FileInput
+                  type='file'
+                  hidden
+                  accept='image/jpeg, image/png, image/jpg'
+                  multiple
+                  ref={fileInputRef}
+                  onChange={(e) => {
+                    handleUploadFile(e, onChangeValue, value);
+                  }}
+                />
+                <AddFileRow>
+                  <AddFileBtn
+                    backgroundColor={theme.palette.grey[50]}
+                    onClick={handleOpenFileUpload}
+                  >
+                    <UploadIconBox />
+                    첨부파일 업로드 *최대 10장
+                    <br /> (권장 사이즈 750x480이상)
+                  </AddFileBtn>
+                  <Carousel imgs={value} setImgFiles={onChangeValue} />
+                </AddFileRow>
+              </>
+            )}
           />
-          <AddFileRow>
-            <AddFileBtn
-              backgroundColor={theme.palette.grey[50]}
-              onClick={handleOpenFileUpload}
-            >
-              <UploadIconBox />
-              첨부파일 업로드 *최대 10장
-              <br /> (권장 사이즈 750x480이상)
-            </AddFileBtn>
-            <Carousel imgs={imgFiles} setImgFiles={setImgFiles} />
-          </AddFileRow>
           {errors.storeImages && (
             <GappedErrorMessage>
               {errors.storeImages?.message}

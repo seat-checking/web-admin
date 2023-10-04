@@ -1,5 +1,6 @@
 import type {
-  EditShopRequest,
+  EditShopInformationRequest,
+  EditShopLayoutRequest,
   GetShopLayoutResponse,
   ShopLayout,
   ToggleCloseTodayRequest,
@@ -57,18 +58,32 @@ export const getShopInformation = async (): Promise<ShopInformationForm> => {
   return response.data.result;
 };
 
-export const editShopInformation = async (mainImage: File[]) => {
+export const editShopInformation = async (
+  params: EditShopInformationRequest,
+) => {
   const shopId = localStorage.getItem(STORAGE.storeId);
 
   const formData = new FormData();
-  formData.append('storeName', 'history');
-  formData.append('address', '1번지');
-  formData.append('detailAddress', '자세한');
-  formData.append('category', '음식점');
-  formData.append('introduction', '소개');
-  mainImage.forEach((image) => {
-    formData.append(`file`, image);
+  formData.append('store-id', String(params.shopId));
+  formData.append('storeName', params.storeName);
+  formData.append('address', params.address);
+  formData.append('detailAddress', params.detailAddress);
+  formData.append('category', params.category);
+  formData.append('introduction', params.introduction);
+  formData.append('telNum', '0123');
+  params.storeImages.forEach((image) => {
+    if (typeof image === 'string') {
+      formData.append(`originImages`, image);
+    } else {
+      formData.append(`file`, image.file);
+    }
   });
+  if (!formData.has('originImages')) {
+    formData.append(`originImages`, '');
+  }
+  if (!formData.has('file')) {
+    formData.append(`file`, '');
+  }
 
   const response = await axiosClient.patch(
     `/stores/admins/basic-information/${shopId}`,
@@ -120,7 +135,10 @@ export class ShopApi {
     await axiosClient.delete(`${this.apiPrefix}/spaces/${spaceId}`);
   };
 
-  static editShopLayout = async ({ spaceId, layout }: EditShopRequest) => {
+  static editShopLayout = async ({
+    spaceId,
+    layout,
+  }: EditShopLayoutRequest) => {
     const response = await axiosClient.patch(
       `${this.apiPrefix}/spaces/${spaceId}`,
       layout,

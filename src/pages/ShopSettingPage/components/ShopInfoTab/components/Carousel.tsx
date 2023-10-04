@@ -1,21 +1,15 @@
 import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
+import type { ImgFile } from 'pages/ShopSettingPage/components/ShopInfoTab';
+import type { ChangeEvent } from 'react';
 import { ReactComponent as ChevronRight } from 'assets/icons/chevron-right.svg';
 import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 
 import { flexSet } from 'styles/mixin';
 
-interface Image {
-  // id: number;
-  // url: string;
-  name: string;
-  file: File;
-  thumbnail: string;
-}
-
 interface CarouselProps {
-  imgs?: Image[];
-  setImgFiles: React.Dispatch<React.SetStateAction<Image[]>>;
+  imgs?: (string | ImgFile)[];
+  setImgFiles: (event: (string | ImgFile)[] | ChangeEvent<Element>) => void;
 }
 
 /**
@@ -37,29 +31,35 @@ export const Carousel: React.FC<CarouselProps> = ({ imgs, setImgFiles }) => {
     setCurrentImgIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
-  const handleDeleteImg = (imgName: string) => {
-    if (!imgs) {
-      return;
-    }
-    const isLastImg = currentImgIndex === imgs.length - 1;
-    if (isLastImg && currentImgIndex !== 0) {
-      setCurrentImgIndex((prev) => prev - 1);
-    }
-    const deleted = imgs?.filter((img) => img.name !== imgName);
-    setImgFiles(deleted);
-  };
+  // const handleDeleteImg = (imgName: string) => {
+  //   if (!imgs) {
+  //     return;
+  //   }
+  //   const isLastImg = currentImgIndex === imgs.length - 1;
+  //   if (isLastImg && currentImgIndex !== 0) {
+  //     setCurrentImgIndex((prev) => prev - 1);
+  //   }
+  //   const deleted = imgs?.filter((img) => img.name !== imgName);
+  //   setImgFiles(deleted);
+  // };
 
   return (
     <Wrap>
       {!imgs || imgs.length === 0 ? (
         <NoImg>등록된 이미지가 없어요.</NoImg>
       ) : (
-        <ImgWrap $img={imgs[currentImgIndex].thumbnail}>
-          <XButtonWrap
+        <ImgWrap
+          $img={
+            typeof imgs[currentImgIndex] === 'string'
+              ? imgs[currentImgIndex]
+              : ((imgs[currentImgIndex] as ImgFile).thumbnail as string)
+          }
+        >
+          {/* <XButtonWrap
             onClick={() => handleDeleteImg(imgs[currentImgIndex].name)}
           >
             <XIcon width='2.4rem' stroke={theme.palette.grey[300]} />
-          </XButtonWrap>
+          </XButtonWrap> */}
           <Footer>
             <ChevronRight
               fill={theme.palette.grey[300]}
@@ -82,7 +82,7 @@ export const Carousel: React.FC<CarouselProps> = ({ imgs, setImgFiles }) => {
   );
 };
 
-const Wrap = styled.div<{ $img?: string }>`
+const Wrap = styled.div<{ $img?: string | ImgFile }>`
   width: 20.2rem;
 
   border: 0.1rem solid ${({ theme }) => theme.palette.grey[300]};
@@ -90,7 +90,7 @@ const Wrap = styled.div<{ $img?: string }>`
   overflow: hidden;
 `;
 
-const ImgWrap = styled.div<{ $img?: string }>`
+const ImgWrap = styled.div<{ $img?: string | ImgFile }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -98,7 +98,7 @@ const ImgWrap = styled.div<{ $img?: string }>`
   padding: 0.8rem 1rem;
   height: 100%;
 
-  background-image: url(${({ $img }) => $img});
+  background-image: url(${({ $img }) => `${$img}`});
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
