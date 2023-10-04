@@ -3,19 +3,20 @@ import type {
   CurrentlyInUseResponse,
   GetShopLayoutResponse,
 } from 'api/shop/types';
+import { useGetSpaceLayout } from 'common/hooks/queries/useGetSpaceLayout';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { CheckOutConfirmModal } from 'pages/ShopStatusPage/ShopContent/components/CheckOutConfirmModal';
 import {
   Chair,
   ChairBorder,
+  EmptyText,
   GridTable,
   GridWrap,
 } from 'pages/ShopStatusPage/ShopContent/components/ShopLayout.styled';
 
 interface ShopLayoutProps {
-  layout: GetShopLayoutResponse | undefined;
-  isLoading: boolean;
   inUse: CurrentlyInUseResponse;
+  currentSpaceId: number;
 }
 
 /**
@@ -23,10 +24,12 @@ interface ShopLayoutProps {
  */
 
 export const ShopLayout: React.FC<ShopLayoutProps> = ({
-  layout,
   inUse,
-  isLoading,
+  currentSpaceId,
 }) => {
+  const { data: layout, isInitialLoading: isLoading } =
+    useGetSpaceLayout(currentSpaceId);
+
   const isUsingNow = (chairId: number) =>
     inUse.allChairsCurrentlyInUse.findIndex(({ id }) => id === chairId) !== -1;
 
@@ -67,6 +70,8 @@ export const ShopLayout: React.FC<ShopLayoutProps> = ({
       <GridWrap $height={layout?.height}>
         {isLoading ? (
           <LoadingSpinner />
+        ) : currentSpaceId === -1 ? (
+          <EmptyText>아직 설정된 좌석이 없어요</EmptyText>
         ) : (
           <>
             {layout?.tableList.map((table) => (

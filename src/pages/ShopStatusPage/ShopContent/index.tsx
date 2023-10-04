@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { CurrentlyInUseResponse } from 'api/shop/types';
-import { useGetSpaceLayout } from 'common/hooks/queries/useGetSpaceLayout';
+
 import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
 import { ShopLayout } from 'pages/ShopStatusPage/ShopContent/components/ShopLayout';
 import { SpaceList } from 'pages/ShopStatusPage/ShopContent/components/SpaceList';
@@ -30,15 +30,16 @@ export const ShopContent: React.FC = () => {
   const { data: spaceList, isLoading: isSpaceListLoading } = useGetSpaces();
   const [currentSpaceId, setCurrentSpaceId] = useState<number>(-1);
 
-  const { data: layout, isLoading: isLayoutLoading } =
-    useGetSpaceLayout(currentSpaceId);
-
   const handleChangeSpace = (spaceId: number) => {
     setCurrentSpaceId(spaceId);
   };
 
   useEffect(() => {
-    if (!spaceList || spaceList.length === 0) {
+    if (!spaceList) {
+      return;
+    }
+    if (spaceList.length === 0) {
+      setCurrentSpaceId(-1);
       return;
     }
     setCurrentSpaceId(spaceList[0].storeSpaceId);
@@ -52,7 +53,7 @@ export const ShopContent: React.FC = () => {
         currentSpaceId={currentSpaceId}
         onChangeSpace={handleChangeSpace}
       />
-      <ShopLayout isLoading={isLayoutLoading} layout={layout} inUse={inUse} />
+      <ShopLayout currentSpaceId={currentSpaceId} inUse={inUse} />
     </>
   );
 };

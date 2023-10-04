@@ -7,11 +7,13 @@ import {
 import { flexSet } from 'styles/mixin';
 
 export const GridWrap = styled.div<{ $height?: number }>`
-  background-color: white;
+  position: relative;
+
   width: ${TABLE_SIZE_PX * COLUMN_CNT}px;
   height: ${({ $height }) =>
     $height ? $height * TABLE_SIZE_PX + 'px' : '500px'};
-  transition: all 0.2s ease;
+
+  background-color: white;
 
   box-sizing: content-box;
 
@@ -19,6 +21,8 @@ export const GridWrap = styled.div<{ $height?: number }>`
   border-left: 2px solid ${({ theme }) => theme.palette.grey[200]};
   border-right: 2px solid ${({ theme }) => theme.palette.grey[200]};
   border-radius: 0 0 12px 12px;
+
+  transition: all 0.2s ease;
 `;
 
 export const GridTable = styled.div<{
@@ -98,4 +102,15 @@ export const Chair = styled.div<{
       border: 0.1rem solid #933fff; // clicked
       box-shadow: 0px 0px 0.3rem 0.15rem rgba(147, 63, 255, 0.5); //clicked
     `};
+`;
+
+export const EmptyText = styled.span`
+  font-size: 2.4rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.palette.grey[500]};
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
 `;
