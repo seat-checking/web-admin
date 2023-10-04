@@ -12,7 +12,6 @@ import {
   modifyPermission,
 } from 'api/store/store';
 import { PATH } from 'common/utils/constants';
-import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Label } from 'components/Label';
 import {
   EmployerTabWrapper,
@@ -181,7 +180,6 @@ export const EmployerTab: React.FC = () => {
             />
           ) : null,
         )}
-        <CustomToastContainer />
       </StaffListWrapper>
     </>
   );
