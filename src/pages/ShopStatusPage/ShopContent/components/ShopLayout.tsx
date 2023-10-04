@@ -71,7 +71,7 @@ export const ShopLayout: React.FC<ShopLayoutProps> = ({
         {isLoading ? (
           <LoadingSpinner />
         ) : currentSpaceId === -1 ? (
-          <EmptyText>아직 설정된 좌석이 없어요</EmptyText>
+          <EmptyText>아직 설정된 좌석이 없어요.</EmptyText>
         ) : (
           <>
             {layout?.tableList.map((table) => (

@@ -6,7 +6,10 @@ import { useSelectedShop } from 'common/stores/authStore';
 import { LoadingSpinner } from 'components/LoadingSpinner';
 import { ReservationCard } from 'pages/ShopStatusPage/ReservationTab/components/ReservationCard';
 import { StatusTabs } from 'pages/ShopStatusPage/ReservationTab/components/StatusTabs';
-import { ContentWrap } from 'pages/ShopStatusPage/ReservationTab/styled';
+import {
+  ContentWrap,
+  EmptyBox,
+} from 'pages/ShopStatusPage/ReservationTab/styled';
 
 const reservationStatusPerTab = {
   0: 'pending',
@@ -49,7 +52,7 @@ export const ReservationTab: React.FC = () => {
       <StatusTabs activeTab={activeTab} onClickTab={changeTab} />
       <ContentWrap>
         {reservations.pages[0] == null ? (
-          <div>데이터가 없습니다.</div>
+          <EmptyBox>아직 예약이 없어요.</EmptyBox>
         ) : (
           reservations.pages.map((group) => {
             return (
