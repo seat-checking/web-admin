@@ -9,7 +9,9 @@ import { flexSet } from 'styles/mixin';
 export const GridWrap = styled.div<{ $height?: number }>`
   background-color: white;
   width: ${TABLE_SIZE_PX * COLUMN_CNT}px;
-  height: ${({ $height }) => ($height ? '500px' : $height + 'px')};
+  height: ${({ $height }) =>
+    $height ? $height * TABLE_SIZE_PX + 'px' : '500px'};
+  transition: all 0.2s ease;
 
   box-sizing: content-box;
 

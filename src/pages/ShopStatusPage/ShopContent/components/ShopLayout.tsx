@@ -2,6 +2,7 @@ import type {
   CurrentlyInUseResponse,
   GetShopLayoutResponse,
 } from 'api/shop/types';
+import { LoadingSpinner } from 'components/LoadingSpinner';
 import {
   Chair,
   ChairBorder,
@@ -19,7 +20,11 @@ interface ShopLayoutProps {
  * 가게 좌석 배치도 영역
  */
 
-export const ShopLayout: React.FC<ShopLayoutProps> = ({ layout, inUse }) => {
+export const ShopLayout: React.FC<ShopLayoutProps> = ({
+  layout,
+  inUse,
+  isLoading,
+}) => {
   const isUsingNow = (chairId: number) =>
     inUse.allChairsCurrentlyInUse.findIndex(({ id }) => id === chairId) !== -1;
 
@@ -33,17 +38,22 @@ export const ShopLayout: React.FC<ShopLayoutProps> = ({ layout, inUse }) => {
 
   return (
     <GridWrap $height={layout?.height}>
-      {layout?.tableList.map((table) => (
-        <GridTable
-          key={table.i}
-          width={table.w}
-          height={table.h}
-          x={table.x}
-          y={table.y}
-        />
-      ))}
-
-      {chairsDom()}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          {layout?.tableList.map((table) => (
+            <GridTable
+              key={table.i}
+              width={table.w}
+              height={table.h}
+              x={table.x}
+              y={table.y}
+            />
+          ))}
+          {chairsDom()}
+        </>
+      )}
     </GridWrap>
   );
 };
