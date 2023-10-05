@@ -27,6 +27,7 @@ export const queryKeys = {
   GET_PERMISSION: 'permission',
   GET_OWNED_SHOPS: 'ownedShops',
   GET_RESERVATIONS: 'reservations',
+  GET_SHOP_INFORMATION: 'shopInformation',
 };
 
 export const TEMPORARY_SPACE_ID = -1;

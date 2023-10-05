@@ -1,3 +1,6 @@
+import type { ShopInformationForm } from 'common/utils/types';
+import type { ImgFile } from 'pages/ShopSettingPage/components/ShopInfoTab';
+
 export interface ToggleCloseTodayRequest {
   shopId: number;
   isClosedToday: boolean;
@@ -35,7 +38,11 @@ export interface GetShopLayoutResponse extends ShopLayout {
   storeSpaceId: number;
 }
 
-export interface EditShopRequest {
+export interface EditShopLayoutRequest {
   spaceId: number;
   layout: ShopLayout;
+}
+
+export interface EditShopInformationRequest extends ShopInformationForm {
+  shopId: number;
 }
