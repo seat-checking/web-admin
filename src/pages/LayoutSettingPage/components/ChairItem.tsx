@@ -32,7 +32,7 @@ export const ChairItem = forwardRef<HTMLDivElement, ChairItemProps>(
       <>
         <ChairBorder {...rest} ref={ref}>
           <Chair $isClickable={isClickable} $isSelected={isPopoverOpen}>
-            <Number>{manageId}</Number>
+            <ManageId>{manageId}</ManageId>
           </Chair>
         </ChairBorder>
         {isPopoverOpen && (
@@ -67,7 +67,7 @@ export const Chair = styled.div<{
   cursor: ${({ $isClickable }) => ($isClickable ? 'pointer' : 'default')};
 `;
 
-const Number = styled.span`
+const ManageId = styled.span`
   color: ${({ theme }) => theme.palette.grey[400]};
   font-size: 0.9rem;
   font-weight: 400;

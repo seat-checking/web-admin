@@ -1,4 +1,6 @@
 import type {
+  CurrentlyInUseResponse,
+  GetSeatStatisticsResponse,
   EditShopInformationRequest,
   EditShopLayoutRequest,
   GetShopLayoutResponse,
@@ -13,7 +15,6 @@ import type {
 } from 'common/utils/types';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { axiosClient } from 'api/apiClient';
-
 import { STORAGE } from 'common/utils/constants';
 
 export const addShop = async (shopInfoForm: ShopInfoForm) => {
@@ -46,6 +47,24 @@ export const getShopPermission = async (
   const response = await axiosClient.get(`/stores/admins/permission/${shopId}`);
 
   return JSON.parse(response.data.result.permissionByMenu);
+};
+
+export const getSeatStatistics = async (
+  shopId: number | null,
+): Promise<GetSeatStatisticsResponse> => {
+  const response = await axiosClient.get(
+    `/stores/seats/statistics_information/${shopId}`,
+  );
+  return response.data.result;
+};
+
+export const getCurrentlyInUse = async (
+  spaceId: number,
+): Promise<CurrentlyInUseResponse> => {
+  const response = await axiosClient.get(
+    `/utilization/seat/current-in-use/${spaceId}`,
+  );
+  return response.data.result;
 };
 
 export const getShopInformation = async (): Promise<ShopInformationForm> => {
@@ -101,10 +120,9 @@ export class ShopApi {
   static readonly apiPrefix = '/stores/admins';
 
   // 가게의 모든 스페이스 기본 정보 조회
-  static getSpaceList = async (): Promise<SpaceType[]> => {
-    const storeId = localStorage.getItem(STORAGE.storeId);
+  static getSpaceList = async (shopId: number | null): Promise<SpaceType[]> => {
     const response = await axiosClient.get(
-      `${this.apiPrefix}/spaces/${storeId}`,
+      `${this.apiPrefix}/spaces/${shopId}`,
     );
     return response.data.result;
   };
@@ -113,18 +131,17 @@ export class ShopApi {
   static getLayout = async (
     spaceId: number,
   ): Promise<GetShopLayoutResponse> => {
-    const response = await axiosClient.get(
-      `${this.apiPrefix}/spaces/seats/${spaceId}`,
-    );
+    const response = await axiosClient.get(`/stores/spaces/seats/${spaceId}`);
     return response.data.result;
   };
 
   // 스페이스 생성
-  static createShopLayout = async (layout: ShopLayout): Promise<number> => {
-    const storeId = localStorage.getItem(STORAGE.storeId);
-
+  static createShopLayout = async (
+    shopId: number,
+    layout: ShopLayout,
+  ): Promise<number> => {
     const response = await axiosClient.post(
-      `${this.apiPrefix}/spaces/${storeId}`,
+      `${this.apiPrefix}/spaces/${shopId}`,
       layout,
     );
     return response.data.result.storeSpaceId;

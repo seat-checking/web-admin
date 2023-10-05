@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
+import { useSelectedShop } from 'common/stores/authStore';
 import { TEMPORARY_SPACE_ID, queryKeys } from 'common/utils/constants';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';
 
@@ -18,6 +19,7 @@ export const useSpace = (): UseSpaceReturn => {
   const { data, isLoading } = useGetSpaces();
   const [spaceList, setSpaceList] = useState<SpaceType[] | undefined>(data);
   const queryClient = useQueryClient();
+  const { storeId: shopId } = useSelectedShop();
 
   useEffect(() => {
     setSpaceList(data);
@@ -28,9 +30,10 @@ export const useSpace = (): UseSpaceReturn => {
   const clearSpaces = useCallback(() => {
     const cached = queryClient.getQueryData([
       queryKeys.GET_SPACES,
+      shopId,
     ]) as SpaceType[];
     setSpaceList(cached);
-  }, [queryClient]);
+  }, [queryClient, shopId]);
 
   const setSpaces = useCallback((space: SpaceType[]) => {
     setSpaceList(space);

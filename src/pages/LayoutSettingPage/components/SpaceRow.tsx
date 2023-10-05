@@ -103,8 +103,8 @@ export const SpaceRow: React.FC = () => {
         {isChangeConfirmModalOn && (
           <ExitConfirmModal
             onClose={() => setIsChangeConfirmModalOn(false)}
+            clearSpaces={clearSpaces}
             onComplete={() => {
-              clearSpaces();
               handleChangeSpaceId(clickedSpaceId);
             }}
           />
@@ -114,6 +114,7 @@ export const SpaceRow: React.FC = () => {
           <AddText>스페이스 추가</AddText>
           {isAddConfirmModalOn && (
             <ExitConfirmModal
+              clearSpaces={clearSpaces}
               onComplete={() => {
                 clearSpaces();
                 setIsAddOn(true);

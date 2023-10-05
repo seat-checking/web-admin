@@ -10,9 +10,9 @@ export const useEditLayout = () => {
     mutationFn: ({ spaceId, layout }: EditShopLayoutRequest) => {
       return ShopApi.editShopLayout({ spaceId, layout });
     },
-    onSuccess(_, variables: EditShopLayoutRequest) {
+    onSuccess(_, { spaceId }) {
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.GET_SPACE_LAYOUT, variables],
+        queryKey: [queryKeys.GET_SPACE_LAYOUT, spaceId],
       });
     },
   });

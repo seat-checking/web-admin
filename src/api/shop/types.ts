@@ -1,5 +1,4 @@
 import type { ShopInformationForm } from 'common/utils/types';
-import type { ImgFile } from 'pages/ShopSettingPage/components/ShopInfoTab';
 
 export interface ToggleCloseTodayRequest {
   shopId: number;
@@ -43,6 +42,22 @@ export interface EditShopLayoutRequest {
   layout: ShopLayout;
 }
 
+interface ChairId {
+  id: number;
+}
+
+export interface CurrentlyInUseResponse {
+  isThisSpaceCurrentlyInUse: boolean;
+  isThisSpaceCurrentlyHolding: boolean;
+  allChairsCurrentlyInUse: ChairId[];
+  allChairsCurrentlyHolding: ChairId[];
+}
+
+export interface GetSeatStatisticsResponse {
+  totalNumberOfSeats: number;
+  numberOfRemainingSeats: number;
+  averageSeatUsageMinute: number;
+}
 export interface EditShopInformationRequest extends ShopInformationForm {
   shopId: number;
 }

@@ -1,7 +1,6 @@
 import { axiosClient } from 'api/apiClient';
 
 const apiPrefix = '/reservations/admins';
-const storeId = localStorage.getItem('storeId');
 
 export type ReservationStatusType = '거절' | '취소' | '대기' | '승인';
 export interface Reservation {
@@ -22,25 +21,29 @@ export interface ReservationResponse {
   size: number;
   hasNext: boolean;
 }
+export type ReservationResponseType = ReservationResponse | null;
 
 export type ReservationStatus = 'processed' | 'pending' | 'all';
 
 export interface ReservationsRequest {
   page: number;
   reservationStatus: ReservationStatus;
+  shopId: number | null;
 }
 
 export interface ProcessReservationRequest {
   reservationId: number;
   isApproved: boolean;
+  shopId: number | null;
 }
 
 export const processReservation = async ({
   reservationId,
   isApproved,
+  shopId,
 }: ProcessReservationRequest) => {
   const response = await axiosClient.post(
-    `${apiPrefix}/${storeId}/${
+    `${apiPrefix}/${shopId}/${
       isApproved ? 'approve' : 'reject'
     }/?reservation-id=${reservationId}`,
   );
@@ -50,9 +53,10 @@ export const processReservation = async ({
 export const getReservations = async ({
   page = 1,
   reservationStatus,
-}: ReservationsRequest): Promise<ReservationResponse> => {
+  shopId,
+}: ReservationsRequest): Promise<ReservationResponseType> => {
   const response = await axiosClient.get(
-    `${apiPrefix}/${storeId}/${reservationStatus}-list`,
+    `${apiPrefix}/${shopId}/${reservationStatus}-list`,
     {
       params: {
         page,
@@ -62,13 +66,20 @@ export const getReservations = async ({
     },
   );
   if (response.status === 204) {
-    return {
-      content: [],
-      page: 1,
-      size: 1,
-      hasNext: false,
-    };
+    return null;
   }
 
   return response.data.result;
+};
+
+export const forceCheckout = async (chairId: number) => {
+  const response = await axiosClient.post(
+    `/utilization/admins/forced_check_out/${chairId}`,
+    {
+      params: {
+        'utilization-id': chairId,
+      },
+    },
+  );
+  return response.data;
 };

@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components/macro';
-import type { Permission } from 'common/utils/auth';
-import type { DropdownShop, Shop } from 'common/utils/types';
+import type { DropdownShop } from 'common/utils/types';
 import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as PlusSquareIcon } from 'assets/icons/plus-square.svg';
 import { useGetOwnedShops } from 'common/hooks/queries/useGetOwnedShops';
 import { useGetPermission } from 'common/hooks/queries/useGetPermission';
-import { setPermissions } from 'common/utils/auth';
+
+import { useAuthActions, useSelectedShop } from 'common/stores/authStore';
 import { PATH } from 'common/utils/constants';
 import { ShopDropdownItem } from 'components/DashboardLayout/components/ShopDropdownItem';
 import { ellipsisText } from 'styles/mixin';
@@ -15,18 +15,15 @@ import { ellipsisText } from 'styles/mixin';
 interface ShopDropdownProps {
   onClose?: () => void;
   isFolded: boolean;
-  selectedShop: Shop;
-  setSelectedShop: React.Dispatch<React.SetStateAction<Shop>>;
 }
 
 /**
  * 가게 드롭다운 컴포넌트
  */
-export const ShopDropdown: React.FC<ShopDropdownProps> = ({
-  isFolded,
-  selectedShop,
-  setSelectedShop,
-}) => {
+export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
+  const selectedShop = useSelectedShop();
+  const { setPermissions, setSelectedShop } = useAuthActions();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { data: storeResponseList } = useGetOwnedShops(isOpen);
   const { fetchPermission } = useGetPermission();
@@ -78,7 +75,7 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({
         onClick={handleToggleDropdown}
         folded={isFolded}
       >
-        <SelecteText folded={isFolded}>{selectedShop.storeName}</SelecteText>
+        <SelecteText folded={isFolded}>{selectedShop?.storeName}</SelecteText>
         <ChevronDown stroke='white' />
       </TriggerBtn>
       {isOpen && (
@@ -94,7 +91,7 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({
               <ShopDropdownItem
                 key={shop.storeId}
                 shop={shop}
-                isSelected={selectedShop.storeId === shop.storeId}
+                isSelected={selectedShop?.storeId === shop.storeId}
                 onClick={() => handleChangeSelectedShop(shop)}
               />
             ))}

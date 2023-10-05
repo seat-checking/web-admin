@@ -11,6 +11,7 @@ import {
   getSeachList,
   modifyPermission,
 } from 'api/store/store';
+import { useSelectedShop } from 'common/stores/authStore';
 import { PATH } from 'common/utils/constants';
 import { Label } from 'components/Label';
 import {
@@ -38,7 +39,7 @@ export const EmployerTab: React.FC = () => {
   const [searched, setSearched] = useState(false);
   const [employeeList, setEmployeeList] = useState<EmployeeResponse[]>([]);
   const navigate = useNavigate();
-  const storeId = localStorage.getItem('storeId') || '';
+  const { storeId } = useSelectedShop();
 
   const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -63,7 +64,7 @@ export const EmployerTab: React.FC = () => {
   const fetchEmployeeList = useCallback(async () => {
     if (storeId) {
       try {
-        const response = await getEmployeeList({ storeId });
+        const response = await getEmployeeList({ storeId: String(storeId) });
         if (response.isSuccess) {
           const parsedEmployeeList =
             response.result.storeMemberResponseList.map((employee) => ({
@@ -88,7 +89,7 @@ export const EmployerTab: React.FC = () => {
       return;
     }
     try {
-      await deleteMember({ storeId, memberId: employeeId });
+      await deleteMember({ storeId: String(storeId), memberId: employeeId });
       const updatedEmployeeList = employeeList.filter(
         (employee) => employee.id !== employeeId,
       );
@@ -117,7 +118,7 @@ export const EmployerTab: React.FC = () => {
       };
 
       const params = {
-        storeId,
+        storeId: String(storeId),
         id: employeeId,
         permissionByMenu,
       };

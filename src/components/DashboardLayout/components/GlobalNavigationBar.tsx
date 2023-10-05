@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import type { Shop } from 'common/utils/types';
+import { useState } from 'react';
 import { ReactComponent as ChevronLeft } from 'assets/icons/chevron-left-bg-grey.svg';
 import { ReactComponent as AnalyticsActive } from 'assets/icons/snb-analytics-active.svg';
 import { ReactComponent as Analytics } from 'assets/icons/snb-analytics.svg';
@@ -11,8 +10,8 @@ import { ReactComponent as SettingStoreActive } from 'assets/icons/snb-setting-s
 import { ReactComponent as SettingStore } from 'assets/icons/snb-setting-store.svg';
 import defaultShopImg from 'assets/images/default-shop.png';
 
-import { getPermission } from 'common/utils/auth';
-import { PATH, STORAGE } from 'common/utils/constants';
+import { usePermissions, useSelectedShop } from 'common/stores/authStore';
+import { PATH } from 'common/utils/constants';
 import {
   Blank,
   FoldBtn,
@@ -31,51 +30,22 @@ export const GlobalNavigationBar: React.FC = () => {
     setIsFolded((prevState) => !prevState);
   };
 
-  const defaultSelectedShop: Shop = {
-    storeId: Number(localStorage.getItem(STORAGE.storeId)),
-    storeName: localStorage.getItem(STORAGE.storeName) || '',
-    mainImage: localStorage.getItem(STORAGE.mainImage) || '',
-    introduction: localStorage.getItem(STORAGE.introduction) || '',
-  };
+  const selectedShop = useSelectedShop();
 
-  const [selectedShop, setSelectedShop] = useState<Shop>(defaultSelectedShop);
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE.storeId, selectedShop.storeId.toString());
-
-    // storeId 외 정보는 새로고침 하기 전에만 저장시킴
-    const saveShopInformation = () => {
-      localStorage.setItem(
-        STORAGE.introduction,
-        selectedShop.introduction || '',
-      );
-      localStorage.setItem(STORAGE.mainImage, selectedShop.mainImage || '');
-      localStorage.setItem(STORAGE.storeName, selectedShop.storeName);
-    };
-    window.addEventListener('beforeunload', saveShopInformation);
-    return () => {
-      window.removeEventListener('beforeunload', saveShopInformation);
-    };
-  }, [selectedShop]);
+  const permissions = usePermissions();
 
   return (
     <>
       <Wrap folded={isFolded}>
         <img
-          src={selectedShop.mainImage || defaultShopImg}
+          src={selectedShop?.mainImage || defaultShopImg}
           alt='가게 로고'
           className='shopLogo'
         />
-        {!isFolded && (
-          <ShopDropdown
-            isFolded={isFolded}
-            selectedShop={selectedShop}
-            setSelectedShop={setSelectedShop}
-          />
-        )}
-        <p className='branchName hideFold'>{selectedShop.introduction}</p>
+        {!isFolded && <ShopDropdown isFolded={isFolded} />}
+        <p className='branchName hideFold'>{selectedShop?.introduction}</p>
         <ul className='naviationList'>
-          {getPermission('storeStatus') && (
+          {permissions?.storeStatus && (
             <NavigationItem
               to='/'
               label='가게 현황'
@@ -84,7 +54,7 @@ export const GlobalNavigationBar: React.FC = () => {
               isFolded={isFolded}
             />
           )}
-          {getPermission('seatSetting') && (
+          {permissions?.seatSetting && (
             <NavigationItem
               to={`/${PATH.layout}`}
               label='좌석 설정'
@@ -93,7 +63,7 @@ export const GlobalNavigationBar: React.FC = () => {
               isFolded={isFolded}
             />
           )}
-          {getPermission('storeStatistics') && (
+          {permissions?.storeStatistics && (
             <NavigationItem
               to={`/${PATH.statistics}`}
               label='가게 통계'
@@ -102,7 +72,7 @@ export const GlobalNavigationBar: React.FC = () => {
               isFolded={isFolded}
             />
           )}
-          {getPermission('storeSetting') && (
+          {permissions?.storeSetting && (
             <NavigationItem
               to={`/${PATH.setting}`}
               label='가게 설정'

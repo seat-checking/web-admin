@@ -1,9 +1,15 @@
 import styled, { keyframes } from 'styled-components';
 import type React from 'react';
 
-export const LoadingSpinner: React.FC = () => {
+interface LoadingSpinnerProps {
+  height?: string;
+}
+
+export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  height = '100%',
+}) => {
   return (
-    <SpinnerContainer>
+    <SpinnerContainer $height={height}>
       <CircularLoader />
     </SpinnerContainer>
   );
@@ -14,11 +20,11 @@ const spin = keyframes`
   100% { transform: rotate(360deg); }
 `;
 
-const SpinnerContainer = styled.div`
+const SpinnerContainer = styled.div<{ $height: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: ${({ $height }) => $height};
 `;
 
 const SPINNER_THICKNESS_REM = 0.5;

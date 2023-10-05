@@ -1,60 +1,46 @@
-import { useQueryClient } from '@tanstack/react-query';
 import styled, { useTheme } from 'styled-components';
-import { useSelectedShop } from 'common/stores/authStore';
-import { queryKeys } from 'common/utils/constants';
+import { useForceCheckout } from 'common/hooks/mutations/useForceCheckout';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
-import { useSaveLayout } from 'pages/LayoutSettingPage/hooks/useSaveLayout';
-import { useChange } from 'pages/LayoutSettingPage/stores/changeStore';
 
-interface ExitConfirmModalProps {
-  onComplete?: () => void;
+interface CheckOutConfirmModalProps {
   onClose: () => void;
-  clearSpaces: () => void;
+  selectedChairId: number | null;
+  selectedManageId: number | null;
 }
 /**
- * 저장하지 않았을 때 뜨는 확인 모달
+ * 스페이스 삭제 모달
  */
-export const ExitConfirmModal: React.FC<ExitConfirmModalProps> = ({
-  onComplete,
+export const CheckOutConfirmModal: React.FC<CheckOutConfirmModalProps> = ({
   onClose,
-  clearSpaces,
+  selectedChairId,
+  selectedManageId,
 }) => {
   const theme = useTheme();
-  const { setChange } = useChange();
-  const saveLayout = useSaveLayout();
+  const { mutate: forceCheckoutMutate } = useForceCheckout();
 
-  const queryClient = useQueryClient();
-  const { storeId: shopId } = useSelectedShop();
+  if (selectedChairId == null) {
+    return null;
+  }
 
   const handleCancel = () => {
-    setChange(false);
-    clearSpaces();
-    onComplete?.();
-
     onClose();
   };
 
-  const handleSave = () => {
-    setChange(false);
-    queryClient.invalidateQueries([queryKeys.GET_SPACES, shopId]);
-    onComplete?.();
-
-    saveLayout();
-
+  const handleCheckout = () => {
+    forceCheckoutMutate(selectedChairId);
     onClose();
   };
 
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={onClose} closeOnOusideClick>
       <Modal.Header>좌석 설정</Modal.Header>
       <Content>
         <ConfirmText>
-          좌석을 저장하지 않고 <br />
-          현재 스페이스를 나가시나요? 😥
+          해당 좌석 ({selectedManageId}번) 사용 종료할까요? 😥
         </ConfirmText>
         <DescriptionText>
-          저장하지 않으면 좌석이 모두 초기화 돼요!
+          해당 좌석 ({selectedManageId}번) 사용 종료할까요?
         </DescriptionText>
       </Content>
       <Footer>
@@ -66,16 +52,16 @@ export const ExitConfirmModal: React.FC<ExitConfirmModalProps> = ({
           height='4.5rem'
           onClick={handleCancel}
         >
-          스페이스 나가기
+          취소
         </Button>
         <Button
           backgroundColor={theme.palette.grey[500]}
           borderRadius='0.4rem'
           fontSize='1.4rem'
           height='4.5rem'
-          onClick={handleSave}
+          onClick={handleCheckout}
         >
-          저장하기
+          사용 종료
         </Button>
       </Footer>
     </Modal>
@@ -85,7 +71,6 @@ export const ExitConfirmModal: React.FC<ExitConfirmModalProps> = ({
 const ConfirmText = styled.div`
   font-size: 1.8rem;
   font-weight: 600;
-  line-height: 2.3rem;
 `;
 
 const DescriptionText = styled.div`

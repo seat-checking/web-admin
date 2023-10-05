@@ -13,7 +13,7 @@ import {
   patchRequestInformation,
 } from 'api/store/store';
 
-import { STORAGE } from 'common/utils/constants';
+import { useSelectedShop } from 'common/stores/authStore';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
@@ -65,6 +65,7 @@ export const InformationList: React.FC<InformationListProps> = ({
     [id: number]: { title?: string; contentGuide?: string };
   }>({});
   const [radioStates, setRadioStates] = useState<{ [id: number]: string }>({});
+  const { storeId } = useSelectedShop();
 
   const theme = useTheme();
 
@@ -124,13 +125,12 @@ export const InformationList: React.FC<InformationListProps> = ({
   const handleDelete = async (customid: number) => {
     if (modalOpen !== null) {
       try {
-        const storeId = localStorage.getItem(STORAGE.storeId);
         if (!storeId) {
           return;
         }
 
         const Params = {
-          storeId,
+          storeId: String(storeId),
           customid,
         };
 
@@ -144,7 +144,6 @@ export const InformationList: React.FC<InformationListProps> = ({
   };
 
   const handleSave = async (item: StoreCustomReservationField) => {
-    const storeId = localStorage.getItem(STORAGE.storeId);
     if (!storeId) {
       return;
     }
@@ -167,7 +166,7 @@ export const InformationList: React.FC<InformationListProps> = ({
       contentGuide: editedContentGuide,
     };
     const params = {
-      storeId,
+      storeId: String(storeId),
       data: resData,
       customid: item.id,
     };

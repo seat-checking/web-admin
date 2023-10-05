@@ -9,6 +9,7 @@ export const PATH = {
 } as const;
 
 export const STORAGE = {
+  auth: 'auth',
   accessToken: 'accessToken',
   storeId: 'storeId',
   storeName: 'storeName',
@@ -27,6 +28,8 @@ export const queryKeys = {
   GET_PERMISSION: 'permission',
   GET_OWNED_SHOPS: 'ownedShops',
   GET_RESERVATIONS: 'reservations',
+  GET_SEAT_STATISTICS: 'spaceStatistics',
+  GET_CURRENTLY_IN_USE: 'currentlyInUse',
   GET_SHOP_INFORMATION: 'shopInformation',
 };
 
