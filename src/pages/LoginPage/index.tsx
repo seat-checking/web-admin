@@ -56,7 +56,6 @@ export const LoginPage: React.FC = () => {
       },
     );
   };
-  console.log('error :>> ', errors);
 
   return (
     <Background>
@@ -93,7 +92,11 @@ export const LoginPage: React.FC = () => {
             </ErrorMessage>
           )}
           <Button style={{ marginTop: '2rem' }}>
-            {isLoading ? <LoadingSpinner spinnerSize='2.4rem' /> : '로그인'}
+            {isLoading ? (
+              <LoadingSpinner spinnerSize='2.4rem' theme='light' />
+            ) : (
+              '로그인'
+            )}
           </Button>
         </form>
       </ContentWrap>
