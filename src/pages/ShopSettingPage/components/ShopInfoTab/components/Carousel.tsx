@@ -8,7 +8,7 @@ import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 import { darkerOnHover, flexSet } from 'styles/mixin';
 
 interface CarouselProps {
-  imgs?: (string | ImgFile)[];
+  imgs?: (string | ImgFile)[] | null;
   setImgFiles: (event: (string | ImgFile)[] | ChangeEvent<Element>) => void;
 }
 

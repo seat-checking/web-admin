@@ -66,11 +66,11 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
   const handleUploadFile = (
     event: ChangeEvent<HTMLInputElement>,
     onChange: (event: (string | ImgFile)[] | ChangeEvent<Element>) => void,
-    prevImgs: (string | ImgFile)[],
+    prevImgs: (string | ImgFile)[] | null,
   ) => {
     const { files } = event.target;
     if (files && files.length > 0) {
-      if (files.length + prevImgs.length > 10) {
+      if (prevImgs && files.length + prevImgs.length > 10) {
         setError('storeImages', {
           type: 'custom',
           message: '최대 10장의 이미지를 등록할 수 있습니다.',
@@ -86,6 +86,10 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
         file,
         thumbnail: URL.createObjectURL(file),
       }));
+      if (!prevImgs) {
+        onChange(fileList);
+        return;
+      }
       onChange([...prevImgs, ...fileList]);
     }
   };

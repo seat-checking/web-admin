@@ -47,5 +47,5 @@ export interface ShopInformationForm {
   category: '음식점' | '카페' | '모임';
   introduction: string;
   telNum: string;
-  storeImages: (string | ImgFile)[];
+  storeImages: (string | ImgFile)[] | null;
 }
