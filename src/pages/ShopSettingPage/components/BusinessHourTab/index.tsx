@@ -8,6 +8,7 @@ import { useSelectedShop } from 'common/stores/authStore';
 import { Button } from 'components/Button';
 import { Label } from 'components/Label';
 
+import { LoadingSpinner } from 'components/LoadingSpinner';
 import {
   DayItem,
   DayText,
@@ -170,7 +171,7 @@ export const BusinessHourTab: React.FC = () => {
   }, [storeId, reset]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner height='30rem' />;
   }
 
   return (

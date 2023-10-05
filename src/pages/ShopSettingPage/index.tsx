@@ -16,7 +16,7 @@ import { ContentWrap, TabsWrap, Wrap } from 'pages/ShopSettingPage/styled';
 export const ShopSettingPage: React.FC = () => {
   const { activeTab, changeTab } = useTab();
 
-  const { data: shopInformation } = useGetShopInformation();
+  const { data: shopInformation, isInitialLoading } = useGetShopInformation();
 
   return (
     <Wrap>
@@ -26,10 +26,10 @@ export const ShopSettingPage: React.FC = () => {
             tabList={[
               {
                 label: '가게 정보 설정',
-                content: shopInformation ? (
+                content: isInitialLoading ? (
                   <ShopInfoTab shopInformation={shopInformation} />
                 ) : (
-                  <LoadingSpinner />
+                  <LoadingSpinner height='30rem' />
                 ),
               },
               {

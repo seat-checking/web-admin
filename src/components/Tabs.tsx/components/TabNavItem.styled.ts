@@ -11,8 +11,17 @@ export const ListItem = styled.li<{
     $isClickable &&
     css`
       cursor: pointer;
-      &:active {
-        background-color: rgba(0, 0, 0, 0.05);
+      position: relative;
+      :hover::after {
+        display: inline-block;
+        content: '';
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        width: calc(100% - 1rem);
+        height: calc(100% - 1rem);
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 1rem;
       }
     `}
 `;
