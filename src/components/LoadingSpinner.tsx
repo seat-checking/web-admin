@@ -3,14 +3,21 @@ import type React from 'react';
 
 interface LoadingSpinnerProps {
   height?: string;
+  spinnerSize?: string;
+  spinnerThickness?: string;
 }
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   height = '100%',
+  spinnerSize = '5rem',
+  spinnerThickness = '0.5rem',
 }) => {
   return (
     <SpinnerContainer $height={height}>
-      <CircularLoader />
+      <CircularLoader
+        $spinnerSize={spinnerSize}
+        $spinnerThickness={spinnerThickness}
+      />
     </SpinnerContainer>
   );
 };
@@ -27,15 +34,17 @@ const SpinnerContainer = styled.div<{ $height: string }>`
   height: ${({ $height }) => $height};
 `;
 
-const SPINNER_THICKNESS_REM = 0.5;
-
-const CircularLoader = styled.div`
-  width: 5rem;
-  height: 5rem;
+const CircularLoader = styled.div<{
+  $spinnerSize: string;
+  $spinnerThickness: string;
+}>`
+  width: ${({ $spinnerSize }) => $spinnerSize};
+  height: ${({ $spinnerSize }) => $spinnerSize};
   border-radius: 50%;
 
-  border: ${SPINNER_THICKNESS_REM}rem solid rgba(0, 0, 0, 0.1);
-  border-top: ${SPINNER_THICKNESS_REM}rem solid orange;
+  border: ${({ $spinnerThickness }) => $spinnerThickness} solid
+    rgba(0, 0, 0, 0.1);
+  border-top: ${({ $spinnerThickness }) => $spinnerThickness} solid orange;
 
   animation: ${spin} 1s linear infinite;
 

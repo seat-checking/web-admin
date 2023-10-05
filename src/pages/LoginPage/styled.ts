@@ -38,7 +38,7 @@ export const Checkbox = styled.input`
 
 export const JoinRow = styled.div`
   padding-top: 4rem;
-  padding-bottom: 5.6rem;
+  padding-bottom: 3.6rem;
 
   ${flexSet()}
 `;

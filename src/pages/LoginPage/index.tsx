@@ -1,7 +1,7 @@
 import { isAxiosError } from 'axios';
 
 import { useForm } from 'react-hook-form';
-import type { ErrorResponse, LoginResponse } from 'api/lib/auth';
+import type { ErrorResponse } from 'api/lib/auth';
 
 import type { SubmitHandler } from 'react-hook-form';
 import { useLogin } from 'common/hooks/mutations/useLogin';
@@ -9,11 +9,12 @@ import { useLogin } from 'common/hooks/mutations/useLogin';
 import { PATH } from 'common/utils/constants';
 import { Button } from 'components/Button';
 
+import { ErrorMessage } from 'components/ErrorMessage';
 import { Input } from 'components/Input';
+import { LoadingSpinner } from 'components/LoadingSpinner';
 import {
   Background,
   ContentWrap,
-  ErrorMessageGap,
   InputWrap,
   JoinLink,
   JoinRow,
@@ -36,25 +37,27 @@ export const LoginPage: React.FC = () => {
     setError,
     formState: { errors },
   } = useForm<LoginFormInputs>();
-  const { mutate: loginMutate } = useLogin();
+  const { mutate: loginMutate, isLoading } = useLogin();
 
   const handleLogin: SubmitHandler<LoginFormInputs> = ({ email, password }) => {
+    if (isLoading) {
+      return;
+    }
     loginMutate(
       { email, password },
       {
         onError(error) {
           if (isAxiosError<ErrorResponse>(error)) {
-            console.log(error.response?.data.message);
             setError('root', {
-              message: '아이디 또는 비밀번호를 다시 입력해주세요.',
+              message: '아이디 또는 비밀번호를 잘못 입력했습니다.',
             });
           }
         },
       },
     );
   };
+  console.log('error :>> ', errors);
 
-  console.log('errors :>> ', errors);
   return (
     <Background>
       <ContentWrap>
@@ -63,25 +66,35 @@ export const LoginPage: React.FC = () => {
           <Input
             label='이메일'
             placeholder='이메일을 입력해 주세요.'
-            {...register('email')}
+            {...register('email', {
+              required: '이메일을 입력해 주세요.',
+            })}
           />
           <InputWrap>
             <Input
               label='비밀번호'
               type='password'
               placeholder='비밀번호를 입력해 주세요.'
-              {...register('password')}
+              {...register('password', {
+                required: '비밀번호를 입력해 주세요.',
+              })}
             />
           </InputWrap>
 
-          {errors.root && (
-            <ErrorMessageGap>{errors.root?.message}</ErrorMessageGap>
-          )}
           <JoinRow>
             <OrangeText>계정이 없으신가요?</OrangeText>
             <JoinLink to={`/${PATH.join}`}>회원가입</JoinLink>
           </JoinRow>
-          <Button>로그인</Button>
+          {(errors.email || errors.password || errors.root) && (
+            <ErrorMessage>
+              {errors.email?.message ||
+                errors.password?.message ||
+                errors.root?.message}
+            </ErrorMessage>
+          )}
+          <Button style={{ marginTop: '2rem' }}>
+            {isLoading ? <LoadingSpinner spinnerSize='2.4rem' /> : '로그인'}
+          </Button>
         </form>
       </ContentWrap>
     </Background>
