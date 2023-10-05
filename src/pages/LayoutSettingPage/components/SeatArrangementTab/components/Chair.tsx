@@ -40,7 +40,7 @@ const Wrap = styled.div`
 const StyledChair = styled.div`
   width: ${`${CHAIR_SIZE_PX}px`};
   height: ${`${CHAIR_SIZE_PX}px`};
-  border: 1px solid ${({ theme }) => theme.palette.black.main};
+  border: 0.1rem solid ${({ theme }) => theme.palette.black.main};
   background-color: ${({ theme }) => theme.palette.grey[100]};
   border-radius: 50%;
 `;

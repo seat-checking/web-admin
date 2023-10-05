@@ -284,6 +284,8 @@ const Body = styled.div`
   padding: 1.6rem 1.2rem;
   border-radius: 0.6rem;
   background-color: ${({ theme }) => theme.palette.grey[100]};
+
+  transition: all 0.1s ease;
 `;
 
 const TextRow = styled.div`

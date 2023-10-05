@@ -17,6 +17,8 @@ export const Wrap = styled.div<{ folded: boolean }>`
   min-height: 100vh; // 필요
   background-color: #303030;
 
+  transition: width 0.1s ease;
+
   .shopLogo {
     width: ${({ folded }): string => (folded ? '4.8rem' : '14rem')};
     height: ${({ folded }): string => (folded ? '4.8rem' : '14rem')};

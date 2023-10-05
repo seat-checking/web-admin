@@ -8,7 +8,6 @@ import type { SubmitHandler } from 'react-hook-form';
 
 import { useEditShopInformation } from 'common/hooks/mutations/useEditShopInformation';
 import { useAddress } from 'common/hooks/useAddress';
-import { STORAGE } from 'common/utils/constants';
 import { AddressBox } from 'components/AddressBox';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
@@ -95,8 +94,7 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
   };
 
   const onSubmit: SubmitHandler<ShopInformationForm> = (data) => {
-    const shopId = Number(localStorage.getItem(STORAGE.storeId));
-    editShopSettingMutate({ ...data, shopId });
+    editShopSettingMutate({ ...data });
   };
 
   return (
