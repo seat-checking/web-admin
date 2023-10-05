@@ -26,7 +26,7 @@ export const ShopSettingPage: React.FC = () => {
             tabList={[
               {
                 label: '가게 정보 설정',
-                content: isInitialLoading ? (
+                content: !isInitialLoading ? (
                   <ShopInfoTab shopInformation={shopInformation} />
                 ) : (
                   <LoadingSpinner height='30rem' />

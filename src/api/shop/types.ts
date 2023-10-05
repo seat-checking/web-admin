@@ -59,5 +59,5 @@ export interface GetSeatStatisticsResponse {
   averageSeatUsageMinute: number;
 }
 export interface EditShopInformationRequest extends ShopInformationForm {
-  shopId: number;
+  shopId: number | null;
 }
