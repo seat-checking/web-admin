@@ -149,9 +149,11 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
             </BtnsRow>
           ) : (
             <Footer>
-              {reservationStatus === '취소'
-                ? '예약이 취소된 고객입니다.'
-                : '예약이 거절된 고객입니다.'}
+              {reservationStatus === '승인'
+                ? '예약이 승인된 고객입니다.'
+                : reservationStatus === '거절'
+                ? '예약이 거절된 고객입니다.'
+                : '예약이 취소된 고객입니다.'}
             </Footer>
           )}
         </>
