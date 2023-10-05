@@ -67,9 +67,9 @@ export const getCurrentlyInUse = async (
   return response.data.result;
 };
 
-export const getShopInformation = async (): Promise<ShopInformationForm> => {
-  const shopId = localStorage.getItem(STORAGE.storeId);
-
+export const getShopInformation = async (
+  shopId: number | null,
+): Promise<ShopInformationForm> => {
   const response = await axiosClient.get(
     `/stores/admins/basic-information/${shopId}`,
   );
@@ -80,8 +80,6 @@ export const getShopInformation = async (): Promise<ShopInformationForm> => {
 export const editShopInformation = async (
   params: EditShopInformationRequest,
 ) => {
-  const shopId = localStorage.getItem(STORAGE.storeId);
-
   const formData = new FormData();
   formData.append('store-id', String(params.shopId));
   formData.append('storeName', params.storeName);
@@ -105,7 +103,7 @@ export const editShopInformation = async (
   }
 
   const response = await axiosClient.patch(
-    `/stores/admins/basic-information/${shopId}`,
+    `/stores/admins/basic-information/${params.shopId}`,
     formData,
     {
       headers: {
