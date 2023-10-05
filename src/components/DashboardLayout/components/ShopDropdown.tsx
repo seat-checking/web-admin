@@ -10,6 +10,7 @@ import { useGetPermission } from 'common/hooks/queries/useGetPermission';
 import { useAuthActions, useSelectedShop } from 'common/stores/authStore';
 import { PATH } from 'common/utils/constants';
 import { ShopDropdownItem } from 'components/DashboardLayout/components/ShopDropdownItem';
+import { LoadingSpinner } from 'components/LoadingSpinner';
 import { ellipsisText } from 'styles/mixin';
 
 interface ShopDropdownProps {
@@ -25,7 +26,8 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
   const { setPermissions, setSelectedShop } = useAuthActions();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { data: storeResponseList } = useGetOwnedShops(isOpen);
+  const { data: storeResponseList, isInitialLoading } =
+    useGetOwnedShops(isOpen);
   const { fetchPermission } = useGetPermission();
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -87,14 +89,18 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
             </AddShopBtn>
           </Header>
           <Body>
-            {storeResponseList?.map((shop) => (
-              <ShopDropdownItem
-                key={shop.storeId}
-                shop={shop}
-                isSelected={selectedShop?.storeId === shop.storeId}
-                onClick={() => handleChangeSelectedShop(shop)}
-              />
-            ))}
+            {isInitialLoading ? (
+              <LoadingSpinner spinnerSize='3rem' theme='light' />
+            ) : (
+              storeResponseList?.map((shop) => (
+                <ShopDropdownItem
+                  key={shop.storeId}
+                  shop={shop}
+                  isSelected={selectedShop?.storeId === shop.storeId}
+                  onClick={() => handleChangeSelectedShop(shop)}
+                />
+              ))
+            )}
           </Body>
         </DropdownWrap>
       )}
