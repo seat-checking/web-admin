@@ -45,7 +45,8 @@ export const ShopSettingPage: React.FC = () => {
                 content: <ApplicationTab />,
               },
             ]}
-            tabWidth='80rem'
+            maxTabWidth='80rem'
+            minTabWidth='60rem'
             activeTab={activeTab}
             onClickTab={changeTab}
           />

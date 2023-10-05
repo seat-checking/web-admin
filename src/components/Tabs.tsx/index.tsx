@@ -9,7 +9,8 @@ export interface TabItem {
 
 interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   tabList: TabItem[];
-  tabWidth?: string;
+  maxTabWidth?: string;
+  minTabWidth?: string;
   activeTab: number;
   onClickTab?: (index: number) => void;
 }
@@ -19,7 +20,8 @@ interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 export const Tabs: React.FC<TabsProps> = ({
   tabList,
-  tabWidth,
+  maxTabWidth,
+  minTabWidth,
   activeTab,
   onClickTab,
   ...rest
@@ -39,7 +41,9 @@ export const Tabs: React.FC<TabsProps> = ({
 
   return (
     <Wrap {...rest}>
-      <TabWrap $tabWidth={tabWidth}>{tabNavItemList}</TabWrap>
+      <TabWrap $maxTabWidth={maxTabWidth} $minTabWidth={minTabWidth}>
+        {tabNavItemList}
+      </TabWrap>
       {tabList.map(
         (item, index) =>
           activeTab === index && (
@@ -57,15 +61,16 @@ const Wrap = styled.div`
   flex-direction: column;
 `;
 
-const TabWrap = styled.ul<{ $tabWidth?: string }>`
+const TabWrap = styled.ul<{ $maxTabWidth?: string; $minTabWidth?: string }>`
   display: flex;
 
   height: 6rem;
 
-  ${({ $tabWidth }) =>
-    $tabWidth &&
+  ${({ $maxTabWidth, $minTabWidth }) =>
+    $maxTabWidth &&
     css`
-      max-width: ${$tabWidth};
+      max-width: ${$maxTabWidth};
+      min-width: ${$minTabWidth};
       width: 100%;
       margin: auto;
     `}
