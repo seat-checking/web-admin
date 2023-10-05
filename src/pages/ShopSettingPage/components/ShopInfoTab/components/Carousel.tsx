@@ -1,48 +1,81 @@
 import { useState } from 'react';
 import styled, { useTheme } from 'styled-components';
+import type { ImgFile } from 'pages/ShopSettingPage/components/ShopInfoTab';
+import type { ChangeEvent } from 'react';
 import { ReactComponent as ChevronRight } from 'assets/icons/chevron-right.svg';
 import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 
-import { flexSet } from 'styles/mixin';
-
-interface Image {
-  id: number;
-  url: string;
-}
+import { darkerOnHover, flexSet } from 'styles/mixin';
 
 interface CarouselProps {
-  imgs?: Image[];
+  imgs?: (string | ImgFile)[] | null;
+  setImgFiles: (event: (string | ImgFile)[] | ChangeEvent<Element>) => void;
 }
 
 /**
  * 캐러셀 컴포넌트
  */
-export const Carousel: React.FC<CarouselProps> = ({ imgs }) => {
+export const Carousel: React.FC<CarouselProps> = ({ imgs, setImgFiles }) => {
   const theme = useTheme();
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
+  const handleShowNextImg = () => {
+    if (!imgs) {
+      return;
+    }
+    const imgCount = imgs.length;
+    setCurrentImgIndex((prev) => (prev < imgCount - 1 ? prev + 1 : prev));
+  };
+
+  const handleShowPrevImg = () => {
+    setCurrentImgIndex((prev) => (prev > 0 ? prev - 1 : prev));
+  };
+
+  const handleDeleteImg = () => {
+    if (!imgs) {
+      return;
+    }
+    const deleted = [...imgs];
+    deleted.splice(currentImgIndex, 1);
+    setImgFiles(deleted);
+    const isLastImg = currentImgIndex === imgs.length - 1;
+    if (isLastImg && currentImgIndex !== 0) {
+      setCurrentImgIndex((prev) => prev - 1);
+    }
+  };
+
   return (
     <Wrap>
-      {!imgs ? (
+      {!imgs || imgs.length === 0 ? (
         <NoImg>등록된 이미지가 없어요.</NoImg>
       ) : (
-        <ImgWrap $img={imgs[currentImgIndex].url}>
-          <XButtonWrap>
+        <ImgWrap
+          $img={
+            typeof imgs[currentImgIndex] === 'string'
+              ? imgs[currentImgIndex]
+              : ((imgs[currentImgIndex] as ImgFile).thumbnail as string)
+          }
+        >
+          <XButtonWrap onClick={handleDeleteImg} type='button'>
             <XIcon width='2.4rem' stroke={theme.palette.grey[300]} />
           </XButtonWrap>
           <Footer>
-            <ChevronRight
-              fill={theme.palette.grey[300]}
-              width='2.4rem'
-              height='2.4rem'
-              transform='rotate(180)'
-            />
-            {`${currentImgIndex}/${imgs.length}`}
-            <ChevronRight
-              fill={theme.palette.grey[300]}
-              width='2.4rem'
-              height='2.4rem'
-            />
+            <ButtonWrap type='button' onClick={handleShowPrevImg}>
+              <ChevronRight
+                fill={theme.palette.grey[300]}
+                width='2.4rem'
+                height='2.4rem'
+                transform='rotate(180)'
+              />
+            </ButtonWrap>
+            {`${currentImgIndex + 1}/${imgs.length}`}
+            <ButtonWrap type='button' onClick={handleShowNextImg}>
+              <ChevronRight
+                fill={theme.palette.grey[300]}
+                width='2.4rem'
+                height='2.4rem'
+              />
+            </ButtonWrap>
           </Footer>
         </ImgWrap>
       )}
@@ -50,7 +83,7 @@ export const Carousel: React.FC<CarouselProps> = ({ imgs }) => {
   );
 };
 
-const Wrap = styled.div<{ $img?: string }>`
+const Wrap = styled.div<{ $img?: string | ImgFile }>`
   width: 20.2rem;
 
   border: 0.1rem solid ${({ theme }) => theme.palette.grey[300]};
@@ -58,7 +91,7 @@ const Wrap = styled.div<{ $img?: string }>`
   overflow: hidden;
 `;
 
-const ImgWrap = styled.div<{ $img?: string }>`
+const ImgWrap = styled.div<{ $img?: string | ImgFile }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -66,15 +99,22 @@ const ImgWrap = styled.div<{ $img?: string }>`
   padding: 0.8rem 1rem;
   height: 100%;
 
-  background-image: url(${({ $img }) => $img});
+  background-image: url(${({ $img }) => `${$img}`});
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+
+  transition: all 0.3s;
 `;
 
-const XButtonWrap = styled.button`
+const ButtonWrap = styled.button`
+  ${darkerOnHover(2.4)}
+`;
+
+const XButtonWrap = styled(ButtonWrap)`
   margin-left: auto;
 `;
+
 const NoImg = styled.div`
   height: 100%;
   ${flexSet()};

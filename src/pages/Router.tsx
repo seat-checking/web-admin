@@ -86,7 +86,7 @@ export const router = createBrowserRouter([
         },
       },
       {
-        path: `${PATH.setting}/:shopId`,
+        path: `${PATH.setting}`,
         async lazy(): Promise<{ Component: React.FC }> {
           const { ShopSettingPage } = await import('./ShopSettingPage');
           return { Component: ShopSettingPage };

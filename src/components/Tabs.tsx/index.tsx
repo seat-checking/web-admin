@@ -4,12 +4,13 @@ import { TabNavItem } from 'components/Tabs.tsx/components/TabNavItem';
 
 export interface TabItem {
   label: string;
-  content: React.ReactElement;
+  content: React.ReactElement | null;
 }
 
 interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   tabList: TabItem[];
-  tabWidth?: string;
+  maxTabWidth?: string;
+  minTabWidth?: string;
   activeTab: number;
   onClickTab?: (index: number) => void;
 }
@@ -19,7 +20,8 @@ interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 export const Tabs: React.FC<TabsProps> = ({
   tabList,
-  tabWidth,
+  maxTabWidth,
+  minTabWidth,
   activeTab,
   onClickTab,
   ...rest
@@ -39,12 +41,15 @@ export const Tabs: React.FC<TabsProps> = ({
 
   return (
     <Wrap {...rest}>
-      <TabWrap $tabWidth={tabWidth}>{tabNavItemList}</TabWrap>
-      {tabList.map((item, index) => (
-        <ContentWrap hidden={activeTab !== index} key={item.label}>
-          {item.content}
-        </ContentWrap>
-      ))}
+      <TabWrap $maxTabWidth={maxTabWidth} $minTabWidth={minTabWidth}>
+        {tabNavItemList}
+      </TabWrap>
+      {tabList.map(
+        (item, index) =>
+          activeTab === index && (
+            <ContentWrap key={item.label}>{item.content}</ContentWrap>
+          ),
+      )}
     </Wrap>
   );
 };
@@ -56,15 +61,16 @@ const Wrap = styled.div`
   flex-direction: column;
 `;
 
-const TabWrap = styled.ul<{ $tabWidth?: string }>`
+const TabWrap = styled.ul<{ $maxTabWidth?: string; $minTabWidth?: string }>`
   display: flex;
 
   height: 6rem;
 
-  ${({ $tabWidth }) =>
-    $tabWidth &&
+  ${({ $maxTabWidth, $minTabWidth }) =>
+    $maxTabWidth &&
     css`
-      max-width: ${$tabWidth};
+      max-width: ${$maxTabWidth};
+      min-width: ${$minTabWidth};
       width: 100%;
       margin: auto;
     `}

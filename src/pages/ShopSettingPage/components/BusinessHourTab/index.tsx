@@ -6,7 +6,6 @@ import type { DayOfWeek, OperatingTimeResponse } from 'api/store/store';
 import { getOperatingTime, patchOperatingTime } from 'api/store/store';
 import { useSelectedShop } from 'common/stores/authStore';
 import { Button } from 'components/Button';
-import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Label } from 'components/Label';
 
 import {
@@ -281,7 +280,6 @@ export const BusinessHourTab: React.FC = () => {
           </SaveBtnWrap>
         </form>
       </Wrap>
-      <CustomToastContainer />
     </ConfigProvider>
   );
 };

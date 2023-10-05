@@ -15,7 +15,6 @@ import {
 
 import { useSelectedShop } from 'common/stores/authStore';
 import { Button } from 'components/Button';
-import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import { Modal } from 'components/Modal';
@@ -302,7 +301,6 @@ export const InformationList: React.FC<InformationListProps> = ({
           )}
         </ListWrapper>
       ))}
-      <CustomToastContainer />
     </LabelWrapper>
   );
 };

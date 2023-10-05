@@ -13,7 +13,6 @@ import {
 } from 'api/store/store';
 import { useSelectedShop } from 'common/stores/authStore';
 import { PATH } from 'common/utils/constants';
-import { CustomToastContainer } from 'components/CustomToastContainer';
 import { Label } from 'components/Label';
 import {
   EmployerTabWrapper,
@@ -95,7 +94,7 @@ export const EmployerTab: React.FC = () => {
         (employee) => employee.id !== employeeId,
       );
       setEmployeeList(updatedEmployeeList);
-      navigate(`/${PATH.setting}/1`);
+      navigate(`/${PATH.setting}`);
     } catch (error) {
       console.error(error);
     }
@@ -182,7 +181,6 @@ export const EmployerTab: React.FC = () => {
             />
           ) : null,
         )}
-        <CustomToastContainer />
       </StaffListWrapper>
     </>
   );

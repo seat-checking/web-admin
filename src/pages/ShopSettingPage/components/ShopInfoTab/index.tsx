@@ -1,99 +1,256 @@
+import { useRef } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useTheme } from 'styled-components';
+import type { ShopInformationForm } from 'common/utils/types';
+import type { ChangeEvent } from 'react';
+import type { Address } from 'react-daum-postcode';
+import type { SubmitHandler } from 'react-hook-form';
 
+import { useEditShopInformation } from 'common/hooks/mutations/useEditShopInformation';
+import { useAddress } from 'common/hooks/useAddress';
+import { STORAGE } from 'common/utils/constants';
 import { AddressBox } from 'components/AddressBox';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { Label } from 'components/Label';
 import { Radio } from 'components/Radio';
-import { HelperText } from 'pages/ShopSettingPage/components/HelperText';
 import {
   ContentWrap,
-  GrayBackground,
   ListItem,
   RadioRow,
-  WifiHelperWrap,
-  WifiLabelWrap,
   FileInput,
   AddFileBtn,
   AddFileRow,
   UploadIconBox,
+  GappedErrorMessage,
 } from 'pages/ShopSettingPage/components/ShopInfoTab/ShopInfoTab.styled';
 
 import { Carousel } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Carousel';
-import { Wifi } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Wifi';
 
+export interface ImgFile {
+  name: string;
+  file: File;
+  thumbnail: string;
+}
+
+interface ShopInfoTabProps {
+  shopInformation: ShopInformationForm | undefined;
+}
 /**
  * 가게 정보 설정 탭
  */
-export const ShopInfoTab: React.FC = () => {
+export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
+  shopInformation,
+}) => {
   const theme = useTheme();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    control,
+  } = useForm<ShopInformationForm>({
+    defaultValues: shopInformation,
+  });
+
+  const { open, handleComplete } = useAddress();
+  const { mutate: editShopSettingMutate } = useEditShopInformation();
+
+  const handleOpenFileUpload = (event: React.MouseEvent) => {
+    event.preventDefault();
+    fileInputRef.current?.click();
+  };
+
+  const handleUploadFile = (
+    event: ChangeEvent<HTMLInputElement>,
+    onChange: (event: (string | ImgFile)[] | ChangeEvent<Element>) => void,
+    prevImgs: (string | ImgFile)[] | null,
+  ) => {
+    const { files } = event.target;
+    if (files && files.length > 0) {
+      if (prevImgs && files.length + prevImgs.length > 10) {
+        setError('storeImages', {
+          type: 'custom',
+          message: '최대 10장의 이미지를 등록할 수 있습니다.',
+        });
+        return;
+      }
+      const fileList = Array.prototype.map.call<
+        FileList,
+        [(file: File) => ImgFile],
+        ImgFile[]
+      >(files, (file: File) => ({
+        name: file.name,
+        file,
+        thumbnail: URL.createObjectURL(file),
+      }));
+      if (!prevImgs) {
+        onChange(fileList);
+        return;
+      }
+      onChange([...prevImgs, ...fileList]);
+    }
+  };
+
+  const onSubmit: SubmitHandler<ShopInformationForm> = (data) => {
+    const shopId = Number(localStorage.getItem(STORAGE.storeId));
+    editShopSettingMutate({ ...data, shopId });
+  };
+
   return (
-    <ContentWrap>
-      <GrayBackground>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <ContentWrap>
         <ListItem>
-          <WifiLabelWrap>
-            <Label label='Wi-Fi 등록' marginBottom='0' />
-            <WifiHelperWrap>
-              <HelperText>
-                현재 가게에서 사용중인 Wi-Fi를 통해 고객들의 입실과 퇴실 여부를
-                확인할 수 있어요.
-              </HelperText>
-            </WifiHelperWrap>
-          </WifiLabelWrap>
-          <Wifi />
-        </ListItem>
-      </GrayBackground>
-      <ListItem>
-        <Input
-          label='가게 이름'
-          placeholder='가게명을 작성해주세요. (ex. 캐치카페 한양대점)'
-        />
-      </ListItem>
-      <ListItem>
-        <Label label='가게 위치' />
-        {/* // TODO 기능 구현 미완 */}
-        <AddressBox
-          value=''
-          onClick={() => {
-            console.log(3);
-          }}
-        />
-        <Input placeholder='상세 주소' value='' />
-      </ListItem>
-      <ListItem>
-        <Label label='가게 유형' required={false} />
-        <RadioRow>
-          <Radio
-            id='restaurant'
-            label='음식점'
-            value='음식점'
-            name='shopSort'
+          <Input
+            label='가게 이름'
+            placeholder='가게명을 작성해주세요. (ex. 캐치카페 한양대점)'
+            {...register('storeName', {
+              required: '가게 이름은 필수 입력입니다.',
+            })}
           />
-          <Radio id='cafe' label='카페' value='카페' name='shopSort' />
-          <Radio id='gathering' label='모임' value='모임' name='shopSort' />
-        </RadioRow>
-      </ListItem>
-      <ListItem>
-        <Label label='가게 대표 이미지' />
-        <FileInput type='file' hidden />
-        <AddFileRow>
-          <AddFileBtn backgroundColor={theme.palette.grey[50]}>
-            <UploadIconBox />
-            첨부파일 업로드 *최대 10장
-            <br /> (권장 사이즈 750x480이상)
-          </AddFileBtn>
-          <Carousel />
-        </AddFileRow>
-      </ListItem>
-      <ListItem>
-        <Input
-          label='한 줄 소개'
-          placeholder='가게의 소개글을 작성해주세요. (최대 N자 이내)'
-        />
-      </ListItem>
-      <ListItem>
-        <Button>저장하기</Button>
-      </ListItem>
-    </ContentWrap>
+          {errors.storeName && (
+            <GappedErrorMessage>{errors.storeName?.message}</GappedErrorMessage>
+          )}
+        </ListItem>
+        <ListItem>
+          <Label label='가게 위치' />
+          <Controller
+            control={control}
+            name='address'
+            rules={{ required: '주소를 선택해주세요' }}
+            render={({ field: { onChange, value } }) => (
+              <AddressBox
+                value={value}
+                onClick={(e) => {
+                  e.preventDefault();
+                  open({
+                    onComplete: (data: Address) => {
+                      const fullAddress = handleComplete(data);
+                      onChange(fullAddress);
+                    },
+                  });
+                }}
+              />
+            )}
+          />
+          <Input
+            placeholder='상세 주소'
+            {...register('detailAddress', {
+              required: '상세 주소를 입력해주세요.',
+            })}
+          />
+          {errors.address && (
+            <GappedErrorMessage>{errors.address?.message}</GappedErrorMessage>
+          )}
+          {errors.detailAddress && (
+            <GappedErrorMessage>
+              {errors.detailAddress?.message}
+            </GappedErrorMessage>
+          )}
+        </ListItem>
+        <ListItem>
+          <Input
+            label='가게 전화번호'
+            placeholder='(ex. 010-1234-5678)'
+            {...register('telNum', {
+              required: '가게 전화번호는 필수 입력입니다.',
+            })}
+          />
+          {errors.telNum && (
+            <GappedErrorMessage>{errors.telNum?.message}</GappedErrorMessage>
+          )}
+        </ListItem>
+        <ListItem>
+          <Label label='가게 유형' required={false} />
+          <RadioRow>
+            <Radio
+              id='restaurant'
+              label='음식점'
+              value='음식점'
+              {...register('category', {
+                required: '가게 유형을 선택해주세요.',
+              })}
+            />
+            <Radio
+              id='cafe'
+              label='카페'
+              value='카페'
+              {...register('category', {
+                required: '가게 유형을 선택해주세요.',
+              })}
+            />
+            <Radio
+              id='gathering'
+              label='모임'
+              value='모임'
+              {...register('category', {
+                required: '가게 유형을 선택해주세요.',
+              })}
+            />
+          </RadioRow>
+          {errors.category && (
+            <GappedErrorMessage>{errors.category?.message}</GappedErrorMessage>
+          )}
+        </ListItem>
+        <ListItem>
+          <Label label='가게 대표 이미지' />
+          <Controller
+            control={control}
+            name='storeImages'
+            rules={{ required: '이미지를 선택해주세요.' }}
+            render={({ field: { onChange: onChangeValue, value } }) => (
+              <>
+                <FileInput
+                  type='file'
+                  hidden
+                  accept='image/jpeg, image/png, image/jpg'
+                  multiple
+                  ref={fileInputRef}
+                  onChange={(e) => {
+                    handleUploadFile(e, onChangeValue, value);
+                  }}
+                />
+                <AddFileRow>
+                  <AddFileBtn
+                    backgroundColor={theme.palette.grey[50]}
+                    onClick={handleOpenFileUpload}
+                  >
+                    <UploadIconBox />
+                    첨부파일 업로드 *최대 10장
+                    <br /> (권장 사이즈 750x480이상)
+                  </AddFileBtn>
+                  <Carousel imgs={value} setImgFiles={onChangeValue} />
+                </AddFileRow>
+              </>
+            )}
+          />
+          {errors.storeImages && (
+            <GappedErrorMessage>
+              {errors.storeImages?.message}
+            </GappedErrorMessage>
+          )}
+        </ListItem>
+        <ListItem>
+          <Input
+            label='한 줄 소개'
+            maxLength={30}
+            placeholder='가게의 소개글을 작성해주세요. (최대 30자 이내)'
+            {...register('introduction', {
+              required: '한 줄 소개는 필수 입력입니다.',
+            })}
+          />
+          {errors.introduction && (
+            <GappedErrorMessage>
+              {errors.introduction?.message}
+            </GappedErrorMessage>
+          )}
+        </ListItem>
+        <ListItem>
+          <Button type='submit'>저장하기</Button>
+        </ListItem>
+      </ContentWrap>
+    </form>
   );
 };

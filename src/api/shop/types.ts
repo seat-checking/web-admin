@@ -1,3 +1,5 @@
+import type { ShopInformationForm } from 'common/utils/types';
+
 export interface ToggleCloseTodayRequest {
   shopId: number;
   isClosedToday: boolean;
@@ -35,7 +37,7 @@ export interface GetShopLayoutResponse extends ShopLayout {
   storeSpaceId: number;
 }
 
-export interface EditShopRequest {
+export interface EditShopLayoutRequest {
   spaceId: number;
   layout: ShopLayout;
 }
@@ -55,4 +57,7 @@ export interface GetSeatStatisticsResponse {
   totalNumberOfSeats: number;
   numberOfRemainingSeats: number;
   averageSeatUsageMinute: number;
+}
+export interface EditShopInformationRequest extends ShopInformationForm {
+  shopId: number;
 }

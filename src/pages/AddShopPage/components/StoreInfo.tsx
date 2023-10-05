@@ -26,6 +26,7 @@ export const StoreInfo: React.FC = () => {
   } = useForm<ShopInfoForm>({
     mode: 'onChange',
   });
+
   const navigate = useNavigate();
   const { mutate: addShopMutate } = useAddShop();
 
@@ -83,13 +84,13 @@ export const StoreInfo: React.FC = () => {
             required: '상세 주소를 입력해주세요.',
           })}
         />
+        {errors.address && (
+          <GappedErrorMessage>{errors.address?.message}</GappedErrorMessage>
+        )}
         {errors.detailAddress && (
           <GappedErrorMessage>
             {errors.detailAddress?.message}
           </GappedErrorMessage>
-        )}
-        {errors.address && (
-          <GappedErrorMessage>{errors.address?.message}</GappedErrorMessage>
         )}
       </InputWrap>
       <InputWrap>

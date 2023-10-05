@@ -30,6 +30,7 @@ export const queryKeys = {
   GET_RESERVATIONS: 'reservations',
   GET_SEAT_STATISTICS: 'spaceStatistics',
   GET_CURRENTLY_IN_USE: 'currentlyInUse',
+  GET_SHOP_INFORMATION: 'shopInformation',
 };
 
 export const TEMPORARY_SPACE_ID = -1;

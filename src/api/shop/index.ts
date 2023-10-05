@@ -1,15 +1,21 @@
 import type {
   CurrentlyInUseResponse,
-  EditShopRequest,
   GetSeatStatisticsResponse,
+  EditShopInformationRequest,
+  EditShopLayoutRequest,
   GetShopLayoutResponse,
   ShopLayout,
   ToggleCloseTodayRequest,
 } from 'api/shop/types';
 import type { Permission } from 'common/utils/auth';
-import type { DropdownShop, ShopInfoForm } from 'common/utils/types';
+import type {
+  DropdownShop,
+  ShopInfoForm,
+  ShopInformationForm,
+} from 'common/utils/types';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { axiosClient } from 'api/apiClient';
+import { STORAGE } from 'common/utils/constants';
 
 export const addShop = async (shopInfoForm: ShopInfoForm) => {
   const response = await axiosClient.post(
@@ -61,6 +67,55 @@ export const getCurrentlyInUse = async (
   return response.data.result;
 };
 
+export const getShopInformation = async (): Promise<ShopInformationForm> => {
+  const shopId = localStorage.getItem(STORAGE.storeId);
+
+  const response = await axiosClient.get(
+    `/stores/admins/basic-information/${shopId}`,
+  );
+
+  return response.data.result;
+};
+
+export const editShopInformation = async (
+  params: EditShopInformationRequest,
+) => {
+  const shopId = localStorage.getItem(STORAGE.storeId);
+
+  const formData = new FormData();
+  formData.append('store-id', String(params.shopId));
+  formData.append('storeName', params.storeName);
+  formData.append('address', params.address);
+  formData.append('detailAddress', params.detailAddress);
+  formData.append('category', params.category);
+  formData.append('introduction', params.introduction);
+  formData.append('telNum', params.telNum);
+  params.storeImages?.forEach((image) => {
+    if (typeof image === 'string') {
+      formData.append(`originImages`, image);
+    } else {
+      formData.append(`file`, image.file);
+    }
+  });
+  if (!formData.has('originImages')) {
+    formData.append(`originImages`, '');
+  }
+  if (!formData.has('file')) {
+    formData.append(`file`, '');
+  }
+
+  const response = await axiosClient.patch(
+    `/stores/admins/basic-information/${shopId}`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+  return response.data.result;
+};
+
 export class ShopApi {
   static readonly apiPrefix = '/stores/admins';
 
@@ -97,7 +152,10 @@ export class ShopApi {
     await axiosClient.delete(`${this.apiPrefix}/spaces/${spaceId}`);
   };
 
-  static editShopLayout = async ({ spaceId, layout }: EditShopRequest) => {
+  static editShopLayout = async ({
+    spaceId,
+    layout,
+  }: EditShopLayoutRequest) => {
     const response = await axiosClient.patch(
       `${this.apiPrefix}/spaces/${spaceId}`,
       layout,
