@@ -100,6 +100,8 @@ const useLayoutStore = create<LayoutStoreState>()(
                 break;
               }
             }
+            useChangeStore.getState().setChange(true);
+
             return { layout: copy };
           },
           false,

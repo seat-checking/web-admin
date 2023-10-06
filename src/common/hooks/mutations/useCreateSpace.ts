@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import type { ShopLayout } from 'api/shop/types';
 import { ShopApi } from 'api/shop';
 import { useSpaceId } from 'pages/LayoutSettingPage/hooks/useSpaceId';

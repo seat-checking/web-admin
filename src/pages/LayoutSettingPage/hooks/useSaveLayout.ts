@@ -52,7 +52,6 @@ export const useSaveLayout = () => {
   const height = useShopHeight();
   const layout = useLayout();
   const queryClient = useQueryClient();
-  const { setChange } = useChange();
 
   const { mutate: editLayoutMutate } = useEditLayout();
   const { mutate: createSpaceMutate } = useCreateSpace();
@@ -81,7 +80,6 @@ export const useSaveLayout = () => {
       spaceId,
       layout: convertDataForServer(layout, height, spaceName, reservationUnit),
     });
-    setChange(false);
   };
 
   return handleSave;
