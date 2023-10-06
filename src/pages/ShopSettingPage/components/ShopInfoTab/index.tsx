@@ -23,6 +23,7 @@ import {
   AddFileRow,
   UploadIconBox,
   GappedErrorMessage,
+  TextArea,
 } from 'pages/ShopSettingPage/components/ShopInfoTab/ShopInfoTab.styled';
 
 import { Carousel } from 'pages/ShopSettingPage/components/ShopInfoTab/components/Carousel';
@@ -233,12 +234,11 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
           )}
         </ListItem>
         <ListItem>
-          <Input
-            label='한 줄 소개'
-            maxLength={30}
-            placeholder='가게의 소개글을 작성해주세요. (최대 30자 이내)'
+          <Label label='가게 소개' />
+          <TextArea
+            placeholder='가게의 소개글을 작성해주세요.'
             {...register('introduction', {
-              required: '한 줄 소개는 필수 입력입니다.',
+              required: '소개 문구는 필수 입력입니다.',
             })}
           />
           {errors.introduction && (
