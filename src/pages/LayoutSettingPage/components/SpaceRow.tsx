@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ReactComponent as AlertCircleBorderIcon } from 'assets/icons/alert-circle-border.svg';
 import { ReactComponent as PlusCircle } from 'assets/icons/plus-circle.svg';
 
+import { useSelectedShop } from 'common/stores/authStore';
 import { ExitConfirmModal } from 'pages/LayoutSettingPage/components/ExitConfirmModal';
 import { Space } from 'pages/LayoutSettingPage/components/Space';
 import { SpaceAddEditModal } from 'pages/LayoutSettingPage/components/SpaceAddEditModal';
@@ -25,6 +26,7 @@ import { useModal } from 'pages/LayoutSettingPage/stores/modalStore';
  * space 목록 컴포넌트 (검은색 영역)
  */
 export const SpaceRow: React.FC = () => {
+  const { storeId: shopId } = useSelectedShop();
   const { setSpaceId, spaceId, setFirstSpaceId } = useSpaceId();
   const { isChanged } = useChange();
   const { setIsAddOn, isAddOn } = useModal();
@@ -77,6 +79,10 @@ export const SpaceRow: React.FC = () => {
       setIsAddOn(true);
     }
   }, [spaceList, setFirstSpaceId, setIsAddOn]);
+
+  useEffect(() => {
+    firstLoadedRef.current = false;
+  }, [shopId]);
 
   return (
     <>
