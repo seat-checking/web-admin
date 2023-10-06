@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTheme } from 'styled-components';
 import type { ShopInformationForm } from 'common/utils/types';
@@ -52,6 +52,7 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
     register,
     handleSubmit,
     formState: { errors },
+    reset,
     setError,
     control,
   } = useForm<ShopInformationForm>({
@@ -100,6 +101,10 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
   const onSubmit: SubmitHandler<ShopInformationForm> = (data) => {
     editShopSettingMutate({ ...data, shopId });
   };
+
+  useEffect(() => {
+    reset(shopInformation);
+  }, [reset, shopInformation]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
