@@ -8,6 +8,7 @@ import type { SubmitHandler } from 'react-hook-form';
 
 import { useEditShopInformation } from 'common/hooks/mutations/useEditShopInformation';
 import { useAddress } from 'common/hooks/useAddress';
+import { useSelectedShop } from 'common/stores/authStore';
 import { AddressBox } from 'components/AddressBox';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
@@ -41,6 +42,8 @@ interface ShopInfoTabProps {
 export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
   shopInformation,
 }) => {
+  const { storeId: shopId } = useSelectedShop();
+
   const theme = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -94,7 +97,7 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
   };
 
   const onSubmit: SubmitHandler<ShopInformationForm> = (data) => {
-    editShopSettingMutate({ ...data });
+    editShopSettingMutate({ ...data, shopId });
   };
 
   return (
@@ -150,11 +153,10 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
         </ListItem>
         <ListItem>
           <Input
+            required={false}
             label='가게 전화번호'
             placeholder='(ex. 010-1234-5678)'
-            {...register('telNum', {
-              required: '가게 전화번호는 필수 입력입니다.',
-            })}
+            {...register('telNum')}
           />
           {errors.telNum && (
             <GappedErrorMessage>{errors.telNum?.message}</GappedErrorMessage>
