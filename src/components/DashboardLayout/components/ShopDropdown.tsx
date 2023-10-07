@@ -77,7 +77,7 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
         onClick={handleToggleDropdown}
         folded={isFolded}
       >
-        <SelecteText folded={isFolded}>{selectedShop?.storeName}</SelecteText>
+        <SelectedText folded={isFolded}>{selectedShop?.storeName}</SelectedText>
         <ChevronDown stroke='white' />
       </TriggerBtn>
       {isOpen && (
@@ -128,20 +128,20 @@ const TriggerBtn = styled.button<{ folded: boolean }>`
   width: 100%;
 `;
 
-const SelecteText = styled.div<{ folded: boolean }>`
+const SelectedText = styled.div<{ folded: boolean }>`
   margin-right: 0.8rem;
 
   font-weight: 600;
   font-size: ${({ folded }): string => (folded ? '1.4rem' : '2.4rem')};
   color: white;
 
-  max-width: ${({ folded }): string => (folded ? '7.6rem' : '18rem')};
-  ${ellipsisText(1)}
+  max-width: ${({ folded }): string => (folded ? '7.6rem' : '20rem')};
+  ${ellipsisText(3)}
 `;
 
 const DropdownWrap = styled.div`
   position: absolute;
-  top: 5rem;
+  margin-top: 1rem;
   left: 4rem;
 
   width: 34.8rem;
