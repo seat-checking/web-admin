@@ -50,7 +50,7 @@ export const processReservation = async ({
   return response.data;
 };
 
-export const getReservations = async ({
+export const getInfiniteReservations = async ({
   page = 1,
   reservationStatus,
   shopId,
