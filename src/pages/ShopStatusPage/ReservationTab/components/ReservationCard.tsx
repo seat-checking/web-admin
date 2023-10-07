@@ -57,9 +57,12 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
     processReservationMutate(
       { reservationId, isApproved, shopId },
       {
-        onSuccess() {
+        onSuccess(_, { shopId: processedShopId }) {
           queryClient.setQueryData(
-            [queryKeys.GET_RESERVATIONS, { type: 'pending' }],
+            [
+              queryKeys.GET_INFINITE_RESERVATIONS,
+              { shopId: processedShopId, type: 'pending' },
+            ],
             (data: InfiniteData<ReservationResponse> | undefined) => {
               if (!data) return data;
               return {
