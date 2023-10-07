@@ -31,7 +31,6 @@ export const ShopDropdownItem: React.FC<DropdownItemProps> = ({
             {shop.isOpenNow ? '영업 중' : '준비 중'}
           </IsOpenText>
         </UpperWrap>
-        <Introduction>{shop.introduction}</Introduction>
       </MiddleWrap>
       <RightWrap>
         <Toggle isChecked={shop.isClosedToday} shopId={shop.storeId} />
@@ -103,15 +102,6 @@ const Circle = styled.div<{ $isOpen: boolean }>`
   border-radius: 50%;
   background-color: ${({ $isOpen: $isClosed, theme }) =>
     $isClosed ? theme.palette.primary.orange : theme.palette.grey[200]};
-`;
-
-const Introduction = styled.div`
-  color: ${({ theme }) => theme.palette.grey[300]};
-  font-size: 1.4rem;
-  font-weight: 400;
-  line-height: normal;
-
-  text-align: start;
 `;
 
 const RightWrap = styled.div`

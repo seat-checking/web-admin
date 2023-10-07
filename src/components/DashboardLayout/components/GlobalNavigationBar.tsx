@@ -43,7 +43,6 @@ export const GlobalNavigationBar: React.FC = () => {
           className='shopLogo'
         />
         {!isFolded && <ShopDropdown isFolded={isFolded} />}
-        <p className='branchName hideFold'>{selectedShop?.introduction}</p>
         <ul className='naviationList'>
           {permissions?.storeStatus && (
             <NavigationItem
