@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components/macro';
-import { flexSet } from 'styles/mixin';
+import { ellipsisText, flexSet } from 'styles/mixin';
 
 export const SpaceBox = styled.div<{ isSelected: boolean }>`
   position: relative;
@@ -28,14 +28,23 @@ export const SpaceBox = styled.div<{ isSelected: boolean }>`
     `}
 `;
 
-export const Name = styled.div`
+export const Name = styled.div<{ $length?: number }>`
   max-width: 16rem;
 
   text-align: center;
   font-weight: 500;
   font-size: 2.4rem;
+  line-height: 2.8rem;
 
-  /* background-color: aqua; */
+  ${({ $length }) =>
+    $length &&
+    $length > 7 &&
+    css`
+      font-size: 1.8rem;
+      line-height: 2rem;
+    `}
+
+  ${ellipsisText(2)}
 `;
 
 export const BtnsRow = styled.div`

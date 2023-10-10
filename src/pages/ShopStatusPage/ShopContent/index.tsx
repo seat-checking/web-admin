@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { CurrentlyInUseResponse } from 'api/shop/types';
 
+import { useGetCurrentlyInUse } from 'common/hooks/queries/useGetCurrentlyInUse';
 import { useGetSpaces } from 'common/hooks/queries/useGetSpaces';
 import { ShopLayout } from 'pages/ShopStatusPage/ShopContent/components/ShopLayout';
 import { SpaceList } from 'pages/ShopStatusPage/ShopContent/components/SpaceList';
@@ -30,6 +31,8 @@ export const ShopContent: React.FC = () => {
   const { data: spaceList, isLoading: isSpaceListLoading } = useGetSpaces();
   const [currentSpaceId, setCurrentSpaceId] = useState<number>(-1);
 
+  // TODO: api 500 해결 후  수정 예정
+  // const { data: currentlyInUse } = useGetCurrentlyInUse(currentSpaceId);
   const handleChangeSpace = (spaceId: number) => {
     setCurrentSpaceId(spaceId);
   };

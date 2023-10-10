@@ -50,7 +50,7 @@ export const Space: React.FC<SpaceProps> = ({
 
   return (
     <SpaceBox onClick={onClick} isSelected={isSelected}>
-      <Name>{name}</Name>
+      <Name $length={name.length}>{name}</Name>
       {isSelected && (
         <BtnsRow>
           <IconButton onClick={(e) => handleOpenModal(e, 'EDIT')}>
