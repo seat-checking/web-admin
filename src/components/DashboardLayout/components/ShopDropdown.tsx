@@ -1,10 +1,11 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
-import styled, { useTheme } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import type { DropdownShop } from 'common/utils/types';
 import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as PlusSquareIcon } from 'assets/icons/plus-square.svg';
+import { ReactComponent as XCircleIcon } from 'assets/icons/x-circle.svg';
 import { useGetInfiniteOwnedShops } from 'common/hooks/queries/useGetInfiniteOwnedShops';
 import { useGetPermission } from 'common/hooks/queries/useGetPermission';
 
@@ -40,7 +41,6 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
   const { fetchPermission } = useGetPermission();
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const theme = useTheme();
   const navigate = useNavigate();
 
   const handleAddShop = () => {
@@ -70,6 +70,12 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
       introduction: shop.introduction,
     });
     setIsOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate(`/${PATH.login}`);
+    // TODO 로그아웃 api 연결
   };
 
   const refetchPage = (pageIndex: number) => {
@@ -103,9 +109,13 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
         <DropdownWrap>
           <Header>
             <AddShopBtn onClick={handleAddShop}>
-              <PlusSquareIcon stroke={theme.palette.grey[300]} />
+              <PlusSquareIcon />
               가게 추가
             </AddShopBtn>
+            <LogoutBtn onClick={handleLogout}>
+              <XCircleIcon />
+              로그아웃
+            </LogoutBtn>
           </Header>
           <Body>
             {status === 'loading' ? (
@@ -198,6 +208,9 @@ const Header = styled.div`
   position: absolute;
   background-color: ${({ theme }) => theme.palette.primary.dark};
   z-index: 1;
+
+  display: flex;
+  justify-content: space-between;
 `;
 
 const AddShopBtn = styled.button`
@@ -207,12 +220,36 @@ const AddShopBtn = styled.button`
 
   font-size: 1.2rem;
   font-weight: 500;
+
+  svg {
+    stroke: ${({ theme }) => theme.palette.grey[300]};
+  }
+
+  :hover {
+    color: white;
+    svg {
+      stroke: white;
+    }
+  }
+`;
+
+const LogoutBtn = styled(AddShopBtn)`
+  color: ${({ theme }) => theme.palette.grey[400]};
+  svg {
+    stroke: ${({ theme }) => theme.palette.grey[400]};
+  }
+  :hover {
+    color: white;
+    svg {
+      stroke: white;
+    }
+  }
 `;
 
 const Body = styled.div`
   max-height: 60vh;
   overflow: auto;
-  padding-top: 4.8rem;
+  padding-top: 6rem;
 
   /* 스크롤바 설정*/
   &::-webkit-scrollbar {
