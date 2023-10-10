@@ -10,6 +10,9 @@ interface DropdownItemProps {
   isSelected: boolean;
   onClick: VoidFunction;
   shop: DropdownShop;
+  pageIdx: number;
+  itemIdx: number;
+  refetch: () => void;
 }
 
 /**
@@ -19,6 +22,9 @@ export const ShopDropdownItem: React.FC<DropdownItemProps> = ({
   shop,
   isSelected,
   onClick,
+  pageIdx,
+  itemIdx,
+  refetch,
 }) => {
   return (
     <Wrap type='button' $isSelected={isSelected} onClick={onClick}>
@@ -33,7 +39,13 @@ export const ShopDropdownItem: React.FC<DropdownItemProps> = ({
         </UpperWrap>
       </MiddleWrap>
       <RightWrap>
-        <Toggle isChecked={shop.isClosedToday} shopId={shop.storeId} />
+        <Toggle
+          isDefaultChecked={!shop.isClosedToday}
+          shopId={shop.storeId}
+          pageIdx={pageIdx}
+          itemIdx={itemIdx}
+          refetch={refetch}
+        />
         <HelperText>일시 정지</HelperText>
       </RightWrap>
     </Wrap>
@@ -53,6 +65,13 @@ const Wrap = styled.button<{ $isSelected: boolean }>`
     $isSelected &&
     css`
       background-color: rgba(255, 255, 255, 0.1);
+    `};
+  ${({ $isSelected }) =>
+    !$isSelected &&
+    css`
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
     `};
 `;
 

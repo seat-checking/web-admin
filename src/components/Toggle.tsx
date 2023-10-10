@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components/macro';
+import type { InfiniteData } from '@tanstack/react-query';
 import type { DropdownShop } from 'common/utils/types';
 import type { ChangeEvent } from 'react';
 import { useToggleCloseToday } from 'common/hooks/mutations/useToggleCloseToday';
@@ -8,57 +9,84 @@ import { queryKeys } from 'common/utils/constants';
 
 interface ToggleProps {
   shopId: number;
-  isChecked: boolean;
+  isDefaultChecked: boolean;
+  pageIdx: number;
+  itemIdx: number;
+  refetch: () => void;
 }
 
 /**
  * 오늘 영업 임시 중단 여부 토글
  */
-export const Toggle: React.FC<ToggleProps> = ({ shopId, isChecked }) => {
-  const isToggledRef = useRef(isChecked);
+export const Toggle: React.FC<ToggleProps> = ({
+  shopId,
+  isDefaultChecked,
+  pageIdx,
+  itemIdx,
+  refetch,
+}) => {
+  const [checked, setChecked] = useState(isDefaultChecked);
   const queryClient = useQueryClient();
 
   const { mutate: toggleMutate } = useToggleCloseToday();
 
   const handleToggle = (event: ChangeEvent<HTMLInputElement>) => {
-    isToggledRef.current = event.currentTarget.checked;
+    const isChecked = event.currentTarget.checked;
+    setChecked(isChecked);
 
-    if (event.currentTarget.checked) {
-      queryClient.invalidateQueries([queryKeys.GET_OWNED_SHOPS]);
+    // isClosedToday 는 체크된 상태와 반대임
+    const isClosedToday = !isChecked;
+    if (!isClosedToday) {
+      toggleMutate(
+        { shopId, isClosedToday },
+        {
+          onSuccess() {
+            // 오늘 영업 on 시켰으면 현재 운영 중 여부를 다시 받아와야 하므로 API 재호출
+            refetch();
+          },
+        },
+      );
       return;
     }
 
+    // 오늘 영업 off 시켰으면 isOpenNow도 무조건 false
     queryClient.setQueryData(
       [queryKeys.GET_OWNED_SHOPS],
-      (data: DropdownShop[] | undefined) => {
-        return data?.map((shop) => {
-          if (shop.storeId === shopId) {
-            return { ...shop, isOpenNow: false };
-          }
-          return shop;
-        });
+      (data: InfiniteData<DropdownShop[]> | undefined) => {
+        if (!data) return data;
+
+        const copiedPages = [...data.pages];
+        copiedPages[pageIdx][itemIdx].isClosedToday = isClosedToday;
+        copiedPages[pageIdx][itemIdx].isOpenNow = false;
+        return {
+          pages: copiedPages,
+          pageParams: data.pageParams,
+        };
       },
     );
   };
 
   useEffect(() => {
     return () => {
-      if (isChecked === isToggledRef.current) {
+      if (isDefaultChecked === checked) {
         return;
       }
-
-      const isClosedToday = isToggledRef.current;
-
-      toggleMutate({ shopId, isClosedToday });
+      // 오늘 영업 off 시킨 경우에는 mutate를 호출하지 않았으므로 여기서 호출해줌
+      if (!checked) {
+        toggleMutate({ shopId, isClosedToday: true });
+      }
     };
-  }, [isChecked, toggleMutate, shopId]);
+  }, [isDefaultChecked, toggleMutate, shopId, checked]);
 
   return (
-    <Wrap onClick={(e) => e.stopPropagation()} $isInActive={isChecked == null}>
+    <Wrap
+      onClick={(e) => e.stopPropagation()}
+      $isInActive={isDefaultChecked == null}
+    >
       <input
         role='switch'
         type='checkbox'
-        defaultChecked={isChecked}
+        checked={checked}
         onChange={handleToggle}
       />
     </Wrap>

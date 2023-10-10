@@ -34,6 +34,7 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
     isFetching,
     status,
     error,
+    refetch,
     fetchNextPage,
   } = useGetInfiniteOwnedShops(isOpen);
   const { fetchPermission } = useGetPermission();
@@ -69,6 +70,10 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
       introduction: shop.introduction,
     });
     setIsOpen(false);
+  };
+
+  const refetchPage = (pageIndex: number) => {
+    refetch({ refetchPage: (_, index) => index === pageIndex });
   };
 
   useEffect(() => {
@@ -109,14 +114,17 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
               <p>{error.message}</p>
             ) : (
               <>
-                {storeResponseList?.pages.map((group, idx) => {
+                {storeResponseList?.pages.map((group, pageIdx) => {
                   return (
                     // eslint-disable-next-line react/no-array-index-key
-                    <Fragment key={idx}>
-                      {group?.map((shop) => (
+                    <Fragment key={pageIdx}>
+                      {group?.map((shop, itemIdx) => (
                         <ShopDropdownItem
                           key={shop.storeId}
+                          pageIdx={pageIdx}
+                          itemIdx={itemIdx}
                           shop={shop}
+                          refetch={() => refetchPage(pageIdx)}
                           isSelected={selectedShop?.storeId === shop.storeId}
                           onClick={() => handleChangeSelectedShop(shop)}
                         />
