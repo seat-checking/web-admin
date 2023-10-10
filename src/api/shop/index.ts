@@ -15,7 +15,6 @@ import type {
 } from 'common/utils/types';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { axiosClient } from 'api/apiClient';
-import { STORAGE } from 'common/utils/constants';
 
 export const addShop = async (shopInfoForm: ShopInfoForm) => {
   const response = await axiosClient.post(

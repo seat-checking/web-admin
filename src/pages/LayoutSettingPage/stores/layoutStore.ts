@@ -77,10 +77,11 @@ const useLayoutStore = create<LayoutStoreState>()(
             const newLayout = state.layout.map((prevItem, idx) => {
               return {
                 ...prevItem,
-                w: changedLayout[idx].w,
-                h: changedLayout[idx].h,
-                x: changedLayout[idx].x,
-                y: changedLayout[idx].y,
+                // FIXME w가 왜 비어있는지 파악해야함
+                w: changedLayout[idx]?.w,
+                h: changedLayout[idx]?.h,
+                x: changedLayout[idx]?.x,
+                y: changedLayout[idx]?.y,
               };
             });
             return {
@@ -100,6 +101,8 @@ const useLayoutStore = create<LayoutStoreState>()(
                 break;
               }
             }
+            useChangeStore.getState().setChange(true);
+
             return { layout: copy };
           },
           false,

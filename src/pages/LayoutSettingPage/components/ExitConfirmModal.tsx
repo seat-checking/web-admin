@@ -1,7 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query';
 import styled, { useTheme } from 'styled-components';
-import { useSelectedShop } from 'common/stores/authStore';
-import { queryKeys } from 'common/utils/constants';
 import { Button } from 'components/Button';
 import { Modal } from 'components/Modal';
 import { useSaveLayout } from 'pages/LayoutSettingPage/hooks/useSaveLayout';
@@ -24,24 +21,16 @@ export const ExitConfirmModal: React.FC<ExitConfirmModalProps> = ({
   const { setChange } = useChange();
   const saveLayout = useSaveLayout();
 
-  const queryClient = useQueryClient();
-  const { storeId: shopId } = useSelectedShop();
-
   const handleCancel = () => {
     setChange(false);
     clearSpaces();
     onComplete?.();
-
     onClose();
   };
 
   const handleSave = () => {
-    setChange(false);
-    queryClient.invalidateQueries([queryKeys.GET_SPACES, shopId]);
     onComplete?.();
-
     saveLayout();
-
     onClose();
   };
 

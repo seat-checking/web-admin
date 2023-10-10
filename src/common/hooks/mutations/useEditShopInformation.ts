@@ -1,18 +1,22 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import type { ShopInformationForm } from 'common/utils/types';
+import type { EditShopInformationRequest } from 'api/shop/types';
 import { editShopInformation } from 'api/shop';
-import { useSelectedShop } from 'common/stores/authStore';
+import { queryKeys } from 'common/utils/constants';
 
 export const useEditShopInformation = () => {
-  const { storeId: shopId } = useSelectedShop();
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: ShopInformationForm) => {
-      return editShopInformation({ ...params, shopId });
+    mutationFn: (params: EditShopInformationRequest) => {
+      return editShopInformation({ ...params });
     },
-    onSuccess: () => {
+    onSuccess: (_, { shopId: usedShopId }) => {
       toast.success('변경사항이 성공적으로 저장되었습니다.');
+      queryClient.invalidateQueries([
+        queryKeys.GET_SHOP_INFORMATION,
+        usedShopId,
+      ]);
     },
   });
 };
