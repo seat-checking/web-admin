@@ -6,6 +6,7 @@ import type {
   GetShopLayoutResponse,
   ShopLayout,
   ToggleCloseTodayRequest,
+  OwnedShopsRequest,
 } from 'api/shop/types';
 import type { Permission } from 'common/utils/auth';
 import type {
@@ -15,7 +16,7 @@ import type {
 } from 'common/utils/types';
 import type { SpaceType } from 'pages/LayoutSettingPage/utils/types';
 import { axiosClient } from 'api/apiClient';
-import { STORAGE } from 'common/utils/constants';
+import { INFINITE_OWNED_SHOPS_PAGE_SIZE } from 'common/utils/types';
 
 export const addShop = async (shopInfoForm: ShopInfoForm) => {
   const response = await axiosClient.post(
@@ -25,8 +26,16 @@ export const addShop = async (shopInfoForm: ShopInfoForm) => {
   return response.data.result;
 };
 
-export const getOwnedShops = async (): Promise<DropdownShop[]> => {
-  const response = await axiosClient.get('/stores/admins/owned');
+export const getInfiniteOwnedShops = async ({
+  page = 1,
+}: OwnedShopsRequest): Promise<DropdownShop[]> => {
+  const response = await axiosClient.get('/stores/admins/owned', {
+    params: {
+      page,
+      size: INFINITE_OWNED_SHOPS_PAGE_SIZE,
+      sort: 'id',
+    },
+  });
   return response.data.result.storeResponseList;
 };
 

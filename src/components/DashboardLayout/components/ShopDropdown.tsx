@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components/macro';
 import type { DropdownShop } from 'common/utils/types';
 import { ReactComponent as ChevronDown } from 'assets/icons/chevron-down.svg';
 import { ReactComponent as PlusSquareIcon } from 'assets/icons/plus-square.svg';
-import { useGetOwnedShops } from 'common/hooks/queries/useGetOwnedShops';
+import { useGetInfiniteOwnedShops } from 'common/hooks/queries/useGetInfiniteOwnedShops';
 import { useGetPermission } from 'common/hooks/queries/useGetPermission';
 
 import { useAuthActions, useSelectedShop } from 'common/stores/authStore';
@@ -23,11 +24,18 @@ interface ShopDropdownProps {
  */
 export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
   const selectedShop = useSelectedShop();
+  const [ref, inView] = useInView();
+
   const { setPermissions, setSelectedShop } = useAuthActions();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { data: storeResponseList, isInitialLoading } =
-    useGetOwnedShops(isOpen);
+  const {
+    data: storeResponseList,
+    isFetching,
+    status,
+    error,
+    fetchNextPage,
+  } = useGetInfiniteOwnedShops(isOpen);
   const { fetchPermission } = useGetPermission();
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -64,6 +72,12 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
   };
 
   useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage]);
+
+  useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -89,17 +103,32 @@ export const ShopDropdown: React.FC<ShopDropdownProps> = ({ isFolded }) => {
             </AddShopBtn>
           </Header>
           <Body>
-            {isInitialLoading ? (
+            {status === 'loading' ? (
               <LoadingSpinner spinnerSize='3rem' theme='light' />
+            ) : status === 'error' ? (
+              <p>{error.message}</p>
             ) : (
-              storeResponseList?.map((shop) => (
-                <ShopDropdownItem
-                  key={shop.storeId}
-                  shop={shop}
-                  isSelected={selectedShop?.storeId === shop.storeId}
-                  onClick={() => handleChangeSelectedShop(shop)}
-                />
-              ))
+              <>
+                {storeResponseList?.pages.map((group, idx) => {
+                  return (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <Fragment key={idx}>
+                      {group?.map((shop) => (
+                        <ShopDropdownItem
+                          key={shop.storeId}
+                          shop={shop}
+                          isSelected={selectedShop?.storeId === shop.storeId}
+                          onClick={() => handleChangeSelectedShop(shop)}
+                        />
+                      ))}
+                    </Fragment>
+                  );
+                })}
+                <div ref={ref} style={{ height: '1px' }} />
+                {isFetching && (
+                  <LoadingSpinner spinnerSize='3rem' theme='light' />
+                )}
+              </>
             )}
           </Body>
         </DropdownWrap>
@@ -140,11 +169,13 @@ const SelectedText = styled.div<{ folded: boolean }>`
 `;
 
 const DropdownWrap = styled.div`
+  overflow: hidden;
   position: absolute;
   margin-top: 1rem;
   left: 4rem;
 
   width: 34.8rem;
+
   background-color: ${({ theme }) => theme.palette.primary.dark};
   border: 0.2rem solid ${({ theme }) => theme.palette.grey[400]};
   box-shadow: 0px 1.8rem 6.8rem 0px rgba(0, 0, 0, 0.25);
@@ -153,7 +184,12 @@ const DropdownWrap = styled.div`
 `;
 
 const Header = styled.div`
+  width: 95%;
   padding: 1.6rem;
+
+  position: absolute;
+  background-color: ${({ theme }) => theme.palette.primary.dark};
+  z-index: 1;
 `;
 
 const AddShopBtn = styled.button`
@@ -165,4 +201,27 @@ const AddShopBtn = styled.button`
   font-weight: 500;
 `;
 
-const Body = styled.div``;
+const Body = styled.div`
+  max-height: 60vh;
+  overflow: auto;
+  padding-top: 4.8rem;
+
+  /* 스크롤바 설정*/
+  &::-webkit-scrollbar {
+    width: 2rem;
+    /* background-color: yellow; */
+  }
+
+  /* 스크롤바 막대 설정*/
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.palette.grey[300]};
+    /* 스크롤바 둥글게 설정    */
+    border-radius: 2rem;
+    border: 0.6rem solid ${({ theme }) => theme.palette.primary.dark};
+  }
+
+  /* 스크롤바 뒷 배경 설정*/
+  &::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+  }
+`;
