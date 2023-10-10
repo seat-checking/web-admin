@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import styled, { css } from 'styled-components/macro';
 import type { InfiniteData } from '@tanstack/react-query';
 import type { DropdownShop } from 'common/utils/types';
@@ -49,6 +49,7 @@ export const Toggle: React.FC<ToggleProps> = ({
       return;
     }
 
+    toggleMutate({ shopId, isClosedToday: true });
     // 오늘 영업 off 시켰으면 isOpenNow도 무조건 false
     queryClient.setQueryData(
       [queryKeys.GET_OWNED_SHOPS],
@@ -65,18 +66,6 @@ export const Toggle: React.FC<ToggleProps> = ({
       },
     );
   };
-
-  useEffect(() => {
-    return () => {
-      if (isDefaultChecked === checked) {
-        return;
-      }
-      // 오늘 영업 off 시킨 경우에는 mutate를 호출하지 않았으므로 여기서 호출해줌
-      if (!checked) {
-        toggleMutate({ shopId, isClosedToday: true });
-      }
-    };
-  }, [isDefaultChecked, toggleMutate, shopId, checked]);
 
   return (
     <Wrap
