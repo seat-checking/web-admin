@@ -5,17 +5,23 @@ import type { ChangeEvent } from 'react';
 import { ReactComponent as ChevronRight } from 'assets/icons/chevron-right.svg';
 import { ReactComponent as XIcon } from 'assets/icons/x.svg';
 
+import { LoadingSpinner } from 'components/LoadingSpinner';
 import { darkerOnHover, flexSet } from 'styles/mixin';
 
 interface CarouselProps {
   imgs?: (string | ImgFile)[] | null;
   setImgFiles: (event: (string | ImgFile)[] | ChangeEvent<Element>) => void;
+  isLoading: boolean;
 }
 
 /**
  * 캐러셀 컴포넌트
  */
-export const Carousel: React.FC<CarouselProps> = ({ imgs, setImgFiles }) => {
+export const Carousel: React.FC<CarouselProps> = ({
+  imgs,
+  setImgFiles,
+  isLoading,
+}) => {
   const theme = useTheme();
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
@@ -46,7 +52,9 @@ export const Carousel: React.FC<CarouselProps> = ({ imgs, setImgFiles }) => {
 
   return (
     <Wrap>
-      {!imgs || imgs.length === 0 ? (
+      {isLoading ? (
+        <LoadingSpinner spinnerSize='4rem' />
+      ) : !imgs || imgs.length === 0 ? (
         <NoImg>등록된 이미지가 없어요.</NoImg>
       ) : (
         <ImgWrap
