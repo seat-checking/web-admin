@@ -2,6 +2,7 @@ import styled from 'styled-components/macro';
 import upload from 'assets/icons/upload.svg';
 import { Button } from 'components/Button';
 import { ErrorMessage } from 'components/ErrorMessage';
+import { StyledInput } from 'components/Input.styled';
 
 export const ContentWrap = styled.ul`
   width: 100%;
@@ -69,4 +70,17 @@ export const RadioRow = styled.div`
   gap: 8.7rem;
 
   padding-top: 0.8rem;
+`;
+
+export const TextArea = styled(StyledInput).attrs({ as: 'textarea' })`
+  padding: 1rem 1.6rem;
+
+  width: 100%;
+  height: 8rem;
+  border: 0.1rem solid ${({ theme }) => theme.palette.grey[300]};
+  border-radius: 0.8rem;
+
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
 `;
