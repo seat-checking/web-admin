@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useGetReservations } from 'common/hooks/queries/useGetReservations';
+import { useGetInfiniteReservations } from 'common/hooks/queries/useGetInfiniteReservations';
 import { useTab } from 'common/hooks/useTab';
 import { useSelectedShop } from 'common/stores/authStore';
 import { LoadingSpinner } from 'components/LoadingSpinner';
@@ -35,7 +35,7 @@ export const ReservationTab: React.FC = () => {
     status,
     isFetching,
     error,
-  } = useGetReservations(storeId, currentReservationStatusPerTab);
+  } = useGetInfiniteReservations(storeId, currentReservationStatusPerTab);
 
   useEffect(() => {
     if (inView) {

@@ -10,6 +10,9 @@ interface DropdownItemProps {
   isSelected: boolean;
   onClick: VoidFunction;
   shop: DropdownShop;
+  pageIdx: number;
+  itemIdx: number;
+  refetch: () => void;
 }
 
 /**
@@ -19,6 +22,9 @@ export const ShopDropdownItem: React.FC<DropdownItemProps> = ({
   shop,
   isSelected,
   onClick,
+  pageIdx,
+  itemIdx,
+  refetch,
 }) => {
   return (
     <Wrap type='button' $isSelected={isSelected} onClick={onClick}>
@@ -31,10 +37,15 @@ export const ShopDropdownItem: React.FC<DropdownItemProps> = ({
             {shop.isOpenNow ? '영업 중' : '준비 중'}
           </IsOpenText>
         </UpperWrap>
-        <Introduction>{shop.introduction}</Introduction>
       </MiddleWrap>
       <RightWrap>
-        <Toggle isChecked={shop.isClosedToday} shopId={shop.storeId} />
+        <Toggle
+          isDefaultChecked={!shop.isClosedToday}
+          shopId={shop.storeId}
+          pageIdx={pageIdx}
+          itemIdx={itemIdx}
+          refetch={refetch}
+        />
         <HelperText>일시 정지</HelperText>
       </RightWrap>
     </Wrap>
@@ -54,6 +65,13 @@ const Wrap = styled.button<{ $isSelected: boolean }>`
     $isSelected &&
     css`
       background-color: rgba(255, 255, 255, 0.1);
+    `};
+  ${({ $isSelected }) =>
+    !$isSelected &&
+    css`
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
     `};
 `;
 
@@ -103,15 +121,6 @@ const Circle = styled.div<{ $isOpen: boolean }>`
   border-radius: 50%;
   background-color: ${({ $isOpen: $isClosed, theme }) =>
     $isClosed ? theme.palette.primary.orange : theme.palette.grey[200]};
-`;
-
-const Introduction = styled.div`
-  color: ${({ theme }) => theme.palette.grey[300]};
-  font-size: 1.4rem;
-  font-weight: 400;
-  line-height: normal;
-
-  text-align: start;
 `;
 
 const RightWrap = styled.div`

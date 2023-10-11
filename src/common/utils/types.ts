@@ -49,3 +49,5 @@ export interface ShopInformationForm {
   telNum: string;
   storeImages: (string | ImgFile)[] | null;
 }
+
+export const INFINITE_OWNED_SHOPS_PAGE_SIZE = 10;

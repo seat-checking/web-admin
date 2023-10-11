@@ -21,6 +21,12 @@ export const NavigationLink = styled(NavLink)<{ $folded: boolean }>`
   font-weight: 500;
   font-size: 2rem;
   line-height: 2.4rem;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  transition: background-color 0.15s ease;
+
   &.active {
     color: #303030;
     background-color: white;

@@ -33,6 +33,10 @@ export interface ShopLayout {
   chairList: Chair[];
 }
 
+export interface OwnedShopsRequest {
+  page: number;
+}
+
 export interface GetShopLayoutResponse extends ShopLayout {
   storeSpaceId: number;
 }

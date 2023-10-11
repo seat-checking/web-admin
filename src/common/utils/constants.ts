@@ -27,7 +27,7 @@ export const queryKeys = {
   GET_SPACE_LAYOUT: 'spaceLayout',
   GET_PERMISSION: 'permission',
   GET_OWNED_SHOPS: 'ownedShops',
-  GET_RESERVATIONS: 'reservations',
+  GET_INFINITE_RESERVATIONS: 'infiniteReservations',
   GET_SEAT_STATISTICS: 'spaceStatistics',
   GET_CURRENTLY_IN_USE: 'currentlyInUse',
   GET_SHOP_INFORMATION: 'shopInformation',
