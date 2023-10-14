@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import type { JoinForm } from 'common/utils/types';
 import type { JoinStatus } from 'pages/JoinPage/utils/types';
 import type { UseFormReturn } from 'react-hook-form';
+import { ReactComponent as SeatSenseImg } from 'assets/images/seatsense-no-bg.svg';
+import { ReactComponent as SeatSenseText } from 'assets/images/seatsense-text.svg';
 import { AdminInfo } from 'pages/JoinPage/components/AdminInfo';
 import { StoreInfo } from 'pages/JoinPage/components/StoreInfo';
 import {
@@ -14,7 +16,7 @@ import {
   RightContentWrap,
   RightSide,
   Title,
-  WhiteTitle,
+  LogoWrap,
   Wrap,
 } from 'pages/JoinPage/styled';
 
@@ -35,11 +37,10 @@ export const JoinPage: React.FC = () => {
   return (
     <Wrap>
       <LeftSide>
-        <WhiteTitle>
-          서비스 설명
-          <br />
-          디자인
-        </WhiteTitle>
+        <LogoWrap>
+          <SeatSenseImg />
+          <SeatSenseText />
+        </LogoWrap>
       </LeftSide>
       <RightSide>
         <RightContentWrap>

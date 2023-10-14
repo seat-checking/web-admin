@@ -51,7 +51,6 @@ export const convertDataForServer = (
 export const useSaveLayout = () => {
   const height = useShopHeight();
   const layout = useLayout();
-  const queryClient = useQueryClient();
 
   const { mutate: editLayoutMutate } = useEditLayout();
   const { mutate: createSpaceMutate } = useCreateSpace();
@@ -63,7 +62,6 @@ export const useSaveLayout = () => {
 
   const handleSave = () => {
     if (!shopId) return;
-    queryClient.invalidateQueries([queryKeys.GET_SPACES, shopId]);
     if (spaceId === TEMPORARY_SPACE_ID) {
       createSpaceMutate({
         layout: convertDataForServer(

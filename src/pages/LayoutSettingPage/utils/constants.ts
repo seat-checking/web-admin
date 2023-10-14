@@ -6,7 +6,7 @@ export const CHAIR_SIZE_PX = 20;
 export const COLUMN_CNT = 32;
 export const DEFAULT_ROW_CNT = 15;
 
-export const TABLE_POPOVER_BODY_WIDTH_REM = 20;
+export const TABLE_POPOVER_BODY_WIDTH_REM = 14;
 export const CHAIR_POPOVER_BODY_WIDTH_REM = 13.6;
 export const POPOVER_PADDING_REM = 0.8;
 

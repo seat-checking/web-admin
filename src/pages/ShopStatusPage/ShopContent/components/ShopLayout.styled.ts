@@ -35,7 +35,7 @@ export const GridTable = styled.div<{
   background-color: ${(props): string => props.theme.palette.grey[100]};
 
   border-color: ${({ theme }) => theme.palette.black.main};
-  border-width: 0.1rem;
+  border-width: 1px;
   border-style: solid;
 
   width: ${({ width }) => width * TABLE_SIZE_PX + 'px'};

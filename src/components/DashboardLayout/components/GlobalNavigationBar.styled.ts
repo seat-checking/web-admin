@@ -23,10 +23,10 @@ export const Wrap = styled.div<{ folded: boolean }>`
     width: ${({ folded }): string => (folded ? '4.8rem' : '14rem')};
     height: ${({ folded }): string => (folded ? '4.8rem' : '14rem')};
     object-fit: cover;
-    /* background-color: ${({ theme }): string =>
-      theme.palette.primary.orange}; */
     box-shadow: 0px 0.5rem 0.5rem rgba(44, 44, 44, 0.2);
     border-radius: ${({ folded }): string => (folded ? '0.8rem' : '1.4rem')};
+
+    background-color: white;
   }
 
   .hideFold {

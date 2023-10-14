@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import imageCompression from 'browser-image-compression';
+import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTheme } from 'styled-components';
 import type { ShopInformationForm } from 'common/utils/types';
@@ -43,6 +44,7 @@ interface ShopInfoTabProps {
 export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
   shopInformation,
 }) => {
+  const [isUploadLoading, setIsUploadLoading] = useState(false);
   const { storeId: shopId } = useSelectedShop();
 
   const theme = useTheme();
@@ -72,7 +74,13 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
     onChange: (event: (string | ImgFile)[] | ChangeEvent<Element>) => void,
     prevImgs: (string | ImgFile)[] | null,
   ) => {
+    setIsUploadLoading(true);
     const { files } = event.target;
+
+    const options = {
+      maxSizeMB: 1,
+    };
+
     if (files && files.length > 0) {
       if (prevImgs && files.length + prevImgs.length > 10) {
         setError('storeImages', {
@@ -81,24 +89,36 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
         });
         return;
       }
-      const fileList = Array.prototype.map.call<
-        FileList,
-        [(file: File) => ImgFile],
-        ImgFile[]
-      >(files, (file: File) => ({
-        name: file.name,
-        file,
-        thumbnail: URL.createObjectURL(file),
-      }));
-      if (!prevImgs) {
-        onChange(fileList);
-        return;
-      }
-      onChange([...prevImgs, ...fileList]);
+
+      const fileList = Array.from(files).map(async (file: File) => {
+        const resultFile = {
+          name: file.name,
+          file,
+          thumbnail: URL.createObjectURL(file),
+        };
+
+        try {
+          const compressedFile = await imageCompression(file, options);
+          resultFile.file = new File([compressedFile], compressedFile.name);
+        } catch (error) {
+          console.log(error);
+        }
+        return resultFile;
+      });
+
+      Promise.all(fileList).then((result) => {
+        if (!prevImgs) {
+          onChange(result);
+          return;
+        }
+        onChange([...prevImgs, ...result]);
+        setIsUploadLoading(false);
+      });
     }
   };
 
   const onSubmit: SubmitHandler<ShopInformationForm> = (data) => {
+    console.log('data :>> ', data);
     editShopSettingMutate({ ...data, shopId });
   };
 
@@ -169,7 +189,7 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
           )}
         </ListItem>
         <ListItem>
-          <Label label='가게 유형' required={false} />
+          <Label label='가게 유형' />
           <RadioRow>
             <Radio
               id='restaurant'
@@ -227,7 +247,11 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
                     첨부파일 업로드 *최대 10장
                     <br /> (권장 사이즈 750x480이상)
                   </AddFileBtn>
-                  <Carousel imgs={value} setImgFiles={onChangeValue} />
+                  <Carousel
+                    imgs={value}
+                    setImgFiles={onChangeValue}
+                    isLoading={isUploadLoading}
+                  />
                 </AddFileRow>
               </>
             )}
@@ -253,7 +277,9 @@ export const ShopInfoTab: React.FC<ShopInfoTabProps> = ({
           )}
         </ListItem>
         <ListItem>
-          <Button type='submit'>저장하기</Button>
+          <Button type='submit' isDisabled={isUploadLoading}>
+            저장하기
+          </Button>
         </ListItem>
       </ContentWrap>
     </form>

@@ -8,7 +8,7 @@ import { ReactComponent as SettingSeatActive } from 'assets/icons/snb-setting-se
 import { ReactComponent as SettingSeat } from 'assets/icons/snb-setting-seat.svg';
 import { ReactComponent as SettingStoreActive } from 'assets/icons/snb-setting-store-active.svg';
 import { ReactComponent as SettingStore } from 'assets/icons/snb-setting-store.svg';
-import defaultShopImg from 'assets/images/default-shop.png';
+import seatSenseLogo from 'assets/images/seatsense-bg-2x.png';
 
 import { usePermissions, useSelectedShop } from 'common/stores/authStore';
 import { PATH } from 'common/utils/constants';
@@ -38,7 +38,7 @@ export const GlobalNavigationBar: React.FC = () => {
     <>
       <Wrap folded={isFolded}>
         <img
-          src={selectedShop?.mainImage || defaultShopImg}
+          src={selectedShop?.mainImage || seatSenseLogo}
           alt='가게 로고'
           className='shopLogo'
         />
