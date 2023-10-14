@@ -1,13 +1,15 @@
+import { ReactComponent as SeatSenseImg } from 'assets/images/seatsense-no-bg.svg';
+import { ReactComponent as SeatSenseText } from 'assets/images/seatsense-text.svg';
 import {
   LeftSide,
   ProgressBackground,
   ProgressBar,
   ProgressWrap,
   RightContentWrap,
+  LogoWrap,
   RightSide,
   SubTitle,
   Title,
-  WhiteTitle,
   Wrap,
 } from 'pages/AddShopPage/AddShopPage.styled';
 import { StoreInfo } from 'pages/AddShopPage/components/StoreInfo';
@@ -19,11 +21,10 @@ export const AddShopPage: React.FC = () => {
   return (
     <Wrap>
       <LeftSide>
-        <WhiteTitle>
-          서비스 설명
-          <br />
-          디자인
-        </WhiteTitle>
+        <LogoWrap>
+          <SeatSenseImg />
+          <SeatSenseText />
+        </LogoWrap>
       </LeftSide>
       <RightSide>
         <RightContentWrap>

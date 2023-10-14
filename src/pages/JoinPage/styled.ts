@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components/macro';
 import type { JoinStatus } from 'pages/JoinPage/utils/types';
-import { mediaBpDown } from 'styles/mixin';
+import { flexSet, mediaBpDown } from 'styles/mixin';
 
 export const Wrap = styled.div`
   /* background-color: aliceblue; */
@@ -22,18 +22,15 @@ export const LeftSide = styled.div`
   )}
 `;
 
-export const WhiteTitle = styled.h2`
-  /* background-color: aqua; */
+export const LogoWrap = styled.div`
   width: ${LEFT_SIDE_WIDTH};
   position: fixed;
   top: 50%;
-  left: 0;
+  transform: translateY(-50%);
 
-  font-weight: 700;
-  font-size: 3.4rem;
-  line-height: 4.1rem;
-  color: white;
-  text-align: center;
+  ${flexSet()}
+  flex-direction: column;
+  gap: 2em;
 `;
 
 export const RightSide = styled.div`
