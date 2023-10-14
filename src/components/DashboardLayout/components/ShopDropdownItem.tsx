@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components/macro';
 import type { DropdownShop } from 'common/utils/types';
-import defaultShopImg from 'assets/images/default-shop.png';
+import seatSenseLogo from 'assets/images/seatsense-bg-1x.png';
 import { HelperText } from 'components/DashboardLayout/components/HelperText';
 
 import { Toggle } from 'components/Toggle';
@@ -22,7 +22,7 @@ export const ShopDropdownItem: React.FC<DropdownItemProps> = ({
 }) => {
   return (
     <Wrap type='button' $isSelected={isSelected} onClick={onClick}>
-      <Img src={shop.mainImage || defaultShopImg} alt='' />
+      <Img src={shop.mainImage || seatSenseLogo} alt='가게 로고' />
       <MiddleWrap>
         <UpperWrap>
           <StoreName>{shop.storeName}</StoreName>
@@ -64,6 +64,8 @@ const Img = styled.img`
   object-fit: cover;
 
   margin-right: 0.8rem;
+
+  background-color: white;
 `;
 
 const MiddleWrap = styled.div`
