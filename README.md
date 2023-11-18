@@ -96,7 +96,7 @@ $ yarn start
 
 | 가게 설정 페이지 | 
 | :---: |
-| <img width="200" src="https://github.com/seat-checking/web-admin/assets/117795271/b4351b4d-0f12-4f82-b3bd-f381ac8d88da"/> <img width="200" src="https://github.com/seat-checking/web-admin/assets/117795271/f5574a1c-abc1-46e1-99b5-51bb6d2d0aa9"/> <img width="200" src="https://github.com/seat-checking/web-admin/assets/117795271/271c1e8f-e7b8-4c70-a440-99bd364150ce"/> <img width="200" src="https://github.com/seat-checking/web-admin/assets/117795271/fdbf5ef5-e08d-4a3b-a818-e47790585e10"/>  | 
+| <img width="150" src="https://github.com/seat-checking/web-admin/assets/117795271/b4351b4d-0f12-4f82-b3bd-f381ac8d88da"/> <img width="150" src="https://github.com/seat-checking/web-admin/assets/117795271/f5574a1c-abc1-46e1-99b5-51bb6d2d0aa9"/> <img width="150" src="https://github.com/seat-checking/web-admin/assets/117795271/271c1e8f-e7b8-4c70-a440-99bd364150ce"/> <img width="150" src="https://github.com/seat-checking/web-admin/assets/117795271/fdbf5ef5-e08d-4a3b-a818-e47790585e10"/>  | 
 
 | 좌석 설정 페이지 | 
 | :---: |
