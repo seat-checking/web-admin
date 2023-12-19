@@ -10,6 +10,18 @@
 
 > **유저 서버** : https://myuser.seat-sense.site<br> **관리자 서버** : https://admin.seat-sense.site<br>
 
+## 테스트 계정
+
+### 유저 계정
+
+- **계정명:** test3@gmail.com
+- **비밀번호:** qwer1234!
+
+### 관리자 계정
+
+- **계정명:** test7@gmail.com
+- **비밀번호:** qwer1234!
+
 
 ## 개발팀 소개
 
